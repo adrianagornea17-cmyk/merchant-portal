@@ -3,889 +3,171 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verifone Central</title>
+  <title>Verifone — Portal Prototypes</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --sidebar-w: 220px;
-      --sidebar-bg: #ffffff;
-      --sidebar-border: #e5e7eb;
-      --bg: #f9fafb;
-      --text: #111827;
-      --text-2: #374151;
-      --text-3: #6b7280;
-      --text-4: #9ca3af;
-      --border: #e5e7eb;
-      --active-bg: #eff6ff;
-      --active-text: #1d4ed8;
-      --accent: #2563eb;
-      --teal: #0d9488;
-      --radius: 8px;
-      --tag-bg: #f3f4f6;
-    }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ─── SIDEBAR ─── */
-    #sidebar {
-      width: var(--sidebar-w);
-      min-width: var(--sidebar-w);
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--sidebar-border);
+      background: #f9fafb;
+      color: #111827;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .sb-logo {
-      padding: 18px 16px 14px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
       align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
+      justify-content: center;
+      padding: 40px 24px;
     }
 
-    .sb-logo svg { flex-shrink: 0; }
-
-    .sb-logo-text {
-      font-size: 16px;
-      font-weight: 700;
-      color: #0f172a;
-      letter-spacing: -0.3px;
-    }
-
-    .sb-scroll {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px 8px;
-    }
-
-    .sb-scroll::-webkit-scrollbar { width: 3px; }
-    .sb-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
-
-    .nav-section {
-      margin-bottom: 4px;
-    }
-
-    .nav-section-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.7px;
-      text-transform: uppercase;
-      color: var(--text-4);
-      padding: 10px 10px 4px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 8px 10px;
-      border-radius: 7px;
-      color: var(--text-2);
-      font-size: 13.5px;
-      font-weight: 500;
-      cursor: pointer;
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-      transition: background 0.1s, color 0.1s;
-      text-decoration: none;
-    }
-
-    .nav-item:hover { background: #f3f4f6; color: var(--text); }
-
-    .nav-item.active {
-      background: var(--active-bg);
-      color: var(--active-text);
-      font-weight: 600;
-    }
-
-    .nav-item .nav-icon {
-      width: 18px; height: 18px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      opacity: 0.75;
-    }
-
-    .nav-item.active .nav-icon { opacity: 1; }
-
-    .nav-item .nav-badge {
-      margin-left: auto;
-      background: #e5e7eb;
-      color: #374151;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 1px 6px;
-      border-radius: 20px;
-    }
-
-    .nav-item.active .nav-badge {
-      background: #dbeafe;
-      color: var(--active-text);
-    }
-
-    .nav-divider {
-      margin: 6px 8px;
-      border: none;
-      border-top: 1px solid var(--border);
-    }
-
-    .nav-sub-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6.5px 10px 6.5px 30px;
-      border-radius: 7px;
-      color: var(--text-3);
-      font-size: 13px;
-      font-weight: 400;
-      cursor: pointer;
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-      transition: background 0.1s, color 0.1s;
-    }
-
-    .nav-sub-item:hover { background: #f3f4f6; color: var(--text-2); }
-
-    .nav-sub-item.active {
-      color: var(--active-text);
-      font-weight: 500;
-    }
-
-    .nav-sub-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: #d1d5db;
-      flex-shrink: 0;
-    }
-
-    .nav-sub-item.active .nav-sub-dot { background: var(--accent); }
-
-    /* ─── MAIN ─── */
-    #main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* Topbar */
-    .topbar {
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13.5px;
-    }
-
-    .topbar-bc-root { color: var(--text-3); font-weight: 400; }
-    .topbar-bc-sep  { color: var(--text-4); }
-    .topbar-bc-cur  { color: var(--text);   font-weight: 600; }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .topbar-btn {
-      display: flex; align-items: center; justify-content: center;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: none;
-      border: none;
-      color: var(--text-3);
-      cursor: pointer;
-      transition: background 0.1s, color 0.1s;
-    }
-
-    .topbar-btn:hover { background: #f3f4f6; color: var(--text); }
-
-    .avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: #1d4ed8;
-      color: #fff;
-      font-size: 11.5px;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    /* Page */
-    .page-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px 28px;
-    }
-
-    .page-content::-webkit-scrollbar { width: 5px; }
-    .page-content::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
-
-    /* Page heading */
-    .page-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .page-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    .page-actions {
+    .logo-row {
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-bottom: 8px;
     }
 
-    .btn-outline {
-      display: flex; align-items: center; gap: 6px;
-      padding: 7px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 20px;
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.4px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 880px;
+    }
+
+    .card {
       background: #fff;
-      color: var(--text-2);
+      border: 1.5px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card:hover {
+      border-color: #2563eb;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.10);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .card-desc {
       font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: border-color 0.1s, background 0.1s;
+      color: #6b7280;
+      line-height: 1.6;
     }
 
-    .btn-outline:hover { border-color: #d1d5db; background: #f9fafb; }
-
-    .btn-outline .chev {
-      color: var(--text-3);
-      display: flex; align-items: center;
-    }
-
-    /* Filter / search card */
-    .filter-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 18px;
-      margin-bottom: 16px;
-    }
-
-    .view-toggle {
+    .card-link {
+      margin-top: auto;
+      padding-top: 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #2563eb;
       display: flex;
       align-items: center;
       gap: 4px;
-      margin-bottom: 14px;
     }
 
-    .vt-label {
-      font-size: 12.5px;
-      color: var(--text-3);
-      font-weight: 500;
-      margin-right: 6px;
-    }
-
-    .vt-btn {
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1.5px solid transparent;
-      transition: all 0.1s;
-      background: #f3f4f6;
-      color: var(--text-3);
-    }
-
-    .vt-btn.active {
-      background: #fff;
-      border-color: var(--border);
-      color: var(--text);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    }
-
-    .search-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .search-label {
-      font-size: 12.5px;
-      color: var(--text-3);
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    .search-type-btn {
-      display: flex; align-items: center; gap: 5px;
-      padding: 7px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 20px;
-      background: #fff;
-      color: var(--text-2);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .search-input-wrap {
-      flex: 1;
-      position: relative;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 7px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 20px;
-      font-size: 13px;
-      color: var(--text);
-      background: #fff;
-      outline: none;
-      transition: border-color 0.1s;
-    }
-
-    .search-input:focus { border-color: var(--accent); }
-    .search-input::placeholder { color: var(--text-4); }
-
-    .filter-chips-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-
-    .filter-chip {
-      display: flex; align-items: center; gap: 5px;
-      padding: 5px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 20px;
-      background: #fff;
-      color: var(--text-2);
-      font-size: 12.5px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: border-color 0.1s;
-      white-space: nowrap;
-    }
-
-    .filter-chip:hover { border-color: #d1d5db; }
-
-    .filter-chip .chev {
-      display: flex; align-items: center;
-      color: var(--text-3);
-    }
-
-    .add-filter-btn {
-      display: flex; align-items: center; gap: 5px;
-      padding: 5px 12px;
-      border: 1.5px dashed var(--border);
-      border-radius: 20px;
-      background: none;
-      color: var(--accent);
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.1s;
-    }
-
-    .add-filter-btn:hover { background: #eff6ff; }
-
-    /* Filter dropdown */
-    .filter-dropdown {
-      position: relative;
+    .tag {
       display: inline-block;
-    }
-
-    .filter-menu {
-      display: none;
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
-      min-width: 200px;
-      z-index: 100;
-      padding: 6px 0;
-    }
-
-    .filter-menu.open { display: block; animation: dropIn 0.12s ease; }
-    @keyframes dropIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
-
-    .fm-item {
-      display: block;
-      padding: 8px 16px;
-      font-size: 13px;
-      color: var(--text-2);
-      cursor: pointer;
-      transition: background 0.08s;
-    }
-
-    .fm-item:hover { background: #f9fafb; }
-
-    .filter-actions-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .btn-clear {
-      background: none;
-      border: none;
-      color: var(--accent);
-      font-size: 13px;
+      font-size: 10.5px;
       font-weight: 600;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .btn-apply {
-      padding: 7px 22px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
+      padding: 2px 8px;
       border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.1s;
+      margin-bottom: 2px;
     }
-
-    .btn-apply:hover { background: #1d4ed8; }
-
-    /* Table */
-    .table-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .table-meta {
-      padding: 12px 18px;
-      font-size: 12.5px;
-      color: var(--text-3);
-      border-bottom: 1px solid var(--border);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead th {
-      background: #f9fafb;
-      padding: 10px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-3);
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-
-    tbody tr {
-      border-bottom: 1px solid #f3f4f6;
-      transition: background 0.08s;
-      cursor: pointer;
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: #f9fafb; }
-
-    tbody td {
-      padding: 11px 14px;
-      font-size: 13px;
-      color: var(--text-2);
-    }
-
-    .cell-muted { color: var(--text-4); }
-
-    .state-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 9px;
-      border-radius: 20px;
-      font-size: 11.5px;
-      font-weight: 600;
-    }
-
-    .state-authorized { background: #dcfce7; color: #166534; }
-    .state-initiated   { background: #fef9c3; color: #854d0e; }
-    .state-captured    { background: #dbeafe; color: #1e40af; }
-    .state-declined    { background: #fee2e2; color: #991b1b; }
-
-    .state-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0;
-    }
-
-    .link-blue {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .link-blue:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
-<!-- ─── SIDEBAR ─── -->
-<aside id="sidebar">
-  <div class="sb-logo">
-    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-      <rect width="32" height="32" rx="7" fill="#0f172a"/>
+  <div class="logo-row">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="8" fill="#0f172a"/>
       <circle cx="10" cy="10" r="3" fill="#38bdf8"/>
       <circle cx="22" cy="10" r="3" fill="#38bdf8"/>
       <circle cx="10" cy="22" r="3" fill="#60a5fa"/>
       <circle cx="22" cy="22" r="3" fill="#60a5fa"/>
     </svg>
-    <span class="sb-logo-text">Verifone</span>
+    <span class="logo-text">Verifone</span>
+  </div>
+  <p class="subtitle">Portal prototypes — pick a version to preview</p>
+
+  <div class="grid">
+
+    <!-- Original dark portal -->
+    <a class="card" href="merchant-portal.html">
+      <div class="card-icon" style="background:#0f172a;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V3M2 9h20"/></svg>
+      </div>
+      <span class="tag" style="background:#0f172a;color:#38bdf8;">Dark theme</span>
+      <div class="card-title">Merchant Portal</div>
+      <div class="card-desc">Original dark-themed portal with left sidebar navigation, tool cards, and stats dashboard.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Verifone light base -->
+    <a class="card" href="verifone-transactions.html">
+      <div class="card-icon" style="background:#eff6ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      </div>
+      <span class="tag" style="background:#eff6ff;color:#1d4ed8;">Light theme</span>
+      <div class="card-title">Transactions — Base</div>
+      <div class="card-desc">Verifone Central style with left nav, Orders/Transactions table, and inline filter chips.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- V1 Collapsible -->
+    <a class="card" href="index-v1-collapsible.html">
+      <div class="card-icon" style="background:#f0fdf4;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      </div>
+      <span class="tag" style="background:#f0fdf4;color:#166534;">Option 1</span>
+      <div class="card-title">Collapsible Filters</div>
+      <div class="card-desc">Search bar always visible. "Filters" button expands a section below with all filter options and active count badge.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- V2 Side panel -->
+    <a class="card" href="index-v2-sidepanel.html">
+      <div class="card-icon" style="background:#fdf4ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></svg>
+      </div>
+      <span class="tag" style="background:#fdf4ff;color:#7e22ce;">Option 2</span>
+      <div class="card-title">Filter Side Panel</div>
+      <div class="card-desc">Search bar always visible. "Filters" button slides in a panel from the right with grouped controls.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
   </div>
 
-  <div class="sb-scroll">
-    <div class="nav-section">
-      <div class="nav-section-label">Main</div>
-      <button class="nav-item" onclick="setActive(this)">
-        <span class="nav-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        </span>
-        Dashboard
-      </button>
-
-      <button class="nav-item active" onclick="setActive(this)">
-        <span class="nav-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        </span>
-        Commerce
-      </button>
-
-      <div class="nav-sub-item active">
-        <span class="nav-sub-dot"></span>
-        Orders / Transactions
-      </div>
-      <div class="nav-sub-item" onclick="this.parentElement.querySelectorAll('.nav-sub-item').forEach(e=>e.classList.remove('active'));this.classList.add('active')">
-        <span class="nav-sub-dot"></span>
-        Payment links
-      </div>
-      <div class="nav-sub-item" onclick="this.parentElement.querySelectorAll('.nav-sub-item').forEach(e=>e.classList.remove('active'));this.classList.add('active')">
-        <span class="nav-sub-dot"></span>
-        Customers
-      </div>
-      <div class="nav-sub-item" onclick="this.parentElement.querySelectorAll('.nav-sub-item').forEach(e=>e.classList.remove('active'));this.classList.add('active')">
-        <span class="nav-sub-dot"></span>
-        Products
-      </div>
-
-      <button class="nav-item" onclick="setActive(this)">
-        <span class="nav-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg>
-        </span>
-        Administration
-      </button>
-
-      <button class="nav-item" onclick="setActive(this)">
-        <span class="nav-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-        </span>
-        Boarding
-      </button>
-    </div>
-
-    <hr class="nav-divider"/>
-
-    <div class="nav-section">
-      <div class="nav-section-label">Analytics</div>
-      <button class="nav-item" onclick="setActive(this)">
-        <span class="nav-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V3M2 9h20"/></svg>
-        </span>
-        Reports
-        <span class="nav-badge">3</span>
-      </button>
-      <button class="nav-item" onclick="setActive(this)">
-        <span class="nav-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-        </span>
-        Analytics
-      </button>
-    </div>
-
-    <hr class="nav-divider"/>
-
-    <div class="nav-section">
-      <div class="nav-section-label">Tools</div>
-      <button class="nav-item" onclick="setActive(this)">
-        <span class="nav-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1.2" fill="currentColor" stroke="none"/></svg>
-        </span>
-        Device manager
-      </button>
-      <button class="nav-item" onclick="setActive(this)">
-        <span class="nav-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V7l7-4v19M14 22V11l7-3v14"/><path d="M3 11h11M3 16h11"/></svg>
-        </span>
-        Petro
-      </button>
-    </div>
-  </div>
-</aside>
-
-<!-- ─── MAIN ─── -->
-<div id="main">
-
-  <!-- Topbar -->
-  <div class="topbar">
-    <div class="topbar-left">
-      <span class="topbar-bc-root">Commerce</span>
-      <span class="topbar-bc-sep">/</span>
-      <span class="topbar-bc-cur">Orders / Transactions</span>
-    </div>
-    <div class="topbar-right">
-      <button class="topbar-btn" title="Notifications">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-      </button>
-      <div class="avatar" title="Adriana Gornea">A</div>
-    </div>
-  </div>
-
-  <!-- Page content -->
-  <div class="page-content">
-
-    <div class="page-heading">
-      <span class="page-title">Orders / Transactions</span>
-      <div class="page-actions">
-        <button class="btn-outline">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-          Schedule
-        </button>
-        <button class="btn-outline">
-          Export CSV
-          <span class="chev">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="filter-card">
-      <div class="view-toggle">
-        <span class="vt-label">Table View:</span>
-        <button class="vt-btn" onclick="this.parentElement.querySelectorAll('.vt-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Orders</button>
-        <button class="vt-btn active" onclick="this.parentElement.querySelectorAll('.vt-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Transactions</button>
-      </div>
-
-      <div class="search-row">
-        <span class="search-label">Search or Filter:</span>
-        <button class="search-type-btn">
-          Transaction ID
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="search-input-wrap">
-          <input class="search-input" type="text" placeholder="Search" />
-        </div>
-      </div>
-
-      <div class="filter-chips-row">
-        <button class="filter-chip">
-          Created: 4/1/2026 00:00 – 4/30/2026 23:59
-          <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
-        </button>
-        <button class="filter-chip">
-          Organizations
-          <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
-        </button>
-        <button class="filter-chip">
-          Merchant ID
-          <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
-        </button>
-        <div class="filter-dropdown">
-          <button class="add-filter-btn" onclick="toggleFilterMenu(event)">
-            + Add filter
-          </button>
-          <div class="filter-menu" id="filterMenu">
-            <span class="fm-item">Channel</span>
-            <span class="fm-item">Currency</span>
-            <span class="fm-item">Product</span>
-            <span class="fm-item">Transaction type</span>
-            <span class="fm-item">Transaction state</span>
-            <span class="fm-item">Wallet</span>
-            <span class="fm-item">Stored credential type</span>
-            <span class="fm-item">Processor</span>
-            <span class="fm-item">Account type</span>
-            <span class="fm-item">Token type</span>
-            <span class="fm-item">Amount</span>
-          </div>
-        </div>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:14px;">
-          <button class="btn-clear">Clear</button>
-          <button class="btn-apply">Apply</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Table -->
-    <div class="table-card">
-      <div class="table-meta">Showing 1 – 25 of 1,482 transactions</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Transaction ID</th>
-            <th>Merchant Reference</th>
-            <th>Organization</th>
-            <th>Product</th>
-            <th>Orig. amount</th>
-            <th>Curr. amount</th>
-            <th>Type</th>
-            <th>State</th>
-            <th>Related Transactions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><a class="link-blue" href="#">TXN-00841923</a></td>
-            <td class="cell-muted">—</td>
-            <td>Aldi Nord Madrid_site</td>
-            <td>Visa</td>
-            <td>19.84 EUR</td>
-            <td>19.84 EUR</td>
-            <td>Sale</td>
-            <td><span class="state-badge state-authorized"><span class="state-dot"></span>Authorized</span></td>
-            <td><a class="link-blue" href="#">1</a></td>
-          </tr>
-          <tr>
-            <td><a class="link-blue" href="#">TXN-00841922</a></td>
-            <td class="cell-muted">—</td>
-            <td>Aldi Nord Madrid_site</td>
-            <td>Visa</td>
-            <td>24.46 EUR</td>
-            <td>24.46 EUR</td>
-            <td>Sale</td>
-            <td><span class="state-badge state-initiated"><span class="state-dot"></span>Initiated</span></td>
-            <td class="cell-muted">—</td>
-          </tr>
-          <tr>
-            <td><a class="link-blue" href="#">TXN-00841921</a></td>
-            <td class="cell-muted">—</td>
-            <td>Aldi Nord Madrid_site</td>
-            <td>Visa</td>
-            <td>7.21 EUR</td>
-            <td>7.21 EUR</td>
-            <td>Sale</td>
-            <td><span class="state-badge state-authorized"><span class="state-dot"></span>Authorized</span></td>
-            <td><a class="link-blue" href="#">1</a></td>
-          </tr>
-          <tr>
-            <td><a class="link-blue" href="#">TXN-00841920</a></td>
-            <td class="cell-muted">—</td>
-            <td>Aldi Nord Madrid_site</td>
-            <td>Visa</td>
-            <td>1.23 EUR</td>
-            <td>1.23 EUR</td>
-            <td>Sale</td>
-            <td><span class="state-badge state-authorized"><span class="state-dot"></span>Authorized</span></td>
-            <td><a class="link-blue" href="#">1</a></td>
-          </tr>
-          <tr>
-            <td><a class="link-blue" href="#">TXN-00841919</a></td>
-            <td>Aldi PT: Lunch soon?</td>
-            <td>Aldi Nord Portugal</td>
-            <td>Visa</td>
-            <td>12.00 EUR</td>
-            <td>12.00 EUR</td>
-            <td>Sale</td>
-            <td><span class="state-badge state-authorized"><span class="state-dot"></span>Authorized</span></td>
-            <td><a class="link-blue" href="#">1</a></td>
-          </tr>
-          <tr>
-            <td><a class="link-blue" href="#">TXN-00841918</a></td>
-            <td class="cell-muted">—</td>
-            <td>Aldi Nord Barcelona_site</td>
-            <td>Mastercard</td>
-            <td>33.50 EUR</td>
-            <td>33.50 EUR</td>
-            <td>Sale</td>
-            <td><span class="state-badge state-captured"><span class="state-dot"></span>Captured</span></td>
-            <td><a class="link-blue" href="#">2</a></td>
-          </tr>
-          <tr>
-            <td><a class="link-blue" href="#">TXN-00841917</a></td>
-            <td class="cell-muted">—</td>
-            <td>Aldi Nord Barcelona_site</td>
-            <td>Amex</td>
-            <td>88.00 EUR</td>
-            <td>88.00 EUR</td>
-            <td>Auth</td>
-            <td><span class="state-badge state-declined"><span class="state-dot"></span>Declined</span></td>
-            <td class="cell-muted">—</td>
-          </tr>
-          <tr>
-            <td><a class="link-blue" href="#">TXN-00841916</a></td>
-            <td>Order #44821</td>
-            <td>Aldi Nord Portugal</td>
-            <td>Visa</td>
-            <td>45.99 EUR</td>
-            <td>45.99 EUR</td>
-            <td>Sale</td>
-            <td><span class="state-badge state-captured"><span class="state-dot"></span>Captured</span></td>
-            <td><a class="link-blue" href="#">1</a></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-  </div><!-- /page-content -->
-</div><!-- /main -->
-
-<script>
-  function setActive(el) {
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-  }
-
-  function toggleFilterMenu(e) {
-    e.stopPropagation();
-    document.getElementById('filterMenu').classList.toggle('open');
-  }
-
-  document.addEventListener('click', () => {
-    document.getElementById('filterMenu').classList.remove('open');
-  });
-</script>
 </body>
 </html>

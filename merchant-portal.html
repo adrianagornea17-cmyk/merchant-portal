@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merchant Portal</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0f0f0f;
+      --sidebar-bg:   #161616;
+      --card-bg:      #1e1e1e;
+      --card-hover:   #252525;
+      --border:       #282828;
+      --text:         #ffffff;
+      --text-2:       #d1d5db;
+      --text-3:       #6b7280;
+      --text-4:       #3f3f46;
+      --accent:       #3b82f6;
+      --active-bg:    rgba(59,130,246,0.14);
+      --green:        #4ade80;
+      --red:          #f87171;
+      --amber:        #fbbf24;
+      --sidebar-w:    268px;
+      --radius:       10px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ─── SIDEBAR ─── */
+    #sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      border-right: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .sb-header {
+      padding: 18px 14px 14px;
+      flex-shrink: 0;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 30px; height: 30px;
+      background: #2563eb;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .merchant-chip {
+      background: #202020;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      margin: 10px 12px 0;
+      flex-shrink: 0;
+    }
+
+    .merchant-name { color: #fff; font-size: 12.5px; font-weight: 600; }
+    .merchant-mid  { color: var(--text-3); font-size: 11px; margin-top: 2px; }
+
+    .sb-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 8px 8px;
+    }
+
+    .sb-scroll::-webkit-scrollbar { width: 3px; }
+    .sb-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+    .sec-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.9px;
+      color: var(--text-4);
+      text-transform: uppercase;
+      padding: 14px 10px 5px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--text-3);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.1s, color 0.1s;
+      text-decoration: none;
+    }
+
+    .nav-btn:hover  { background: #202020; color: var(--text-2); }
+    .nav-btn.active { background: var(--active-bg); color: #93c5fd; }
+
+    .nav-btn .icon { width: 16px; height: 16px; flex-shrink: 0; }
+
+    .nav-btn .chev {
+      margin-left: auto;
+      width: 14px; height: 14px;
+      flex-shrink: 0;
+      opacity: 0.4;
+    }
+
+    /* Home-view: tool nav rows */
+    .tool-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--text-3);
+      font-size: 13px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.1s, color 0.1s;
+    }
+    .tool-nav:hover { background: #202020; color: var(--text-2); }
+
+    .tool-nav-left { display: flex; align-items: center; gap: 9px; }
+
+    /* Tool view: sub-menu */
+    .sub-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--text-3);
+      font-size: 13px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.1s, color 0.1s;
+    }
+    .sub-btn:hover  { background: #202020; color: var(--text-2); }
+    .sub-btn.active { background: var(--active-bg); color: #93c5fd; }
+
+    .sub-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: #3f3f46;
+      transition: background 0.1s;
+    }
+    .sub-btn.active .sub-dot { background: var(--accent); }
+
+    /* Split divider line */
+    .split-hr {
+      margin: 10px 8px;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Compact switch-tool rows */
+    .switch-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      border-radius: 7px;
+      color: #4b5563;
+      font-size: 12px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.1s, color 0.1s;
+    }
+    .switch-btn:hover   { background: #1e1e1e; color: var(--text-3); }
+    .switch-btn.current { background: #202020; color: var(--text-2); }
+
+    .switch-left { display: flex; align-items: center; gap: 7px; }
+
+    .cur-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Tool view header */
+    .tool-header {
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-3);
+      font-size: 11.5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0 0 10px 0;
+      transition: color 0.1s;
+    }
+    .back-btn:hover { color: var(--text-2); }
+
+    .tool-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tool-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tool-name  { font-size: 13.5px; font-weight: 600; color: #fff; }
+    .tool-sub   { font-size: 11px;   color: var(--text-3); margin-top: 2px; }
+
+    /* Footer */
+    .sb-footer {
+      padding: 12px 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #4f46e5;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-name { font-size: 12.5px; font-weight: 600; color: #fff; }
+    .user-role { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+
+    /* ─── MAIN ─── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .topbar {
+      padding: 13px 30px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .topbar-title { font-size: 14.5px; font-weight: 600; }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14.5px;
+      font-weight: 600;
+    }
+    .bc-parent  { color: var(--text-3); }
+    .bc-sep     { color: var(--text-4); font-weight: 400; }
+
+    .bell {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); cursor: pointer;
+      transition: color 0.1s;
+    }
+    .bell:hover { color: #fff; }
+
+    /* Page content */
+    .page {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 30px;
+    }
+    .page::-webkit-scrollbar { width: 5px; }
+    .page::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .stat-lbl {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--text-3);
+      text-transform: uppercase;
+    }
+
+    .stat-val {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+      margin: 5px 0 3px;
+      line-height: 1;
+    }
+
+    .stat-note { font-size: 11px; }
+
+    /* Tools section */
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-title { font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+    .section-line  { flex: 1; height: 1px; background: var(--border); }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 22px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: background 0.12s, border-color 0.12s;
+      text-align: center;
+    }
+
+    .tool-card:hover {
+      background: var(--card-hover);
+      border-color: #333;
+    }
+
+
+
+    .tc-icon {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .tc-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .tc-sub  { font-size: 11.5px; color: var(--text-3); margin-top: 1px; }
+
+    .tc-cta {
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1.5px solid;
+      opacity: 1;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+
+    .tc-cta:hover { filter: brightness(1.15); }
+
+    /* Tool content placeholder */
+    .tool-content-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tool-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-3);
+      gap: 8px;
+      padding: 40px;
+    }
+
+    .tp-icon {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .tp-title { font-size: 16px; font-weight: 600; color: var(--text-2); }
+    .tp-sub   { font-size: 13px; color: var(--text-3); }
+
+    /* Welcome heading */
+    .welcome-title { font-size: 26px; font-weight: 700; color: #fff; }
+    .welcome-date  { font-size: 13px; color: var(--text-3); margin-top: 3px; margin-bottom: 26px; }
+
+    /* ─── PAY BY LINK PAGE ─── */
+    .pbl-page {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px;
+    }
+    .pbl-page::-webkit-scrollbar { width: 5px; }
+    .pbl-page::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+
+    .pbl-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .pbl-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .pbl-create-btn {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 9px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .pbl-create-btn:hover { background: #1d4ed8; }
+
+    .pbl-card {
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 24px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Light-mode wizard preview (intentionally light — mirrors the real UI) */
+    .pbl-mockup {
+      background: #f0f0f2;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 520px;
+      padding: 24px 24px 0;
+      margin-bottom: 32px;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+
+    .mock-back {
+      font-size: 11.5px;
+      color: #2563eb;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mock-heading {
+      font-size: 19px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 20px;
+    }
+
+    .mock-stepper {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 18px;
+    }
+
+    .mock-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      min-width: 80px;
+    }
+
+    .mock-step-circle {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+
+    .mock-step-circle.on  { background: #2563eb; color: #fff; }
+    .mock-step-circle.off { background: #d1d5db; color: #9ca3af; }
+
+    .mock-step-label { font-size: 11px; color: #374151; font-weight: 500; white-space: nowrap; }
+
+    .mock-step-line {
+      flex: 1;
+      height: 2px;
+      background: #d1d5db;
+      margin-top: 12px;
+    }
+
+    .mock-form-card {
+      background: #fff;
+      border-radius: 10px 10px 0 0;
+      padding: 18px 18px 22px;
+    }
+
+    .mock-form-title { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 14px; }
+
+    .mock-lbl { font-size: 11px; color: #6b7280; margin-bottom: 4px; }
+
+    .mock-select {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: #9ca3af;
+      background: #fff;
+      margin-bottom: 14px;
+    }
+
+    .mock-divider { border: none; border-top: 1px solid #f0f0f0; margin: 2px 0 14px; }
+
+    .mock-radios { display: flex; gap: 16px; margin-bottom: 12px; }
+
+    .mock-radio {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11.5px; color: #6b7280;
+    }
+
+    .mock-radio-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .mock-amount-row { display: flex; gap: 8px; }
+
+    .mock-amount-box {
+      flex: 1;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: #9ca3af;
+      background: #fff;
+    }
+
+    .pbl-cta-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .pbl-cta-desc {
+      font-size: 13px;
+      color: var(--text-3);
+      text-align: center;
+      max-width: 520px;
+      line-height: 1.75;
+    }
+
+    /* ─── END PAY BY LINK ─── */
+
+    /* Transitions */
+    #sidebar, #main { animation: fadeIn 0.18s ease; }
+    @keyframes fadeIn { from { opacity: 0.5; } to { opacity: 1; } }
+
+    /* ─── APP LAUNCHER ─── */
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .launcher-wrap {
+      position: relative;
+    }
+
+    .launcher-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-3);
+      transition: background 0.12s, color 0.12s;
+    }
+    .launcher-btn:hover { background: #2a2a2a; color: #fff; }
+    .launcher-btn.open  { background: #333; color: #fff; }
+
+    .launcher-panel {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 300px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+      padding: 16px;
+      z-index: 999;
+      display: none;
+    }
+    .launcher-panel.open { display: block; animation: dropIn 0.15s ease; }
+    @keyframes dropIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    .lp-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .lp-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .lp-edit {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: #2e2e2e;
+      border: none;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3);
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+    .lp-edit:hover { background: #3a3a3a; color: #fff; }
+
+    .lp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+    }
+
+    .lp-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 6px;
+      border-radius: 10px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: background 0.1s;
+    }
+    .lp-item:hover { background: #2a2a2a; }
+
+    .lp-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .lp-name {
+      font-size: 11.5px;
+      color: var(--text-2);
+      text-align: center;
+      line-height: 1.3;
+    }
+  </style>
+</head>
+<body>
+<aside id="sidebar"></aside>
+<div id="main"></div>
+
+<script>
+/* ── SVG icon library ─────────────────────────────────────────────────── */
+const I = {
+  grid:     `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="9" height="9" rx="1.5"/><rect x="13" y="2" width="9" height="9" rx="1.5"/><rect x="2" y="13" width="9" height="9" rx="1.5"/><rect x="13" y="13" width="9" height="9" rx="1.5"/></svg>`,
+  home:     `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  bell:     `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>`,
+  back:     `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`,
+  dots:     `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5"  cy="5"  r="2"/><circle cx="12" cy="5"  r="2"/><circle cx="19" cy="5"  r="2"/><circle cx="5"  cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5"  cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg>`,
+  pencil:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+  chev:     `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`,
+
+  boarding: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
+  txn:      `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+  petro:    `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V7l7-4v19M14 22V11l7-3v14"/><path d="M3 11h11M3 16h11"/></svg>`,
+  device:   `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1.2" fill="currentColor" stroke="none"/></svg>`,
+  report:   `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V3M2 9h20"/></svg>`,
+  premier:  `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  sales:    `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`,
+  payment:  `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+  admin:    `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg>`,
+};
+
+/* ── Tool definitions ─────────────────────────────────────────────────── */
+const TOOLS = [
+  {
+    id: 'boarding',     name: 'Boarding',         subtitle: 'Merchant onboarding',
+    iconKey: 'boarding', iconBg: '#12243a', iconColor: '#60a5fa',
+    cta: 'Create order',
+    submenu: ['Overview','New application','Pending review','Approved','Rejected','Settings'],
+  },
+  {
+    id: 'payment',      name: 'Payment tools',     subtitle: 'Links & virtual transactions',
+    iconKey: 'payment',  iconBg: '#0e2a1e', iconColor: '#34d399',
+    cta: 'Create a payment link',
+    submenu: ['Overview','Payment link','Virtual transactions','Settings'],
+  },
+  {
+    id: 'transactions', name: 'Transactions',      subtitle: 'Data & monitoring',
+    iconKey: 'txn',      iconBg: '#0c2018', iconColor: '#4ade80',
+    cta: 'Search for a transaction',
+    submenu: ['Overview','Search','Reports','Disputes','Chargebacks','Batch files','Settings'],
+  },
+  {
+    id: 'petro',        name: 'Petro',             subtitle: 'Fuel & fleet mgmt',
+    iconKey: 'petro',    iconBg: '#251a08', iconColor: '#fbbf24',
+    submenu: ['Overview','Fuel pricing','Fleet cards','Tank monitors','Reports','Settings'],
+  },
+  {
+    id: 'device',       name: 'Device manager',    subtitle: 'Terminals & POS',
+    iconKey: 'device',   iconBg: '#25101a', iconColor: '#f472b6',
+    submenu: ['Overview','All devices','Deploy queue','Maintenance','Firmware','Settings'],
+  },
+  {
+    id: 'reporting',    name: 'Reporting tools',   subtitle: 'BI & analytics',
+    iconKey: 'report',   iconBg: '#151530', iconColor: '#818cf8',
+    submenu: ['Overview','Dashboards','Scheduled reports','Custom reports','Exports','Settings'],
+  },
+  {
+    id: 'premier',      name: 'Premier portal',    subtitle: 'Partner management',
+    iconKey: 'premier',  iconBg: '#1c1028', iconColor: '#c084fc',
+    submenu: ['Overview','Partners','Commissions','Agreements','Support','Settings'],
+  },
+  {
+    id: 'sales',        name: 'Sales connector',   subtitle: 'CRM & sales tools',
+    iconKey: 'sales',    iconBg: '#0e1e2e', iconColor: '#38bdf8',
+    submenu: ['Overview','Leads','Opportunities','Pipeline','Contracts','Settings'],
+  },
+  {
+    id: 'admin',        name: 'Administration',    subtitle: 'Users & settings',
+    iconKey: 'admin',    iconBg: '#1c1c20', iconColor: '#94a3b8',
+    cta: 'Add a new user',
+    submenu: ['Overview','User management','Roles & permissions','Audit logs','API console','Notifications','Settings'],
+  },
+];
+
+/* ── State ────────────────────────────────────────────────────────────── */
+let state = { view: 'home', toolId: null, subItem: 'Overview' };
+
+const tool = () => TOOLS.find(t => t.id === state.toolId);
+
+/* ── App launcher HTML ───────────────────────────────────────────────── */
+function launcherHTML() {
+  const items = TOOLS.map(t => `
+    <button class="lp-item" onclick="selectTool('${t.id}');closeLauncher()">
+      <div class="lp-icon" style="background:${t.iconBg}">${icon(t.iconKey, t.iconColor, 20)}</div>
+      <span class="lp-name">${t.name}</span>
+    </button>
+  `).join('');
+
+  return `
+    <div class="launcher-wrap">
+      <button class="launcher-btn" id="launcherBtn" onclick="toggleLauncher(event)" title="All tools">
+        ${icon('dots','currentColor',18)}
+      </button>
+      <div class="launcher-panel" id="launcherPanel">
+        <div class="lp-head">
+          <span class="lp-title">Your tools</span>
+          <button class="lp-edit" title="Customise">${icon('pencil','currentColor',14)}</button>
+        </div>
+        <div class="lp-grid">${items}</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ── Helpers ─────────────────────────────────────────────────────────── */
+function icon(key, color, size) {
+  const svg = (I[key] || '').replace(/width="\d+"/, `width="${size||17}"`).replace(/height="\d+"/, `height="${size||17}"`);
+  return `<span style="color:${color||'currentColor'};display:flex;align-items:center;">${svg}</span>`;
+}
+
+function toolIconBadge(t, size) {
+  size = size || 46;
+  const iSize = size * 0.43;
+  return `<div class="tc-icon" style="background:${t.iconBg};width:${size}px;height:${size}px;border-radius:${size*0.22}px;">${icon(t.iconKey, t.iconColor, iSize)}</div>`;
+}
+
+/* ── Sidebar: HOME view ───────────────────────────────────────────────── */
+function renderHomeSidebar() {
+  const toolRows = TOOLS.map(t => `
+    <button class="tool-nav" onclick="selectTool('${t.id}')">
+      <span class="tool-nav-left">${icon(t.iconKey)}&nbsp;${t.name}</span>
+      ${icon('chev')}
+    </button>
+  `).join('');
+
+  return `
+    <div class="sb-header">
+      <div class="logo-row">
+        <div class="logo-icon">${icon('grid','#fff',14)}</div>
+        <span class="logo-text">Merchant portal</span>
+      </div>
+    </div>
+    <div class="merchant-chip">
+      <div class="merchant-name">Sunrise Foods Inc</div>
+      <div class="merchant-mid">MID 8842019</div>
+    </div>
+    <div class="sb-scroll">
+      <div class="sec-label">Overview</div>
+      <button class="nav-btn active">${icon('home','#93c5fd')} Home</button>
+      <div class="sec-label">Tools</div>
+      ${toolRows}
+    </div>
+    <div class="sb-footer">
+      <div class="avatar">AG</div>
+      <div>
+        <div class="user-name">Adriana Gornea</div>
+        <div class="user-role">Admin</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ── Sidebar: TOOL view (split) ───────────────────────────────────────── */
+function renderToolSidebar() {
+  const t = tool();
+
+  const subItems = t.submenu.map(item => `
+    <button class="sub-btn ${state.subItem === item ? 'active' : ''}" onclick="selectSub('${item}')">
+      <span class="sub-dot"></span>${item}
+    </button>
+  `).join('');
+
+  const switchRows = TOOLS.map(s => `
+    <button class="switch-btn ${s.id === t.id ? 'current' : ''}" onclick="selectTool('${s.id}')">
+      <span class="switch-left">
+        ${icon(s.iconKey, s.id === t.id ? s.iconColor : '#4b5563', 14)}
+        ${s.name}
+      </span>
+      ${s.id === t.id ? `<span class="cur-dot" style="background:${t.iconColor}"></span>` : ''}
+    </button>
+  `).join('');
+
+  return `
+    <div class="tool-header">
+      <button class="back-btn" onclick="goHome()">
+        ${icon('back','currentColor',12)} Back to home
+      </button>
+      <div class="tool-title-row">
+        <div class="tool-icon" style="background:${t.iconBg}">
+          ${icon(t.iconKey, t.iconColor, 17)}
+        </div>
+        <div>
+          <div class="tool-name">${t.name}</div>
+          <div class="tool-sub">${t.subtitle}</div>
+        </div>
+      </div>
+    </div>
+    <div class="sb-scroll">
+      <div class="sec-label">${t.name}</div>
+      ${subItems}
+
+      <hr class="split-hr" />
+      <div class="sec-label">Switch tool</div>
+      ${switchRows}
+    </div>
+    <div class="sb-footer">
+      <div class="avatar">AG</div>
+      <div>
+        <div class="user-name">Adriana Gornea</div>
+        <div class="user-role">Admin</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ── Main: HOME ───────────────────────────────────────────────────────── */
+function renderHomeMain() {
+  const toolCards = TOOLS.map(t => `
+    <div class="tool-card" onclick="selectTool('${t.id}')">
+      ${toolIconBadge(t, 46)}
+      <div>
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-sub">${t.subtitle}</div>
+      </div>
+      <span class="tc-cta" style="color:${t.iconColor};border-color:${t.iconColor}22;background:${t.iconBg}">
+        ${t.cta || 'Open'}&nbsp;→
+      </span>
+    </div>
+  `).join('');
+
+  return `
+    <div class="topbar">
+      <span class="topbar-title">Home</span>
+      <div class="topbar-right">
+        ${launcherHTML()}
+        <button class="bell">${icon('bell','currentColor',15)}</button>
+      </div>
+    </div>
+    <div class="page">
+      <div class="welcome-title">Good morning, Adriana</div>
+      <div class="welcome-date">Monday, May 4, 2026 — business overview</div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-lbl">Today's Volume</div>
+          <div class="stat-val">$14,230</div>
+          <div class="stat-note" style="color:#4ade80">↑ 8.2% vs yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Transactions</div>
+          <div class="stat-val">342</div>
+          <div class="stat-note" style="color:#4ade80">↑ 12 since last hour</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Approval Rate</div>
+          <div class="stat-val">97.4%</div>
+          <div class="stat-note" style="color:#6b7280">Last 24 hours</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Active Devices</div>
+          <div class="stat-val">18</div>
+          <div class="stat-note" style="color:#f87171">2 require attention</div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <span class="section-title">Tools</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="tools-grid">${toolCards}</div>
+    </div>
+  `;
+}
+
+/* ── Pay by Link overview ─────────────────────────────────────────────── */
+function renderPayByLink() {
+  return `
+    <div class="topbar">
+      <span class="breadcrumb">
+        <span class="bc-parent">Payment tools</span>
+        <span class="bc-sep">/</span>
+        <span>Overview</span>
+      </span>
+      <div class="topbar-right">
+        ${launcherHTML()}
+        <button class="bell">${icon('bell','currentColor',15)}</button>
+      </div>
+    </div>
+    <div class="tool-content-wrap">
+      <div class="pbl-page">
+        <div class="pbl-header">
+          <span class="pbl-title">Pay by Link</span>
+          <button class="pbl-create-btn">Create New</button>
+        </div>
+
+        <div class="pbl-card">
+          <!-- Wizard preview mockup -->
+          <div class="pbl-mockup">
+            <div class="mock-back">&#8249; Payment links</div>
+            <div class="mock-heading">Create Payment link</div>
+
+            <div class="mock-stepper">
+              <div class="mock-step">
+                <div class="mock-step-circle on">1</div>
+                <div class="mock-step-label">Payment Settings</div>
+              </div>
+              <div class="mock-step-line"></div>
+              <div class="mock-step">
+                <div class="mock-step-circle off">2</div>
+                <div class="mock-step-label">Link Settings</div>
+              </div>
+              <div class="mock-step-line"></div>
+              <div class="mock-step">
+                <div class="mock-step-circle off">3</div>
+                <div class="mock-step-label">Done</div>
+              </div>
+            </div>
+
+            <div class="mock-form-card">
+              <div class="mock-form-title">Payment Settings</div>
+              <div class="mock-lbl">Organization</div>
+              <div class="mock-select">- Select -</div>
+              <hr class="mock-divider" />
+              <div class="mock-lbl">Cart information</div>
+              <div class="mock-radios">
+                <div class="mock-radio"><div class="mock-radio-dot"></div> Amount</div>
+                <div class="mock-radio"><div class="mock-radio-dot"></div> Amount &amp; Product</div>
+              </div>
+              <div class="mock-lbl">Transaction Amount</div>
+              <div class="mock-amount-row">
+                <div class="mock-amount-box">Currency</div>
+                <div class="mock-amount-box" style="flex:2"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pbl-cta-title">Collect payments with Pay by Link</div>
+          <div class="pbl-cta-desc">A simple and secure way to collect payments by generating a shareable payment link with amount and currency details. Customers complete the payment online, and you can track the status and transaction details in Verifone Central.</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ── Main: TOOL ───────────────────────────────────────────────────────── */
+function renderToolMain() {
+  const t = tool();
+
+  if (t.id === 'payment' && state.subItem === 'Overview') return renderPayByLink();
+
+  return `
+    <div class="topbar">
+      <span class="breadcrumb">
+        <span class="bc-parent">${t.name}</span>
+        <span class="bc-sep">/</span>
+        <span>${state.subItem}</span>
+      </span>
+      <div class="topbar-right">
+        ${launcherHTML()}
+        <button class="bell">${icon('bell','currentColor',15)}</button>
+      </div>
+    </div>
+    <div class="tool-content-wrap">
+      <div class="tool-placeholder">
+        ${toolIconBadge(t, 58)}
+        <div class="tp-title">${t.name} — ${state.subItem}</div>
+        <div class="tp-sub">${t.subtitle}</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ── Render engine ────────────────────────────────────────────────────── */
+function render() {
+  document.getElementById('sidebar').innerHTML =
+    state.view === 'home' ? renderHomeSidebar() : renderToolSidebar();
+  document.getElementById('main').innerHTML =
+    state.view === 'home' ? renderHomeMain() : renderToolMain();
+}
+
+/* ── Actions ─────────────────────────────────────────────────────────── */
+function selectTool(id) {
+  state = { view: 'tool', toolId: id, subItem: 'Overview' };
+  render();
+}
+
+function selectSub(item) {
+  state.subItem = item;
+  render();
+}
+
+function goHome() {
+  state = { view: 'home', toolId: null, subItem: 'Overview' };
+  render();
+}
+
+render();
+
+/* ── Launcher toggle ─────────────────────────────────────────────────── */
+function toggleLauncher(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('launcherPanel');
+  const btn   = document.getElementById('launcherBtn');
+  const open  = panel.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+
+function closeLauncher() {
+  const panel = document.getElementById('launcherPanel');
+  const btn   = document.getElementById('launcherBtn');
+  if (panel) { panel.classList.remove('open'); btn.classList.remove('open'); }
+}
+
+document.addEventListener('click', () => closeLauncher());
+</script>
+</body>
+</html>
