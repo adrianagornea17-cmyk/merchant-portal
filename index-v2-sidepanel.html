@@ -194,22 +194,34 @@
       gap: 10px;
     }
 
-    .view-toggle { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-
-    .vt-label { font-size: 12px; color: var(--text-3); font-weight: 500; margin-right: 4px; white-space: nowrap; }
-
-    .vt-btn {
-      padding: 5px 13px; border-radius: 20px; font-size: 13px; font-weight: 500;
-      cursor: pointer; border: 1.5px solid transparent;
-      background: #f3f4f6; color: var(--text-3); transition: all 0.1s;
+    /* View toggle inside filter panel */
+    .fp-view-toggle {
+      display: flex;
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
     }
 
-    .vt-btn.active {
-      background: #fff; border-color: var(--border); color: var(--text);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    .fp-vt-btn {
+      flex: 1;
+      padding: 7px 0;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-3);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s, box-shadow 0.12s;
     }
 
-    .search-divider { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; }
+    .fp-vt-btn.active {
+      background: #fff;
+      color: var(--text);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+    }
 
     .search-type-btn {
       display: flex; align-items: center; gap: 5px;
@@ -539,14 +551,6 @@
 
       <!-- Search bar -->
       <div class="search-bar-card">
-        <div class="view-toggle">
-          <span class="vt-label">View:</span>
-          <button class="vt-btn" onclick="this.parentElement.querySelectorAll('.vt-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Orders</button>
-          <button class="vt-btn active" onclick="this.parentElement.querySelectorAll('.vt-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Transactions</button>
-        </div>
-
-        <div class="search-divider"></div>
-
         <button class="search-type-btn">
           Transaction ID
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -707,6 +711,17 @@
     </div>
 
     <div class="fp-body">
+      <!-- Table view toggle -->
+      <div class="fp-section">
+        <div class="fp-section-label">Table View</div>
+        <div class="fp-view-toggle">
+          <button class="fp-vt-btn" id="fpBtnOrders" onclick="setView('orders')">Orders</button>
+          <button class="fp-vt-btn active" id="fpBtnTransactions" onclick="setView('transactions')">Transactions</button>
+        </div>
+      </div>
+
+      <hr class="fp-divider"/>
+
       <!-- Date range -->
       <div class="fp-section">
         <div class="fp-section-label">Date range</div>
@@ -839,6 +854,11 @@
 
   function removePill(btn) {
     btn.closest('.active-filter-pill').remove();
+  }
+
+  function setView(v) {
+    document.getElementById('fpBtnOrders').classList.toggle('active', v === 'orders');
+    document.getElementById('fpBtnTransactions').classList.toggle('active', v === 'transactions');
   }
 </script>
 </body>
