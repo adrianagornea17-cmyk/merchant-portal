@@ -44,8 +44,54 @@
       flex-direction: column;
       height: 100vh;
       border-right: 1px solid var(--border);
-      transition: all 0.2s;
+      transition: width 0.22s ease, min-width 0.22s ease;
+      overflow: hidden;
     }
+
+    /* ── Collapsed state ── */
+    #sidebar.collapsed { width: 54px; min-width: 54px; }
+
+    #sidebar.collapsed .nav-label,
+    #sidebar.collapsed .merchant-chip,
+    #sidebar.collapsed .sec-label,
+    #sidebar.collapsed .chev,
+    #sidebar.collapsed .back-btn,
+    #sidebar.collapsed .tool-info,
+    #sidebar.collapsed .cur-dot,
+    #sidebar.collapsed .user-name,
+    #sidebar.collapsed .user-role,
+    #sidebar.collapsed .sub-dot { display: none; }
+
+    #sidebar.collapsed .sb-header { padding: 14px 10px; }
+    #sidebar.collapsed .logo-row  { justify-content: center; }
+
+    #sidebar.collapsed .tool-nav,
+    #sidebar.collapsed .nav-btn   { justify-content: center; padding: 9px; }
+
+    #sidebar.collapsed .sub-btn,
+    #sidebar.collapsed .switch-btn { justify-content: center; padding: 8px; }
+
+    #sidebar.collapsed .sb-footer      { justify-content: center; }
+    #sidebar.collapsed .tool-header    { padding: 12px 10px; }
+    #sidebar.collapsed .tool-title-row { justify-content: center; }
+    #sidebar.collapsed .split-hr       { margin: 8px 6px; }
+    #sidebar.collapsed .sb-toggle      { transform: rotate(180deg); }
+
+    /* Toggle button */
+    .sb-toggle {
+      margin-left: auto;
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      background: none;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.1s, color 0.1s;
+    }
+    .sb-toggle:hover { background: #2a2a2a; color: #fff; }
+    #sidebar.collapsed .sb-toggle { margin-left: 0; }
 
     .sb-header {
       padding: 18px 14px 14px;
@@ -963,9 +1009,9 @@ function toolIconBadge(t, size) {
 /* ── Sidebar: HOME view ───────────────────────────────────────────────── */
 function renderHomeSidebar() {
   const toolRows = TOOLS.map(t => `
-    <button class="tool-nav" onclick="selectTool('${t.id}')">
-      <span class="tool-nav-left">${icon(t.iconKey)}&nbsp;${t.name}</span>
-      ${icon('chev')}
+    <button class="tool-nav" onclick="selectTool('${t.id}')" title="${t.name}">
+      <span class="tool-nav-left">${icon(t.iconKey)}<span class="nav-label">&nbsp;${t.name}</span></span>
+      <span class="chev">${icon('chev')}</span>
     </button>
   `).join('');
 
@@ -973,7 +1019,10 @@ function renderHomeSidebar() {
     <div class="sb-header">
       <div class="logo-row">
         <div class="logo-icon">${icon('grid','#fff',14)}</div>
-        <span class="logo-text">Merchant portal</span>
+        <span class="logo-text nav-label">Merchant portal</span>
+        <button class="sb-toggle" onclick="toggleSidebar()" title="Toggle menu">
+          ${icon('chev','currentColor',13)}
+        </button>
       </div>
     </div>
     <div class="merchant-chip">
@@ -982,7 +1031,7 @@ function renderHomeSidebar() {
     </div>
     <div class="sb-scroll">
       <div class="sec-label">Overview</div>
-      <button class="nav-btn active">${icon('home','#93c5fd')} Home</button>
+      <button class="nav-btn active" title="Home">${icon('home','#93c5fd')} <span class="nav-label">Home</span></button>
       <div class="sec-label">Tools</div>
       ${toolRows}
     </div>
@@ -1001,16 +1050,16 @@ function renderToolSidebar() {
   const t = tool();
 
   const subItems = t.submenu.map(item => `
-    <button class="sub-btn ${state.subItem === item ? 'active' : ''}" onclick="selectSub('${item}')">
-      <span class="sub-dot"></span>${item}
+    <button class="sub-btn ${state.subItem === item ? 'active' : ''}" onclick="selectSub('${item}')" title="${item}">
+      <span class="sub-dot"></span><span class="nav-label">${item}</span>
     </button>
   `).join('');
 
   const switchRows = TOOLS.map(s => `
-    <button class="switch-btn ${s.id === t.id ? 'current' : ''}" onclick="selectTool('${s.id}')">
+    <button class="switch-btn ${s.id === t.id ? 'current' : ''}" onclick="selectTool('${s.id}')" title="${s.name}">
       <span class="switch-left">
         ${icon(s.iconKey, s.id === t.id ? s.iconColor : '#4b5563', 14)}
-        ${s.name}
+        <span class="nav-label">${s.name}</span>
       </span>
       ${s.id === t.id ? `<span class="cur-dot" style="background:${t.iconColor}"></span>` : ''}
     </button>
@@ -1025,10 +1074,13 @@ function renderToolSidebar() {
         <div class="tool-icon" style="background:${t.iconBg}">
           ${icon(t.iconKey, t.iconColor, 17)}
         </div>
-        <div>
+        <div class="tool-info">
           <div class="tool-name">${t.name}</div>
           <div class="tool-sub">${t.subtitle}</div>
         </div>
+        <button class="sb-toggle" style="margin-left:auto" onclick="toggleSidebar()" title="Toggle menu">
+          ${icon('chev','currentColor',13)}
+        </button>
       </div>
     </div>
     <div class="sb-scroll">
@@ -1392,6 +1444,11 @@ function closeLauncher() {
 }
 
 document.addEventListener('click', () => { closeLauncher(); closeAllMenus(); });
+
+/* ── Sidebar toggle ──────────────────────────────────────────────────── */
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
 
 function toggleCardMenu(e, id) {
   e.stopPropagation();
