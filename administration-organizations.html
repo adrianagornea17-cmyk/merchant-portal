@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifone — Administration · Organizations</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-w: 220px;
+      --panel-w: 360px;
+      --bg: #f9fafb;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --border: #e5e7eb;
+      --active-bg: #eff6ff;
+      --active-text: #1d4ed8;
+      --accent: #2563eb;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ─── LEFT SIDEBAR ─── */
+    #sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: #fff;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .sb-logo {
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .sb-logo-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+
+    .sb-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 8px;
+    }
+
+    .sb-scroll::-webkit-scrollbar { width: 3px; }
+    .sb-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+    .nav-section { margin-bottom: 4px; }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: var(--text-4);
+      padding: 10px 10px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      color: var(--text-2);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .nav-item:hover { background: #f3f4f6; color: var(--text); }
+    .nav-item.active { background: var(--active-bg); color: var(--active-text); font-weight: 600; }
+    .nav-item .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.75; }
+    .nav-item.active .nav-icon { opacity: 1; }
+
+    .nav-divider { margin: 6px 8px; border: none; border-top: 1px solid var(--border); }
+
+    .nav-sub-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6.5px 10px 6.5px 30px;
+      border-radius: 7px;
+      color: var(--text-3);
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .nav-sub-item:hover { background: #f3f4f6; color: var(--text-2); }
+    .nav-sub-item.active { color: var(--active-text); font-weight: 600; background: #eff6ff; }
+    .nav-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; }
+    .nav-sub-item.active .nav-sub-dot { background: var(--accent); }
+
+    .sb-bottom {
+      padding: 12px 8px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .sb-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .sb-user:hover { background: #f3f4f6; }
+
+    .sb-avatar {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #1d4ed8;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sb-user-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+    .sb-user-role { font-size: 11px; color: var(--text-4); }
+
+    /* ─── MAIN ─── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 6px; font-size: 13.5px; }
+    .topbar-bc-root { color: var(--text-3); }
+    .topbar-bc-sep  { color: var(--text-4); }
+    .topbar-bc-cur  { color: var(--text); font-weight: 600; }
+
+    .topbar-right { display: flex; align-items: center; gap: 8px; }
+
+    .topbar-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: none; border: none;
+      color: var(--text-3);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .topbar-btn:hover { background: #f3f4f6; color: var(--text); }
+
+    .page-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+    }
+    .page-content::-webkit-scrollbar { width: 5px; }
+    .page-content::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+
+    .page-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .page-title { font-size: 20px; font-weight: 700; color: #0f172a; }
+
+    .page-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-primary {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 20px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background 0.1s;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+
+    .btn-outline {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px;
+      border: 1.5px solid var(--border); border-radius: 20px;
+      background: #fff; color: var(--text-2);
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: border-color 0.1s, background 0.1s;
+    }
+    .btn-outline:hover { border-color: #d1d5db; background: #f9fafb; }
+
+    /* Filter bar */
+    .filter-bar {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-type-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 7px 12px;
+      border: 1.5px solid var(--border); border-radius: 20px;
+      background: #fff; color: var(--text-2);
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      white-space: nowrap; flex-shrink: 0;
+    }
+
+    .search-input-wrap { flex: 1; }
+
+    .search-input {
+      width: 100%;
+      padding: 7px 14px;
+      border: 1.5px solid var(--border); border-radius: 20px;
+      font-size: 13px; color: var(--text); background: #fff;
+      outline: none; transition: border-color 0.1s;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--text-4); }
+
+    .btn-search {
+      padding: 7px 18px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 20px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background 0.1s; flex-shrink: 0;
+    }
+    .btn-search:hover { background: #1d4ed8; }
+
+    .filter-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .filter-chip {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 12px;
+      border: 1.5px solid var(--border); border-radius: 20px;
+      background: #fff; color: var(--text-2);
+      font-size: 12.5px; font-weight: 500; cursor: pointer;
+      transition: border-color 0.1s;
+    }
+    .filter-chip:hover { border-color: #d1d5db; background: #f9fafb; }
+
+    /* Table */
+    .table-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-meta {
+      padding: 10px 16px;
+      font-size: 12.5px;
+      color: var(--text-3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead th {
+      background: #f9fafb;
+      padding: 10px 14px;
+      font-size: 12px; font-weight: 600;
+      color: var(--text-3);
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    th.sortable { cursor: pointer; }
+    th.sortable:hover { color: var(--text-2); }
+
+    tbody tr {
+      border-bottom: 1px solid #f3f4f6;
+      transition: background 0.08s;
+      cursor: pointer;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f9fafb; }
+    tbody tr.row-selected { background: #eff6ff; }
+
+    tbody td {
+      padding: 11px 14px;
+      font-size: 13px;
+      color: var(--text-2);
+    }
+
+    .cell-muted { color: var(--text-4); }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 20px;
+      font-size: 11.5px; font-weight: 600;
+    }
+    .status-enabled  { background: #dcfce7; color: #166534; }
+    .status-disabled { background: #f3f4f6; color: #6b7280; }
+    .status-deleted  { background: #fee2e2; color: #991b1b; }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+    /* ─── HIERARCHY SLIDE-IN PANEL ─── */
+    #panel-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.18);
+      z-index: 40;
+      animation: fadeIn 0.18s ease;
+    }
+
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+    #hierarchy-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: var(--panel-w);
+      height: 100vh;
+      background: #fff;
+      border-left: 1px solid var(--border);
+      box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transform: translateX(100%);
+      transition: transform 0.22s cubic-bezier(.4,0,.2,1);
+    }
+
+    #hierarchy-panel.open { transform: translateX(0); }
+
+    /* panel header */
+    .panel-header {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .panel-header-left { display: flex; flex-direction: column; gap: 2px; }
+    .panel-title { font-size: 14px; font-weight: 700; color: #0f172a; }
+    .panel-subtitle { font-size: 11.5px; color: var(--text-4); }
+
+    .panel-close-btn {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: none; border: 1px solid var(--border);
+      color: var(--text-3); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s;
+    }
+    .panel-close-btn:hover { background: #f3f4f6; color: var(--text); }
+
+    /* search & controls */
+    .panel-controls {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .panel-search-wrap { position: relative; }
+
+    .panel-search {
+      width: 100%;
+      padding: 7px 12px 7px 32px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 12.5px; color: var(--text); background: #f9fafb;
+      outline: none; transition: border-color 0.1s, background 0.1s;
+    }
+    .panel-search:focus { border-color: var(--accent); background: #fff; }
+    .panel-search::placeholder { color: var(--text-4); }
+
+    .panel-search-icon {
+      position: absolute;
+      left: 10px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-4);
+      pointer-events: none;
+    }
+
+    .panel-search-clear {
+      position: absolute;
+      right: 10px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--text-4); cursor: pointer;
+      display: none;
+      padding: 0;
+    }
+    .panel-search-clear.visible { display: flex; }
+    .panel-search-clear:hover { color: var(--text-2); }
+
+    .expand-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .expand-row span {
+      font-size: 11.5px;
+      color: var(--text-4);
+      margin-right: 4px;
+    }
+
+    .expand-btn {
+      padding: 4px 10px;
+      border: 1.5px solid var(--border); border-radius: 6px;
+      background: #fff; color: var(--text-2);
+      font-size: 11.5px; font-weight: 500; cursor: pointer;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .expand-btn:hover { background: #f3f4f6; border-color: #d1d5db; }
+
+    /* tree */
+    .panel-tree {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 0;
+    }
+    .panel-tree::-webkit-scrollbar { width: 4px; }
+    .panel-tree::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+
+    .tree-node {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      padding: 5px 14px;
+      cursor: pointer;
+      transition: background 0.08s;
+      min-height: 32px;
+    }
+    .tree-node:hover { background: #f9fafb; }
+    .tree-node.selected { background: #eff6ff; }
+    .tree-node.search-match { background: #fefce8; }
+    .tree-node.selected.search-match { background: #eff6ff; }
+
+    .tree-toggle-btn {
+      width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-4);
+      border: none; background: none; cursor: pointer; padding: 0;
+      border-radius: 3px;
+      transition: color 0.1s, background 0.1s, transform 0.15s;
+    }
+    .tree-toggle-btn:hover { color: var(--text-2); background: #e5e7eb; }
+    .tree-toggle-btn.open { transform: rotate(90deg); }
+    .tree-toggle-btn.leaf { visibility: hidden; pointer-events: none; }
+
+    .tree-label {
+      flex: 1;
+      font-size: 12.5px;
+      color: var(--text-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+    .tree-node.selected .tree-label { color: var(--active-text); font-weight: 600; }
+
+    mark {
+      background: #fde047;
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    .tree-count {
+      font-size: 10.5px;
+      color: var(--text-4);
+      flex-shrink: 0;
+      margin-right: 4px;
+    }
+
+    .type-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-estate  { background: #0f172a; color: #fff; }
+    .badge-group   { background: #dbeafe; color: #1d4ed8; }
+    .badge-company { background: #ede9fe; color: #6d28d9; }
+    .badge-site    { background: #d1fae5; color: #065f46; }
+
+    .tree-children { overflow: hidden; }
+
+    /* detail sub-panel */
+    .panel-detail {
+      border-top: 1px solid var(--border);
+      padding: 14px 16px;
+      flex-shrink: 0;
+      background: #f9fafb;
+    }
+
+    .detail-empty {
+      font-size: 12px;
+      color: var(--text-4);
+      text-align: center;
+      padding: 6px 0;
+    }
+
+    .detail-org-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .detail-field {}
+    .detail-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-4);
+      margin-bottom: 2px;
+    }
+    .detail-value {
+      font-size: 12.5px;
+      color: var(--text-2);
+      font-weight: 500;
+    }
+    .detail-id {
+      font-size: 11px;
+      color: var(--text-4);
+      font-family: monospace;
+      margin-bottom: 10px;
+    }
+
+    .detail-actions { display: flex; gap: 8px; }
+
+    .detail-btn {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 7px;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.1s;
+    }
+    .detail-btn-primary { background: var(--accent); color: #fff; border: none; }
+    .detail-btn-primary:hover { background: #1d4ed8; }
+    .detail-btn-outline { background: #fff; color: var(--text-2); border: 1.5px solid var(--border); }
+    .detail-btn-outline:hover { background: #f3f4f6; }
+
+    /* no-results */
+    .tree-empty {
+      padding: 20px 16px;
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--text-4);
+    }
+
+    /* dropdown util */
+    .dropdown-wrap { position: relative; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px); left: 0;
+      background: #fff;
+      border: 1px solid var(--border); border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      min-width: 180px; z-index: 100; padding: 6px 0;
+    }
+    .dropdown-menu.open { display: block; animation: dropIn 0.12s ease; }
+    @keyframes dropIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:none; } }
+    .dd-item {
+      display: block;
+      padding: 8px 16px;
+      font-size: 13px; color: var(--text-2);
+      cursor: pointer; transition: background 0.08s;
+    }
+    .dd-item:hover { background: #f9fafb; }
+    .dd-item.checked { color: var(--accent); font-weight: 600; }
+    .dd-item.checked::before { content: "✓  "; }
+  </style>
+</head>
+<body>
+
+<!-- ─── LEFT SIDEBAR ─── -->
+<aside id="sidebar">
+  <div class="sb-logo">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="#0f172a"/>
+      <circle cx="10" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="22" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="10" cy="22" r="3" fill="#60a5fa"/>
+      <circle cx="22" cy="22" r="3" fill="#60a5fa"/>
+    </svg>
+    <span class="sb-logo-text">Verifone</span>
+  </div>
+
+  <div class="sb-scroll">
+    <div class="nav-section">
+      <div class="nav-section-label">Main</div>
+      <button class="nav-item" onclick="setNav(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+        Dashboard
+      </button>
+      <button class="nav-item" onclick="setNav(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+        Commerce
+      </button>
+      <button class="nav-item active" onclick="setNav(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg></span>
+        Administration
+      </button>
+      <button class="nav-sub-item active" onclick="setSubNav(this)">
+        <span class="nav-sub-dot"></span>
+        Organizations
+      </button>
+      <button class="nav-sub-item" onclick="setSubNav(this)">
+        <span class="nav-sub-dot"></span>
+        Users
+      </button>
+      <button class="nav-sub-item" onclick="setSubNav(this)">
+        <span class="nav-sub-dot"></span>
+        Roles &amp; Permissions
+      </button>
+      <button class="nav-sub-item" onclick="setSubNav(this)">
+        <span class="nav-sub-dot"></span>
+        Settings
+      </button>
+      <button class="nav-item" onclick="setNav(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        Boarding
+      </button>
+    </div>
+
+    <hr class="nav-divider"/>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Analytics</div>
+      <button class="nav-item" onclick="setNav(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V3M2 9h20"/></svg></span>
+        Reports
+      </button>
+      <button class="nav-item" onclick="setNav(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+        Analytics
+      </button>
+    </div>
+  </div>
+
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">AG</div>
+      <div>
+        <div class="sb-user-name">Adriana Gornea</div>
+        <div class="sb-user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ─── MAIN ─── -->
+<div id="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-bc-root">Administration</span>
+      <span class="topbar-bc-sep">/</span>
+      <span class="topbar-bc-cur">Organizations</span>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    <div class="page-heading">
+      <span class="page-title">Organizations</span>
+      <div class="page-actions">
+        <button class="btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+        <button class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add organization
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="dropdown-wrap">
+        <button class="search-type-btn" id="searchTypeBtn" onclick="toggleDropdown('searchTypeMenu', event)">
+          Organization name
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="dropdown-menu" id="searchTypeMenu">
+          <span class="dd-item checked" onclick="setSearchType('Organization name',this)">Organization name</span>
+          <span class="dd-item" onclick="setSearchType('Organization ID',this)">Organization ID</span>
+          <span class="dd-item" onclick="setSearchType('Friendly name',this)">Friendly name</span>
+        </div>
+      </div>
+      <div class="search-input-wrap">
+        <input class="search-input" id="mainSearch" type="text" placeholder="Search by Organization name" oninput="filterTable()" />
+      </div>
+      <button class="btn-search" onclick="filterTable()">Search</button>
+    </div>
+
+    <div class="filter-chips">
+      <div class="dropdown-wrap">
+        <button class="filter-chip" onclick="toggleDropdown('countryMenu',event)">Country <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="dropdown-menu" id="countryMenu">
+          <span class="dd-item" onclick="closeDropdown('countryMenu')">Germany</span>
+          <span class="dd-item" onclick="closeDropdown('countryMenu')">France</span>
+          <span class="dd-item" onclick="closeDropdown('countryMenu')">Spain</span>
+        </div>
+      </div>
+      <div class="dropdown-wrap">
+        <button class="filter-chip" onclick="toggleDropdown('typeMenu',event)">Type <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="dropdown-menu" id="typeMenu">
+          <span class="dd-item" onclick="closeDropdown('typeMenu')">Estate Owner</span>
+          <span class="dd-item" onclick="closeDropdown('typeMenu')">Merchant Company Group</span>
+          <span class="dd-item" onclick="closeDropdown('typeMenu')">Merchant Company</span>
+          <span class="dd-item" onclick="closeDropdown('typeMenu')">Merchant Site</span>
+        </div>
+      </div>
+      <div class="dropdown-wrap">
+        <button class="filter-chip" onclick="toggleDropdown('statusMenu',event)">Status <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="dropdown-menu" id="statusMenu">
+          <span class="dd-item" onclick="closeDropdown('statusMenu')">Enabled</span>
+          <span class="dd-item" onclick="closeDropdown('statusMenu')">Disabled</span>
+          <span class="dd-item" onclick="closeDropdown('statusMenu')">Deleted</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-meta" id="tableMeta">1 – 14 of 14 organizations</div>
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" onclick="sortTable(0)">Name ↕</th>
+            <th>Friendly name</th>
+            <th>Country</th>
+            <th>Parent organization</th>
+            <th>Type</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="orgTableBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─── BACKDROP ─── -->
+<div id="panel-backdrop" onclick="closePanel()"></div>
+
+<!-- ─── HIERARCHY PANEL ─── -->
+<div id="hierarchy-panel">
+  <div class="panel-header">
+    <div class="panel-header-left">
+      <span class="panel-title">Org Hierarchy</span>
+      <span class="panel-subtitle" id="panelSubtitle">—</span>
+    </div>
+    <button class="panel-close-btn" onclick="closePanel()" title="Close (Esc)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="panel-controls">
+    <div class="panel-search-wrap">
+      <span class="panel-search-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <input class="panel-search" id="panelSearch" type="text" placeholder="Search by name, ID, or friendly name…" oninput="onPanelSearch()" />
+      <button class="panel-search-clear" id="panelSearchClear" onclick="clearPanelSearch()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="expand-row">
+      <span>Tree:</span>
+      <button class="expand-btn" onclick="expandAll()">Expand all</button>
+      <button class="expand-btn" onclick="collapseAll()">Collapse all</button>
+    </div>
+  </div>
+
+  <div class="panel-tree" id="panelTree"></div>
+
+  <div class="panel-detail" id="panelDetail">
+    <div class="detail-empty" id="detailEmpty">Click an entity to see its details</div>
+    <div id="detailContent" style="display:none">
+      <div class="detail-org-name" id="detailName"></div>
+      <div class="detail-id" id="detailId"></div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <div class="detail-label">Type</div>
+          <div class="detail-value" id="detailType"></div>
+        </div>
+        <div class="detail-field">
+          <div class="detail-label">Status</div>
+          <div class="detail-value" id="detailStatus"></div>
+        </div>
+        <div class="detail-field">
+          <div class="detail-label">Country</div>
+          <div class="detail-value" id="detailCountry"></div>
+        </div>
+        <div class="detail-field">
+          <div class="detail-label">Parent</div>
+          <div class="detail-value" id="detailParent"></div>
+        </div>
+      </div>
+      <div class="detail-actions">
+        <button class="detail-btn detail-btn-primary" onclick="viewOrgDetails()">View details</button>
+        <button class="detail-btn detail-btn-outline">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─── DATA ─── */
+const orgs = [
+  { id:'ORG-001', name:'ALDI Nord Estate',              friendly:'—',           country:'—',       parent:'—',                             type:'Estate Owner',          status:'Enabled'  },
+  { id:'ORG-002', name:'ALDI Nord France',              friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Merchant Company Group',status:'Enabled'  },
+  { id:'ORG-003', name:'ALDI Nord Germany',             friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Merchant Company Group',status:'Enabled'  },
+  { id:'ORG-004', name:'Aldi Avignon',                  friendly:'Aldi Avignon',country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
+  { id:'ORG-005', name:'Aldi La Charité Sur Loire',     friendly:'—',           country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
+  { id:'ORG-006', name:'Aldi Nord France - Company',    friendly:'—',           country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
+  { id:'ORG-007', name:'Bargteheide',                   friendly:'—',           country:'Germany', parent:'ALDI Nord Germany',             type:'Merchant Company',      status:'Enabled'  },
+  { id:'ORG-008', name:'10001 Filiale Essen Achim DE',  friendly:'—',           country:'Germany', parent:'ALDI Nord Germany',             type:'Merchant Company',      status:'Enabled'  },
+  { id:'ORG-009', name:'Aldi Avignon (Site)',           friendly:'—',           country:'France',  parent:'Aldi Avignon',                  type:'Merchant Site',         status:'Enabled'  },
+  { id:'ORG-010', name:'Aldi Bayonne',                  friendly:'—',           country:'France',  parent:'Aldi Nord France - Company',    type:'Merchant Site',         status:'Enabled'  },
+  { id:'ORG-011', name:'Aldi France',                   friendly:'—',           country:'France',  parent:'Aldi Nord France - Company',    type:'Merchant Site',         status:'Enabled'  },
+  { id:'ORG-012', name:'ALDI France',                   friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Unspecified',           status:'Deleted'  },
+  { id:'ORG-013', name:'Bargteheide - Location 2',      friendly:'—',           country:'—',       parent:'Bargteheide',                   type:'Merchant Site',         status:'Enabled'  },
+  { id:'ORG-014', name:'10001 Filiale Essen',           friendly:'—',           country:'Germany', parent:'10001 Filiale Essen Achim DE',  type:'Merchant Site',         status:'Enabled'  },
+];
+
+/* Tree mirrors org structure */
+const treeData = [
+  { id:'ORG-001', name:'ALDI Nord Estate', type:'estate', children:[
+    { id:'ORG-002', name:'ALDI Nord France', type:'group', children:[
+      { id:'ORG-004', name:'Aldi Avignon', type:'company', children:[
+        { id:'ORG-009', name:'Aldi Avignon (Site)', type:'site', children:[] }
+      ]},
+      { id:'ORG-005', name:'Aldi La Charité Sur Loire', type:'company', children:[] },
+      { id:'ORG-006', name:'Aldi Nord France - Company', type:'company', children:[
+        { id:'ORG-010', name:'Aldi Bayonne', type:'site', children:[] },
+        { id:'ORG-011', name:'Aldi France',  type:'site', children:[] }
+      ]}
+    ]},
+    { id:'ORG-003', name:'ALDI Nord Germany', type:'group', children:[
+      { id:'ORG-007', name:'Bargteheide', type:'company', children:[
+        { id:'ORG-013', name:'Bargteheide - Location 2', type:'site', children:[] }
+      ]},
+      { id:'ORG-008', name:'10001 Filiale Essen Achim DE', type:'company', children:[
+        { id:'ORG-014', name:'10001 Filiale Essen', type:'site', children:[] }
+      ]}
+    ]},
+    { id:'ORG-012', name:'ALDI France', type:'unspecified', children:[] }
+  ]}
+];
+
+const TYPE_LABELS = { estate:'Estate Owner', group:'Merchant Company Group', company:'Merchant Company', site:'Merchant Site', unspecified:'Unspecified' };
+const TYPE_BADGE  = { estate:'badge-estate', group:'badge-group', company:'badge-company', site:'badge-site', unspecified:'badge-company' };
+const TYPE_SHORT  = { estate:'Estate', group:'MCG', company:'Co.', site:'Site', unspecified:'—' };
+
+let openNodes   = new Set(['ORG-001']);  /* start with root open */
+let selectedOrg = null;
+let panelOpen   = false;
+let searchQ     = '';
+
+/* ─── TABLE ─── */
+function statusBadge(s) {
+  const cls = s==='Enabled'?'status-enabled':s==='Disabled'?'status-disabled':'status-deleted';
+  return `<span class="status-badge ${cls}"><span class="status-dot"></span>${s}</span>`;
+}
+
+function renderTable(data) {
+  document.getElementById('orgTableBody').innerHTML = data.map(o => `
+    <tr onclick="rowClick('${o.id}')" class="${selectedOrg===o.id?'row-selected':''}">
+      <td>${o.name}</td>
+      <td class="${o.friendly==='—'?'cell-muted':''}">${o.friendly}</td>
+      <td class="${o.country==='—'?'cell-muted':''}">${o.country}</td>
+      <td class="${o.parent==='—'?'cell-muted':''}">${o.parent}</td>
+      <td>${o.type}</td>
+      <td>${statusBadge(o.status)}</td>
+    </tr>`).join('');
+  document.getElementById('tableMeta').textContent = `1 – ${data.length} of ${data.length} organizations`;
+}
+
+function filterTable() {
+  const q = document.getElementById('mainSearch').value.toLowerCase();
+  renderTable(orgs.filter(o =>
+    o.name.toLowerCase().includes(q) ||
+    o.id.toLowerCase().includes(q) ||
+    o.friendly.toLowerCase().includes(q)
+  ));
+}
+
+function sortTable(col) {
+  const keys = ['name','friendly','country','parent','type','status'];
+  orgs.sort((a,b) => (a[keys[col]]||'').localeCompare(b[keys[col]]||''));
+  renderTable(orgs);
+}
+
+function rowClick(id) {
+  selectedOrg = id;
+  renderTable(orgs);
+  const org = orgs.find(o => o.id === id);
+  openPanel(org);
+}
+
+/* ─── PANEL OPEN/CLOSE ─── */
+function openPanel(org) {
+  document.getElementById('panelSubtitle').textContent = org.name;
+  panelOpen = true;
+  document.getElementById('panel-backdrop').style.display = 'block';
+  document.getElementById('hierarchy-panel').classList.add('open');
+  // Reset search
+  document.getElementById('panelSearch').value = '';
+  document.getElementById('panelSearchClear').classList.remove('visible');
+  searchQ = '';
+  // Expand path to selected org in tree, then render
+  expandPathTo(treeData, org.id);
+  refreshTree();
+  showDetail(org);
+}
+
+function closePanel() {
+  panelOpen = false;
+  document.getElementById('panel-backdrop').style.display = 'none';
+  document.getElementById('hierarchy-panel').classList.remove('open');
+  selectedOrg = null;
+  renderTable(orgs);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && panelOpen) closePanel();
+});
+
+/* ─── TREE ─── */
+function getAllIds(nodes) {
+  return nodes.flatMap(n => [n.id, ...getAllIds(n.children)]);
+}
+
+function expandAll() {
+  openNodes = new Set(getAllIds(treeData));
+  refreshTree();
+}
+
+function collapseAll() {
+  openNodes = new Set();
+  refreshTree();
+}
+
+function expandPathTo(nodes, targetId, path=[]) {
+  for (const n of nodes) {
+    if (n.id === targetId) {
+      path.forEach(id => openNodes.add(id));
+      return true;
+    }
+    if (expandPathTo(n.children, targetId, [...path, n.id])) return true;
+  }
+  return false;
+}
+
+function highlight(text, q) {
+  if (!q) return escHtml(text);
+  const escaped = escHtml(text);
+  const re = new RegExp(`(${escRe(q)})`, 'gi');
+  return escaped.replace(re, '<mark>$1</mark>');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function escRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+}
+
+function nodeMatchesSearch(node, q) {
+  if (!q) return true;
+  const lq = q.toLowerCase();
+  return node.name.toLowerCase().includes(lq) || node.id.toLowerCase().includes(lq);
+}
+
+function renderTreeNodes(nodes, depth=0) {
+  let html = '';
+  for (const node of nodes) {
+    const hasChildren = node.children && node.children.length > 0;
+    const isOpen = openNodes.has(node.id);
+    const selfMatch = nodeMatchesSearch(node, searchQ);
+    const indent = 14 + depth * 16;
+
+    let visibleChildren = node.children;
+    if (searchQ) {
+      visibleChildren = node.children.filter(c => subtreeMatches(c, searchQ));
+    }
+
+    const showThisNode = !searchQ || selfMatch || visibleChildren.length > 0;
+    if (!showThisNode) continue;
+
+    const isSelected = selectedOrg === node.id;
+
+    html += `
+      <div>
+        <div class="tree-node ${isSelected?'selected':''} ${selfMatch&&searchQ?'search-match':''}"
+             style="padding-left:${indent}px"
+             onclick="treeNodeClick('${node.id}',${hasChildren})">
+          <button class="tree-toggle-btn ${hasChildren?'':'leaf'} ${isOpen&&hasChildren?'open':''}"
+                  onclick="event.stopPropagation();toggleNode('${node.id}');return false">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <span class="tree-label" title="${escHtml(node.name)}">${highlight(node.name, searchQ)}</span>
+          ${hasChildren?`<span class="tree-count">(${node.children.length})</span>`:''}
+          <span class="type-badge ${TYPE_BADGE[node.type]}">${TYPE_SHORT[node.type]}</span>
+        </div>
+        ${hasChildren && (isOpen || searchQ) ? `<div class="tree-children">${renderTreeNodes(visibleChildren, depth+1)}</div>` : ''}
+      </div>`;
+  }
+  return html || `<div class="tree-empty">No results</div>`;
+}
+
+function subtreeMatches(node, q) {
+  if (nodeMatchesSearch(node, q)) return true;
+  return node.children.some(c => subtreeMatches(c, q));
+}
+
+function refreshTree() {
+  document.getElementById('panelTree').innerHTML = renderTreeNodes(treeData);
+}
+
+function toggleNode(id) {
+  if (openNodes.has(id)) openNodes.delete(id);
+  else openNodes.add(id);
+  refreshTree();
+}
+
+function treeNodeClick(id, hasChildren) {
+  selectedOrg = id;
+  renderTable(orgs);
+  if (hasChildren) {
+    if (openNodes.has(id)) openNodes.delete(id);
+    else openNodes.add(id);
+  }
+  refreshTree();
+  const org = orgs.find(o => o.id === id);
+  if (org) showDetail(org);
+  else {
+    const node = findNode(treeData, id);
+    if (node) showDetail({ id, name: node.name, type: TYPE_LABELS[node.type], status:'Enabled', country:'N/A', parent:'—', friendly:'—' });
+  }
+}
+
+function findNode(nodes, id) {
+  for (const n of nodes) {
+    if (n.id === id) return n;
+    const f = findNode(n.children, id);
+    if (f) return f;
+  }
+  return null;
+}
+
+/* ─── PANEL SEARCH ─── */
+function onPanelSearch() {
+  searchQ = document.getElementById('panelSearch').value;
+  document.getElementById('panelSearchClear').classList.toggle('visible', searchQ.length > 0);
+  if (searchQ) {
+    // auto-expand all so search results are visible
+    openNodes = new Set(getAllIds(treeData));
+  }
+  refreshTree();
+}
+
+function clearPanelSearch() {
+  document.getElementById('panelSearch').value = '';
+  searchQ = '';
+  document.getElementById('panelSearchClear').classList.remove('visible');
+  refreshTree();
+}
+
+/* ─── DETAIL PANEL ─── */
+function showDetail(org) {
+  document.getElementById('detailEmpty').style.display = 'none';
+  document.getElementById('detailContent').style.display = 'block';
+  document.getElementById('detailName').textContent = org.name;
+  document.getElementById('detailId').textContent = 'ID: ' + org.id;
+  document.getElementById('detailType').textContent = org.type;
+  document.getElementById('detailStatus').textContent = org.status;
+  document.getElementById('detailCountry').textContent = (org.country==='—'||!org.country) ? 'N/A' : org.country;
+  document.getElementById('detailParent').textContent = (org.parent==='—'||!org.parent) ? 'None' : org.parent;
+}
+
+function viewOrgDetails() {
+  if (!selectedOrg) return;
+  const org = orgs.find(o => o.id === selectedOrg);
+  alert(`Navigating to details page for:\n${org.name} (${org.id})\n\n(In production this would open the org details page.)`);
+}
+
+/* ─── NAV ─── */
+function setNav(el) {
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setSubNav(el) {
+  document.querySelectorAll('.nav-sub-item').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ─── DROPDOWNS ─── */
+function toggleDropdown(id, e) {
+  e.stopPropagation();
+  document.querySelectorAll('.dropdown-menu').forEach(m => { if (m.id!==id) m.classList.remove('open'); });
+  document.getElementById(id).classList.toggle('open');
+}
+
+function closeDropdown(id) { document.getElementById(id).classList.remove('open'); }
+
+function setSearchType(label, el) {
+  const btn = document.getElementById('searchTypeBtn');
+  btn.firstChild.textContent = label + ' ';
+  document.getElementById('mainSearch').placeholder = 'Search by ' + label;
+  el.closest('.dropdown-menu').querySelectorAll('.dd-item').forEach(i => i.classList.remove('checked'));
+  el.classList.add('checked');
+  closeDropdown('searchTypeMenu');
+}
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+});
+
+/* ─── INIT ─── */
+renderTable(orgs);
+</script>
+</body>
+</html>
