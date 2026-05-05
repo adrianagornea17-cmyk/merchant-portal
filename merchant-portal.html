@@ -383,6 +383,7 @@
       border: 1.5px solid transparent;
       transition: background 0.12s, border-color 0.12s;
       text-align: center;
+      position: relative;
     }
 
     .tool-card:hover {
@@ -390,7 +391,60 @@
       border-color: #333;
     }
 
+    /* ─── Card more-menu ─── */
+    .tc-more-btn {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      background: transparent;
+      border: none;
+      color: var(--text-3);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.1s, background 0.1s, color 0.1s;
+    }
 
+    .tool-card:hover .tc-more-btn { opacity: 1; }
+    .tc-more-btn:hover { background: #2e2e2e; color: #fff; }
+    .tc-more-btn.open  { opacity: 1; background: #2e2e2e; color: #fff; }
+
+    .tc-menu {
+      display: none;
+      position: absolute;
+      top: 36px; right: 8px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      min-width: 160px;
+      z-index: 200;
+      padding: 4px 0;
+      text-align: left;
+    }
+
+    .tc-menu.open { display: block; animation: dropIn 0.12s ease; }
+
+    .tc-menu-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: #d1d5db;
+      cursor: pointer;
+      transition: background 0.08s, color 0.08s;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .tc-menu-item:hover { background: #2a2a2a; color: #fff; }
+
+    .tc-menu-item.danger { color: #f87171; }
+    .tc-menu-item.danger:hover { background: #2a1414; color: #fca5a5; }
+
+    .tc-menu-sep { margin: 4px 0; border: none; border-top: 1px solid #2a2a2a; }
 
     .tc-icon {
       width: 46px; height: 46px;
@@ -999,6 +1053,25 @@ function renderToolSidebar() {
 function renderHomeMain() {
   const toolCards = TOOLS.map(t => `
     <div class="tool-card" onclick="selectTool('${t.id}')">
+      <!-- More menu -->
+      <button class="tc-more-btn" id="moreBtn-${t.id}" onclick="toggleCardMenu(event,'${t.id}')" title="More options">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+      </button>
+      <div class="tc-menu" id="menu-${t.id}">
+        <button class="tc-menu-item" onclick="event.stopPropagation();selectTool('${t.id}');closeAllMenus()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open
+        </button>
+        <button class="tc-menu-item" onclick="event.stopPropagation();selectTool('${t.id}');selectSub('Overview');closeAllMenus()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Details
+        </button>
+        <button class="tc-menu-item" onclick="event.stopPropagation();selectTool('${t.id}');selectSub('Settings');closeAllMenus()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg>
+          Settings
+        </button>
+      </div>
+
       ${toolIconBadge(t, 46)}
       <div>
         <div class="tc-name">${t.name}</div>
@@ -1318,7 +1391,24 @@ function closeLauncher() {
   if (panel) { panel.classList.remove('open'); btn.classList.remove('open'); }
 }
 
-document.addEventListener('click', () => closeLauncher());
+document.addEventListener('click', () => { closeLauncher(); closeAllMenus(); });
+
+function toggleCardMenu(e, id) {
+  e.stopPropagation();
+  const menu = document.getElementById('menu-' + id);
+  const btn  = document.getElementById('moreBtn-' + id);
+  const isOpen = menu.classList.contains('open');
+  closeAllMenus();
+  if (!isOpen) {
+    menu.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+function closeAllMenus() {
+  document.querySelectorAll('.tc-menu').forEach(m => m.classList.remove('open'));
+  document.querySelectorAll('.tc-more-btn').forEach(b => b.classList.remove('open'));
+}
 </script>
 </body>
 </html>
