@@ -1055,6 +1055,37 @@ function renderHomeMain() {
         <div class="section-line"></div>
       </div>
       <div class="tools-grid">${toolCards}</div>
+
+      <div class="section-head" style="margin-top:32px">
+        <span class="section-title">Recent transactions</span>
+        <div class="section-line"></div>
+        <button class="txn-view-all" onclick="selectTool('transactions');selectSub('Search')">View all →</button>
+      </div>
+
+      <div class="txn-table-card">
+        <table class="txn">
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${RECENT_TXN.map(tx => `
+              <tr>
+                <td class="txn-id">${tx.id}</td>
+                <td class="txn-time">${tx.time}</td>
+                <td class="txn-type">${tx.type}</td>
+                <td class="txn-amt">${tx.amount}</td>
+                <td><span class="badge ${badgeClass(tx.status)}">${tx.status}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
     </div>
   `;
 }
