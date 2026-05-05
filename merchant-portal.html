@@ -625,6 +625,67 @@
 
     /* ─── END PAY BY LINK ─── */
 
+    /* ─── TRANSACTIONS OVERVIEW ─── */
+    .txn-page { flex:1; overflow-y:auto; padding:28px 30px; }
+    .txn-page::-webkit-scrollbar { width:5px; }
+    .txn-page::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:4px; }
+
+    .txn-header {
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;
+    }
+    .txn-title { font-size:20px; font-weight:700; color:#fff; }
+    .txn-search-btn {
+      display:flex; align-items:center; gap:7px;
+      background:#2563eb; color:#fff; border:none; border-radius:20px;
+      padding:8px 18px; font-size:13px; font-weight:600; cursor:pointer;
+      transition:background 0.12s;
+    }
+    .txn-search-btn:hover { background:#1d4ed8; }
+
+    .txn-table-card {
+      background:#1a1a1a; border:1px solid var(--border); border-radius:14px; overflow:hidden;
+    }
+
+    .txn-table-head {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 18px 12px; border-bottom:1px solid var(--border);
+    }
+    .txn-table-title { font-size:13.5px; font-weight:600; color:#fff; }
+    .txn-view-all {
+      font-size:12px; font-weight:600; color:#60a5fa;
+      background:none; border:none; cursor:pointer; transition:color 0.1s;
+    }
+    .txn-view-all:hover { color:#93c5fd; }
+
+    table.txn { width:100%; border-collapse:collapse; }
+    table.txn th {
+      text-align:left; padding:10px 18px; font-size:10px; font-weight:700;
+      letter-spacing:0.8px; color:var(--text-3); text-transform:uppercase;
+      border-bottom:1px solid var(--border);
+    }
+    table.txn th:last-child, table.txn td:last-child { text-align:center; }
+    table.txn th:nth-child(4), table.txn td:nth-child(4) { text-align:right; }
+
+    table.txn td {
+      padding:13px 18px; font-size:13px; border-bottom:1px solid #222;
+    }
+    table.txn tr:last-child td { border-bottom:none; }
+    table.txn tr:hover td { background:#202020; }
+
+    .txn-id    { color:#60a5fa; font-family:monospace; font-size:12.5px; }
+    .txn-time  { color:var(--text-3); font-size:12px; }
+    .txn-type  { color:var(--text-2); }
+    .txn-amt   { color:#fff; font-weight:600; }
+
+    .badge {
+      display:inline-block; padding:3px 10px; border-radius:20px;
+      font-size:11px; font-weight:600;
+    }
+    .badge-ok  { background:rgba(74,222,128,0.12); color:#4ade80; }
+    .badge-pen { background:rgba(251,191,36,0.12);  color:#fbbf24; }
+    .badge-dec { background:rgba(248,113,113,0.12); color:#f87171; }
+    /* ─── END TRANSACTIONS ─── */
+
     /* Transitions */
     #sidebar, #main { animation: fadeIn 0.18s ease; }
     @keyframes fadeIn { from { opacity: 0.5; } to { opacity: 1; } }
@@ -741,6 +802,7 @@ const I = {
   back:     `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`,
   dots:     `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5"  cy="5"  r="2"/><circle cx="12" cy="5"  r="2"/><circle cx="19" cy="5"  r="2"/><circle cx="5"  cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5"  cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg>`,
   pencil:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+  search:   `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
   chev:     `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`,
 
   boarding: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
@@ -1067,11 +1129,105 @@ function renderPayByLink() {
   `;
 }
 
+/* ── Transactions data ────────────────────────────────────────────────── */
+const RECENT_TXN = [
+  { id:'TXN-9182', time:'09:42 AM', type:'Sale',   amount:'$1,240.00', status:'Approved' },
+  { id:'TXN-9181', time:'09:31 AM', type:'Sale',   amount:'$84.50',    status:'Approved' },
+  { id:'TXN-9180', time:'09:14 AM', type:'Refund', amount:'$320.00',   status:'Pending'  },
+  { id:'TXN-9179', time:'08:55 AM', type:'Sale',   amount:'$567.20',   status:'Approved' },
+  { id:'TXN-9178', time:'08:40 AM', type:'Sale',   amount:'$2,100.00', status:'Declined' },
+];
+
+function badgeClass(s) {
+  return s === 'Approved' ? 'badge-ok' : s === 'Pending' ? 'badge-pen' : 'badge-dec';
+}
+
+/* ── Transactions overview ────────────────────────────────────────────── */
+function renderTransactionsOverview() {
+  const t = tool();
+  const rows = RECENT_TXN.map(tx => `
+    <tr>
+      <td class="txn-id">${tx.id}</td>
+      <td class="txn-time">${tx.time}</td>
+      <td class="txn-type">${tx.type}</td>
+      <td class="txn-amt">${tx.amount}</td>
+      <td><span class="badge ${badgeClass(tx.status)}">${tx.status}</span></td>
+    </tr>
+  `).join('');
+
+  return `
+    <div class="topbar">
+      <span class="breadcrumb">
+        <span class="bc-parent">Transactions</span>
+        <span class="bc-sep">/</span>
+        <span>Overview</span>
+      </span>
+      <div class="topbar-right">
+        ${launcherHTML()}
+        <button class="bell">${icon('bell','currentColor',15)}</button>
+      </div>
+    </div>
+    <div class="tool-content-wrap">
+      <div class="txn-page">
+        <div class="txn-header">
+          <span class="txn-title">Transactions</span>
+          <button class="txn-search-btn" onclick="selectSub('Search')">
+            ${icon('search','#fff',13)} Search transactions
+          </button>
+        </div>
+
+        <div class="stats-grid" style="margin-bottom:24px">
+          <div class="stat-card">
+            <div class="stat-lbl">Today's Volume</div>
+            <div class="stat-val">$14,230</div>
+            <div class="stat-note" style="color:#4ade80">↑ 8.2% vs yesterday</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Total Count</div>
+            <div class="stat-val">342</div>
+            <div class="stat-note" style="color:#4ade80">↑ 12 since last hour</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Approval Rate</div>
+            <div class="stat-val">97.4%</div>
+            <div class="stat-note" style="color:#6b7280">Last 24 hours</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Avg Ticket</div>
+            <div class="stat-val">$41.60</div>
+            <div class="stat-note" style="color:#f87171">↓ 1.3% vs yesterday</div>
+          </div>
+        </div>
+
+        <div class="txn-table-card">
+          <div class="txn-table-head">
+            <span class="txn-table-title">Last 5 transactions</span>
+            <button class="txn-view-all" onclick="selectSub('Search')">View all →</button>
+          </div>
+          <table class="txn">
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 /* ── Main: TOOL ───────────────────────────────────────────────────────── */
 function renderToolMain() {
   const t = tool();
 
-  if (t.id === 'payment' && state.subItem === 'Overview') return renderPayByLink();
+  if (t.id === 'payment'      && state.subItem === 'Overview') return renderPayByLink();
+  if (t.id === 'transactions' && state.subItem === 'Overview') return renderTransactionsOverview();
 
   return `
     <div class="topbar">
