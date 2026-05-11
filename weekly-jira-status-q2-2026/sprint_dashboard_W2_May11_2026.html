@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sprint Dashboard — [Q2 2026] Verifone Central</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  background: #f2f2f2;
+  color: #222;
+  padding: 40px;
+}
+.page { max-width: 980px; margin: 0 auto; }
+
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 19px; font-weight: 700; }
+.page-header p  { font-size: 12px; color: #888; margin-top: 3px; }
+
+/* Card wrapper */
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 24px 24px 20px;
+  margin-bottom: 22px;
+}
+.card-title {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #111;
+  margin-bottom: 16px;
+}
+
+/* ── 5-column metric rows ── */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.metric-cell {
+  padding: 16px 18px 14px;
+  border-right: 1px solid #e0e0e0;
+}
+.metric-cell:last-child { border-right: none; }
+.m-label { font-size: 12px; color: #666; margin-bottom: 10px; }
+.m-val   { font-size: 38px; font-weight: 700; line-height: 1; color: #111; }
+.m-val.red    { color: #c0392b; }
+.m-val.green  { color: #27884a; }
+.m-val.amber  { color: #c47d0e; }
+.m-val.purple { color: #6d3faa; }
+.m-sub { font-size: 11px; margin-top: 7px; color: #999; }
+.m-sub.red   { color: #c0392b; }
+.m-sub.green { color: #27884a; }
+.m-sub.amber { color: #c47d0e; }
+
+/* ── Bar chart ── */
+.bar-intro { font-size: 12px; color: #555; margin: 18px 0 8px; }
+.bar-track {
+  display: flex;
+  height: 24px;
+  border-radius: 3px;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 14px;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 11.5px;
+  color: #444;
+}
+.legend-item { display: flex; align-items: flex-start; gap: 7px; }
+.l-dot { width: 13px; height: 13px; border-radius: 2px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── Epic Progress ── */
+.epic-list { display: flex; flex-direction: column; gap: 10px; }
+.epic-card {
+  display: flex; align-items: stretch;
+  border: 1px solid #e0e0e0; border-radius: 4px;
+  overflow: hidden; background: #fff;
+}
+.epic-stripe { width: 5px; flex-shrink: 0; }
+.epic-body { flex: 1; padding: 14px 16px; }
+.epic-meta { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.epic-key { font-size: 11px; font-weight: 700; color: #888; }
+.epic-status { font-size: 11px; color: #777; }
+.epic-name { font-size: 14px; font-weight: 600; color: #111; margin-bottom: 8px; line-height: 1.3; }
+.epic-bar-wrap { background: #eee; border-radius: 3px; height: 8px; margin-bottom: 8px; overflow: hidden; }
+.epic-bar-fill { height: 100%; border-radius: 3px; }
+.epic-note { font-size: 11px; color: #888; }
+.epic-right {
+  display: flex; flex-direction: column;
+  align-items: flex-end; justify-content: center;
+  padding: 14px 20px; min-width: 90px; flex-shrink: 0;
+}
+.epic-count { font-size: 12px; color: #999; margin-bottom: 3px; }
+.epic-pct { font-size: 28px; font-weight: 700; line-height: 1; }
+.c-green  { color: #27884a; }
+.c-blue   { color: #1565c0; }
+.c-amber  { color: #c47d0e; }
+.c-red    { color: #c0392b; }
+.bg-green { background: #27884a; }
+.bg-blue  { background: #1565c0; }
+.bg-amber { background: #c47d0e; }
+.bg-red   { background: #c0392b; }
+
+/* ── WoW table ── */
+.wow-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.wow-table thead tr { background: #1b1b2f; color: #fff; }
+.wow-table thead th { padding: 11px 16px; text-align: left; font-size: 12.5px; font-weight: 600; }
+.wow-table tbody tr { border-bottom: 1px solid #efefef; }
+.wow-table tbody tr:nth-child(even) { background: #fafafa; }
+.wow-table tbody td { padding: 12px 16px; vertical-align: middle; }
+.t-red    { color: #c0392b; font-weight: 600; }
+.t-green  { color: #27884a; font-weight: 600; }
+.t-amber  { color: #c47d0e; font-weight: 600; }
+.t-grey   { color: #888; }
+.t-target { color: #555; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-header">
+    <h1>Sprint Dashboard — ET Project</h1>
+    <p>Fix Version: [Q2 2026] Verifone Central &nbsp;·&nbsp; Generated: 11 May 2026</p>
+  </div>
+
+  <!-- ════════════════════════
+       SPRINT SNAPSHOT
+  ════════════════════════ -->
+  <div class="card">
+    <div class="card-title">Sprint Snapshot</div>
+    <div class="metric-row">
+
+      <div class="metric-cell">
+        <div class="m-label">In progress</div>
+        <div class="m-val">50</div>
+        <div class="m-sub">of 69 active tickets</div>
+      </div>
+
+      <div class="metric-cell">
+        <div class="m-label">Stale &gt; 5d</div>
+        <div class="m-val red">18</div>
+        <div class="m-sub red">↑ no update in 5+ days</div>
+      </div>
+
+      <div class="metric-cell">
+        <div class="m-label">Closed 7d</div>
+        <div class="m-val">14</div>
+        <div class="m-sub">closed this week</div>
+      </div>
+
+      <div class="metric-cell">
+        <div class="m-label">Critical</div>
+        <div class="m-val red">4</div>
+        <div class="m-sub red">→ 1 new ticket added</div>
+      </div>
+
+      <div class="metric-cell">
+        <div class="m-label">Unassigned</div>
+        <div class="m-val amber">1</div>
+        <div class="m-sub amber">needs owner — ET-1499</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════
+       ENGINEERING CAPACITY
+  ════════════════════════ -->
+  <div class="card">
+    <div class="card-title">Engineering Capacity &amp; Utilization</div>
+    <div class="metric-row">
+
+      <div class="metric-cell">
+        <div class="m-label">Total Engineers</div>
+        <div class="m-val">16</div>
+        <div class="m-sub">80 eng-days / wk<br>available</div>
+      </div>
+
+      <div class="metric-cell">
+        <div class="m-label">On Enhancements</div>
+        <div class="m-val green">5</div>
+        <div class="m-sub green">30% of active tickets</div>
+      </div>
+
+      <div class="metric-cell">
+        <div class="m-label">On Defects</div>
+        <div class="m-val">1</div>
+        <div class="m-sub">1% of active tickets</div>
+      </div>
+
+      <div class="metric-cell">
+        <div class="m-label">On QA / Testing</div>
+        <div class="m-val purple">2</div>
+        <div class="m-sub">12% of active tickets</div>
+      </div>
+
+      <div class="metric-cell">
+        <div class="m-label">Unassigned tickets</div>
+        <div class="m-val amber">1</div>
+        <div class="m-sub amber">Wasted capacity —<br>needs owner</div>
+      </div>
+
+    </div>
+
+    <div class="bar-intro">Ticket allocation across active work (69 tickets, 16 engineers)</div>
+
+    <div class="bar-track">
+      <div style="width:30%; background:#3a9e6e;"></div>
+      <div style="width:1%;  background:#c0392b;"></div>
+      <div style="width:12%; background:#7e57c2;"></div>
+      <div style="width:57%; background:#c47d0e;"></div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="l-dot" style="background:#3a9e6e;"></div>
+        <span>Product Enhancements 30%<br>(21 tickets, 5 engineers)</span>
+      </div>
+      <div class="legend-item">
+        <div class="l-dot" style="background:#c0392b;"></div>
+        <span>Production Defects 1%<br>(1 ticket, 1 engineer)</span>
+      </div>
+      <div class="legend-item">
+        <div class="l-dot" style="background:#7e57c2;"></div>
+        <span>QA / Testing 12%<br>(8 tickets, 2 engineers)</span>
+      </div>
+      <div class="legend-item">
+        <div class="l-dot" style="background:#c47d0e;"></div>
+        <span>Epics / Initiatives 57%<br>(39 tickets, 13 engineers)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════
+       EPIC PROGRESS
+  ════════════════════════ -->
+  <div class="card">
+    <div class="card-title">Epic Progress — Fix Version [Q2 2026] Verifone Central</div>
+    <div class="epic-list">
+
+      <!-- ET-966 · 100% · green -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-green"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-966</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[MOP-UI] Automatic boarding of device feature "Refund" — SC VerifonePay (SAIO)</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-green" style="width:100%"></div></div>
+          <div class="epic-note">Ashish Verma · 1 story Ready for Release. Final sign-off pending.</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 1</div>
+          <div class="epic-pct c-green">100%</div>
+        </div>
+      </div>
+
+      <!-- ET-1152 · 100% · green -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-green"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1152</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[MOP-UI] Surcharge automatic boarding for customers using Salesconnector for AGPA/VEPP (Cobra)</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-green" style="width:100%"></div></div>
+          <div class="epic-note">Ashish Verma · 1 story Ready for Release. Final sign-off pending.</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 1</div>
+          <div class="epic-pct c-green">100%</div>
+        </div>
+      </div>
+
+      <!-- ET-2003 · 38% · amber -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-amber"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2003</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[VC UI] Q2-2026 Fixes for front end application defects</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-amber" style="width:38%"></div></div>
+          <div class="epic-note">Senthil Chidambaram · 5 closed + 7 ready for release. 5 in Code Review (incl. 2 Critical). 3 in Testing.</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">12 / 32</div>
+          <div class="epic-pct c-amber">38%</div>
+        </div>
+      </div>
+
+      <!-- ET-2034 · 30% · amber -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-amber"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2034</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Westpac Functional Defects</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-amber" style="width:30%"></div></div>
+          <div class="epic-note">Sruthi Nakul Mysore · 1 closed + 5 ready for release. 2 in Testing. 3 Blocked (org filter defects).</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">6 / 20</div>
+          <div class="epic-pct c-amber">30%</div>
+        </div>
+      </div>
+
+      <!-- ET-973 · 11% · red -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-red"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-973</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Decouple all existing applications in VFC into modular Micro Frontend (MFE) applications</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-red" style="width:11%"></div></div>
+          <div class="epic-note">Sruthi Nakul Mysore · 1 done. 7 in Development. 1 Blocked (Device Manager MFE — Anand BS).</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 9</div>
+          <div class="epic-pct c-red">11%</div>
+        </div>
+      </div>
+
+      <!-- ET-1636 · 0% · red -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-red"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1636</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">SMB APP — Requirements for Westpac Readiness</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-red" style="width:2%"></div></div>
+          <div class="epic-note">Akshat Aggarwal · 24 active stories. 7 in Testing, 2 in Development. No stories closed yet — active delivery in progress.</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 24</div>
+          <div class="epic-pct c-red">0%</div>
+        </div>
+      </div>
+
+      <!-- ET-974 · 0% · red -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-red"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-974</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Self Service Deployment App — NEXUS</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-red" style="width:2%"></div></div>
+          <div class="epic-note">Senthil Chidambaram · 4 stories all in active development (Nexus enhancements, dashboard, CDN, MFE page).</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 4</div>
+          <div class="epic-pct c-red">0%</div>
+        </div>
+      </div>
+
+      <!-- ET-2029 · 0% · red + CRITICAL -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-red"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2029</span>
+            <span class="epic-status">[Implementation]</span>
+            <span style="font-size:10px;font-weight:700;color:#c0392b;background:#fdecea;padding:1px 6px;border-radius:8px;">CRITICAL</span>
+          </div>
+          <div class="epic-name">[VerifoneCentral Portal][PPC] Adding TEYA_EU</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-red" style="width:2%"></div></div>
+          <div class="epic-note">Anand BS · 1 story in Development. Critical priority — needs tracking.</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct c-red">0%</div>
+        </div>
+      </div>
+
+      <!-- ET-1999 · 0% · red -->
+      <div class="epic-card">
+        <div class="epic-stripe bg-red"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1999</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Adopt Permissions-based Access Control Model in Verifone Central</div>
+          <div class="epic-bar-wrap"><div class="epic-bar-fill bg-red" style="width:2%"></div></div>
+          <div class="epic-note">Anand BS · 1 story In Development (ET-2071), 1 Blocked (ET-858 — Device Manager roles).</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct c-red">0%</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════
+       WEEK-ON-WEEK TRACKER
+  ════════════════════════ -->
+  <div class="card">
+    <div class="card-title">Week-on-Week Baseline Tracker</div>
+    <table class="wow-table">
+      <thead>
+        <tr>
+          <th style="width:30%">Metric</th>
+          <th style="width:15%">W1 (28 Apr)</th>
+          <th style="width:15%">W2 (now)</th>
+          <th style="width:15%">Target</th>
+          <th style="width:25%">Trend</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tickets in progress</td>
+          <td class="t-grey">—</td>
+          <td>50</td>
+          <td class="t-target">&lt; 50</td>
+          <td class="t-grey">→ Baseline week</td>
+        </tr>
+        <tr>
+          <td>Closed this week</td>
+          <td>3</td>
+          <td class="t-green">14</td>
+          <td class="t-target">&gt; 10</td>
+          <td class="t-green">↑ Significant improvement</td>
+        </tr>
+        <tr>
+          <td>Stale in-progress &gt; 5d</td>
+          <td class="t-grey">—</td>
+          <td class="t-red">18</td>
+          <td class="t-target">&lt; 10</td>
+          <td class="t-red">↑ Needs attention</td>
+        </tr>
+        <tr>
+          <td>Critical unresolved</td>
+          <td>3</td>
+          <td class="t-red">4</td>
+          <td class="t-target">0</td>
+          <td class="t-red">↑ New ticket added</td>
+        </tr>
+        <tr>
+          <td>Unassigned in progress</td>
+          <td>1</td>
+          <td class="t-amber">1</td>
+          <td class="t-target">&lt; 1</td>
+          <td class="t-grey">→ No change (ET-1499)</td>
+        </tr>
+        <tr>
+          <td>Top closer this week</td>
+          <td>Senthil — 2</td>
+          <td>Akshat — 12</td>
+          <td class="t-target">Track only</td>
+          <td class="t-grey">→ New leader</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:10.5px;color:#bbb;margin-top:10px;">* W1 stale/in-progress values marked — are not queryable historically; fill from prior week's report.</p>
+  </div>
+
+</div>
+</body>
+</html>
