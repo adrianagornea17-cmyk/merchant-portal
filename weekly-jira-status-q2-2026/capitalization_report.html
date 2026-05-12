@@ -150,7 +150,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     <!-- Monthly capacity tiles -->
     <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:22px;">
       <div style="padding:16px 20px;">
-        <div style="font-size:12px;color:#666;margin-bottom:8px;">April 2026</div>
+        <div style="font-size:12px;color:#666;margin-bottom:8px;">March 2026 <span style="font-size:10px;background:#e8f5e9;color:#2e7d32;padding:1px 6px;border-radius:10px;border:1px solid #c8e6c9;margin-left:4px;">complete</span></div>
+        <div style="font-size:26px;font-weight:700;color:#111;line-height:1;">13 <span style="font-size:13px;color:#999;font-weight:400;">md · 104h</span></div>
+        <div style="background:#e8f5e9;border-radius:3px;height:5px;margin-top:10px;overflow:hidden;"><div style="width:59%;height:100%;background:#43a047;border-radius:3px;"></div></div>
+        <div style="font-size:11px;color:#888;margin-top:5px;">22 days · 30% leaves · 10% BAU</div>
+      </div>
+      <div style="padding:16px 20px;border-left:1px solid #e0e0e0;">
+        <div style="font-size:12px;color:#666;margin-bottom:8px;">April 2026 <span style="font-size:10px;background:#e8f5e9;color:#2e7d32;padding:1px 6px;border-radius:10px;border:1px solid #c8e6c9;margin-left:4px;">complete</span></div>
         <div style="font-size:26px;font-weight:700;color:#111;line-height:1;">17 <span style="font-size:13px;color:#999;font-weight:400;">md · 136h</span></div>
         <div style="background:#e8f5e9;border-radius:3px;height:5px;margin-top:10px;overflow:hidden;"><div style="width:81%;height:100%;background:#43a047;border-radius:3px;"></div></div>
         <div style="font-size:11px;color:#888;margin-top:5px;">21 days · 10% leaves · 10% BAU</div>
@@ -161,19 +167,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
         <div style="background:#fff3e0;border-radius:3px;height:5px;margin-top:10px;overflow:hidden;"><div style="width:81%;height:100%;background:#fb8c00;border-radius:3px;"></div></div>
         <div style="font-size:11px;color:#888;margin-top:5px;">21 days · 10% leaves · 10% BAU</div>
       </div>
-      <div style="padding:16px 20px;border-left:1px solid #e0e0e0;">
-        <div style="font-size:12px;color:#666;margin-bottom:8px;">June 2026 <span style="font-size:10px;background:#f5f5f5;color:#999;padding:1px 6px;border-radius:10px;border:1px solid #e0e0e0;margin-left:4px;">upcoming</span></div>
-        <div style="font-size:26px;font-weight:700;color:#111;line-height:1;">18 <span style="font-size:13px;color:#999;font-weight:400;">md · 144h</span></div>
-        <div style="background:#f5f5f5;border-radius:3px;height:5px;margin-top:10px;overflow:hidden;"><div style="width:82%;height:100%;background:#bdbdbd;border-radius:3px;"></div></div>
-        <div style="font-size:11px;color:#888;margin-top:5px;">22 days · 10% leaves · 10% BAU</div>
-      </div>
     </div>
 
     <!-- Utilisation banner -->
     <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;background:#f8f9ff;border:1px solid #e8eaf6;border-radius:4px;padding:16px 20px;margin-bottom:24px;">
       <div style="min-width:110px;">
         <div style="font-size:11px;color:#666;margin-bottom:4px;">Q2 Total Available</div>
-        <div style="font-size:22px;font-weight:700;color:#111;">416h <span style="font-size:12px;color:#888;font-weight:400;">· 52 md</span></div>
+        <div style="font-size:22px;font-weight:700;color:#111;">376h <span style="font-size:12px;color:#888;font-weight:400;">· 47 md</span></div>
       </div>
       <div style="min-width:110px;">
         <div style="font-size:11px;color:#666;margin-bottom:4px;">Logged So Far</div>
@@ -181,12 +181,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
       </div>
       <div style="min-width:110px;">
         <div style="font-size:11px;color:#666;margin-bottom:4px;">Remaining</div>
-        <div style="font-size:22px;font-weight:700;color:#27884a;">147h</div>
+        <div style="font-size:22px;font-weight:700;color:#27884a;">107h</div>
       </div>
       <div style="flex:2;min-width:180px;">
-        <div style="font-size:11px;color:#666;margin-bottom:6px;">Q2 Capacity consumed &nbsp;<b>65%</b> &nbsp;<span style="font-weight:400;color:#999;">(269h of 416h)</span></div>
+        <div style="font-size:11px;color:#666;margin-bottom:6px;">Q2 Capacity consumed &nbsp;<b>72%</b> &nbsp;<span style="font-weight:400;color:#999;">(269h of 376h)</span></div>
         <div style="background:#dde2f1;border-radius:3px;height:10px;overflow:hidden;">
-          <div style="width:65%;height:100%;border-radius:3px;background:linear-gradient(90deg,#1565c0,#7627bb);"></div>
+          <div style="width:72%;height:100%;border-radius:3px;background:linear-gradient(90deg,#1565c0,#7627bb);"></div>
         </div>
       </div>
     </div>
@@ -699,24 +699,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
     }
   });
 
-  /* Right chart — available capacity by month vs logged */
+  /* Right chart — available capacity by Q2 month */
   new Chart(document.getElementById('capacityChart').getContext('2d'), {
     type: 'bar',
     data: {
-      labels: ['April 2026','May 2026','June 2026'],
+      labels: ['March 2026','April 2026','May 2026'],
       datasets: [
         {
-          label: 'Logged so far',
-          data: [0, 269, 0],
-          backgroundColor: ['rgba(21,101,192,.25)','rgba(21,101,192,.72)','rgba(21,101,192,.1)'],
-          borderWidth: 0,
-          borderRadius: 3,
-        },
-        {
           label: 'Available capacity',
-          data: [136, 136, 144],
-          backgroundColor: ['rgba(67,160,71,.15)','rgba(251,140,0,.15)','rgba(189,189,189,.22)'],
-          borderColor: ['#43a047','#fb8c00','#bdbdbd'],
+          data: [104, 136, 136],
+          backgroundColor: ['rgba(67,160,71,.2)','rgba(67,160,71,.2)','rgba(251,140,0,.18)'],
+          borderColor: ['#43a047','#43a047','#fb8c00'],
           borderWidth: 1,
           borderRadius: 3,
         }
@@ -726,16 +719,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
       indexAxis: 'y',
       responsive: true,
       plugins: {
-        legend: {
-          display: true,
-          position: 'bottom',
-          labels: { font: { size: 11 }, boxWidth: 12, padding: 14 }
-        },
-        tooltip: { callbacks: { label: ctx => '  ' + ctx.dataset.label + ': ' + ctx.parsed.x + 'h' } }
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => '  ' + ctx.parsed.x + 'h (' + (ctx.parsed.x/8) + ' md)' } }
       },
       scales: {
         x: {
-          beginAtZero: true, max: 300,
+          beginAtZero: true, max: 160,
           grid: { color: '#f0f0f0' },
           ticks: { callback: v => v + 'h', font: { size: 11 } }
         },
