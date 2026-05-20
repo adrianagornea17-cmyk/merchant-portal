@@ -40,9 +40,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
 </head>
 <body>
 <div class="page">
-  <div class="page-header">
-    <h1>ET Project — Jira Weekly Reports</h1>
-    <p>Project: ET &nbsp;·&nbsp; Fix Version: Verifone Central &nbsp;·&nbsp; Last updated: 18 May 2026, 09:00</p>
+  <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+    <div>
+      <h1>ET Project — Jira Weekly Reports</h1>
+      <p>Project: ET &nbsp;·&nbsp; Fix Version: Verifone Central &nbsp;·&nbsp; Last updated: 18 May 2026, 09:00</p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+      <button id="run-btn" onclick="triggerRun()"
+        style="background:#1565c0;color:#fff;border:none;border-radius:6px;
+               padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;
+               display:flex;align-items:center;gap:7px;white-space:nowrap;">
+        <span id="run-icon">▶</span> <span id="run-label">Refresh All Reports</span>
+      </button>
+      <span id="run-status" style="font-size:11px;color:#aaa;"></span>
+    </div>
   </div>
 
   <div class="year-label">2026</div>
@@ -100,5 +111,75 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-s
 
   </div>
 </div>
+<script>
+const BTN    = document.getElementById('run-btn');
+const ICON   = document.getElementById('run-icon');
+const LABEL  = document.getElementById('run-label');
+const STATUS = document.getElementById('run-status');
+const SERVER = 'http://localhost:18765';
+
+async function triggerRun() {
+  BTN.disabled = true;
+  ICON.textContent  = '⏳';
+  LABEL.textContent = 'Starting…';
+  STATUS.textContent = '';
+  try {
+    const r = await fetch(SERVER + '/run', {cache: 'no-store'});
+    const d = await r.json();
+    if (d.status === 'started') {
+      ICON.textContent  = '✓';
+      LABEL.textContent = 'Job started';
+      BTN.style.background = '#2e7d32';
+      STATUS.textContent = 'Running in background — refresh pages in a few minutes.';
+      STATUS.style.color = '#2e7d32';
+      pollUntilDone();
+    } else if (d.status === 'already_running') {
+      ICON.textContent  = '⏳';
+      LABEL.textContent = 'Already running…';
+      BTN.style.background = '#e65100';
+      STATUS.textContent = 'A run is already in progress.';
+      STATUS.style.color = '#e65100';
+      reset(4000);
+    }
+  } catch (e) {
+    ICON.textContent  = '✗';
+    LABEL.textContent = 'Server offline';
+    BTN.style.background = '#b71c1c';
+    STATUS.textContent = 'Local trigger server not running. Open Terminal and check LaunchAgent.';
+    STATUS.style.color = '#b71c1c';
+    BTN.disabled = false;
+    reset(6000);
+  }
+}
+
+function reset(ms) {
+  setTimeout(() => {
+    BTN.disabled = false;
+    BTN.style.background = '#1565c0';
+    ICON.textContent  = '▶';
+    LABEL.textContent = 'Refresh All Reports';
+    STATUS.textContent = '';
+    STATUS.style.color = '#aaa';
+  }, ms);
+}
+
+function pollUntilDone() {
+  const interval = setInterval(async () => {
+    try {
+      const r = await fetch(SERVER + '/status', {cache: 'no-store'});
+      const d = await r.json();
+      if (!d.running) {
+        clearInterval(interval);
+        ICON.textContent  = '✓';
+        LABEL.textContent = 'Done — reload pages';
+        STATUS.textContent = `Completed at ${d.last_time || 'unknown'}`;
+        STATUS.style.color = '#2e7d32';
+        BTN.disabled = false;
+        reset(8000);
+      }
+    } catch { clearInterval(interval); reset(1000); }
+  }, 5000);
+}
+</script>
 </body>
 </html>
