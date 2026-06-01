@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sprint Dashboard W6 — Jun 1–Jun 7, 2026 | ET Q2 2026</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+       background: #f2f2f2; color: #222; padding: 40px; }
+.page { max-width: 980px; margin: 0 auto; }
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 19px; font-weight: 700; }
+.page-header p  { font-size: 12px; color: #888; margin-top: 3px; }
+.back-link { font-size: 12px; color: #1a73e8; text-decoration: none; display: inline-block; margin-bottom: 16px; }
+.back-link:hover { text-decoration: underline; }
+.card { background: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 24px; margin-bottom: 22px; }
+.card-title { font-size: 10.5px; font-weight: 800; letter-spacing: .1em;
+              text-transform: uppercase; color: #111; margin-bottom: 18px; }
+.metric-row { display: grid; grid-template-columns: repeat(5,1fr);
+              border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+.metric-cell { padding: 16px 18px 14px; border-right: 1px solid #e0e0e0; }
+.metric-cell:last-child { border-right: none; }
+.m-label { font-size: 12px; color: #666; margin-bottom: 10px; }
+.m-val   { font-size: 38px; font-weight: 700; line-height: 1; color: #111; }
+.m-val.red    { color: #c0392b; }
+.m-val.green  { color: #27884a; }
+.m-val.amber  { color: #c47d0e; }
+.m-val.purple { color: #6d3faa; }
+.m-sub { font-size: 11px; margin-top: 7px; color: #999; }
+.m-sub.red   { color: #c0392b; }
+.m-sub.green { color: #27884a; }
+.m-sub.amber { color: #c47d0e; }
+.bar-intro { font-size: 12px; color: #555; margin: 18px 0 8px; }
+.bar-track { display: flex; height: 24px; border-radius: 3px; overflow: hidden; width: 100%; margin-bottom: 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 20px; font-size: 11.5px; color: #444; }
+.legend-item { display: flex; align-items: flex-start; gap: 7px; }
+.l-dot { width: 13px; height: 13px; border-radius: 2px; flex-shrink: 0; margin-top: 1px; }
+.epic-list { display: flex; flex-direction: column; gap: 10px; }
+.epic-card { display: flex; align-items: stretch; border: 1px solid #e0e0e0;
+             border-radius: 4px; overflow: hidden; background: #fff; }
+.epic-stripe { width: 5px; flex-shrink: 0; }
+.epic-body { flex: 1; padding: 14px 16px; }
+.epic-meta { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.epic-key  { font-size: 11px; font-weight: 700; color: #888; }
+.epic-status { font-size: 11px; color: #777; }
+.epic-name { font-size: 14px; font-weight: 600; color: #111; margin-bottom: 8px; line-height: 1.3; }
+.epic-bar-wrap { background: #eee; border-radius: 3px; height: 8px; margin-bottom: 8px; overflow: hidden; }
+.epic-bar-fill { height: 100%; border-radius: 3px; }
+.epic-note { font-size: 11px; color: #888; }
+.epic-right { display: flex; flex-direction: column; align-items: flex-end;
+              justify-content: center; padding: 14px 20px; min-width: 90px; flex-shrink: 0; }
+.epic-count { font-size: 12px; color: #999; margin-bottom: 3px; }
+.epic-pct   { font-size: 28px; font-weight: 700; line-height: 1; }
+.wow-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.wow-table thead tr { background: #1b1b2f; color: #fff; }
+.wow-table thead th { padding: 11px 16px; text-align: left; font-size: 12.5px; font-weight: 600; }
+.wow-table tbody tr { border-bottom: 1px solid #efefef; }
+.wow-table tbody tr:nth-child(even) { background: #fafafa; }
+.wow-table tbody td { padding: 12px 16px; vertical-align: middle; }
+.t-red  { color: #c0392b; font-weight: 600; }
+.t-green{ color: #27884a; font-weight: 600; }
+.t-amber{ color: #c47d0e; font-weight: 600; }
+.t-grey { color: #888; }
+.t-target { color: #555; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="index.html">← Weekly Reports Home</a>
+  <div class="page-header">
+    <h1>Sprint Dashboard — W6, Jun 1–Jun 7, 2026</h1>
+    <p>Project: ET &nbsp;·&nbsp; Fix Version: [Q2 2026] Verifone Central &nbsp;·&nbsp; Generated: 1 Jun 2026, 23:57</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sprint Snapshot</div>
+    <div class="metric-row">
+      <div class="metric-cell">
+        <div class="m-label">In progress</div>
+        <div class="m-val">58</div>
+        <div class="m-sub">of 75 active tickets</div>
+      </div>
+      <div class="metric-cell">
+        <div class="m-label">Stale &gt; 5d</div>
+        <div class="m-val red">47</div>
+        <div class="m-sub red">↑ no update in 5+ days</div>
+      </div>
+      <div class="metric-cell">
+        <div class="m-label">Closed this week</div>
+        <div class="m-val">0</div>
+        <div class="m-sub">closed Jun 1–Jun 7</div>
+      </div>
+      <div class="metric-cell">
+        <div class="m-label">Critical</div>
+        <div class="m-val red">5</div>
+        <div class="m-sub red">unresolved critical tickets</div>
+      </div>
+      <div class="metric-cell">
+        <div class="m-label">Unassigned</div>
+        <div class="m-val amber">2</div>
+        <div class="m-sub amber">needs owner</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Engineering Capacity &amp; Utilization</div>
+    <div class="metric-row">
+      <div class="metric-cell">
+        <div class="m-label">Total Engineers</div>
+        <div class="m-val">7</div>
+        <div class="m-sub">35 eng-days / wk available</div>
+      </div>
+      <div class="metric-cell">
+        <div class="m-label">On Enhancements</div>
+        <div class="m-val green">12</div>
+        <div class="m-sub green">16% of active tickets</div>
+      </div>
+      <div class="metric-cell">
+        <div class="m-label">On Defects</div>
+        <div class="m-val ">1</div>
+        <div class="m-sub">1% of active tickets</div>
+      </div>
+      <div class="metric-cell">
+        <div class="m-label">On QA / Testing</div>
+        <div class="m-val purple">13</div>
+        <div class="m-sub">17% of active tickets</div>
+      </div>
+      <div class="metric-cell">
+        <div class="m-label">Unassigned tickets</div>
+        <div class="m-val amber">2</div>
+        <div class="m-sub amber">Wasted capacity — needs owners</div>
+      </div>
+    </div>
+
+    <div class="bar-intro">Ticket allocation across active work (75 tickets)</div>
+    <div class="bar-track">
+      <div style="width:16%;background:#3a9e6e;"></div>
+      <div style="width:1%;background:#c0392b;"></div>
+      <div style="width:17%;background:#7e57c2;"></div>
+      <div style="width:66%;background:#c47d0e;"></div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="l-dot" style="background:#3a9e6e;"></div>
+        <span>Product Enhancements 16% (12 tickets)</span></div>
+      <div class="legend-item"><div class="l-dot" style="background:#c0392b;"></div>
+        <span>Production Defects 1% (1 tickets)</span></div>
+      <div class="legend-item"><div class="l-dot" style="background:#7e57c2;"></div>
+        <span>QA / Testing 17% (13 tickets)</span></div>
+      <div class="legend-item"><div class="l-dot" style="background:#c47d0e;"></div>
+        <span>Epics / Initiatives 66% (49 tickets)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Epic Progress</div>
+    <div class="epic-list">
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#27884a;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1791</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">SDK Integration Workshop Backlog - </div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:100%;background:#27884a;"></div>
+          </div>
+          <div class="epic-note">Akshat Aggarwal · 2 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">2 / 2</div>
+          <div class="epic-pct" style="color:#27884a;">100%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#27884a;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1746</span>
+            <span class="epic-status">[Transition]</span>
+          </div>
+          <div class="epic-name">Verifone Central - Update Phone Number Fields </div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:100%;background:#27884a;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 1 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 1</div>
+          <div class="epic-pct" style="color:#27884a;">100%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#27884a;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1152</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[MOP- UI] Surcharge automatic boarding for customers using Salesconnector for AGPA/VEPP (Cobra)</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:100%;background:#27884a;"></div>
+          </div>
+          <div class="epic-note">Ashish Verma · 1 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 1</div>
+          <div class="epic-pct" style="color:#27884a;">100%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#27884a;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-966</span>
+            <span class="epic-status">[Transition]</span>
+          </div>
+          <div class="epic-name">[MOP-UI] Automatic boarding of device feature "Refund" including limits on order by order basis- SC VerifonePay (SAIO)</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:100%;background:#27884a;"></div>
+          </div>
+          <div class="epic-note">Ashish Verma · 1 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 1</div>
+          <div class="epic-pct" style="color:#27884a;">100%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#27884a;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1147</span>
+            <span class="epic-status">[Transition]</span>
+          </div>
+          <div class="epic-name">[MOP-UI & BE] Bankaxept merchant onboarding and rev share tag using API (Norway)</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:83%;background:#27884a;"></div>
+          </div>
+          <div class="epic-note">Linn Karlsson · 10 closed of 12 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">10 / 12</div>
+          <div class="epic-pct" style="color:#27884a;">83%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#27884a;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-497</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[MOP-UI] Apply minimum monthly fee for Salesconnector VerifonePay customer</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:80%;background:#27884a;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 4 closed of 5 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">4 / 5</div>
+          <div class="epic-pct" style="color:#27884a;">80%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#1565c0;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1566</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">SSO Maintenance Support and Integration 2026</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:61%;background:#1565c0;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 14 closed of 23 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">14 / 23</div>
+          <div class="epic-pct" style="color:#1565c0;">61%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#1565c0;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1699</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[UK][FYQ2][Verifone Central] - Omnipay DCC - Verifone Central changes</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:50%;background:#1565c0;"></div>
+          </div>
+          <div class="epic-note">Utkarsh Agrawal · 1 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 2</div>
+          <div class="epic-pct" style="color:#1565c0;">50%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#1565c0;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-837</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[Generated Reports]: Allow users to select individual Org as a filter</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:50%;background:#1565c0;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 1 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 2</div>
+          <div class="epic-pct" style="color:#1565c0;">50%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c47d0e;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2034</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Westpac Functional Defects</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:43%;background:#c47d0e;"></div>
+          </div>
+          <div class="epic-note">Sruthi Nakul Mysore · 9 closed of 21 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">9 / 21</div>
+          <div class="epic-pct" style="color:#c47d0e;">43%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c47d0e;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2015</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[Q2 2026] Verifone Central - small updates</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:33%;background:#c47d0e;"></div>
+          </div>
+          <div class="epic-note">Sruthi Nakul Mysore · 1 closed of 3 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 3</div>
+          <div class="epic-pct" style="color:#c47d0e;">33%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c47d0e;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1527</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Training | KT | Retrospective | Technical discussions | Deployment | adhoc tasks etc</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:33%;background:#c47d0e;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 3 closed of 9 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">3 / 9</div>
+          <div class="epic-pct" style="color:#c47d0e;">33%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c47d0e;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-846</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Configuration Management App for Verifone Central</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:33%;background:#c47d0e;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 2 closed of 6 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">2 / 6</div>
+          <div class="epic-pct" style="color:#c47d0e;">33%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c47d0e;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2003</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[VC UI] Q2-2026 Fixes for front end application defects</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:30%;background:#c47d0e;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 15 closed of 50 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">15 / 50</div>
+          <div class="epic-pct" style="color:#c47d0e;">30%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c47d0e;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1537</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Small UI/UX enhancements in MOP - Verifone Central </div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:30%;background:#c47d0e;"></div>
+          </div>
+          <div class="epic-note">Adriana Gornea · 3 closed of 10 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">3 / 10</div>
+          <div class="epic-pct" style="color:#c47d0e;">30%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1978</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Verifone Central Portal Automation </div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:17%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 1 closed of 6 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 6</div>
+          <div class="epic-pct" style="color:#c0392b;">17%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1636</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">SMB APP - Requirements for Westpac readiness</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:11%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Akshat Aggarwal · 8 closed of 75 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">8 / 75</div>
+          <div class="epic-pct" style="color:#c0392b;">11%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-973</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Decouple all existing applications in VFC into modular Micro Frontend (MFE) applications</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:9%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Sruthi Nakul Mysore · 1 closed of 11 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 11</div>
+          <div class="epic-pct" style="color:#c0392b;">9%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1260</span>
+            <span class="epic-status">[Elaboration]</span>
+          </div>
+          <div class="epic-name">SMB Application - MVP (part 2) - global needs</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:6%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Akshat Aggarwal · 1 closed of 16 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">1 / 16</div>
+          <div class="epic-pct" style="color:#c0392b;">6%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2293</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Add GIVEX as selectable Processor option on Add/Edit Payment Provider Contract page</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Adriana Gornea · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2121</span>
+            <span class="epic-status">[Blocked]</span>
+          </div>
+          <div class="epic-name">[VAPS][Verifone Central] Unzer Acquiring Support in DACH</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Unassigned · 0 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2079</span>
+            <span class="epic-status">[Submitted]</span>
+          </div>
+          <div class="epic-name">Redundancy - GBX - CyberSource PIM connectivity through to CyberSource</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2077</span>
+            <span class="epic-status">[Elaboration]</span>
+          </div>
+          <div class="epic-name">Verifone Design System Code Audit</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Akshat Aggarwal · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2029</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[VerifoneCentral Portal][PPC] Adding TEYA_EU</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2020</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Marketplace Defect fixes Q2 2026</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 0 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-2018</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Form Forge Tool to generate forms for variety of templates</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 0 closed of 8 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 8</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1999</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Adopt Permissions based access control model in Verifone Central</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 0 closed of 3 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 3</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1781</span>
+            <span class="epic-status">[Blocked]</span>
+          </div>
+          <div class="epic-name">Portal Intake - Westpac | Merchant Self-Serve for Invoices/Receipts - Phase 2 - Suppress Trading Address</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Manish Sharma · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1748</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Search via Verifone Central through GitBook public doc</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Tanya Saxena · 0 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1724</span>
+            <span class="epic-status">[Inception]</span>
+          </div>
+          <div class="epic-name">Portal intake - NZ | Acquirer Portal Access</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Ayushi Gupta · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1714</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[Reporting] Orders/Transactions: Count & Query APIs</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Ashish Verma · 0 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1709</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Portal - FRIC to WSO2 Migration tasks </div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Sruthi Nakul Mysore · 0 closed of 5 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 5</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1679</span>
+            <span class="epic-status">[Inception]</span>
+          </div>
+          <div class="epic-name">Portal intake - Filter by Acquirer Support in Verifone Central</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1497</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">[US] Support for updating PayPal APIKey rotation on Verifone Central</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 0 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1493</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Introduce Business Identifiers fields in Add/Edit Organizations</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1485</span>
+            <span class="epic-status">[Elaboration]</span>
+          </div>
+          <div class="epic-name">Show the Time zone used to show dates in the portal</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Adriana Gornea · 0 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-1021</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">SSO between Premier portal and VFC</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-978</span>
+            <span class="epic-status">[Elaboration]</span>
+          </div>
+          <div class="epic-name">[MOP-UI] Prompt for user selection of VHQ reference ID if multiple option is available and no default option is pre set</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-974</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Self Service Deployment App - NEXUS</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 0 closed of 4 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 4</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-717</span>
+            <span class="epic-status">[Transition]</span>
+          </div>
+          <div class="epic-name">[MOP UI] ability to prompt for DID input only of a Biometric camera module and skip TID & TIN</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Ashish Verma · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-637</span>
+            <span class="epic-status">[Elaboration]</span>
+          </div>
+          <div class="epic-name">Verifone Portal | Organization filters to be consistent across different pages </div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Anand BS · 0 closed of 14 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 14</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-100</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">UI Revamp - TCS Client Nordics</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 0 closed of 1 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 1</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-81</span>
+            <span class="epic-status">[Elaboration]</span>
+          </div>
+          <div class="epic-name">Investigate - Build the alert concept and flow - phase 1</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Senthil Chidambaram · 0 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+      <div class="epic-card">
+        <div class="epic-stripe" style="background:#c0392b;"></div>
+        <div class="epic-body">
+          <div class="epic-meta">
+            <span class="epic-key">ET-25</span>
+            <span class="epic-status">[Implementation]</span>
+          </div>
+          <div class="epic-name">Move the top nav bar menu to the left as side menu bar in Verifone Central</div>
+          <div class="epic-bar-wrap">
+            <div class="epic-bar-fill" style="width:2%;background:#c0392b;"></div>
+          </div>
+          <div class="epic-note">Sumit Ashish · 0 closed of 2 total stories</div>
+        </div>
+        <div class="epic-right">
+          <div class="epic-count">0 / 2</div>
+          <div class="epic-pct" style="color:#c0392b;">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
