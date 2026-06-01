@@ -1,185 +1,534 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>ET Project — Jira Weekly Reports</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-       background: #f2f2f2; color: #222; padding: 40px; }
-.page { max-width: 860px; margin: 0 auto; }
-.page-header { margin-bottom: 32px; }
-.page-header h1 { font-size: 22px; font-weight: 700; }
-.page-header p  { font-size: 12px; color: #888; margin-top: 4px; }
-.year-label { font-size: 10.5px; font-weight: 800; letter-spacing: .1em;
-              text-transform: uppercase; color: #111; margin-bottom: 14px; }
-.q-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px; }
-.q-card { background: #fff; border: 1px solid #ddd; border-radius: 6px;
-          padding: 22px 24px; text-decoration: none; color: #111;
-          display: flex; flex-direction: column; gap: 12px;
-          transition: box-shadow .15s; position: relative; overflow: hidden; }
-.q-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,.09); }
-.q-card.active  { border-left: 4px solid #1565c0; }
-.q-card.upcoming { border-left: 4px solid #e0e0e0; opacity: .65; cursor: default; }
-.q-card.complete { border-left: 4px solid #2e7d32; }
-.q-top { display: flex; align-items: center; justify-content: space-between; }
-.q-label { font-size: 28px; font-weight: 800; color: #111; line-height: 1; }
-.q-badge { font-size: 10px; font-weight: 700; padding: 3px 9px;
-           border-radius: 12px; text-transform: uppercase; letter-spacing: .05em; }
-.badge-active   { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
-.badge-complete { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
-.badge-upcoming { background: #f5f5f5; color: #999;    border: 1px solid #e0e0e0; }
-.q-period { font-size: 13px; color: #555; }
-.q-sub { font-size: 11.5px; color: #aaa; }
-.q-reports { display: flex; gap: 8px; flex-wrap: wrap; }
-.q-report-link { font-size: 11px; background: #f5f5f5; border: 1px solid #e0e0e0;
-                 border-radius: 4px; padding: 4px 10px; color: #1a73e8;
-                 text-decoration: none; }
-.q-report-link:hover { background: #e8f0fe; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jira Reports — Verifone Central</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-w: 220px;
+      --sidebar-bg: #ffffff;
+      --sidebar-border: #e5e7eb;
+      --bg: #f9fafb;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --border: #e5e7eb;
+      --active-bg: #eff6ff;
+      --active-text: #1d4ed8;
+      --accent: #2563eb;
+      --radius: 8px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sb-logo {
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .sb-logo-text { font-size: 16px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; }
+
+    .sb-scroll { flex: 1; overflow-y: auto; padding: 10px 8px; }
+    .sb-scroll::-webkit-scrollbar { width: 3px; }
+    .sb-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+    .nav-section { margin-bottom: 4px; }
+    .nav-section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.7px;
+      text-transform: uppercase; color: var(--text-4); padding: 10px 10px 4px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 7px;
+      color: var(--text-2); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; background: none; border: none;
+      width: 100%; text-align: left; text-decoration: none;
+    }
+    .nav-item:hover { background: #f3f4f6; color: var(--text); }
+    .nav-item.active { background: var(--active-bg); color: var(--active-text); font-weight: 600; }
+    .nav-item .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.75; }
+    .nav-item.active .nav-icon { opacity: 1; }
+    .nav-item .nav-badge { margin-left: auto; font-size: 10.5px; font-weight: 600; background: #f3f4f6; color: var(--text-3); padding: 1px 6px; border-radius: 10px; }
+
+    .nav-divider { margin: 6px 8px; border: none; border-top: 1px solid var(--border); }
+
+    .nav-sub-item { display: flex; align-items: center; gap: 10px; padding: 6px 10px 6px 30px; border-radius: 7px; font-size: 12.5px; color: var(--text-3); cursor: pointer; }
+    .nav-sub-item:hover { background: #f3f4f6; color: var(--text-2); }
+    .nav-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; }
+
+    .sb-bottom { padding: 12px 16px; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .sb-user { display: flex; align-items: center; gap: 10px; }
+    .sb-avatar { width: 30px; height: 30px; border-radius: 50%; background: #0f172a; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sb-user-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+    .sb-user-role { font-size: 11px; color: var(--text-4); }
+
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .topbar { height: 52px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+    .topbar-left { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .topbar-bc-root { color: var(--text-3); }
+    .topbar-bc-sep { color: var(--text-4); }
+    .topbar-bc-cur { color: var(--text); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .topbar-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 6px; border-radius: 6px; }
+    .topbar-btn:hover { background: #f3f4f6; color: var(--text-2); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; background: #0f172a; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+    .page-content { flex: 1; overflow-y: auto; padding: 24px 28px; }
+    .page-content::-webkit-scrollbar { width: 5px; }
+    .page-content::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 5px; }
+
+    .page-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .page-title { font-size: 18px; font-weight: 700; color: #0f172a; }
+    .page-actions { display: flex; align-items: center; gap: 8px; }
+
+    .btn-outline { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 7px; background: #fff; font-size: 13px; font-weight: 500; color: var(--text-2); cursor: pointer; }
+    .btn-outline:hover { border-color: #9ca3af; background: #f9fafb; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .stat-card { background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+    .stat-label { font-size: 11.5px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: #0f172a; line-height: 1; }
+    .stat-sub { font-size: 11.5px; color: var(--text-3); margin-top: 6px; }
+    .stat-bar { height: 4px; border-radius: 2px; background: #f3f4f6; margin-top: 10px; overflow: hidden; }
+    .stat-bar-fill { height: 100%; border-radius: 2px; }
+
+    .filter-card { background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .sprint-chip { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1.5px solid var(--accent); border-radius: 20px; font-size: 12.5px; font-weight: 600; color: var(--accent); background: #eff6ff; cursor: pointer; white-space: nowrap; }
+    .filter-chip { display: flex; align-items: center; gap: 5px; padding: 6px 12px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 12.5px; font-weight: 500; color: var(--text-2); background: none; cursor: pointer; white-space: nowrap; }
+    .filter-chip:hover { border-color: #9ca3af; background: #f9fafb; }
+    .filter-chip.active { border-color: var(--accent); background: #eff6ff; color: var(--accent); font-weight: 600; }
+    .filter-sep { color: var(--border); font-size: 18px; user-select: none; }
+    .search-wrap { flex: 1; min-width: 180px; position: relative; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-4); pointer-events: none; }
+    .search-input { width: 100%; padding: 7px 12px 7px 34px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 13px; color: var(--text); background: #fff; outline: none; }
+    .search-input:focus { border-color: var(--accent); }
+    .chip-clear { margin-left: auto; font-size: 12px; color: var(--text-3); cursor: pointer; background: none; border: none; }
+    .chip-clear:hover { color: var(--text); }
+
+    .table-card { background: #fff; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .table-meta { padding: 12px 18px; font-size: 12.5px; color: var(--text-3); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .table-meta-right { display: flex; align-items: center; gap: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: 11.5px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.4px; padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; background: #f9fafb; }
+    td { padding: 11px 14px; font-size: 13px; color: var(--text-2); border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+
+    .issue-key { font-size: 12px; font-weight: 600; color: var(--accent); cursor: pointer; white-space: nowrap; }
+    .issue-key:hover { text-decoration: underline; }
+    .issue-summary { color: var(--text); font-weight: 500; max-width: 300px; }
+
+    .type-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+    .type-story   { background: #e0f2fe; color: #0369a1; }
+    .type-bug     { background: #fee2e2; color: #b91c1c; }
+    .type-task    { background: #f3f4f6; color: #374151; }
+    .type-epic    { background: #f3e8ff; color: #7e22ce; }
+    .type-subtask { background: #ecfdf5; color: #065f46; }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .s-todo    { background: #f3f4f6; color: #374151; }
+    .s-todo .status-dot    { background: #9ca3af; }
+    .s-inprog  { background: #eff6ff; color: #1d4ed8; }
+    .s-inprog .status-dot  { background: #2563eb; }
+    .s-review  { background: #fef3c7; color: #92400e; }
+    .s-review .status-dot  { background: #d97706; }
+    .s-done    { background: #ecfdf5; color: #065f46; }
+    .s-done .status-dot    { background: #16a34a; }
+    .s-blocked { background: #fee2e2; color: #b91c1c; }
+    .s-blocked .status-dot { background: #dc2626; }
+
+    .pri { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-2); white-space: nowrap; }
+    .pri-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+    .pri-critical { background: #dc2626; }
+    .pri-high     { background: #ea580c; }
+    .pri-medium   { background: #ca8a04; }
+    .pri-low      { background: #16a34a; }
+
+    .assignee { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+    .assignee-av { width: 22px; height: 22px; border-radius: 50%; font-size: 9.5px; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .sp-badge { display: inline-block; font-size: 11.5px; font-weight: 700; color: var(--text-3); background: #f3f4f6; border-radius: 4px; padding: 1px 7px; min-width: 22px; text-align: center; }
+
+    .pagination { display: flex; align-items: center; justify-content: flex-end; gap: 6px; padding: 12px 18px; border-top: 1px solid var(--border); }
+    .page-btn { padding: 5px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 12.5px; background: #fff; color: var(--text-2); cursor: pointer; }
+    .page-btn:hover { border-color: #9ca3af; }
+    .page-btn.active { border-color: var(--accent); background: var(--active-bg); color: var(--active-text); font-weight: 600; }
+  </style>
 </head>
 <body>
-<div class="page">
-  <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
-    <div>
-      <h1>ET Project — Jira Weekly Reports</h1>
-      <p>Project: ET &nbsp;·&nbsp; Fix Version: Verifone Central &nbsp;·&nbsp; Last updated: 18 May 2026, 09:00</p>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
-      <button id="run-btn" onclick="triggerRun()"
-        style="background:#1565c0;color:#fff;border:none;border-radius:6px;
-               padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;
-               display:flex;align-items:center;gap:7px;white-space:nowrap;">
-        <span id="run-icon">▶</span> <span id="run-label">Refresh All Reports</span>
+
+<aside id="sidebar">
+  <a class="sb-logo" href="index.html">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="#0f172a"/>
+      <circle cx="10" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="22" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="10" cy="22" r="3" fill="#60a5fa"/>
+      <circle cx="22" cy="22" r="3" fill="#60a5fa"/>
+    </svg>
+    <span class="sb-logo-text">Verifone</span>
+  </a>
+
+  <div class="sb-scroll">
+    <div class="nav-section">
+      <div class="nav-section-label">Main</div>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+        Dashboard
       </button>
-      <span id="run-status" style="font-size:11px;color:#aaa;"></span>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+        Commerce
+      </button>
+      <div class="nav-sub-item"><span class="nav-sub-dot"></span>Orders / Transactions</div>
+      <div class="nav-sub-item"><span class="nav-sub-dot"></span>Payment links</div>
+      <div class="nav-sub-item"><span class="nav-sub-dot"></span>Customers</div>
+      <div class="nav-sub-item"><span class="nav-sub-dot"></span>Products</div>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg></span>
+        Administration
+      </button>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        Boarding
+      </button>
+    </div>
+
+    <hr class="nav-divider"/>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Analytics</div>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V3M2 9h20"/></svg></span>
+        Reports
+        <span class="nav-badge">3</span>
+      </button>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+        Analytics
+      </button>
+      <button class="nav-item active">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>
+        Jira Reports
+      </button>
+    </div>
+
+    <hr class="nav-divider"/>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Tools</div>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+        Device manager
+      </button>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V7l7-4v19M14 22V11l7-3v14"/><path d="M3 11h11M3 16h11"/></svg></span>
+        Petro
+      </button>
     </div>
   </div>
 
-  <div class="year-label">2026</div>
-  <div class="q-grid">
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">AG</div>
+      <div>
+        <div class="sb-user-name">Adriana Gornea</div>
+        <div class="sb-user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</aside>
 
-    <!-- Q1 2026 -->
-    <a class="q-card complete" href="weekly-jira-status-q1-2026/index.html">
-      <div class="q-top">
-        <div class="q-label">Q1 2026</div>
-        <span class="q-badge badge-complete">Complete</span>
-      </div>
-      <div class="q-period">November 2025 – February 2026</div>
-      <div class="q-reports">
-        <span class="q-report-link">Sprint Dashboard</span>
-        <span class="q-report-link">Time Report</span>
-        <span class="q-report-link">SW Capitalization</span>
-        <span class="q-report-link">Service Allocation</span>
-      </div>
-    </a>
+<div id="main">
 
-    <!-- Q2 2026 -->
-    <a class="q-card active" href="weekly-jira-status-q2-2026/index.html">
-      <div class="q-top">
-        <div class="q-label">Q2 2026</div>
-        <span class="q-badge badge-active">Active</span>
-      </div>
-      <div class="q-period">March – May 2026</div>
-      <div class="q-reports">
-        <span class="q-report-link">Sprint Dashboard</span>
-        <span class="q-report-link">Time Report</span>
-        <span class="q-report-link">SW Capitalization</span>
-        <span class="q-report-link">Service Allocation</span>
-      </div>
-    </a>
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-bc-root">Analytics</span>
+      <span class="topbar-bc-sep">/</span>
+      <span class="topbar-bc-cur">Jira Reports</span>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </button>
+      <div class="avatar" title="Adriana Gornea">A</div>
+    </div>
+  </div>
 
-    <!-- Q3 2026 -->
-    <div class="q-card upcoming">
-      <div class="q-top">
-        <div class="q-label">Q3 2026</div>
-        <span class="q-badge badge-upcoming">Upcoming</span>
+  <div class="page-content">
+
+    <div class="page-heading">
+      <span class="page-title">Jira Reports</span>
+      <div class="page-actions">
+        <button class="btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+        <button class="btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Sync Jira
+        </button>
       </div>
-      <div class="q-period">June – August 2026</div>
-      <div class="q-sub">Starts June 1, 2026</div>
     </div>
 
-    <!-- Q4 2026 -->
-    <div class="q-card upcoming">
-      <div class="q-top">
-        <div class="q-label">Q4 2026</div>
-        <span class="q-badge badge-upcoming">Upcoming</span>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Issues</div>
+        <div class="stat-value">47</div>
+        <div class="stat-sub">Sprint 24 · May 19 – Jun 1</div>
       </div>
-      <div class="q-period">September – November 2026</div>
-      <div class="q-sub">Starts September 1, 2026</div>
+      <div class="stat-card">
+        <div class="stat-label">Completed</div>
+        <div class="stat-value" style="color:#16a34a;">28</div>
+        <div class="stat-sub">59% of sprint</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:59%;background:#16a34a;"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">In Progress</div>
+        <div class="stat-value" style="color:#2563eb;">12</div>
+        <div class="stat-sub">25% of sprint</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:25%;background:#2563eb;"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Open Bugs</div>
+        <div class="stat-value" style="color:#dc2626;">7</div>
+        <div class="stat-sub">3 critical · 4 high</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:15%;background:#dc2626;"></div></div>
+      </div>
+    </div>
+
+    <div class="filter-card">
+      <button class="sprint-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Sprint 24
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <span class="filter-sep">|</span>
+      <button class="filter-chip active" onclick="toggleChip(this)">All</button>
+      <button class="filter-chip" onclick="toggleChip(this)">To Do</button>
+      <button class="filter-chip" onclick="toggleChip(this)">In Progress</button>
+      <button class="filter-chip" onclick="toggleChip(this)">In Review</button>
+      <button class="filter-chip" onclick="toggleChip(this)">Done</button>
+      <button class="filter-chip" onclick="toggleChip(this)">Blocked</button>
+      <span class="filter-sep">|</span>
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" type="text" placeholder="Search issues…" />
+      </div>
+      <button class="chip-clear" onclick="clearFilters()">Clear</button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-meta">
+        Showing 1 – 15 of 47 issues
+        <div class="table-meta-right">
+          <span>Group by:</span>
+          <button class="filter-chip" style="padding:3px 10px;font-size:11.5px;">Status</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Summary</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Assignee</th>
+            <th style="text-align:center;">SP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="issue-key">VHQ-4182</span></td>
+            <td class="issue-summary">Gateway timeout on high-volume batch processing</td>
+            <td><span class="type-badge type-bug">Bug</span></td>
+            <td><span class="status-badge s-inprog"><span class="status-dot"></span>In Progress</span></td>
+            <td><span class="pri"><span class="pri-dot pri-critical"></span>Critical</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#0f172a;">AG</div>A. Gornea</div></td>
+            <td style="text-align:center;"><span class="sp-badge">5</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4181</span></td>
+            <td class="issue-summary">Add multi-currency support to settlement reports</td>
+            <td><span class="type-badge type-story">Story</span></td>
+            <td><span class="status-badge s-review"><span class="status-dot"></span>In Review</span></td>
+            <td><span class="pri"><span class="pri-dot pri-high"></span>High</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#0369a1;">MR</div>M. Reyes</div></td>
+            <td style="text-align:center;"><span class="sp-badge">8</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4179</span></td>
+            <td class="issue-summary">Merchant portal login redirect loop on SSO timeout</td>
+            <td><span class="type-badge type-bug">Bug</span></td>
+            <td><span class="status-badge s-blocked"><span class="status-dot"></span>Blocked</span></td>
+            <td><span class="pri"><span class="pri-dot pri-critical"></span>Critical</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#0369a1;">MR</div>M. Reyes</div></td>
+            <td style="text-align:center;"><span class="sp-badge">3</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4178</span></td>
+            <td class="issue-summary">Implement transaction export with date range filtering</td>
+            <td><span class="type-badge type-story">Story</span></td>
+            <td><span class="status-badge s-done"><span class="status-dot"></span>Done</span></td>
+            <td><span class="pri"><span class="pri-dot pri-high"></span>High</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#0f172a;">AG</div>A. Gornea</div></td>
+            <td style="text-align:center;"><span class="sp-badge">5</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4176</span></td>
+            <td class="issue-summary">Update organisation hierarchy panel — add search debounce</td>
+            <td><span class="type-badge type-task">Task</span></td>
+            <td><span class="status-badge s-done"><span class="status-dot"></span>Done</span></td>
+            <td><span class="pri"><span class="pri-dot pri-medium"></span>Medium</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#7e22ce;">PK</div>P. Kim</div></td>
+            <td style="text-align:center;"><span class="sp-badge">3</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4175</span></td>
+            <td class="issue-summary">Petro pump reconciliation — rounding error on EUR amounts</td>
+            <td><span class="type-badge type-bug">Bug</span></td>
+            <td><span class="status-badge s-inprog"><span class="status-dot"></span>In Progress</span></td>
+            <td><span class="pri"><span class="pri-dot pri-high"></span>High</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#065f46;">LS</div>L. Santos</div></td>
+            <td style="text-align:center;"><span class="sp-badge">2</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4174</span></td>
+            <td class="issue-summary">Device manager bulk-assign firmware update</td>
+            <td><span class="type-badge type-epic">Epic</span></td>
+            <td><span class="status-badge s-inprog"><span class="status-dot"></span>In Progress</span></td>
+            <td><span class="pri"><span class="pri-dot pri-medium"></span>Medium</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#7e22ce;">PK</div>P. Kim</div></td>
+            <td style="text-align:center;"><span class="sp-badge">13</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4173</span></td>
+            <td class="issue-summary">Analytics dashboard — add 90-day rolling average</td>
+            <td><span class="type-badge type-story">Story</span></td>
+            <td><span class="status-badge s-todo"><span class="status-dot"></span>To Do</span></td>
+            <td><span class="pri"><span class="pri-dot pri-medium"></span>Medium</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#065f46;">LS</div>L. Santos</div></td>
+            <td style="text-align:center;"><span class="sp-badge">5</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4172</span></td>
+            <td class="issue-summary">Boarding onboarding wizard — step 3 validation missing</td>
+            <td><span class="type-badge type-bug">Bug</span></td>
+            <td><span class="status-badge s-review"><span class="status-dot"></span>In Review</span></td>
+            <td><span class="pri"><span class="pri-dot pri-high"></span>High</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#0f172a;">AG</div>A. Gornea</div></td>
+            <td style="text-align:center;"><span class="sp-badge">3</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4171</span></td>
+            <td class="issue-summary">Replace deprecated auth middleware with OAuth 2.0 flow</td>
+            <td><span class="type-badge type-task">Task</span></td>
+            <td><span class="status-badge s-done"><span class="status-dot"></span>Done</span></td>
+            <td><span class="pri"><span class="pri-dot pri-critical"></span>Critical</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#0369a1;">MR</div>M. Reyes</div></td>
+            <td style="text-align:center;"><span class="sp-badge">8</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4170</span></td>
+            <td class="issue-summary">Payment links — QR code generation performance regression</td>
+            <td><span class="type-badge type-bug">Bug</span></td>
+            <td><span class="status-badge s-inprog"><span class="status-dot"></span>In Progress</span></td>
+            <td><span class="pri"><span class="pri-dot pri-high"></span>High</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#7e22ce;">PK</div>P. Kim</div></td>
+            <td style="text-align:center;"><span class="sp-badge">2</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4169</span></td>
+            <td class="issue-summary">Add webhook retry policy to failed transaction events</td>
+            <td><span class="type-badge type-story">Story</span></td>
+            <td><span class="status-badge s-done"><span class="status-dot"></span>Done</span></td>
+            <td><span class="pri"><span class="pri-dot pri-medium"></span>Medium</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#065f46;">LS</div>L. Santos</div></td>
+            <td style="text-align:center;"><span class="sp-badge">5</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4168</span></td>
+            <td class="issue-summary">Terminal offline mode — queue transactions locally</td>
+            <td><span class="type-badge type-epic">Epic</span></td>
+            <td><span class="status-badge s-todo"><span class="status-dot"></span>To Do</span></td>
+            <td><span class="pri"><span class="pri-dot pri-medium"></span>Medium</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#0f172a;">AG</div>A. Gornea</div></td>
+            <td style="text-align:center;"><span class="sp-badge">13</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4167</span></td>
+            <td class="issue-summary">Reporting API — add cursor-based pagination</td>
+            <td><span class="type-badge type-task">Task</span></td>
+            <td><span class="status-badge s-done"><span class="status-dot"></span>Done</span></td>
+            <td><span class="pri"><span class="pri-dot pri-low"></span>Low</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#0369a1;">MR</div>M. Reyes</div></td>
+            <td style="text-align:center;"><span class="sp-badge">3</span></td>
+          </tr>
+          <tr>
+            <td><span class="issue-key">VHQ-4166</span></td>
+            <td class="issue-summary">Customer portal — dark mode toggle accessibility fix</td>
+            <td><span class="type-badge type-subtask">Subtask</span></td>
+            <td><span class="status-badge s-done"><span class="status-dot"></span>Done</span></td>
+            <td><span class="pri"><span class="pri-dot pri-low"></span>Low</span></td>
+            <td><div class="assignee"><div class="assignee-av" style="background:#7e22ce;">PK</div>P. Kim</div></td>
+            <td style="text-align:center;"><span class="sp-badge">1</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">›</button>
+      </div>
     </div>
 
   </div>
 </div>
+
 <script>
-const BTN    = document.getElementById('run-btn');
-const ICON   = document.getElementById('run-icon');
-const LABEL  = document.getElementById('run-label');
-const STATUS = document.getElementById('run-status');
-const SERVER = 'http://localhost:18765';
-
-async function triggerRun() {
-  BTN.disabled = true;
-  ICON.textContent  = '⏳';
-  LABEL.textContent = 'Starting…';
-  STATUS.textContent = '';
-  try {
-    const r = await fetch(SERVER + '/run', {cache: 'no-store'});
-    const d = await r.json();
-    if (d.status === 'started') {
-      ICON.textContent  = '✓';
-      LABEL.textContent = 'Job started';
-      BTN.style.background = '#2e7d32';
-      STATUS.textContent = 'Running in background — refresh pages in a few minutes.';
-      STATUS.style.color = '#2e7d32';
-      pollUntilDone();
-    } else if (d.status === 'already_running') {
-      ICON.textContent  = '⏳';
-      LABEL.textContent = 'Already running…';
-      BTN.style.background = '#e65100';
-      STATUS.textContent = 'A run is already in progress.';
-      STATUS.style.color = '#e65100';
-      reset(4000);
-    }
-  } catch (e) {
-    ICON.textContent  = '✗';
-    LABEL.textContent = 'Server offline';
-    BTN.style.background = '#b71c1c';
-    STATUS.textContent = 'Local trigger server not running. Open Terminal and check LaunchAgent.';
-    STATUS.style.color = '#b71c1c';
-    BTN.disabled = false;
-    reset(6000);
+  function setActive(btn) {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
   }
-}
-
-function reset(ms) {
-  setTimeout(() => {
-    BTN.disabled = false;
-    BTN.style.background = '#1565c0';
-    ICON.textContent  = '▶';
-    LABEL.textContent = 'Refresh All Reports';
-    STATUS.textContent = '';
-    STATUS.style.color = '#aaa';
-  }, ms);
-}
-
-function pollUntilDone() {
-  const interval = setInterval(async () => {
-    try {
-      const r = await fetch(SERVER + '/status', {cache: 'no-store'});
-      const d = await r.json();
-      if (!d.running) {
-        clearInterval(interval);
-        ICON.textContent  = '✓';
-        LABEL.textContent = 'Done — reload pages';
-        STATUS.textContent = `Completed at ${d.last_time || 'unknown'}`;
-        STATUS.style.color = '#2e7d32';
-        BTN.disabled = false;
-        reset(8000);
-      }
-    } catch { clearInterval(interval); reset(1000); }
-  }, 5000);
-}
+  function toggleChip(chip) {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  }
+  function clearFilters() {
+    document.querySelectorAll('.filter-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+    document.querySelector('.search-input').value = '';
+  }
 </script>
 </body>
 </html>
