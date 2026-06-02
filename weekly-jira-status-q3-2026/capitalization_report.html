@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Software Capitalization — [Q3 2026] Verifone Central</title>
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+       background: #f2f2f2; color: #222; padding: 40px; }
+.page { max-width: 980px; margin: 0 auto; }
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 19px; font-weight: 700; }
+.page-header p  { font-size: 12px; color: #888; margin-top: 3px; }
+.back-link { font-size: 12px; color: #1a73e8; text-decoration: none; display: inline-block; margin-bottom: 16px; }
+.back-link:hover { text-decoration: underline; }
+.card { background: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 24px; margin-bottom: 22px; }
+.card-title { font-size: 10.5px; font-weight: 800; letter-spacing: .1em;
+              text-transform: uppercase; color: #111; margin-bottom: 18px; }
+.metric-row { display: grid; grid-template-columns: repeat(5,1fr);
+              border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+.metric-cell { padding: 16px 18px 14px; border-right: 1px solid #e0e0e0; }
+.metric-cell:last-child { border-right: none; }
+.m-label { font-size: 12px; color: #666; margin-bottom: 10px; }
+.m-val   { font-size: 38px; font-weight: 700; line-height: 1; color: #111; }
+.m-val.red    { color: #c0392b; }
+.m-val.green  { color: #27884a; }
+.m-val.amber  { color: #c47d0e; }
+.m-val.purple { color: #6d3faa; }
+.m-sub { font-size: 11px; margin-top: 7px; color: #999; }
+.m-sub.red   { color: #c0392b; }
+.m-sub.green { color: #27884a; }
+.m-sub.amber { color: #c47d0e; }
+.bar-intro { font-size: 12px; color: #555; margin: 18px 0 8px; }
+.bar-track { display: flex; height: 24px; border-radius: 3px; overflow: hidden; width: 100%; margin-bottom: 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 20px; font-size: 11.5px; color: #444; }
+.legend-item { display: flex; align-items: flex-start; gap: 7px; }
+.l-dot { width: 13px; height: 13px; border-radius: 2px; flex-shrink: 0; margin-top: 1px; }
+.epic-list { display: flex; flex-direction: column; gap: 10px; }
+.epic-card { display: flex; align-items: stretch; border: 1px solid #e0e0e0;
+             border-radius: 4px; overflow: hidden; background: #fff; }
+.epic-stripe { width: 5px; flex-shrink: 0; }
+.epic-body { flex: 1; padding: 14px 16px; }
+.epic-meta { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.epic-key  { font-size: 11px; font-weight: 700; color: #888; }
+.epic-status { font-size: 11px; color: #777; }
+.epic-name { font-size: 14px; font-weight: 600; color: #111; margin-bottom: 8px; line-height: 1.3; }
+.epic-bar-wrap { background: #eee; border-radius: 3px; height: 8px; margin-bottom: 8px; overflow: hidden; }
+.epic-bar-fill { height: 100%; border-radius: 3px; }
+.epic-note { font-size: 11px; color: #888; }
+.epic-right { display: flex; flex-direction: column; align-items: flex-end;
+              justify-content: center; padding: 14px 20px; min-width: 90px; flex-shrink: 0; }
+.epic-count { font-size: 12px; color: #999; margin-bottom: 3px; }
+.epic-pct   { font-size: 28px; font-weight: 700; line-height: 1; }
+.wow-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.wow-table thead tr { background: #1b1b2f; color: #fff; }
+.wow-table thead th { padding: 11px 16px; text-align: left; font-size: 12.5px; font-weight: 600; }
+.wow-table tbody tr { border-bottom: 1px solid #efefef; }
+.wow-table tbody tr:nth-child(even) { background: #fafafa; }
+.wow-table tbody td { padding: 12px 16px; vertical-align: middle; }
+.t-red  { color: #c0392b; font-weight: 600; }
+.t-green{ color: #27884a; font-weight: 600; }
+.t-amber{ color: #c47d0e; font-weight: 600; }
+.t-grey { color: #888; }
+.t-target { color: #555; font-size: 12px; }
+
+.cap-summary { display:grid; grid-template-columns:repeat(4,1fr);
+               border:1px solid #e0e0e0; border-radius:4px; overflow:hidden; margin-bottom:20px; }
+.cap-cell  { padding:18px 20px 16px; border-right:1px solid #e0e0e0; }
+.cap-cell:last-child { border-right:none; }
+.cap-label { font-size:12px; color:#666; margin-bottom:10px; }
+.cap-val   { font-size:34px; font-weight:700; line-height:1; }
+.cap-sub   { font-size:11px; color:#999; margin-top:7px; }
+.cap-table { width:100%; border-collapse:collapse; font-size:13px; }
+.cap-table thead tr { background:#1b1b2f; color:#fff; }
+.cap-table thead th { padding:11px 16px; text-align:left; font-size:12px; font-weight:600; }
+.cap-table tbody tr { border-bottom:1px solid #f0f0f0; }
+.cap-table tbody tr:hover td { background:#fafbff; }
+.cap-table tbody td { padding:11px 16px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="index.html">← Weekly Reports Home</a>
+  <div class="page-header">
+    <h1>Software Capitalization — [Q3 2026] Verifone Central</h1>
+    <p>Project: ET &nbsp;·&nbsp; Period: June - August, 2026 &nbsp;·&nbsp; Generated: 2 Jun 2026, 14:19</p>
+  </div>
+
+  <!-- ── Available Capacity vs Q3 Hours Comparison ── -->
+  <div class="card">
+    <div class="card-title">Available Capacity vs Q3 Hours — Category Comparison</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:22px;">
+<div style="padding:16px 20px;"><div style="font-size:12px;color:#666;margin-bottom:8px;">June 2026 <span style="font-size:10px;background:#fff3e0;color:#e65100;padding:1px 6px;border-radius:10px;border:1px solid #ffe0b2;margin-left:4px;">in progress</span></div><div style="font-size:26px;font-weight:700;color:#111;line-height:1;">143 <span style="font-size:13px;color:#999;font-weight:400;">md · 1,144h</span></div><div style="display:flex;height:7px;border-radius:3px;overflow:hidden;background:#fff3e0;margin-top:10px;"><div style="width:1.0%;background:#fb8c00;border-radius:3px 0 0 3px;"></div><div style="width:99.0%;background:#ffe0b2;"></div></div><div style="font-size:11px;color:#888;margin-top:6px;">11h logged · 1,133h remaining · 6.5 people · 22 days</div></div>
+<div style="padding:16px 20px;border-left:1px solid #e0e0e0;"><div style="font-size:12px;color:#666;margin-bottom:8px;">July 2026 <span style="font-size:10px;background:#f5f5f5;color:#999;padding:1px 6px;border-radius:10px;border:1px solid #e0e0e0;margin-left:4px;">upcoming</span></div><div style="font-size:26px;font-weight:700;color:#111;line-height:1;">149.5 <span style="font-size:13px;color:#999;font-weight:400;">md · 1,196h</span></div><div style="display:flex;height:7px;border-radius:3px;overflow:hidden;background:#f5f5f5;margin-top:10px;"><div style="width:0.9%;background:#bdbdbd;border-radius:3px 0 0 3px;"></div><div style="width:99.1%;background:#e0e0e0;"></div></div><div style="font-size:11px;color:#888;margin-top:6px;">11h logged · 1,185h remaining · 6.5 people · 23 days</div></div>
+<div style="padding:16px 20px;border-left:1px solid #e0e0e0;"><div style="font-size:12px;color:#666;margin-bottom:8px;">August 2026 <span style="font-size:10px;background:#f5f5f5;color:#999;padding:1px 6px;border-radius:10px;border:1px solid #e0e0e0;margin-left:4px;">upcoming</span></div><div style="font-size:26px;font-weight:700;color:#111;line-height:1;">136.5 <span style="font-size:13px;color:#999;font-weight:400;">md · 1,092h</span></div><div style="display:flex;height:7px;border-radius:3px;overflow:hidden;background:#f5f5f5;margin-top:10px;"><div style="width:0.9%;background:#bdbdbd;border-radius:3px 0 0 3px;"></div><div style="width:99.1%;background:#e0e0e0;"></div></div><div style="font-size:11px;color:#888;margin-top:6px;">10h logged · 1,082h remaining · 6.5 people · 21 days</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;background:#f8f9ff;border:1px solid #e8eaf6;border-radius:4px;padding:16px 20px;">
+      <div style="min-width:110px;">
+        <div style="font-size:11px;color:#666;margin-bottom:4px;">Q3 Total Available</div>
+        <div style="font-size:22px;font-weight:700;color:#111;">3432.0h <span style="font-size:12px;color:#888;font-weight:400;">· 429 md</span></div>
+      </div>
+      <div style="min-width:110px;">
+        <div style="font-size:11px;color:#666;margin-bottom:4px;">Logged So Far</div>
+        <div style="font-size:22px;font-weight:700;color:#1565c0;">32h</div>
+      </div>
+      <div style="min-width:110px;">
+        <div style="font-size:11px;color:#666;margin-bottom:4px;">Remaining</div>
+        <div style="font-size:22px;font-weight:700;color:#27884a;">3400h</div>
+      </div>
+      <div style="flex:2;min-width:220px;">
+        <div style="font-size:11px;color:#666;margin-bottom:7px;">Q3 Capacity consumed &nbsp;<b>1%</b> &nbsp;<span style="font-weight:400;color:#999;">(32h of 3432.0h)</span></div>
+        <div style="display:flex;height:10px;border-radius:3px;overflow:hidden;background:#e8eaf6;"><div title="New Features · 2h · 0.1%" style="width:0.06%;background:#1565c0;"></div><div title="Maintenance · 4h · 0.1%" style="width:0.12%;background:#f57c00;"></div><div title="BAU Work · 13h 30m · 0.4%" style="width:0.39%;background:#9e9e9e;"></div><div title="Technical Improvement · 12h 30m · 0.4%" style="width:0.36%;background:#7627bb;"></div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:8px;"><span style="font-size:10.5px;color:#555;display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#1565c0;display:inline-block;flex-shrink:0;"></span>New Features 2h · 0.1%</span><span style="font-size:10.5px;color:#555;display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#f57c00;display:inline-block;flex-shrink:0;"></span>Maintenance 4h · 0.1%</span><span style="font-size:10.5px;color:#555;display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#9e9e9e;display:inline-block;flex-shrink:0;"></span>BAU Work 13h 30m · 0.4%</span><span style="font-size:10.5px;color:#555;display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#7627bb;display:inline-block;flex-shrink:0;"></span>Technical Improvement 12h 30m · 0.4%</span><span style="font-size:10.5px;color:#bbb;display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#e8eaf6;border:1px solid #c5cae9;display:inline-block;flex-shrink:0;"></span>Remaining 3400h · 99.1%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Q3 Hours by Capitalization Category</div>
+    <div class="cap-summary">
+      <div class="cap-cell">
+        <div class="cap-label">New Features</div>
+        <div class="cap-val" style="color:#1565c0;">2h</div>
+        <div class="cap-sub">6% of Q3 hours</div>
+      </div>
+      <div class="cap-cell">
+        <div class="cap-label">Maintenance</div>
+        <div class="cap-val" style="color:#f57c00;">4h</div>
+        <div class="cap-sub">12% of Q3 hours</div>
+      </div>
+      <div class="cap-cell">
+        <div class="cap-label">BAU Work</div>
+        <div class="cap-val" style="color:#9e9e9e;">13h 30m</div>
+        <div class="cap-sub">42% of Q3 hours</div>
+      </div>
+      <div class="cap-cell">
+        <div class="cap-label">Technical Improvement</div>
+        <div class="cap-val" style="color:#7627bb;">12h 30m</div>
+        <div class="cap-sub">39% of Q3 hours</div>
+      </div>
+    </div>
+    <div class="bar-track"><div style="width:6%;background:#1565c0;"></div><div style="width:12%;background:#f57c00;"></div><div style="width:42%;background:#9e9e9e;"></div><div style="width:39%;background:#7627bb;"></div></div>
+    <div class="legend" style="margin-top:10px;">
+      <div class="legend-item">
+        <div class="l-dot" style="background:#1565c0;"></div>
+        <span>New Features — 6% &nbsp;(2h)</span>
+      </div>
+      <div class="legend-item">
+        <div class="l-dot" style="background:#f57c00;"></div>
+        <span>Maintenance — 12% &nbsp;(4h)</span>
+      </div>
+      <div class="legend-item">
+        <div class="l-dot" style="background:#9e9e9e;"></div>
+        <span>BAU Work — 42% &nbsp;(13h 30m)</span>
+      </div>
+      <div class="legend-item">
+        <div class="l-dot" style="background:#7627bb;"></div>
+        <span>Technical Improvement — 39% &nbsp;(12h 30m)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Capacity by Team Member</div>
+    <table class="cap-table">
+      <thead>
+        <tr>
+          <th>Engineer</th>
+          <th style="text-align:right;"><span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#1565c0;display:inline-block;flex-shrink:0;"></span>New Features</span></th><th style="text-align:right;"><span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#f57c00;display:inline-block;flex-shrink:0;"></span>Maintenance</span></th><th style="text-align:right;"><span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#9e9e9e;display:inline-block;flex-shrink:0;"></span>BAU Work</span></th><th style="text-align:right;"><span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:#7627bb;display:inline-block;flex-shrink:0;"></span>Technical Improvement</span></th>
+          <th style="text-align:right;">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><span style="display:inline-flex;align-items:center;gap:9px;">
+          <span style="width:28px;height:28px;border-radius:50%;background:#5f6368;
+            display:inline-flex;align-items:center;justify-content:center;
+            color:#fff;font-size:11px;font-weight:700;flex-shrink:0;">AB</span>
+          Anand BS</span></td>
+        <td style="text-align:right;"><b>1h</b></td><td style="text-align:right;"><span style="color:#ccc;">—</span></td><td style="text-align:right;"><b>7h</b></td><td style="text-align:right;"><span style="color:#ccc;">—</span></td>
+        <td style="text-align:right;font-weight:700;">8h</td>
+      </tr>
+      <tr>
+        <td><span style="display:inline-flex;align-items:center;gap:9px;">
+          <span style="width:28px;height:28px;border-radius:50%;background:#e91e63;
+            display:inline-flex;align-items:center;justify-content:center;
+            color:#fff;font-size:11px;font-weight:700;flex-shrink:0;">SN</span>
+          Sruthi Nakul Mysore</span></td>
+        <td style="text-align:right;"><span style="color:#ccc;">—</span></td><td style="text-align:right;"><b>4h</b></td><td style="text-align:right;"><span style="color:#ccc;">—</span></td><td style="text-align:right;"><span style="color:#ccc;">—</span></td>
+        <td style="text-align:right;font-weight:700;">4h</td>
+      </tr>
+      <tr>
+        <td><span style="display:inline-flex;align-items:center;gap:9px;">
+          <span style="width:28px;height:28px;border-radius:50%;background:#c5221f;
+            display:inline-flex;align-items:center;justify-content:center;
+            color:#fff;font-size:11px;font-weight:700;flex-shrink:0;">SC</span>
+          Senthil Chidambaram</span></td>
+        <td style="text-align:right;"><b>1h</b></td><td style="text-align:right;"><span style="color:#ccc;">—</span></td><td style="text-align:right;"><b>5h</b></td><td style="text-align:right;"><b>5h</b></td>
+        <td style="text-align:right;font-weight:700;">11h</td>
+      </tr>
+      <tr>
+        <td><span style="display:inline-flex;align-items:center;gap:9px;">
+          <span style="width:28px;height:28px;border-radius:50%;background:#188038;
+            display:inline-flex;align-items:center;justify-content:center;
+            color:#fff;font-size:11px;font-weight:700;flex-shrink:0;">SA</span>
+          Sumit Ashish</span></td>
+        <td style="text-align:right;"><span style="color:#ccc;">—</span></td><td style="text-align:right;"><span style="color:#ccc;">—</span></td><td style="text-align:right;"><b>1h 30m</b></td><td style="text-align:right;"><b>7h 30m</b></td>
+        <td style="text-align:right;font-weight:700;">9h</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Ticket Breakdown</div>
+    <table class="cap-table">
+      <thead>
+        <tr>
+          <th style="width:90px;">Ticket</th>
+          <th>Summary</th>
+          <th style="text-align:right;width:80px;">Hours</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr style="background:#f5f5f5;">
+        <td colspan="3" style="padding:8px 16px;font-size:12px;font-weight:700;color:#333;">
+          <span style="display:inline-flex;align-items:center;gap:8px;">
+            <span style="width:10px;height:10px;border-radius:2px;background:#1565c0;display:inline-block;"></span>
+            New Features
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-2085" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-2085</a></td>
+        <td style="color:#333;">SSO between Premier portal and VFC</td>
+        <td style="text-align:right;font-weight:700;">1h</td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-2018" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-2018</a></td>
+        <td style="color:#333;">Form Forge Tool to generate forms for variety of templates</td>
+        <td style="text-align:right;font-weight:700;">1h</td>
+      </tr>
+      <tr style="background:#f5f5f5;">
+        <td colspan="3" style="padding:8px 16px;font-size:12px;font-weight:700;color:#333;">
+          <span style="display:inline-flex;align-items:center;gap:8px;">
+            <span style="width:10px;height:10px;border-radius:2px;background:#f57c00;display:inline-block;"></span>
+            Maintenance
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-2331" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-2331</a></td>
+        <td style="color:#333;">Enable POS Receipts for only McDonalds Merchant in Q1</td>
+        <td style="text-align:right;font-weight:700;">4h</td>
+      </tr>
+      <tr style="background:#f5f5f5;">
+        <td colspan="3" style="padding:8px 16px;font-size:12px;font-weight:700;color:#333;">
+          <span style="display:inline-flex;align-items:center;gap:8px;">
+            <span style="width:10px;height:10px;border-radius:2px;background:#9e9e9e;display:inline-block;"></span>
+            BAU Work
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-1098" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-1098</a></td>
+        <td style="color:#333;">Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+        <td style="text-align:right;font-weight:700;">6h 30m</td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-1528" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-1528</a></td>
+        <td style="color:#333;">Verifone Central document for Release dates, planned tickets and dependencies</td>
+        <td style="text-align:right;font-weight:700;">5h</td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-1527" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-1527</a></td>
+        <td style="color:#333;">Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Training | KT | R…</td>
+        <td style="text-align:right;font-weight:700;">2h</td>
+      </tr>
+      <tr style="background:#f5f5f5;">
+        <td colspan="3" style="padding:8px 16px;font-size:12px;font-weight:700;color:#333;">
+          <span style="display:inline-flex;align-items:center;gap:8px;">
+            <span style="width:10px;height:10px;border-radius:2px;background:#7627bb;display:inline-block;"></span>
+            Technical Improvement
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-2037" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-2037</a></td>
+        <td style="color:#333;">Nexus App - MFE Detail Page Enhancement</td>
+        <td style="text-align:right;font-weight:700;">7h 30m</td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-2027" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-2027</a></td>
+        <td style="color:#333;">Nexus App – Enhancements</td>
+        <td style="text-align:right;font-weight:700;">4h</td>
+      </tr>
+      <tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;">
+          <a href="https://verifone.atlassian.net/browse/ET-1342" target="_blank"
+             style="color:#1a73e8;text-decoration:none;">ET-1342</a></td>
+        <td style="color:#333;">Infrastructure Setup for Decoupling Micro Frontend Applications</td>
+        <td style="text-align:right;font-weight:700;">1h</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
