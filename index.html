@@ -16,7 +16,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 24px;
+      padding: 40px 24px 80px;
     }
 
     .logo-row {
@@ -105,6 +105,339 @@
       border-radius: 20px;
       margin-bottom: 2px;
     }
+
+    /* ── Footer ── */
+    .site-footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 44px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 100;
+    }
+
+    .site-footer .footer-copy {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .cookie-settings-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      color: #5eead4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      padding: 0;
+    }
+
+    .cookie-settings-btn:hover { color: #99f6e4; }
+
+    /* ── Cookie Modal ── */
+    .cookie-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,5,15,0.55);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cookie-overlay.open { display: flex; }
+
+    .cookie-modal {
+      background: #fff;
+      border-radius: 14px;
+      width: 700px;
+      max-width: calc(100vw - 40px);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    .cm-header {
+      padding: 22px 28px 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cm-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .cm-header .cm-url {
+      font-size: 11.5px;
+      color: #94a3b8;
+    }
+
+    .cm-close {
+      position: absolute;
+      /* relative to modal */
+    }
+
+    .cm-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .cm-close-btn {
+      background: #f1f5f9;
+      border: none;
+      border-radius: 6px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #64748b;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cm-close-btn:hover { background: #e2e8f0; color: #334155; }
+
+    .cm-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .cm-desc {
+      padding: 16px 28px;
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.65;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cm-desc p + p { margin-top: 8px; }
+
+    .cm-desc a { color: #2563eb; }
+
+    .cm-left {
+      width: 210px;
+      flex-shrink: 0;
+      border-right: 1px solid #f1f5f9;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cm-category {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .cm-category.active {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .cm-category-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .cm-checkbox {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid #cbd5e1;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .cm-checkbox.checked {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .cm-checkbox.partial {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .cm-checkbox.locked {
+      background: #2563eb;
+      border-color: #2563eb;
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .cm-checkbox svg { display: none; }
+    .cm-checkbox.checked svg,
+    .cm-checkbox.partial svg,
+    .cm-checkbox.locked svg { display: block; }
+
+    .cm-cat-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .cm-cat-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .cm-right {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cm-panel {
+      display: none;
+      flex-direction: column;
+    }
+
+    .cm-panel.active { display: flex; }
+
+    .cm-panel-intro {
+      padding: 16px 20px 12px;
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.6;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cm-cookie-table {
+      width: 100%;
+    }
+
+    .cm-cookie-table-header {
+      display: grid;
+      grid-template-columns: 1fr 80px 100px 64px;
+      padding: 8px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cm-cookie-table-header span {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .cm-cookie-row {
+      display: grid;
+      grid-template-columns: 1fr 80px 100px 64px;
+      padding: 10px 20px;
+      border-bottom: 1px solid #f8fafc;
+      align-items: start;
+    }
+
+    .cm-cookie-row:last-child { border-bottom: none; }
+
+    .cm-cookie-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #2563eb;
+    }
+
+    .cm-cookie-name-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .cm-cookie-meta {
+      font-size: 12px;
+      color: #475569;
+      padding-top: 1px;
+    }
+
+    .cm-allow-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .cm-row-checkbox {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid #cbd5e1;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .cm-row-checkbox.checked {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .cm-row-checkbox svg { display: none; }
+    .cm-row-checkbox.checked svg { display: block; }
+
+    .cm-optional {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    /* ── Footer actions ── */
+    .cm-footer {
+      padding: 14px 24px;
+      border-top: 1px solid #f1f5f9;
+      background: #f8fafc;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+
+    .btn-outline:hover { border-color: #9ca3af; background: #f9fafb; }
+
+    .btn-primary {
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .btn-primary:hover { background: #1d4ed8; }
   </style>
 </head>
 <body>
@@ -188,6 +521,7 @@
       <div class="card-desc">Sprint issue tracker with status filters, priority indicators, story-point totals, and per-assignee breakdown.</div>
       <div class="card-link">Open →</div>
     </a>
+
     <!-- Organization Page Enhancement -->
     <a class="card" href="NEW organization-page-ui.html">
       <div class="card-icon" style="background:#fff7ed;">
@@ -200,6 +534,317 @@
     </a>
 
   </div>
+
+  <!-- ── Persistent footer ── -->
+  <footer class="site-footer">
+    <span class="footer-copy">© 2026 VeriFone &nbsp;·&nbsp; Privacy and Compliance Policies &nbsp;·&nbsp; Terms and conditions</span>
+    <button class="cookie-settings-btn" onclick="openCookieModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="7" r="1" fill="currentColor"/><circle cx="16" cy="14" r="1" fill="currentColor"/><circle cx="10" cy="16" r="1" fill="currentColor"/></svg>
+      Cookie settings
+    </button>
+  </footer>
+
+  <!-- ── Cookie Preferences Modal ── -->
+  <div class="cookie-overlay" id="cookieOverlay" onclick="overlayClick(event)">
+    <div class="cookie-modal" role="dialog" aria-modal="true" aria-label="Cookies Management Center">
+
+      <!-- Header -->
+      <div class="cm-header">
+        <div class="cm-header-row">
+          <div>
+            <h2>Cookies Management Center</h2>
+            <div class="cm-url">Customize the cookies we use at https://adrianagornea17-cmyk.github.io/merchant-portal/</div>
+          </div>
+          <button class="cm-close-btn" onclick="closeCookieModal()" aria-label="Close">✕</button>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="cm-desc">
+        <p>We use cookies and tracking technologies on our websites to enable us to analyze use of our online services, to improve your experience of our services, and to allow you to use certain features of the online services, such as sharing content via social networks or other communications channels.</p>
+        <p>We never sell your information; we use cookies data to enhance your experience with our website.</p>
+        <p>To find out more please read our <a href="#">Cookies Policy</a>.</p>
+      </div>
+
+      <!-- Body: left categories + right detail -->
+      <div class="cm-body">
+
+        <!-- Left: category list -->
+        <div class="cm-left">
+
+          <div class="cm-category active" onclick="selectCategory('essential', this)">
+            <div class="cm-category-header">
+              <div class="cm-checkbox locked" title="Always active">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="cm-cat-name">Essential</span>
+            </div>
+            <div class="cm-cat-desc">Strictly necessary for the website to function. Cannot be disabled.</div>
+          </div>
+
+          <div class="cm-category" onclick="selectCategory('preferences', this)">
+            <div class="cm-category-header">
+              <div class="cm-checkbox checked" id="chk-preferences">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="cm-cat-name">Preferences</span>
+            </div>
+            <div class="cm-cat-desc">Remembers your settings and preferences.</div>
+          </div>
+
+          <div class="cm-category" onclick="selectCategory('statistics', this)">
+            <div class="cm-category-header">
+              <div class="cm-checkbox partial" id="chk-statistics">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2.5 5h5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <span class="cm-cat-name">Statistics</span>
+            </div>
+            <div class="cm-cat-desc">Track usage and improve our services.</div>
+          </div>
+
+          <div class="cm-category" onclick="selectCategory('marketing', this)">
+            <div class="cm-category-header">
+              <div class="cm-checkbox" id="chk-marketing">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="cm-cat-name">Marketing</span>
+            </div>
+            <div class="cm-cat-desc">Used to track visitors across websites for ad targeting.</div>
+          </div>
+
+        </div>
+
+        <!-- Right: detail panels -->
+        <div class="cm-right">
+
+          <!-- Essential -->
+          <div class="cm-panel active" id="panel-essential">
+            <div class="cm-panel-intro">Essential cookies are strictly necessary to provide you with services available through our website and to use some of its features, such as access to secure areas. Because these cookies are strictly necessary to deliver the website, you cannot refuse them.</div>
+            <div class="cm-cookie-table">
+              <div class="cm-cookie-table-header">
+                <span>Name</span><span>Expires</span><span>Provider</span><span>Allow</span>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">__cf_bm</div><div class="cm-cookie-name-desc">Cloudflare bot management</div></div>
+                <div class="cm-cookie-meta">30 min</div>
+                <div class="cm-cookie-meta">Cloudflare</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" style="cursor:not-allowed;opacity:0.7;">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Always on</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">JSESSIONID</div><div class="cm-cookie-name-desc">Session management cookie</div></div>
+                <div class="cm-cookie-meta">Session</div>
+                <div class="cm-cookie-meta">Verifone</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" style="cursor:not-allowed;opacity:0.7;">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Always on</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences -->
+          <div class="cm-panel" id="panel-preferences">
+            <div class="cm-panel-intro">Preference cookies enable a website to remember information that changes the way the website behaves or looks, like your preferred language or the region that you are in.</div>
+            <div class="cm-cookie-table">
+              <div class="cm-cookie-table-header">
+                <span>Name</span><span>Expires</span><span>Provider</span><span>Allow</span>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">lang</div><div class="cm-cookie-name-desc">Stores preferred language</div></div>
+                <div class="cm-cookie-meta">1 year</div>
+                <div class="cm-cookie-meta">Verifone</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" onclick="toggleRowCookie(this, 'preferences')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">timezone</div><div class="cm-cookie-name-desc">Stores user timezone setting</div></div>
+                <div class="cm-cookie-meta">1 year</div>
+                <div class="cm-cookie-meta">Verifone</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" onclick="toggleRowCookie(this, 'preferences')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statistics -->
+          <div class="cm-panel" id="panel-statistics">
+            <div class="cm-panel-intro">Statistics cookies help us understand how visitors interact with websites by collecting and reporting information anonymously.</div>
+            <div class="cm-cookie-table">
+              <div class="cm-cookie-table-header">
+                <span>Name</span><span>Expires</span><span>Provider</span><span>Allow</span>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_hjid</div><div class="cm-cookie-name-desc">Hotjar user identifier</div></div>
+                <div class="cm-cookie-meta">1 year</div>
+                <div class="cm-cookie-meta">Hotjar</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox" onclick="toggleRowCookie(this, 'statistics')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_hjIncludedInSample</div><div class="cm-cookie-name-desc">Hotjar sample inclusion flag</div></div>
+                <div class="cm-cookie-meta">Session</div>
+                <div class="cm-cookie-meta">Hotjar</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" onclick="toggleRowCookie(this, 'statistics')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">PHPSESID</div><div class="cm-cookie-name-desc">InnerTrends usage statistics</div></div>
+                <div class="cm-cookie-meta">Session</div>
+                <div class="cm-cookie-meta">InnerTrends</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" onclick="toggleRowCookie(this, 'statistics')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_ga</div><div class="cm-cookie-name-desc">Google Analytics visitor ID</div></div>
+                <div class="cm-cookie-meta">2 years</div>
+                <div class="cm-cookie-meta">Google</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox" onclick="toggleRowCookie(this, 'statistics')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marketing -->
+          <div class="cm-panel" id="panel-marketing">
+            <div class="cm-panel-intro">Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.</div>
+            <div class="cm-cookie-table">
+              <div class="cm-cookie-table-header">
+                <span>Name</span><span>Expires</span><span>Provider</span><span>Allow</span>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_fbp</div><div class="cm-cookie-name-desc">Facebook pixel tracking</div></div>
+                <div class="cm-cookie-meta">3 months</div>
+                <div class="cm-cookie-meta">Facebook</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox" onclick="toggleRowCookie(this, 'marketing')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_gcl_au</div><div class="cm-cookie-name-desc">Google Ads conversion</div></div>
+                <div class="cm-cookie-meta">3 months</div>
+                <div class="cm-cookie-meta">Google</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox" onclick="toggleRowCookie(this, 'marketing')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div class="cm-footer">
+        <button class="btn-outline" onclick="savePreferences()">Save preferences</button>
+        <button class="btn-primary" onclick="allowAll()">Allow all</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function openCookieModal() {
+      document.getElementById('cookieOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCookieModal() {
+      document.getElementById('cookieOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function overlayClick(e) {
+      if (e.target === document.getElementById('cookieOverlay')) closeCookieModal();
+    }
+
+    function selectCategory(id, el) {
+      document.querySelectorAll('.cm-category').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.cm-panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('panel-' + id).classList.add('active');
+    }
+
+    function toggleRowCookie(el, categoryId) {
+      el.classList.toggle('checked');
+      updateCategoryCheckbox(categoryId);
+    }
+
+    function updateCategoryCheckbox(categoryId) {
+      const panel = document.getElementById('panel-' + categoryId);
+      if (!panel) return;
+      const rows = panel.querySelectorAll('.cm-row-checkbox[onclick]');
+      const checked = [...rows].filter(r => r.classList.contains('checked')).length;
+      const box = document.getElementById('chk-' + categoryId);
+      if (!box) return;
+      box.classList.remove('checked', 'partial');
+      if (checked === rows.length && rows.length > 0) {
+        box.classList.add('checked');
+        box.querySelector('path').setAttribute('d', 'M2 5l2.5 2.5L8 3');
+      } else if (checked > 0) {
+        box.classList.add('partial');
+        box.querySelector('path').setAttribute('d', 'M2.5 5h5');
+      }
+    }
+
+    function allowAll() {
+      ['preferences','statistics','marketing'].forEach(id => {
+        const panel = document.getElementById('panel-' + id);
+        if (panel) panel.querySelectorAll('.cm-row-checkbox[onclick]').forEach(r => r.classList.add('checked'));
+        const box = document.getElementById('chk-' + id);
+        if (box) {
+          box.classList.remove('partial');
+          box.classList.add('checked');
+          box.querySelector('path').setAttribute('d', 'M2 5l2.5 2.5L8 3');
+        }
+      });
+      setTimeout(closeCookieModal, 300);
+    }
+
+    function savePreferences() {
+      closeCookieModal();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeCookieModal();
+    });
+  </script>
 
 </body>
 </html>
