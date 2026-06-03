@@ -448,6 +448,43 @@
     }
 
     .btn-apply-full:hover { background: #1d4ed8; }
+
+    /* ── Table View Toggle (main content) ── */
+    .table-view-section {
+      margin-bottom: 14px;
+    }
+
+    .table-view-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.7px;
+      text-transform: uppercase; color: var(--text-4); margin-bottom: 8px;
+    }
+
+    .table-view-toggle {
+      display: inline-flex;
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .tv-btn {
+      padding: 6px 18px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-3);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+    }
+
+    .tv-btn.active {
+      background: #fff;
+      color: var(--text);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+    }
   </style>
 </head>
 <body>
@@ -585,11 +622,14 @@
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
-        <div class="active-filter-pill">
-          Merchant ID
-          <button onclick="removePill(this)" title="Remove">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
+      </div>
+
+      <!-- Table View Toggle -->
+      <div class="table-view-section">
+        <div class="table-view-label">TABLE VIEW</div>
+        <div class="table-view-toggle">
+          <button class="tv-btn" id="tvBtnOrders" onclick="setTableView('orders')">Orders</button>
+          <button class="tv-btn active" id="tvBtnTransactions" onclick="setTableView('transactions')">Transactions</button>
         </div>
       </div>
 
@@ -863,6 +903,13 @@
   function setView(v) {
     document.getElementById('fpBtnOrders').classList.toggle('active', v === 'orders');
     document.getElementById('fpBtnTransactions').classList.toggle('active', v === 'transactions');
+  }
+
+  function setTableView(v) {
+    document.getElementById('tvBtnOrders').classList.toggle('active', v === 'orders');
+    document.getElementById('tvBtnTransactions').classList.toggle('active', v === 'transactions');
+    // keep filter panel toggle in sync
+    setView(v);
   }
 </script>
 </body>
