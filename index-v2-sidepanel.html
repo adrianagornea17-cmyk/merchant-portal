@@ -459,31 +459,16 @@
       text-transform: uppercase; color: var(--text-4); margin-bottom: 8px;
     }
 
-    .table-view-toggle {
-      display: inline-flex;
-      background: #f3f4f6;
-      border-radius: 8px;
-      padding: 3px;
-      gap: 2px;
-    }
-
-    .tv-btn {
-      padding: 6px 18px;
-      border: none;
-      border-radius: 6px;
-      background: transparent;
-      color: var(--text-3);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.12s, color 0.12s, box-shadow 0.12s;
-    }
-
-    .tv-btn.active {
+    .tv-display {
+      display: inline-block;
+      padding: 5px 14px;
       background: #fff;
-      color: var(--text);
-      font-weight: 600;
+      border-radius: 6px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      user-select: none;
     }
   </style>
 </head>
@@ -624,13 +609,10 @@
         </div>
       </div>
 
-      <!-- Table View Toggle -->
+      <!-- Table View (read-only) -->
       <div class="table-view-section">
         <div class="table-view-label">TABLE VIEW</div>
-        <div class="table-view-toggle">
-          <button class="tv-btn" id="tvBtnOrders" onclick="setTableView('orders')">Orders</button>
-          <button class="tv-btn active" id="tvBtnTransactions" onclick="setTableView('transactions')">Transactions</button>
-        </div>
+        <div id="tvDisplay" class="tv-display">Transactions</div>
       </div>
 
       <!-- Table -->
@@ -903,13 +885,7 @@
   function setView(v) {
     document.getElementById('fpBtnOrders').classList.toggle('active', v === 'orders');
     document.getElementById('fpBtnTransactions').classList.toggle('active', v === 'transactions');
-  }
-
-  function setTableView(v) {
-    document.getElementById('tvBtnOrders').classList.toggle('active', v === 'orders');
-    document.getElementById('tvBtnTransactions').classList.toggle('active', v === 'transactions');
-    // keep filter panel toggle in sync
-    setView(v);
+    document.getElementById('tvDisplay').textContent = v === 'orders' ? 'Orders' : 'Transactions';
   }
 </script>
 </body>
