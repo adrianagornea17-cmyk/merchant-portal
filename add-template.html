@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifone — Add Report Template</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-w: 220px;
+      --bg: #f4f6f9;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --border: #e5e7eb;
+      --accent: #007a5e;
+      --accent-light: #e6f4f1;
+      --accent-mid: #00a57d;
+      --active-bg: #e6f4f1;
+      --active-text: #007a5e;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ─── TOP NAV ─── */
+    .top-nav {
+      background: linear-gradient(135deg, #005e47 0%, #007a5e 40%, #00a57d 100%);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      color: #fff; font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+      margin-right: 32px; text-decoration: none;
+    }
+    .top-nav-logo svg { opacity: 0.95; }
+    .top-nav-links { display: flex; align-items: center; gap: 2px; flex: 1; }
+    .top-nav-link {
+      padding: 6px 14px; border-radius: 6px;
+      color: rgba(255,255,255,0.82); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; background: none; border: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .top-nav-link:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .top-nav-link.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 600; }
+    .top-nav-right { display: flex; align-items: center; gap: 8px; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.22); color: #fff;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border: 1.5px solid rgba(255,255,255,0.35);
+    }
+
+    /* ─── LAYOUT ─── */
+    .layout { display: flex; flex: 1; }
+
+    /* ─── SIDEBAR ─── */
+    #sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: #fff;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 52px);
+      position: sticky;
+      top: 52px;
+      overflow-y: auto;
+    }
+    #sidebar::-webkit-scrollbar { width: 3px; }
+    #sidebar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+
+    .sb-scroll { flex: 1; padding: 10px 8px; }
+    .nav-section { margin-bottom: 4px; }
+    .nav-section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.7px;
+      text-transform: uppercase; color: var(--text-4); padding: 10px 10px 4px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 7px;
+      color: var(--text-2); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; background: none; border: none; width: 100%;
+      text-align: left; transition: background 0.1s, color 0.1s;
+    }
+    .nav-item:hover { background: #f3f4f6; color: var(--text); }
+    .nav-item.active { background: var(--active-bg); color: var(--active-text); font-weight: 600; }
+    .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.75; }
+    .nav-item.active .nav-icon { opacity: 1; }
+    .nav-sub-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6.5px 10px 6.5px 30px; border-radius: 7px;
+      color: var(--text-3); font-size: 13px;
+      cursor: pointer; background: none; border: none; width: 100%;
+      text-align: left; transition: background 0.1s, color 0.1s;
+    }
+    .nav-sub-item:hover { background: #f3f4f6; color: var(--text-2); }
+    .nav-sub-item.active { color: var(--active-text); font-weight: 500; }
+    .nav-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; }
+    .nav-sub-item.active .nav-sub-dot { background: var(--accent); }
+    .nav-divider { margin: 6px 8px; border: none; border-top: 1px solid var(--border); }
+
+    /* ─── MAIN CONTENT ─── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 24px 32px 48px;
+      max-width: 1100px;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12.5px; color: var(--text-3); margin-bottom: 14px;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb-sep { color: var(--text-4); font-size: 11px; }
+    .breadcrumb-cur { color: var(--text-2); font-weight: 600; }
+
+    /* Page title */
+    .page-title { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 22px; }
+
+    /* Form card */
+    .form-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .form-card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: #fafafa;
+    }
+    .form-card-title { font-size: 14px; font-weight: 700; color: #0f172a; }
+    .form-card-body { padding: 20px; }
+
+    /* Form fields */
+    .form-group { margin-bottom: 18px; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--text-2); margin-bottom: 6px;
+    }
+    .form-label .required { color: #ef4444; margin-left: 2px; }
+    .form-input, .form-select {
+      width: 100%; padding: 9px 12px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13.5px; color: var(--text); background: #fff;
+      outline: none; transition: border-color 0.15s;
+      max-width: 480px;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--accent); }
+    .form-input::placeholder { color: var(--text-4); }
+    .form-hint { font-size: 12px; color: var(--text-3); margin-top: 5px; }
+    .form-row { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+    .form-col { flex: 1; min-width: 220px; max-width: 480px; }
+
+    .checkbox-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 10px;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer;
+    }
+    .checkbox-row label { font-size: 13px; color: var(--text-2); cursor: pointer; }
+
+    /* ─── REPORT CONTENT SECTION ─── */
+    .section-header-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .section-controls {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .select-all-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 20px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fafafa;
+    }
+    .select-all-row input[type="checkbox"] {
+      width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer;
+    }
+    .select-all-row label {
+      font-size: 13px; font-weight: 600; color: var(--text-2); cursor: pointer;
+    }
+    .field-count-badge {
+      margin-left: auto;
+      background: #f3f4f6; color: var(--text-3);
+      font-size: 11.5px; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+    }
+    .field-count-badge.has-selected {
+      background: var(--accent-light); color: var(--accent);
+    }
+
+    /* ─── CATEGORY ACCORDION ─── */
+    .categories-list { }
+
+    .category-block {
+      border-bottom: 1px solid var(--border);
+    }
+    .category-block:last-child { border-bottom: none; }
+
+    .category-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 20px;
+      cursor: pointer;
+      user-select: none;
+      background: #fff;
+      transition: background 0.1s;
+    }
+    .category-header:hover { background: #fafafa; }
+    .category-header.open { background: #fafafa; }
+
+    .cat-check {
+      width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer;
+      flex-shrink: 0;
+    }
+    .category-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 14px;
+    }
+    .category-name {
+      flex: 1; font-size: 13.5px; font-weight: 600; color: var(--text);
+    }
+    .category-badge {
+      font-size: 11.5px; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+      background: #f3f4f6; color: var(--text-3);
+      margin-right: 6px;
+    }
+    .category-badge.has-selected {
+      background: var(--accent-light); color: var(--accent);
+    }
+    .category-arrow {
+      width: 18px; height: 18px; color: var(--text-4);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .category-header.open .category-arrow { transform: rotate(180deg); }
+
+    /* Fields grid inside category */
+    .category-fields {
+      display: none;
+      padding: 8px 20px 16px 20px;
+      background: #fafbfc;
+      border-top: 1px solid var(--border);
+    }
+    .category-fields.open { display: block; }
+
+    .fields-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 2px 12px;
+    }
+
+    .field-item {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 7px 8px 7px 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .field-item:hover { background: #fff; }
+    .field-item input[type="checkbox"] {
+      width: 14px; height: 14px; margin-top: 2px;
+      accent-color: var(--accent); cursor: pointer; flex-shrink: 0;
+    }
+    .field-item label {
+      cursor: pointer; display: flex; flex-direction: column; gap: 1px;
+    }
+    .field-name { font-size: 13px; font-weight: 500; color: var(--text-2); line-height: 1.3; }
+    .field-key { font-size: 11px; color: var(--text-4); font-family: monospace; }
+
+    /* ─── FOOTER ACTIONS ─── */
+    .form-actions {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 10px; padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      background: #fafafa;
+    }
+    .btn-ghost {
+      padding: 8px 20px;
+      background: none; border: 1.5px solid var(--border);
+      border-radius: 8px; color: var(--text-2);
+      font-size: 13.5px; font-weight: 500; cursor: pointer;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .btn-ghost:hover { background: #f3f4f6; border-color: #d1d5db; }
+    .btn-primary {
+      padding: 8px 22px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 13.5px; font-weight: 600; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #005e47; }
+
+    /* Expand/collapse all link */
+    .expand-all-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 12.5px; color: var(--accent); font-weight: 500;
+      padding: 0; text-decoration: none;
+    }
+    .expand-all-btn:hover { text-decoration: underline; }
+
+    .report-content-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: #fafafa;
+    }
+    .report-content-left { display: flex; align-items: center; gap: 10px; }
+    .selected-summary {
+      font-size: 12.5px; color: var(--text-3);
+    }
+    .selected-summary strong { color: var(--accent); font-weight: 700; }
+
+    /* Category icon colors */
+    .icon-txn    { background: #eff6ff; color: #3b82f6; }
+    .icon-amount { background: #f0fdf4; color: #16a34a; }
+    .icon-card   { background: #fef9c3; color: #b45309; }
+    .icon-cust   { background: #fce7f3; color: #db2777; }
+    .icon-ship   { background: #fff7ed; color: #ea580c; }
+    .icon-org    { background: #f5f3ff; color: #7c3aed; }
+    .icon-acq    { background: #e0f2fe; color: #0284c7; }
+    .icon-settle { background: #f0fdf4; color: #059669; }
+    .icon-3ds    { background: #fdf4ff; color: #9333ea; }
+    .icon-fraud  { background: #fff1f2; color: #e11d48; }
+    .icon-inst   { background: #fefce8; color: #ca8a04; }
+    .icon-tax    { background: #f0f9ff; color: #0ea5e9; }
+    .icon-ref    { background: #f9fafb; color: #6b7280; }
+    .icon-dates  { background: #ecfdf5; color: #10b981; }
+  </style>
+</head>
+<body>
+
+<!-- ─── TOP NAV ─── -->
+<nav class="top-nav">
+  <a class="top-nav-logo" href="#">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="rgba(255,255,255,0.2)"/>
+      <circle cx="10" cy="10" r="3" fill="#fff"/>
+      <circle cx="22" cy="10" r="3" fill="#fff"/>
+      <circle cx="10" cy="22" r="3" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="22" cy="22" r="3" fill="rgba(255,255,255,0.7)"/>
+    </svg>
+    Verifone
+  </a>
+  <div class="top-nav-links">
+    <button class="top-nav-link active">Commerce</button>
+    <button class="top-nav-link">Devices</button>
+    <button class="top-nav-link">Administration</button>
+    <button class="top-nav-link">App Marketplace</button>
+  </div>
+  <div class="top-nav-right">
+    <div class="avatar">AG</div>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- ─── SIDEBAR ─── -->
+<aside id="sidebar">
+  <div class="sb-scroll">
+    <div class="nav-section">
+      <div class="nav-section-label">Commerce</div>
+      <button class="nav-item" onclick="window.location='index-v2-sidepanel.html'">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+        Transactions
+      </button>
+      <div class="nav-sub-item"><span class="nav-sub-dot"></span>Online Transactions</div>
+      <div class="nav-sub-item active"><span class="nav-sub-dot"></span>Report Templates</div>
+      <div class="nav-sub-item"><span class="nav-sub-dot"></span>Payment Links</div>
+      <div class="nav-sub-item"><span class="nav-sub-dot"></span>3DS Authentications</div>
+      <hr class="nav-divider">
+      <button class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
+        Customers
+      </button>
+      <button class="nav-item">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></span>
+        Products
+      </button>
+    </div>
+  </div>
+</aside>
+
+<!-- ─── MAIN ─── -->
+<main id="main">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="#">Online Transactions</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="#">Transaction report templates</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-cur">Add template</span>
+  </div>
+
+  <div class="page-title">Add template</div>
+
+  <!-- GENERAL INFORMATION -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="form-card-title">General Information</div>
+    </div>
+    <div class="form-card-body">
+      <div class="form-row">
+        <div class="form-col">
+          <div class="form-group">
+            <label class="form-label">Report Template Name <span class="required">*</span></label>
+            <input class="form-input" type="text" placeholder="Name for reports and scheduling reports" />
+          </div>
+        </div>
+        <div class="form-col">
+          <div class="form-group">
+            <label class="form-label">Organization</label>
+            <select class="form-select">
+              <option value="">Select…</option>
+              <option>Verifone Global</option>
+              <option>Verifone Europe</option>
+              <option>Verifone US</option>
+            </select>
+            <div class="form-hint">All users assigned to this organization are eligible to use this report template.</div>
+          </div>
+        </div>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="share-sub-orgs" />
+        <label for="share-sub-orgs">Share to sub-organizations</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORT CONTENT -->
+  <div class="form-card">
+    <div class="form-card-header" style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="form-card-title">Report Content</div>
+      <span id="global-summary" class="selected-summary"><strong>0</strong> of 130 fields selected</span>
+    </div>
+
+    <!-- Top bar: select all + expand/collapse -->
+    <div class="report-content-topbar">
+      <div class="report-content-left">
+        <input type="checkbox" id="select-all-fields" style="width:15px;height:15px;accent-color:var(--accent);cursor:pointer;" onchange="toggleAllFields(this)" />
+        <label for="select-all-fields" style="font-size:13px;font-weight:600;color:var(--text-2);cursor:pointer;">Select all fields</label>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <button class="expand-all-btn" onclick="expandAll()">Expand all</button>
+        <button class="expand-all-btn" onclick="collapseAll()">Collapse all</button>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="categories-list" id="categories-list">
+
+      <!-- 1. Transaction Details -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Transaction fields" />
+          <div class="category-icon icon-txn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <span class="category-name">Transaction Details</span>
+          <span class="category-badge">11 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Transaction ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Transaction reference</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Transaction state</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Transaction type</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Transaction entry mode</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Transaction description</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Transaction timezone</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Transaction online flag</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Payment product type</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Payment channel</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Technology</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Amount & Currency -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Amount fields" />
+          <div class="category-icon icon-amount">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <span class="category-name">Amount &amp; Currency</span>
+          <span class="category-badge">12 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Original amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Original amount currency</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Current amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Current amount currency</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Surcharge amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Gratuity amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Cashback amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Fee currency</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Processor processing fee</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Charitable donation</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Response code</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Payment Method & Card -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Card fields" />
+          <div class="category-icon icon-card">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <span class="category-name">Payment Method &amp; Card</span>
+          <span class="category-badge">13 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Payment method</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Payment Provider Contract type</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Payment document provider</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Payment document type</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Payment document ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Masked card number</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Card BIN</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Card — last four digits</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Card issuer country</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Card expiry month</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Card expiry year</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Feedback mode</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Fallback transaction</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Customer & Billing -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Customer fields" />
+          <div class="category-icon icon-cust">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <span class="category-name">Customer &amp; Billing</span>
+          <span class="category-badge">6 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Customer ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Customer billing city</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Customer billing country</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Customer billing first name</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Customer email address</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">User agent</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Shipping -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Shipping fields" />
+          <div class="category-icon icon-ship">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
+          </div>
+          <span class="category-name">Shipping</span>
+          <span class="category-badge">7 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Shipping address</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Shipping city</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Shipping country</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Shipping email</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Shipping customer first name</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Shipping phone</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Shipping postal code</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Organization & Merchant -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Organization fields" />
+          <div class="category-icon icon-org">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <span class="category-name">Organization &amp; Merchant</span>
+          <span class="category-badge">10 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Organization name</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Organization ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Merchant ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Merchant reference</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Merchant country</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Merchant present</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Cashier ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Cashier name</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Acquirer merchant ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Device serial number</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Acquirer & Processor -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Acquirer fields" />
+          <div class="category-icon icon-acq">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <span class="category-name">Acquirer &amp; Processor</span>
+          <span class="category-badge">14 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Acquirer name</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Acquirer response code</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Acquirer response message</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Acquirer reference number (ARN)</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Acquirer account type</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Acquirer Settlement ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Processor card brand</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Processor acquirer name</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Processor transaction ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Processor filename reg. no. (BRN)</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Processor issue name</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Receiver registration no. (BRN)</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">STAN</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Processor STAN</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Settlement & Batch -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Settlement fields" />
+          <div class="category-icon icon-settle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <span class="category-name">Settlement &amp; Batch</span>
+          <span class="category-badge">9 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Settlement date</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Settlement ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Batch ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Terminal ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Internal Terminal ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Terminal manufacturer</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Site reference ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Estate management ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Address verification result</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. 3D Secure -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all 3DS fields" />
+          <div class="category-icon icon-3ds">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span class="category-name">3D Secure</span>
+          <span class="category-badge">13 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS status</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS version</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS authentication value</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS whitelisted source</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS schema transaction ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS electronic commerce indicator</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS enrollment value</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS enrollment source</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS schema change indicator</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS SCA Issuer</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS card identifier (SCID)</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS currency</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3DS check result</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Fraud & Security -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Fraud fields" />
+          <div class="category-icon icon-fraud">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <span class="category-name">Fraud &amp; Security</span>
+          <span class="category-badge">8 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Fraud score</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Fraud reason</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Fraud reason code</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">CVV result</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Authorization response</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Issuer authorization result</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Fee config. Card issuer country</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Token type</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. Installment -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Installment fields" />
+          <div class="category-icon icon-inst">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <span class="category-name">Installment</span>
+          <span class="category-badge">8 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Issuer installment amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Issuer installments number</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Deferred months</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Issue installment payment index</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Issue installment down payment amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Issue due date</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Credit term</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Store credentials type</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. DCC & Fees -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all DCC fields" />
+          <div class="category-icon icon-tax">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <span class="category-name">DCC &amp; Fees</span>
+          <span class="category-badge">7 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">DCC accepted</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">DCC amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Exchange rate</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Markup fee</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Markup rate</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Cross border fee</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Platform fee</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. Tax & Compliance -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Tax fields" />
+          <div class="category-icon icon-ref">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <span class="category-name">Tax &amp; Compliance</span>
+          <span class="category-badge">7 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Tax indication</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Tax amount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Tax discount</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">PO number</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">PO name</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">PAX type</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Authentication mode</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14. Dates & Time -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Date fields" />
+          <div class="category-icon icon-dates">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <span class="category-name">Dates &amp; Time</span>
+          <span class="category-badge">8 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Creation date and time</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Creation date</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Creation time</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Creation timezone</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Creation UTC</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Auth date time</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Confirm date time</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Capture status</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15. Reference & Tracking -->
+      <div class="category-block">
+        <div class="category-header" onclick="toggleCategory(this)">
+          <input type="checkbox" class="cat-check" onclick="event.stopPropagation();toggleCategoryCheck(this)" title="Select all Reference fields" />
+          <div class="category-icon icon-3ds" style="background:#f0fdf4;color:#16a34a;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <span class="category-name">Reference &amp; Tracking</span>
+          <span class="category-badge">7 fields</span>
+          <svg class="category-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="category-fields">
+          <div class="fields-grid">
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">3rd party transaction reference</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Parent transaction ID</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Payment Account Reference</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Stored credential reference</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Message number</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Schema identifier</span></label>
+            <label class="field-item"><input type="checkbox" onchange="onFieldChange()" /><span class="field-name">Currency conversion ID</span></label>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /categories-list -->
+
+    <!-- Footer actions inside card -->
+    <div class="form-actions">
+      <button class="btn-ghost">Discard</button>
+      <button class="btn-primary">Save Template</button>
+    </div>
+  </div><!-- /form-card report content -->
+
+</main>
+</div><!-- /layout -->
+
+<script>
+  // ─── Expand / Collapse category ───
+  function toggleCategory(header) {
+    header.classList.toggle('open');
+    const fields = header.nextElementSibling;
+    fields.classList.toggle('open');
+  }
+
+  function expandAll() {
+    document.querySelectorAll('.category-header').forEach(h => {
+      h.classList.add('open');
+      h.nextElementSibling.classList.add('open');
+    });
+  }
+
+  function collapseAll() {
+    document.querySelectorAll('.category-header').forEach(h => {
+      h.classList.remove('open');
+      h.nextElementSibling.classList.remove('open');
+    });
+  }
+
+  // ─── Toggle all fields in a category ───
+  function toggleCategoryCheck(catCheck) {
+    const block = catCheck.closest('.category-block');
+    const fields = block.querySelectorAll('.category-fields input[type="checkbox"]');
+    fields.forEach(f => { f.checked = catCheck.checked; });
+    updateCategoryBadge(block);
+    updateGlobalSummary();
+    syncSelectAll();
+  }
+
+  // ─── Individual field change ───
+  function onFieldChange() {
+    const block = event.target.closest('.category-block');
+    updateCategoryBadge(block);
+    updateGlobalSummary();
+    syncSelectAll();
+    syncCategoryCheck(block);
+  }
+
+  function syncCategoryCheck(block) {
+    const catCheck = block.querySelector('.cat-check');
+    const fields = block.querySelectorAll('.category-fields input[type="checkbox"]');
+    const checked = [...fields].filter(f => f.checked).length;
+    catCheck.checked = checked === fields.length;
+    catCheck.indeterminate = checked > 0 && checked < fields.length;
+  }
+
+  function updateCategoryBadge(block) {
+    const fields = block.querySelectorAll('.category-fields input[type="checkbox"]');
+    const total = fields.length;
+    const checked = [...fields].filter(f => f.checked).length;
+    const badge = block.querySelector('.category-badge');
+    if (checked > 0) {
+      badge.textContent = checked + ' / ' + total + ' selected';
+      badge.classList.add('has-selected');
+    } else {
+      badge.textContent = total + ' fields';
+      badge.classList.remove('has-selected');
+    }
+  }
+
+  function updateGlobalSummary() {
+    const all = document.querySelectorAll('.category-fields input[type="checkbox"]');
+    const total = all.length;
+    const checked = [...all].filter(f => f.checked).length;
+    document.getElementById('global-summary').innerHTML =
+      '<strong>' + checked + '</strong> of ' + total + ' fields selected';
+  }
+
+  function syncSelectAll() {
+    const all = document.querySelectorAll('.category-fields input[type="checkbox"]');
+    const total = all.length;
+    const checked = [...all].filter(f => f.checked).length;
+    const master = document.getElementById('select-all-fields');
+    master.checked = checked === total;
+    master.indeterminate = checked > 0 && checked < total;
+  }
+
+  function toggleAllFields(master) {
+    document.querySelectorAll('.category-fields input[type="checkbox"]').forEach(f => {
+      f.checked = master.checked;
+    });
+    document.querySelectorAll('.category-block').forEach(block => {
+      updateCategoryBadge(block);
+      syncCategoryCheck(block);
+    });
+    document.querySelectorAll('.cat-check').forEach(c => {
+      c.checked = master.checked;
+      c.indeterminate = false;
+    });
+    updateGlobalSummary();
+  }
+
+  // Init summary
+  updateGlobalSummary();
+</script>
+</body>
+</html>
