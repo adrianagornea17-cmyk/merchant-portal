@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Catalog — Verifone Commerce</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #ebebeb;
+      color: #111827;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── TOP NAV ─── */
+    .topnav {
+      background: linear-gradient(135deg, #0d2b2e 0%, #0f3d3a 40%, #0d4a3f 70%, #0a3d33 100%);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 56px;
+      flex-shrink: 0;
+      gap: 32px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 16px;
+      text-decoration: none;
+    }
+
+    .nav-logo-dots {
+      display: grid;
+      grid-template-columns: repeat(3, 6px);
+      gap: 3px;
+    }
+
+    .nav-logo-dots span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4aded0;
+    }
+
+    .nav-logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .nav-link {
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .nav-link.active { color: #fff; font-weight: 600; }
+
+    .nav-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #2d6a4f;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+    }
+
+    /* ─── PAGE LAYOUT ─── */
+    .page-outer {
+      display: flex;
+      justify-content: center;
+      flex: 1;
+      background: #ebebeb;
+      padding: 0 0 40px;
+    }
+
+    .page-content {
+      flex: 1;
+      padding: 32px 40px 48px;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    /* ─── PAGE HEADER ROW ─── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: -0.3px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 22px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover { background: #1d4ed8; }
+
+    .btn-secondary {
+      background: #fff;
+      color: #374151;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .btn-secondary:hover { border-color: #9ca3af; background: #f9fafb; }
+
+    /* ─── BIG EMPTY STATE CARD ─── */
+    .empty-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #e0e0e0;
+      padding: 40px 32px 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ─── MINI PREVIEW ─── */
+    .mini-preview-wrap {
+      width: 100%;
+      max-width: 560px;
+      margin-bottom: 32px;
+    }
+
+    .mini-browser {
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    .mini-browser-bar {
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mini-browser-dots { display: flex; gap: 5px; }
+
+    .mini-browser-dots span {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    .mini-browser-dots span:nth-child(1) { background: #f87171; }
+    .mini-browser-dots span:nth-child(2) { background: #fbbf24; }
+    .mini-browser-dots span:nth-child(3) { background: #4ade80; }
+
+    .mini-browser-title {
+      font-size: 10.5px;
+      color: #9ca3af;
+      font-weight: 500;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    .mini-table thead tr { background: #f3f4f6; }
+
+    .mini-table thead th {
+      padding: 9px 14px;
+      text-align: left;
+      color: #6b7280;
+      font-weight: 600;
+      font-size: 10.5px;
+      border-bottom: 1px solid #e5e7eb;
+      white-space: nowrap;
+    }
+
+    .mini-table tbody tr { border-bottom: 1px solid #f3f4f6; }
+    .mini-table tbody tr:last-child { border-bottom: none; }
+
+    .mini-table tbody td {
+      padding: 10px 14px;
+      color: #374151;
+      white-space: nowrap;
+    }
+
+    .mini-table tbody td.muted { color: #9ca3af; }
+
+    .mini-row-faded  { opacity: 0.35; }
+    .mini-row-faded2 { opacity: 0.12; }
+
+    .mini-action-btn {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* ─── FEATURE TEXT ─── */
+    .feature-headline {
+      font-size: 24px;
+      font-weight: 800;
+      color: #111827;
+      text-align: center;
+      letter-spacing: -0.4px;
+      margin-bottom: 12px;
+    }
+
+    .feature-description {
+      font-size: 14px;
+      color: #6b7280;
+      text-align: center;
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ─── NO RESULTS VARIANT ─── */
+    .no-results-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+    }
+
+    .no-results-icon {
+      width: 56px; height: 56px;
+      background: #fef3c7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .no-results-icon svg {
+      width: 26px; height: 26px;
+      stroke: #d97706;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .no-results-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .no-results-sub {
+      font-size: 14px;
+      color: #6b7280;
+      text-align: center;
+      max-width: 380px;
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    .no-results-sub strong { color: #374151; }
+
+    .no-results-actions { display: flex; gap: 10px; }
+
+    /* ─── DEMO SWITCHER ─── */
+    .demo-switcher {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e1e2e;
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+      z-index: 100;
+    }
+
+    .switcher-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6b7280;
+    }
+
+    .switcher-btns { display: flex; gap: 6px; }
+
+    .sw-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #2d2d3d;
+      color: #9ca3af;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .sw-btn.active { background: #2563eb; color: #fff; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #111827;
+      padding: 24px 40px;
+      flex-shrink: 0;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .footer-logo { display: flex; align-items: center; gap: 8px; }
+
+    .footer-logo-dots {
+      display: grid;
+      grid-template-columns: repeat(3, 5px);
+      gap: 2.5px;
+    }
+
+    .footer-logo-dots span {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #4aded0;
+    }
+
+    .footer-logo-text { font-size: 13px; font-weight: 700; color: #fff; }
+
+    .footer-links { display: flex; gap: 24px; }
+
+    .footer-links a {
+      font-size: 12.5px;
+      color: #9ca3af;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: #fff; }
+
+    .footer-copy {
+      font-size: 12px;
+      color: #4b5563;
+      padding-top: 12px;
+      border-top: 1px solid #1f2937;
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-copy a { color: #4b5563; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-dots">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+      <span class="nav-logo-text">verifone</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link active">Commerce</a>
+      <a href="#" class="nav-link">Devices</a>
+      <a href="#" class="nav-link">Administration</a>
+      <a href="#" class="nav-link">Boarding</a>
+    </div>
+    <div class="nav-avatar">A</div>
+  </nav>
+
+  <!-- PAGE BODY -->
+  <div class="page-outer">
+    <div class="page-content">
+
+      <!-- HEADER -->
+      <div class="page-header">
+        <h1 class="page-title">Product Catalog</h1>
+        <button class="btn-primary">Create Product</button>
+      </div>
+
+      <!-- EMPTY STATE: default -->
+      <div class="empty-card" id="emptyDefault">
+        <div class="mini-preview-wrap">
+          <div class="mini-browser">
+            <div class="mini-browser-bar">
+              <div class="mini-browser-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <span class="mini-browser-title">Product Catalog</span>
+            </div>
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>ID/SKU</th>
+                  <th>Amount/Price</th>
+                  <th>Currency</th>
+                  <th>Organization</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Premium Subscription</td>
+                  <td class="muted">SKU-0041</td>
+                  <td>99.00</td>
+                  <td class="muted">USD</td>
+                  <td class="muted">APAC Test</td>
+                  <td><span class="mini-action-btn">Edit</span></td>
+                </tr>
+                <tr class="mini-row-faded">
+                  <td>Basic Plan</td>
+                  <td class="muted">SKU-0019</td>
+                  <td>29.00</td>
+                  <td class="muted">EUR</td>
+                  <td class="muted">EU Merchants</td>
+                  <td><span class="mini-action-btn">Edit</span></td>
+                </tr>
+                <tr class="mini-row-faded2">
+                  <td>One-time Setup</td>
+                  <td class="muted">SKU-0007</td>
+                  <td>150.00</td>
+                  <td class="muted">USD</td>
+                  <td class="muted">APAC Test</td>
+                  <td><span class="mini-action-btn">Edit</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="feature-headline">Create your Product Catalog in a few clicks</p>
+        <p class="feature-description">
+          Add and edit product information once, then reuse it across Pay By Links and Virtual Terminal payments —
+          no need to re-enter details every time. Whether you're sending a payment link or accepting payments
+          over the phone or email, your product catalog keeps things fast and consistent.
+        </p>
+      </div>
+
+      <!-- EMPTY STATE: no results -->
+      <div class="empty-card" id="emptyNoResults" style="display:none;">
+        <div class="no-results-content">
+          <div class="no-results-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+              <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+              <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="no-results-title">Items not found</p>
+          <p class="no-results-sub">
+            No products match your current search or filters.
+            Try a different product name or <strong>clear the filter</strong> to see all products.
+          </p>
+          <div class="no-results-actions">
+            <button class="btn-secondary" onclick="showState('default')">Clear filter</button>
+            <button class="btn-primary">Create Product</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-logo">
+        <div class="footer-logo-dots">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+        <span class="footer-logo-text">verifone</span>
+      </div>
+      <div class="footer-links">
+        <a href="#">Documentation</a>
+        <a href="#">API Reference</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+    <div class="footer-copy">
+      <span>© 2026 VeriFone</span>
+      <a href="#">Privacy and Compliance Policies</a>
+      <a href="#">Terms and conditions</a>
+    </div>
+  </footer>
+
+  <!-- DEMO SWITCHER -->
+  <div class="demo-switcher">
+    <div class="switcher-label">Empty state demo</div>
+    <div class="switcher-btns">
+      <button class="sw-btn active" id="sw1" onclick="showState('default')">Default</button>
+      <button class="sw-btn" id="sw2" onclick="showState('noResults')">No results</button>
+    </div>
+  </div>
+
+  <script>
+    function showState(state) {
+      const def = document.getElementById('emptyDefault');
+      const noRes = document.getElementById('emptyNoResults');
+      if (state === 'default') {
+        def.style.display = 'flex';
+        noRes.style.display = 'none';
+        document.getElementById('sw1').classList.add('active');
+        document.getElementById('sw2').classList.remove('active');
+      } else {
+        def.style.display = 'none';
+        noRes.style.display = 'flex';
+        document.getElementById('sw1').classList.remove('active');
+        document.getElementById('sw2').classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
