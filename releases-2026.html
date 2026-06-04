@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 Releases — Verifone Central</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-w: 220px;
+      --sidebar-bg: #ffffff;
+      --sidebar-border: #e5e7eb;
+      --bg: #f9fafb;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --border: #e5e7eb;
+      --active-bg: #eff6ff;
+      --active-text: #1d4ed8;
+      --accent: #2563eb;
+      --radius: 8px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sb-logo {
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .sb-logo-text { font-size: 16px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; }
+
+    .sb-scroll { flex: 1; overflow-y: auto; padding: 10px 8px; }
+    .sb-scroll::-webkit-scrollbar { width: 3px; }
+    .sb-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+    .nav-section { margin-bottom: 4px; }
+    .nav-section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.7px;
+      text-transform: uppercase; color: var(--text-4); padding: 10px 10px 4px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 7px;
+      color: var(--text-2); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; background: none; border: none;
+      width: 100%; text-align: left; text-decoration: none;
+    }
+    .nav-item:hover { background: #f3f4f6; color: var(--text); }
+    .nav-item.active { background: var(--active-bg); color: var(--active-text); font-weight: 600; }
+    .nav-item .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.75; }
+    .nav-item.active .nav-icon { opacity: 1; }
+    .nav-item .nav-badge { margin-left: auto; font-size: 10.5px; font-weight: 600; background: #f3f4f6; color: var(--text-3); padding: 1px 6px; border-radius: 10px; }
+
+    .nav-divider { margin: 6px 8px; border: none; border-top: 1px solid var(--border); }
+
+    .nav-sub-item { display: flex; align-items: center; gap: 10px; padding: 6px 10px 6px 30px; border-radius: 7px; font-size: 12.5px; color: var(--text-3); cursor: pointer; }
+    .nav-sub-item:hover { background: #f3f4f6; color: var(--text-2); }
+    .nav-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; }
+
+    .sb-bottom { padding: 12px 16px; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .sb-user { display: flex; align-items: center; gap: 10px; }
+    .sb-avatar { width: 30px; height: 30px; border-radius: 50%; background: #0f172a; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sb-user-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+    .sb-user-role { font-size: 11px; color: var(--text-4); }
+
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .topbar { height: 52px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+    .topbar-left { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .topbar-bc-root { color: var(--text-3); }
+    .topbar-bc-sep { color: var(--text-4); }
+    .topbar-bc-cur { color: var(--text); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .topbar-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 6px; border-radius: 6px; }
+    .topbar-btn:hover { background: #f3f4f6; color: var(--text-2); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; background: #0f172a; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+    .page-content { flex: 1; overflow-y: auto; padding: 24px 28px; }
+    .page-content::-webkit-scrollbar { width: 5px; }
+    .page-content::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 5px; }
+
+    .page-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .page-title { font-size: 18px; font-weight: 700; color: #0f172a; }
+    .page-actions { display: flex; align-items: center; gap: 8px; }
+
+    .btn-outline {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 7px;
+      background: #fff; font-size: 13px; font-weight: 500; color: var(--text-2);
+      cursor: pointer; text-decoration: none;
+    }
+    .btn-outline:hover { border-color: #9ca3af; background: #f9fafb; }
+
+    /* Quarter tabs */
+    .quarter-tabs { display: flex; gap: 2px; margin-bottom: 20px; background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 5px; }
+    .q-tab {
+      flex: 1; padding: 9px 16px; border-radius: 7px; border: none; background: none;
+      font-size: 13.5px; font-weight: 500; color: var(--text-3); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .q-tab:hover { background: #f3f4f6; color: var(--text-2); }
+    .q-tab.active { background: #0f172a; color: #fff; font-weight: 600; }
+    .q-tab .q-count { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 10px; background: rgba(255,255,255,0.15); }
+    .q-tab:not(.active) .q-count { background: #f3f4f6; color: var(--text-3); }
+
+    /* Date info strip */
+    .date-strip {
+      background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 14px 20px; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    }
+    .date-strip-label { font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; }
+    .date-item { display: flex; flex-direction: column; gap: 3px; }
+    .date-value { font-size: 13px; font-weight: 600; color: var(--text); }
+    .date-sep { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
+    .date-jira-link {
+      margin-left: auto; display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none;
+    }
+    .date-jira-link:hover { text-decoration: underline; }
+    .prod-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+      background: #ecfdf5; color: #065f46;
+    }
+    .prod-chip-tbd { background: #fef3c7; color: #92400e; }
+
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+    .stat-card { background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+    .stat-label { font-size: 11.5px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: #0f172a; line-height: 1; }
+    .stat-sub { font-size: 11.5px; color: var(--text-3); margin-top: 6px; }
+    .stat-bar { height: 4px; border-radius: 2px; background: #f3f4f6; margin-top: 10px; overflow: hidden; }
+    .stat-bar-fill { height: 100%; border-radius: 2px; }
+
+    /* Filter bar */
+    .filter-card {
+      background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .filter-chip {
+      display: flex; align-items: center; gap: 4px; padding: 5px 11px;
+      border: 1.5px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 500;
+      color: var(--text-2); background: none; cursor: pointer; white-space: nowrap;
+    }
+    .filter-chip:hover { border-color: #9ca3af; background: #f9fafb; }
+    .filter-chip.active { border-color: var(--accent); background: #eff6ff; color: var(--accent); font-weight: 600; }
+    .filter-sep { color: var(--border); font-size: 18px; user-select: none; }
+    .search-wrap { flex: 1; min-width: 180px; position: relative; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-4); pointer-events: none; }
+    .search-input { width: 100%; padding: 7px 12px 7px 34px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 13px; color: var(--text); background: #fff; outline: none; }
+    .search-input:focus { border-color: var(--accent); }
+    .result-count { font-size: 12px; color: var(--text-3); white-space: nowrap; }
+
+    /* Table */
+    .table-card { background: #fff; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .table-meta {
+      padding: 11px 18px; font-size: 12.5px; color: var(--text-3);
+      border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left; font-size: 11px; font-weight: 600; color: var(--text-3);
+      text-transform: uppercase; letter-spacing: 0.4px; padding: 10px 14px;
+      border-bottom: 1px solid var(--border); white-space: nowrap; background: #f9fafb;
+    }
+    td { padding: 10px 14px; font-size: 13px; color: var(--text-2); border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+
+    .issue-key { font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
+    .issue-key:hover { text-decoration: underline; }
+    .issue-summary { color: var(--text); font-weight: 500; }
+
+    /* Status badges */
+    .status-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .s-done        { background: #ecfdf5; color: #065f46; }
+    .s-done .status-dot        { background: #16a34a; }
+    .s-inprog      { background: #eff6ff; color: #1d4ed8; }
+    .s-inprog .status-dot      { background: #2563eb; }
+    .s-transition  { background: #fef3c7; color: #92400e; }
+    .s-transition .status-dot  { background: #d97706; }
+    .s-elaboration { background: #f3f4f6; color: #374151; }
+    .s-elaboration .status-dot { background: #6b7280; }
+    .s-inception   { background: #f0f9ff; color: #0369a1; }
+    .s-inception .status-dot   { background: #0ea5e9; }
+    .s-submitted   { background: #f5f3ff; color: #6d28d9; }
+    .s-submitted .status-dot   { background: #7c3aed; }
+    .s-blocked     { background: #fee2e2; color: #b91c1c; }
+    .s-blocked .status-dot     { background: #dc2626; }
+
+    /* Priority */
+    .pri { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-2); white-space: nowrap; }
+    .pri-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+    .pri-critical { background: #dc2626; }
+    .pri-high      { background: #ea580c; }
+    .pri-medium    { background: #ca8a04; }
+    .pri-low       { background: #16a34a; }
+
+    /* Assignee */
+    .assignee { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+    .assignee-av { width: 22px; height: 22px; border-radius: 50%; font-size: 9px; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .empty-state { padding: 48px 24px; text-align: center; color: var(--text-3); font-size: 13.5px; }
+
+    .cell-summary { color: var(--text); font-weight: 500; }
+    .cell-vp { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--text-3); cursor: help; }
+    .cell-person { font-size: 12.5px; white-space: nowrap; color: var(--text-2); }
+    .cell-date { font-size: 12px; white-space: nowrap; color: var(--text-3); }
+
+    /* quarter panel visibility */
+    .q-panel { display: none; }
+    .q-panel.active { display: block; }
+  </style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <a class="sb-logo" href="index.html">
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="#0f172a"/>
+      <circle cx="10" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="22" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="10" cy="22" r="3" fill="#60a5fa"/>
+      <circle cx="22" cy="22" r="3" fill="#60a5fa"/>
+    </svg>
+    <span class="sb-logo-text">Verifone</span>
+  </a>
+
+  <div class="sb-scroll">
+    <div class="nav-section">
+      <div class="nav-section-label">Main</div>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+        Dashboard
+      </button>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+        Commerce
+      </button>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg></span>
+        Administration
+      </button>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        Boarding
+      </button>
+    </div>
+
+    <hr class="nav-divider"/>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Analytics</div>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V3M2 9h20"/></svg></span>
+        Reports
+      </button>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+        Analytics
+      </button>
+      <a class="nav-item active" href="jira-reports.html">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>
+        Jira Reports
+      </a>
+      <div class="nav-sub-item" style="background:var(--active-bg);color:var(--active-text);font-weight:600;border-radius:7px;">
+        <span class="nav-sub-dot" style="background:var(--accent);"></span>2026 Releases
+      </div>
+    </div>
+
+    <hr class="nav-divider"/>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Tools</div>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+        Device manager
+      </button>
+      <button class="nav-item" onclick="setActive(this)">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V7l7-4v19M14 22V11l7-3v14"/><path d="M3 11h11M3 16h11"/></svg></span>
+        Petro
+      </button>
+    </div>
+  </div>
+
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">AG</div>
+      <div>
+        <div class="sb-user-name">Adriana Gornea</div>
+        <div class="sb-user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+  <a href="index.html" style="display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:11.5px;font-weight:500;color:#9ca3af;text-decoration:none;border-top:1px solid #e5e7eb;flex-shrink:0;" onmouseover="this.style.color='#374151'" onmouseout="this.style.color='#9ca3af'">← Portal Home</a>
+</aside>
+
+<div id="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-bc-root">Analytics</span>
+      <span class="topbar-bc-sep">/</span>
+      <span class="topbar-bc-cur">2026 Releases</span>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </button>
+      <div class="avatar">A</div>
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    <div class="page-heading">
+      <span class="page-title">VerifoneCentral 2026 Releases</span>
+      <div class="page-actions">
+        <a class="btn-outline" href="https://verifone.atlassian.net/wiki/spaces/GPMPA/pages/682854448/VerifoneCentral+2026+Releases" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Confluence
+        </a>
+        <a class="btn-outline" href="https://verifone.atlassian.net/issues/?jql=type%20in%20(epic)%20and%20project%20in%20(ET)%20and%20fixVersion%20in%20(%22%5BPlanned%20%E2%80%93%20Q1%202026%5D%20Verifone%20Central%22%2C%22%5BQ2%202026%5D%20Verifone%20Central%22%2C%22%5BPlanned%20%E2%80%93%20Q2%202026%5D%20Verifone%20Central%22%2C%22%5BQ3%202026%5D%20Verifone%20Central%22)%20ORDER%20BY%20Rank%20ASC" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          All Epics in Jira
+        </a>
+      </div>
+    </div>
+
+    <!-- Quarter Tabs -->
+    <div class="quarter-tabs" id="quarterTabs"></div>
+
+    <!-- Q2 Panel -->
+    <div class="q-panel active" id="panel-q2">
+      <div class="date-strip">
+        <div class="date-item"><div class="date-strip-label">Dev Start</div><div class="date-value">Feb 2025</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">Dev End</div><div class="date-value">May 2026</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">QAT</div><div class="date-value">Available when dev-ready</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">CST</div><div class="date-value">TBD</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">Production</div><div class="date-value"><span class="prod-chip">Mid June 2026</span></div></div>
+        <a class="date-jira-link" href="https://verifone.atlassian.net/issues/?jql=type%20in%20(epic)%20and%20project%20in%20(ET)%20and%20%20fixVersion%20in%20(%22%5BPlanned%20%E2%80%93%20Q2%202026%5D%20Verifone%20Central%22%2C%22%5BQ2%202026%5D%20Verifone%20Central%22)%20ORDER%20BY%20Rank%20ASC" target="_blank">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open in Jira
+        </a>
+      </div>
+      <div class="stats-row" id="stats-q2"></div>
+      <div class="filter-card">
+        <button class="filter-chip active" onclick="filterStatus('q2','all',this)">All</button>
+        <button class="filter-chip" onclick="filterStatus('q2','Implementation',this)">In Progress</button>
+        <button class="filter-chip" onclick="filterStatus('q2','Transition',this)">Transition</button>
+        <button class="filter-chip" onclick="filterStatus('q2','Elaboration',this)">Elaboration</button>
+        <button class="filter-chip" onclick="filterStatus('q2','Inception',this)">Inception</button>
+        <button class="filter-chip" onclick="filterStatus('q2','Submitted',this)">Submitted</button>
+        <button class="filter-chip" onclick="filterStatus('q2','DONE',this)">Done</button>
+        <button class="filter-chip" onclick="filterStatus('q2','Blocked',this)">Blocked</button>
+        <span class="filter-sep">|</span>
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" type="text" placeholder="Search epics…" oninput="searchEpics('q2',this.value)" />
+        </div>
+        <span class="result-count" id="count-q2"></span>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead><tr>
+            <th style="width:90px">Key</th>
+            <th>Summary</th>
+            <th style="width:220px">Value Proposition</th>
+            <th style="width:140px">Product Owner</th>
+            <th style="width:150px">Assignee</th>
+            <th style="width:120px">Status</th>
+            <th style="width:80px">QAT</th>
+            <th style="width:90px">CST</th>
+            <th style="width:90px">PROD</th>
+          </tr></thead>
+          <tbody id="tbody-q2"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Q3 Panel -->
+    <div class="q-panel" id="panel-q3">
+      <div class="date-strip">
+        <div class="date-item"><div class="date-strip-label">Dev Start</div><div class="date-value">Jun 21, 2026</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">Dev End</div><div class="date-value">Aug 2026</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">CST</div><div class="date-value">TBD</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">Production</div><div class="date-value"><span class="prod-chip prod-chip-tbd">End of Sept 2026</span></div></div>
+        <a class="date-jira-link" href="https://verifone.atlassian.net/issues/?jql=type%20in%20(epic)%20and%20project%20in%20(ET)%20and%20%20fixVersion%20%3D%20%22%5BQ3%202026%5D%20Verifone%20Central%22%20ORDER%20BY%20Rank%20ASC" target="_blank">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open in Jira
+        </a>
+      </div>
+      <div class="stats-row" id="stats-q3"></div>
+      <div class="filter-card">
+        <button class="filter-chip active" onclick="filterStatus('q3','all',this)">All</button>
+        <button class="filter-chip" onclick="filterStatus('q3','Implementation',this)">In Progress</button>
+        <button class="filter-chip" onclick="filterStatus('q3','Elaboration',this)">Elaboration</button>
+        <button class="filter-chip" onclick="filterStatus('q3','Inception',this)">Inception</button>
+        <button class="filter-chip" onclick="filterStatus('q3','Submitted',this)">Submitted</button>
+        <button class="filter-chip" onclick="filterStatus('q3','Blocked',this)">Blocked</button>
+        <span class="filter-sep">|</span>
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" type="text" placeholder="Search epics…" oninput="searchEpics('q3',this.value)" />
+        </div>
+        <span class="result-count" id="count-q3"></span>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead><tr>
+            <th style="width:90px">Key</th>
+            <th>Summary</th>
+            <th style="width:220px">Value Proposition</th>
+            <th style="width:140px">Product Owner</th>
+            <th style="width:150px">Assignee</th>
+            <th style="width:120px">Status</th>
+            <th style="width:80px">QAT</th>
+            <th style="width:90px">CST</th>
+            <th style="width:90px">PROD</th>
+          </tr></thead>
+          <tbody id="tbody-q3"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Q1 Panel -->
+    <div class="q-panel" id="panel-q1">
+      <div class="date-strip">
+        <div class="date-item"><div class="date-strip-label">Dev Start</div><div class="date-value">Feb 2025</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">Dev End</div><div class="date-value">May 2026</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">CST</div><div class="date-value">TBD</div></div>
+        <div class="date-sep"></div>
+        <div class="date-item"><div class="date-strip-label">Production</div><div class="date-value"><span class="prod-chip">Mid June 2026</span></div></div>
+        <a class="date-jira-link" href="https://verifone.atlassian.net/issues/?jql=type%20in%20(epic)%20and%20project%20in%20(ET)%20and%20%20fixVersion%20%3D%20%22%5BPlanned%20%E2%80%93%20Q1%202026%5D%20Verifone%20Central%22%20ORDER%20BY%20Rank%20ASC" target="_blank">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open in Jira
+        </a>
+      </div>
+      <div class="stats-row" id="stats-q1"></div>
+      <div class="filter-card">
+        <button class="filter-chip active" onclick="filterStatus('q1','all',this)">All</button>
+        <button class="filter-chip" onclick="filterStatus('q1','DONE',this)">Done</button>
+        <button class="filter-chip" onclick="filterStatus('q1','Transition',this)">Transition</button>
+        <button class="filter-chip" onclick="filterStatus('q1','Elaboration',this)">Elaboration</button>
+        <span class="filter-sep">|</span>
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" type="text" placeholder="Search epics…" oninput="searchEpics('q1',this.value)" />
+        </div>
+        <span class="result-count" id="count-q1"></span>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead><tr>
+            <th style="width:90px">Key</th>
+            <th>Summary</th>
+            <th style="width:220px">Value Proposition</th>
+            <th style="width:140px">Product Owner</th>
+            <th style="width:150px">Assignee</th>
+            <th style="width:120px">Status</th>
+            <th style="width:80px">QAT</th>
+            <th style="width:90px">CST</th>
+            <th style="width:90px">PROD</th>
+          </tr></thead>
+          <tbody id="tbody-q1"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const DATA = {
+  q2: {
+    label: 'Q2 2026',
+    epics: [
+      {key:'ET-1493',summary:'Introduce Business Identifiers fields in Add/Edit Organizations',status:'Implementation',priority:'3- Medium',assignee:'Anand BS',vp:'Add the business identifies fields editable via UI. Availability: Global, for internal users in org page.',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1497',summary:'[US] Support for updating PayPal APIKey rotation on Verifone Central',status:'Implementation',priority:'3- Medium',assignee:'Anand BS',vp:'Merchants are able to have a key rotation policy for the APIKey for the PayPal integration. Availability: PayPal customers.',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1307',summary:'POC - Embed a BI tool into Verifone Central',status:'DONE',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'POC - Embed a BI tool into Verifone Central. Availability (if implemented): Global.',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-2003',summary:'[VC UI] Q2-2026 Fixes for front end application defects',status:'Implementation',priority:'2- High',assignee:'Senthil Chidambaram',vp:'This epic has all defects fixed in this current release version.',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-2020',summary:'Marketplace Defect fixes Q2 2026',status:'Implementation',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Resolves accumulated Marketplace defects. Availability: Globally',po:'',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-25',summary:'Move the top nav bar menu to the left as side menu bar in Verifone Central',status:'Implementation',priority:'3- Medium',assignee:'Sumit Ashish',vp:'Side menus can be collapsible or hidden on smaller screens. Availability: Global',po:'Senthil Chidambaram',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-637',summary:'Verifone Portal | Organization filters to be consistent across different pages',status:'Elaboration',priority:'1- Critical',assignee:'Anand BS',vp:'UI/UX enhancement to make the Organisation filters consistent across different pages. Availability: Global',po:'Senthil Chidambaram',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-837',summary:'[Generated Reports]: Allow users to select individual Org as a filter',status:'Implementation',priority:'2- High',assignee:'Anand BS',vp:'Enhance Org filter functionality in Generated Reports tab. Availability: Global',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1485',summary:'Show the Time zone used to show dates in the portal',status:'Elaboration',priority:'3- Medium',assignee:'Adriana Gornea',vp:'Helps users understand the context of the time information presented. Availability: Global',po:'Senthil Chidambaram',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-1699',summary:'[UK][FYQ2][Verifone Central] - Omnipay DCC - Verifone Central changes',status:'Implementation',priority:'1- Critical',assignee:'Utkarsh Agrawal',vp:'Agreed partnership between Verifone - Fiserv (Omnipay) - Lloyds. Availability: EMEA',po:'Senthil Chidambaram',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-8',summary:'UIS FE Containerization',status:'DONE',priority:'3- Medium',assignee:'Sruthi Nakul Mysore',vp:'Migrating the UIS Front-End to EKS. Availability: Global',po:'Senthil Chidambaram',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-66',summary:'[MOP] PayPal/Braintree Processor Integration to include MerchantID and API key',status:'DONE',priority:'3- Medium',assignee:'Sumit Gautam',vp:'PayPal+Verifone partnership to enable PayPal/Braintree merchants.',po:'',cst:'',prod:''},
+      {key:'ET-81',summary:'Investigate - Build the alert concept and flow - phase 1',status:'Elaboration',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Investigate and analyze the solution for displaying system alerts on the portal. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-100',summary:'UI Revamp - TCS Client Nordics',status:'Implementation',priority:'2- High',assignee:'Senthil Chidambaram',vp:'Modernizes the Nordic TCS clients UI, improving usability and consistency.',po:'Hunter Novak',cst:'',prod:''},
+      {key:'ET-497',summary:'[MOP-UI] Apply minimum monthly fee for Salesconnector VerifonePay customer',status:'Implementation',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Introduce minimum monthly fee functionality. Availability: SalesConnector',po:'Sasank Kodali',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-717',summary:'[MOP UI] Ability to prompt for DID input only of Biometric camera module, skip TID & TIN',status:'Transition',priority:'2- High',assignee:'Ashish Verma',vp:'Extend current MOP UI user behavior to be able to skip TIN and/or TID entry when a Biometric module is selected.',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-772',summary:'Verifone Central Technical Improvements POC',status:'DONE',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'This initiative modernizes the Verifone frontend platform through UX enhancement and Module Federation. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-846',summary:'Configuration Management App for Verifone Central',status:'Implementation',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Replaces decentralized, error-prone config management with a centralized app. Availability: Globally',po:'',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-966',summary:'[MOP-UI] Automatic boarding of device feature "Refund" including limits on order by order basis - SC VerifonePay (SAIO)',status:'Transition',priority:'2- High',assignee:'Ashish Verma',vp:'Automate Refund boarding including limits on order by order basis for the Nordic market using Salesconnector.',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-973',summary:'Decouple all existing applications in VFC into modular Micro Frontend (MFE) applications',status:'Implementation',priority:'3- Medium',assignee:'Sruthi Nakul Mysore',vp:'Implementing Module Federation to decouple micro frontends. Availability: Global',po:'Senthil Chidambaram',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-974',summary:'Self Service Deployment App - NEXUS',status:'Implementation',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Create a self service deployment app to manage deployments.',po:'Senthil Chidambaram',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-978',summary:'[MOP-UI] Prompt for user selection of VHQ reference ID if multiple options available and no default is pre-set',status:'Elaboration',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Remove user error and mistakes when selecting VHW Reference Device ID.',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1021',summary:'SSO between Premier portal and VFC',status:'Implementation',priority:'3- Medium',assignee:'Anand BS',vp:'SSO between Premier portal and VFC.',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1147',summary:'[MOP-UI & BE] Bankaxept merchant onboarding and rev share tag using API (Norway)',status:'Transition',priority:'3- Medium',assignee:'Linn Karlsson',vp:'Automatic boarding of Norwegian merchant towards market lead service provider Bank Axept.',po:'Sasank Kodali',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1152',summary:'[MOP-UI] Surcharge automatic boarding for customers using Salesconnector for AGPA/VEPP (Cobra)',status:'Implementation',priority:'2- High',assignee:'Ashish Verma',vp:'Automatic feature enablement to support Surcharge fees for Salesconnector.',po:'Sasank Kodali',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1260',summary:'SMB Application - MVP (part 2) - global needs',status:'Elaboration',priority:'2- High',assignee:'Akshat Aggarwal',vp:'SMB app (mini Verifone Central). Availability: Germany, Intercard merchants',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-1527',summary:'Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Training | KT | Retrospective | Deployment',status:'Implementation',priority:'3- Medium',assignee:'Anand BS',vp:'',po:'',cst:'',prod:''},
+      {key:'ET-1537',summary:'Small UI/UX enhancements in MOP - Verifone Central',status:'Implementation',priority:'3- Medium',assignee:'Adriana Gornea',vp:'Small UI/UX enhancements in MOP - Verifone Central.',po:'',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1566',summary:'SSO Maintenance Support and Integration 2026',status:'Implementation',priority:'3- Medium',assignee:'Anand BS',vp:'To Support SSO for different instances.',po:'',cst:'',prod:''},
+      {key:'ET-1636',summary:'SMB APP - Requirements for Westpac readiness',status:'Implementation',priority:'2- High',assignee:'Akshat Aggarwal',vp:'SMB SoftPOS Integrated Platform. Availability: NZ - Westpac',po:'',cst:'',prod:''},
+      {key:'ET-1679',summary:'Portal intake - Filter by Acquirer Support in Verifone Central',status:'Inception',priority:'2- High',assignee:'Senthil Chidambaram',vp:'New filter in Transaction reporting.',po:'',cst:'',prod:''},
+      {key:'ET-1709',summary:'Portal - FRIC to WSO2 Migration tasks',status:'Implementation',priority:'3- Medium',assignee:'Sruthi Nakul Mysore',vp:'Migrates Portal authentication from FRIC to WSO2, improving security.',po:'',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1714',summary:'[Reporting] Orders/Transactions: Count & Query APIs',status:'Implementation',priority:'2- High',assignee:'Ashish Verma',vp:'Parallel Count & Query APIs with auto-retry. Availability: Global',po:'',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1724',summary:'Portal intake - NZ | Acquirer Portal Access',status:'Inception',priority:'3- Medium',assignee:'Ayushi Gupta',vp:'Allows Verifone Admins to set up acquirer-restricted group hierarchies in Verifone Central.',po:'Prema Namasivayam',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1746',summary:'Verifone Central - Update Phone Number Fields',status:'Transition',priority:'3- Medium',assignee:'Anand BS',vp:'Standardizes phone number input placeholders across Verifone Central.',po:'',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1748',summary:'Search via Verifone Central through GitBook public doc',status:'Implementation',priority:'3- Medium',assignee:'Tanya Saxena',vp:'Search option that will provide access to our public documentation directly from Verifone Central. Availability: Global',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-1767',summary:'AI Hackathon World Tour > Enablement Tooling: BLR March 30th - April 2nd',status:'DONE',priority:'2- High',assignee:'Anand BS',vp:'Fosters innovation and developer engagement through hands-on AI exploration.',po:'',cst:'',prod:''},
+      {key:'ET-1781',summary:'Portal Intake - Westpac | Merchant Self-Serve for Invoices/Receipts - Phase 2 - Suppress Trading Address',status:'Blocked',priority:'3- Medium',assignee:'Manish Sharma',vp:'Allows merchants to customise their invoices and receipts.',po:'',cst:'',prod:''},
+      {key:'ET-1788',summary:'SDK Integration Workshop Sprint 1 - Device installation, activation and swap',status:'DONE',priority:'3- Medium',assignee:'Akshat Aggarwal',vp:'Equips integration partners with hands-on expertise in device onboarding flows.',po:'',cst:'',prod:''},
+      {key:'ET-1789',summary:'SDK Integration Workshop Sprint 2 - Payment Flows: Amount Entry, Payment, Success, Transaction History',status:'DONE',priority:'3- Medium',assignee:'Akshat Aggarwal',vp:'Deepens partner proficiency in end-to-end payment flows.',po:'',cst:'',prod:''},
+      {key:'ET-1790',summary:'SDK Integration Workshop Sprint 3 - Unhappy Flows: Device errors, transaction failure',status:'DONE',priority:'3- Medium',assignee:'Akshat Aggarwal',vp:'Prepares integration partners to handle device errors and transaction failures gracefully.',po:'',cst:'',prod:''},
+      {key:'ET-1791',summary:'SDK Integration Workshop Backlog',status:'Implementation',priority:'3- Medium',assignee:'Akshat Aggarwal',vp:'',po:'Akshat Aggarwal',cst:'',prod:''},
+      {key:'ET-1978',summary:'Verifone Central Portal Automation',status:'Implementation',priority:'3- Medium',assignee:'Anand BS',vp:'Create Verifone Central Portal Automation.',po:'',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-1999',summary:'Adopt Permissions based access control model in Verifone Central',status:'Implementation',priority:'3- Medium',assignee:'Anand BS',vp:'Learn Verifone Central merchant portal permissions associated with roles. Availability: Global',po:'',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-2015',summary:'[Q2 2026] Verifone Central - small updates',status:'Implementation',priority:'3- Medium',assignee:'Sruthi Nakul Mysore',vp:'Make scheduled reports easy to find by enhancing the filter text.',po:'Senthil Chidambaram',cst:'2026-06-01',prod:'2026-06-19'},
+      {key:'ET-2018',summary:'Form Forge Tool to generate forms for variety of templates',status:'Implementation',priority:'2- High',assignee:'Senthil Chidambaram',vp:'Accelerates form creation across Verifone via reusable templates, cutting development time and enforcing UI consistency.',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-2021',summary:'Device Swap in Verifone Central',status:'Submitted',priority:'3- Medium',assignee:'Frank Shi',vp:'Enables merchant admins to self-serve SoftPos device replacements directly in Verifone Central without uninstall/reinstall.',po:'',cst:'',prod:''},
+      {key:'ET-2029',summary:'[VerifoneCentral Portal][PPC] Adding TEYA_EU',status:'Implementation',priority:'1- Critical',assignee:'Anand BS',vp:'Extends PPC support to TEYA_EU merchants on Verifone Central Portal. Availability: EMEA',po:'Dhananjaya H M',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-2034',summary:'Westpac Functional Defects',status:'Implementation',priority:'3- Medium',assignee:'Sruthi Nakul Mysore',vp:'Resolves Westpac-reported functional defects to maintain platform stability, client trust, and SLA compliance.',po:'',cst:'',prod:''},
+      {key:'ET-2077',summary:'Verifone Design System Code Audit',status:'Elaboration',priority:'3- Medium',assignee:'Akshat Aggarwal',vp:'Build the Audit mechanism for Verifone Design System: versions management, release process.',po:'',cst:'2026-09-11',prod:'2026-09-30'},
+      {key:'ET-2079',summary:'Redundancy - GBX - CyberSource PIM connectivity through to CyberSource',status:'Submitted',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Improves payment processing resilience for GreenBox AU merchants by establishing redundant CyberSource PIM connectivity. Availability: AU merchants',po:'',cst:'',prod:''},
+      {key:'ET-2121',summary:'[VAPS][Verifone Central] Unzer Acquiring Support in DACH',status:'Blocked',priority:'2- High',assignee:'Unassigned',vp:'Enables Unzer acquiring within Verifone Central for DACH merchants. Availability: EMEA',po:'',cst:'',prod:''},
+      {key:'ET-2293',summary:'Add GIVEX as selectable Processor option on Add/Edit Payment Provider Contract page',status:'Implementation',priority:'1- Critical',assignee:'Adriana Gornea',vp:'Enables the boarding team to onboard GIVEX merchants without workarounds.',po:'Anand BS',cst:'',prod:''},
+    ]
+  },
+  q3: {
+    label: 'Q3 2026',
+    epics: [
+      {key:'ET-2014',summary:'[VC UI] Q3-2026 Fixes for front end application defects',status:'Elaboration',priority:'2- High',assignee:'Senthil Chidambaram',vp:'This epic has all defects fixed in this current release version.',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-1264',summary:'Portal Accessibility Tasks - Phase 4',status:'Elaboration',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Enhancing Verifone Central accessibility to comply with the European Accessibility Act. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-2049',summary:'Verifone Central Home page – Future State',status:'Elaboration',priority:'3- Medium',assignee:'Adriana Gornea',vp:'The merchant portal home page serves as a centralised gate to a comprehensive suite of business management applications. Availability: Global',po:'',cst:'',prod:'2026-09-30'},
+      {key:'ET-2110',summary:'Manage cookie preferences',status:'Inception',priority:'3- Medium',assignee:'Ayushi Gupta',vp:'Allows users to manage their cookie preferences at any time within Verifone Central.',po:'',cst:'2026-08-31',prod:'2026-09-30'},
+      {key:'ET-2108',summary:'[Q3 2026] Verifone Central - small updates',status:'Inception',priority:'3- Medium',assignee:'Unassigned',vp:'The epic includes small UI/UX or text updates in Verifone Central. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-1624',summary:'Organisation hierarchy view',status:'Elaboration',priority:'3- Medium',assignee:'Adriana Gornea',vp:'Allows users to visualise and navigate the organisation hierarchy through an interactive side panel.',po:'',cst:'',prod:'2026-09-30'},
+      {key:'ET-746',summary:'Improve Merchant Experience with Guided Empty Page UI in Verifone Central',status:'Elaboration',priority:'3- Medium',assignee:'Sumit Ashish',vp:'Provide merchants with a guided experience by displaying informative content and actionable prompts on empty pages. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-1998',summary:'Introduce Verifone Design System to serve Verifone Central Portal',status:'Inception',priority:'3- Medium',assignee:'Akshat Aggarwal',vp:'Establishes a unified design system across Verifone Central, enabling faster UI development. Availability: Globally',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-1284',summary:'Add option to have Shortcuts (Pinned pages)',status:'Elaboration',priority:'3- Medium',assignee:'Sruthi Nakul Mysore',vp:'Allow users to quickly access their most commonly used or preferred options, features, or items. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-758',summary:'Consistent amount format',status:'Elaboration',priority:'4- Low',assignee:'Senthil Chidambaram',vp:'Eliminates inconsistent currency display across Verifone Central. Availability: Globally',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-18',summary:'Enhance the search and filter section on Orders & Transactions page - Phase 1',status:'Blocked',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Better consistency and UX.',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-61',summary:'[MOP-UI] Support configuring multiple processors (with optional priority) during onboarding',status:'Implementation',priority:'3- Medium',assignee:'Linn Karlsson',vp:'Merchants want to be able to configure multiple processors and associate a priority to the processors for routing transactions.',po:'Vaibhav Bajpai',cst:'',prod:'2026-09-30'},
+      {key:'ET-1620',summary:'[Verifone Central] Option to Save filters',status:'Inception',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Add the ability to save the filters used regularly for ad-hoc usage. Availability: Global',po:'Vineet Dutt',cst:'',prod:'2026-09-30'},
+      {key:'ET-718',summary:'Consistent User Experience Across View and Edit Modes in VC',status:'Elaboration',priority:'3- Medium',assignee:'Ayushi Gupta',vp:'Provides a uniform look and feel across all pages in Verifone Central by aligning the View and Edit mode designs.',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-165',summary:'Enhance the transaction details section',status:'Elaboration',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Improves the transaction details view in Verifone Central by reorganising information into clear, structured sections.',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-732',summary:'Implement Customizable/Dynamic Data Table Columns Across Verifone Central',status:'Elaboration',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Enable users to tailor data tables to their specific needs by selecting and organizing visible columns. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:'2026-09-30'},
+      {key:'ET-695',summary:'[Report Template]: Navigation to template creation page should be simpler',status:'Submitted',priority:'3- Medium',assignee:'Utkarsh Agrawal',vp:'Enhance navigation to report template page to make it more user friendly. Availability: Global',po:'',cst:'',prod:'2026-09-30'},
+      {key:'ET-87',summary:'Enhance the UI/UX of the organisation page',status:'Inception',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Streamlining the Organisation page by reducing pagination and improving feature flag organization. Availability: Global',po:'Senthil Chidambaram',cst:'2026-08-31',prod:'2026-09-30'},
+      {key:'ET-1066',summary:'Update the date picker component in all the pages on Portal',status:'Elaboration',priority:'3- Medium',assignee:'Ayushi Gupta',vp:'Standardises the date picker component across all Portal modules including MOP, Bluebox, and App Marketplace.',po:'Senthil Chidambaram',cst:'2026-08-31',prod:'2026-09-30'},
+      {key:'ET-1281',summary:'SMB Application - Phase 2',status:'Inception',priority:'2- High',assignee:'Akshat Aggarwal',vp:'SMB Application Phase 2.',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-1700',summary:'[Verifone Central][UK][FYQ3] - Barclays - Verifone Central changes to support DCC',status:'Submitted',priority:'1- Critical',assignee:'Adriana Gornea',vp:'New revenue stream through DCC service.',po:'',cst:'',prod:''},
+      {key:'ET-1794',summary:'EMEA / DACH readiness VFONESoftPosApp',status:'Submitted',priority:'2- High',assignee:'Akshat Aggarwal',vp:'SMB Application readiness for EMEA / DACH.',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-1953',summary:'WBC-MCD VF Central Orders/Transaction Dashboard Changes - Phase 2',status:'Submitted',priority:'3- Medium',assignee:'Rashmi Hatti',vp:'Gives Westpac-MCD merchants improved visibility into orders and transactions. Availability: Westpac',po:'',cst:'',prod:''},
+      {key:'ET-2092',summary:'Westpac Q3',status:'Submitted',priority:'3- Medium',assignee:'Akshat Aggarwal',vp:'',po:'',cst:'',prod:''},
+      {key:'ET-2188',summary:'[MOP UI] Replacement Agreement Capture for Existing Contracts',status:'Submitted',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'Enhance ordering experience and details capture for Replacement orders instead of free text field entry.',po:'',cst:'',prod:''},
+      {key:'ET-2200',summary:'[PayPal Braintree] Ecommerce option missing in Sales Channels dropdown when creating Payment Provider Contract',status:'Inception',priority:'2- High',assignee:'Ayushi Gupta',vp:'Enables merchants using the PayPal Braintree processor to select Ecommerce as a sales channel when creating PPCs.',po:'',cst:'',prod:''},
+      {key:'ET-2218',summary:'SMB APP - Requirements for Westpac (phase 2)',status:'Submitted',priority:'3- Medium',assignee:'Akshat Aggarwal',vp:'SMB SoftPOS Integrated Platform - a unified user experience for four Verifone product lines. Availability: NZ - Westpac',po:'',cst:'',prod:''},
+    ]
+  },
+  q1: {
+    label: 'Q1 2026',
+    epics: [
+      {key:'ET-57',summary:'Verifone Central | Allowed Operations API - Phase 1A (verifone_au & nzeftpos)',status:'DONE',priority:'3- Medium',assignee:'Akanksha Gupta',vp:'Actions on Trx will be driven by Ecom and not front end logic.',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-683',summary:'[Q1 2026] Verifone Central - small updates',status:'DONE',priority:'3- Medium',assignee:'Utkarsh Agrawal',vp:'Make scheduled reports easy to find by enhancing the filter text.',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-694',summary:'[Payment Dashboard]: Default description to select Org and Currency should be dynamic',status:'DONE',priority:'3- Medium',assignee:'Utkarsh Agrawal',vp:'Make the description dynamic based on the current selection. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-638',summary:'Consistent clear actions in drop-downs - Phase 2 (MOP, DM, etc)',status:'DONE',priority:'3- Medium',assignee:'Adriana Gornea',vp:'Having the same actions in all drop-downs ensures a uniform user experience. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-656',summary:'VC UI - IBAN format validation - merchant/site information',status:'DONE',priority:'2- High',assignee:'Adriana Gornea',vp:'Enhance the validation on the IBAN when doing a manual onboarding via Verifone Central. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-85',summary:'Investigation - Enhance the error message to be user friendly',status:'DONE',priority:'3- Medium',assignee:'Adriana Gornea',vp:'Enhance the error message to be user friendly. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-920',summary:'Investigation - Add option to export Org from Verifone Central',status:'DONE',priority:'3- Medium',assignee:'Adriana Gornea',vp:'Remove the manual work for verifone users, by enabling merchants to export the org via Verifone Central. Availability: Global',po:'',cst:'',prod:''},
+      {key:'ET-664',summary:'Investigate - Search via Verifone Central through GitBook public doc',status:'DONE',priority:'3- Medium',assignee:'Adriana Gornea',vp:'Investigate and analyze the solution for having a search option for public documentation directly from Verifone Central. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-665',summary:'Investigate - Add option to have Favourite pages',status:'DONE',priority:'3- Medium',assignee:'Adriana Gornea',vp:'Investigate and analyze the solution for favorite menu feature. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-793',summary:'Icon changes for refund declined/failed transactions on Portal',status:'Transition',priority:'3- Medium',assignee:'Deepanshu Rawat',vp:'Omni Channel & Ecommerce UI changes.',po:'',cst:'',prod:''},
+      {key:'ET-802',summary:'Verifone Central Dashboard & Reports to specify whether a refund was processed in-store or online',status:'Transition',priority:'3- Medium',assignee:'Utkarsh Agrawal',vp:'Portal Changes for Omni refund indicator.',po:'',cst:'',prod:''},
+      {key:'ET-1246',summary:'Portal - White-Label MFA for Portal Banks (Global-ready; NZ & AU Phase 1)',status:'Transition',priority:'2- High',assignee:'Ayushi Gupta',vp:'ASB to sell our ecom offering.',po:'Prema Namasivayam',cst:'',prod:''},
+      {key:'ET-101',summary:'Merchant Companion app for Device Activation',status:'DONE',priority:'2- High',assignee:'Akshat Aggarwal',vp:'Merchant Companion app for Device Activation.',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-456',summary:'MOP UI: Extend "Find my Company" Merchant look up and AML to support SCHUFA (Soletrader search) in Germany',status:'DONE',priority:'3- Medium',assignee:'Linn Karlsson',vp:'Extend merchant look up and search for companies with Soletraders as the legal form for German market.',po:'Sasank Kodali',cst:'',prod:''},
+      {key:'ET-627',summary:'SMB Application - Pilot',status:'DONE',priority:'2- High',assignee:'Akshat Aggarwal',vp:'SMB app pilot.',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-708',summary:'Implement Simplified Order Creation Flow for Merchant Order and POI Order',status:'DONE',priority:'3- Medium',assignee:'Santosh Kumar Mondal',vp:'Implement backend-driven minimal order creation flow with intelligent defaults and portfolio-based derivations.',po:'',cst:'',prod:''},
+      {key:'ET-772',summary:'Verifone Central Technical Improvements POC',status:'DONE',priority:'3- Medium',assignee:'Senthil Chidambaram',vp:'This initiative modernizes the Verifone frontend platform through UX enhancement and Module Federation. Availability: Global',po:'Senthil Chidambaram',cst:'',prod:''},
+      {key:'ET-1054',summary:'Request for pay with Token availability via Virtual Terminal for Worldpay PIM',status:'Elaboration',priority:'2- High',assignee:'Adriana Gornea',vp:'Allow a user to pay with a reuse token via Virtual Terminal. Availability: Worldpay UK PIM.',po:'Dhananjaya H M',cst:'',prod:''},
+      {key:'ET-1245',summary:'Portal - Whitelabel 2FA for ASB - Account Activation',status:'DONE',priority:'2- High',assignee:'Ayushi Gupta',vp:'Sign on condition for ASB.',po:'',cst:'',prod:''},
+      {key:'ET-1274',summary:'Receipt availability on Dashboard for Virtual processed transactions',status:'Transition',priority:'3- Medium',assignee:'Deepanshu Rawat',vp:'Omni for Westpac AU - receipt availability for virtual processed transactions.',po:'Prema Namasivayam',cst:'',prod:''},
+    ]
+  }
+};
+
+// State
+const state = { q1: 'all', q2: 'all', q3: 'all' };
+const searches = { q1: '', q2: '', q3: '' };
+
+function avatarColor(name) {
+  const palette = ['#0369a1','#7e22ce','#065f46','#9a3412','#1e40af','#be185d','#166534','#7c3aed','#0891b2','#b45309','#4f46e5','#b91c1c','#0d9488','#6d28d9','#0f172a','#15803d'];
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+  return palette[Math.abs(h) % palette.length];
+}
+
+function initials(name) {
+  if (!name || name === 'Unassigned') return '?';
+  const p = name.trim().split(/\s+/);
+  return (p[0][0] + (p[1]?.[0] || '')).toUpperCase();
+}
+
+function statusClass(s) {
+  return {
+    'DONE': 's-done',
+    'Implementation': 's-inprog',
+    'Transition': 's-transition',
+    'Elaboration': 's-elaboration',
+    'Inception': 's-inception',
+    'Submitted': 's-submitted',
+    'Blocked': 's-blocked',
+  }[s] || 's-elaboration';
+}
+
+function statusLabel(s) {
+  return {
+    'DONE': 'Done',
+    'Implementation': 'In Progress',
+    'Transition': 'Transition',
+    'Elaboration': 'Elaboration',
+    'Inception': 'Inception',
+    'Submitted': 'Submitted',
+    'Blocked': 'Blocked',
+  }[s] || s;
+}
+
+function priorityClass(p) {
+  if (p.includes('1-')) return 'pri-critical';
+  if (p.includes('2-')) return 'pri-high';
+  if (p.includes('4-')) return 'pri-low';
+  return 'pri-medium';
+}
+
+function priorityLabel(p) {
+  if (p.includes('1-')) return 'Critical';
+  if (p.includes('2-')) return 'High';
+  if (p.includes('4-')) return 'Low';
+  return 'Medium';
+}
+
+function renderRow(epic) {
+  const ini = initials(epic.assignee);
+  const col = epic.assignee === 'Unassigned' ? '#9ca3af' : avatarColor(epic.assignee);
+  const sc = statusClass(epic.status);
+  const sl = statusLabel(epic.status);
+  const jiraUrl = `https://verifone.atlassian.net/browse/${epic.key}`;
+  const vp = epic.vp || '';
+  const vpDisplay = vp.length > 110 ? vp.slice(0, 110) + '…' : vp || '—';
+  return `<tr>
+    <td><a class="issue-key" href="${jiraUrl}" target="_blank">${epic.key}</a></td>
+    <td class="cell-summary">${epic.summary}</td>
+    <td class="cell-vp" title="${vp.replace(/"/g,'&quot;')}">${vpDisplay}</td>
+    <td class="cell-person">${epic.po || '—'}</td>
+    <td><div class="assignee"><div class="assignee-av" style="background:${col};">${ini}</div>${epic.assignee}</div></td>
+    <td><span class="status-badge ${sc}"><span class="status-dot"></span>${sl}</span></td>
+    <td class="cell-date">—</td>
+    <td class="cell-date">${epic.cst || '—'}</td>
+    <td class="cell-date">${epic.prod || '—'}</td>
+  </tr>`;
+}
+
+function renderTable(q) {
+  const epics = DATA[q].epics;
+  const sf = state[q];
+  const sq = searches[q].toLowerCase();
+  const filtered = epics.filter(e => {
+    const statusMatch = sf === 'all' || e.status === sf;
+    const searchMatch = !sq || e.key.toLowerCase().includes(sq) || e.summary.toLowerCase().includes(sq) || e.assignee.toLowerCase().includes(sq) || (e.po||'').toLowerCase().includes(sq) || (e.vp||'').toLowerCase().includes(sq);
+    return statusMatch && searchMatch;
+  });
+  const tbody = document.getElementById(`tbody-${q}`);
+  tbody.innerHTML = filtered.length
+    ? filtered.map(renderRow).join('')
+    : `<tr><td colspan="9"><div class="empty-state">No epics match your filter.</div></td></tr>`;
+  const countEl = document.getElementById(`count-${q}`);
+  countEl.textContent = `${filtered.length} of ${epics.length} epics`;
+}
+
+function renderStats(q) {
+  const epics = DATA[q].epics;
+  const total = epics.length;
+  const done = epics.filter(e => e.status === 'DONE').length;
+  const active = epics.filter(e => e.status === 'Implementation' || e.status === 'Transition').length;
+  const blocked = epics.filter(e => e.status === 'Blocked').length;
+  const planning = epics.filter(e => ['Elaboration','Inception','Submitted'].includes(e.status)).length;
+  const doneP = Math.round(done / total * 100);
+  const activeP = Math.round(active / total * 100);
+  const container = document.getElementById(`stats-${q}`);
+  container.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Total Epics</div>
+      <div class="stat-value">${total}</div>
+      <div class="stat-sub">${DATA[q].label} roadmap</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Done</div>
+      <div class="stat-value" style="color:#16a34a;">${done}</div>
+      <div class="stat-sub">${doneP}% of total</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:${doneP}%;background:#16a34a;"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">In Progress</div>
+      <div class="stat-value" style="color:#2563eb;">${active}</div>
+      <div class="stat-sub">${activeP}% of total</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:${activeP}%;background:#2563eb;"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Planning / Blocked</div>
+      <div class="stat-value" style="color:${blocked > 0 ? '#dc2626' : '#374151'};">${planning} <span style="font-size:16px;font-weight:500;color:#9ca3af;">/ ${blocked}</span></div>
+      <div class="stat-sub">${planning} in planning · ${blocked} blocked</div>
+    </div>`;
+}
+
+function filterStatus(q, status, btn) {
+  state[q] = status;
+  const panel = document.getElementById(`panel-${q}`);
+  panel.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable(q);
+}
+
+function searchEpics(q, val) {
+  searches[q] = val;
+  renderTable(q);
+}
+
+function switchTab(q) {
+  document.querySelectorAll('.q-tab').forEach(t => t.classList.toggle('active', t.dataset.q === q));
+  document.querySelectorAll('.q-panel').forEach(p => p.classList.toggle('active', p.id === `panel-${q}`));
+}
+
+function setActive(btn) {
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Build tabs
+function buildTabs() {
+  const order = ['q2', 'q3', 'q1'];
+  const tabContainer = document.getElementById('quarterTabs');
+  tabContainer.innerHTML = order.map((q, i) => {
+    const count = DATA[q].epics.length;
+    return `<button class="q-tab${i === 0 ? ' active' : ''}" data-q="${q}" onclick="switchTab('${q}')">
+      ${DATA[q].label}
+      <span class="q-count">${count}</span>
+    </button>`;
+  }).join('');
+}
+
+// Init
+buildTabs();
+['q1','q2','q3'].forEach(q => {
+  renderStats(q);
+  renderTable(q);
+});
+</script>
+</body>
+</html>
