@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Catalog — Verifone Commerce</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f0f2f5;
+      color: #111827;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── TOP NAV ─── */
+    .topnav {
+      background: linear-gradient(135deg, #0d2b2e 0%, #0f3d3a 40%, #0d4a3f 70%, #0a3d33 100%);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 56px;
+      flex-shrink: 0;
+      gap: 32px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 16px;
+      text-decoration: none;
+    }
+
+    .nav-logo-dots {
+      display: grid;
+      grid-template-columns: repeat(3, 6px);
+      gap: 3px;
+    }
+
+    .nav-logo-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4aded0;
+    }
+
+    .nav-logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .nav-link {
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+    .nav-link.active {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #2d6a4f;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+    }
+
+    /* ─── SECTION HERO ─── */
+    .section-hero {
+      background: linear-gradient(135deg, #0d2b2e 0%, #0f3d3a 40%, #0d4a3f 70%, #0a3d33 100%);
+      padding: 28px 40px 32px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .hero-icon {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hero-icon svg {
+      width: 48px;
+      height: 48px;
+      stroke: rgba(255,255,255,0.9);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    /* ─── PAGE CONTENT ─── */
+    .page-content {
+      flex: 1;
+      padding: 28px 40px 48px;
+    }
+
+    /* ─── TOOLBAR ─── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 16px;
+    }
+
+    .catalog-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover { background: #1d4ed8; }
+
+    /* ─── SEARCH BAR ─── */
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .search-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #374151;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .search-input::placeholder { color: #9ca3af; }
+
+    .search-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .btn-search {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 22px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-search:hover { background: #1d4ed8; }
+
+    /* ─── FILTERS ─── */
+    .filters-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .dropdown-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #fff;
+      border: 1.5px solid #d1d5db;
+      border-radius: 20px;
+      font-size: 13.5px;
+      color: #374151;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .dropdown-btn:hover { border-color: #9ca3af; }
+
+    .dropdown-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: #6b7280;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .empty-illustration {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    /* No org selected — illustrated ring with magnifier */
+    .empty-illustration.no-org .ring {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px dashed #d1d5db;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .empty-illustration.no-org .icon-wrap {
+      width: 56px;
+      height: 56px;
+      background: #f3f4f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 32px;
+      left: 32px;
+    }
+
+    .empty-illustration.no-org .icon-wrap svg {
+      width: 28px;
+      height: 28px;
+      stroke: #9ca3af;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* No results — X inside a document */
+    .empty-illustration.no-results .bg-shape {
+      width: 88px;
+      height: 88px;
+      background: #fef3c7;
+      border-radius: 18px;
+      position: absolute;
+      top: 16px;
+      left: 16px;
+    }
+
+    .empty-illustration.no-results .icon-wrap {
+      width: 56px;
+      height: 56px;
+      background: #fef9ee;
+      border-radius: 14px;
+      border: 1.5px solid #fde68a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 32px;
+      left: 32px;
+    }
+
+    .empty-illustration.no-results .icon-wrap svg {
+      width: 28px;
+      height: 28px;
+      stroke: #d97706;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .empty-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .empty-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      max-width: 360px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .empty-subtitle strong { color: #374151; }
+
+    .btn-secondary {
+      background: #fff;
+      color: #374151;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .btn-secondary:hover { border-color: #9ca3af; background: #f9fafb; }
+
+    /* ─── FEATURE PREVIEW CARD ─── */
+    .feature-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 32px 36px;
+      max-width: 720px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .feature-mini-preview {
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .mini-table {
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      font-size: 12px;
+    }
+
+    .mini-table-head {
+      display: grid;
+      grid-template-columns: 2fr 2fr 1.5fr 1fr;
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px 14px;
+      color: #9ca3af;
+      font-weight: 600;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mini-table-row {
+      display: grid;
+      grid-template-columns: 2fr 2fr 1.5fr 1fr;
+      padding: 9px 14px;
+      border-bottom: 1px solid #f3f4f6;
+      align-items: center;
+      color: #374151;
+    }
+
+    .mini-table-row:last-child { border-bottom: none; }
+
+    .mini-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: #fff;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .mini-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-blue  { background: #dbeafe; color: #1e40af; }
+
+    .mini-search {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .mini-search-bar {
+      flex: 1;
+      height: 26px;
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+    }
+
+    .mini-search-btn {
+      width: 44px;
+      height: 26px;
+      background: #2563eb;
+      border-radius: 6px;
+    }
+
+    .feature-headline {
+      font-size: 22px;
+      font-weight: 800;
+      color: #111827;
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    .feature-description {
+      font-size: 14px;
+      color: #6b7280;
+      text-align: center;
+      line-height: 1.65;
+      max-width: 520px;
+      margin: 0 auto 28px;
+    }
+
+    .feature-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* ─── DEMO SWITCHER ─── */
+    .demo-switcher {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e1e2e;
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+      z-index: 100;
+    }
+
+    .switcher-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 2px;
+    }
+
+    .switcher-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .sw-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      background: #2d2d3d;
+      color: #9ca3af;
+    }
+
+    .sw-btn.active {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #111827;
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-logo-dots {
+      display: grid;
+      grid-template-columns: repeat(3, 5px);
+      gap: 2.5px;
+    }
+
+    .footer-logo-dots span {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #4aded0;
+    }
+
+    .footer-logo-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 12.5px;
+      color: #9ca3af;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: #fff; }
+
+    .footer-copy {
+      font-size: 12px;
+      color: #4b5563;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #1f2937;
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      width: 100%;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-dots">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+      <span class="nav-logo-text">verifone</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link active">Commerce</a>
+      <a href="#" class="nav-link">Devices</a>
+      <a href="#" class="nav-link">Administration</a>
+      <a href="#" class="nav-link">Boarding</a>
+    </div>
+    <div class="nav-avatar">A</div>
+  </nav>
+
+  <!-- SECTION HERO -->
+  <div class="section-hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 48 48">
+        <rect x="6" y="10" width="28" height="22" rx="3"/>
+        <path d="M6 16h28"/>
+        <circle cx="10" cy="13" r="1.2" fill="rgba(255,255,255,0.9)" stroke="none"/>
+        <circle cx="14" cy="13" r="1.2" fill="rgba(255,255,255,0.9)" stroke="none"/>
+        <circle cx="38" cy="36" r="6" stroke-width="2"/>
+        <line x1="42.2" y1="40.2" x2="45" y2="43" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 class="hero-title">Commerce</h1>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-content">
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <h2 class="catalog-title">Customer Catalog</h2>
+      <button class="btn-primary">Add new customer</button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-row">
+      <div class="search-wrap">
+        <input class="search-input" type="text" placeholder="Type email address or phone number" id="searchInput" />
+      </div>
+      <button class="btn-search" onclick="handleSearch()">Search</button>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters-row">
+      <button class="dropdown-btn" id="orgDropdown" onclick="toggleOrg()">
+        <span id="orgLabel">Organizations</span>
+        <svg viewBox="0 0 16 16"><polyline points="4,6 8,10 12,6"/></svg>
+      </button>
+    </div>
+
+    <!-- EMPTY STATE: no org selected -->
+    <div class="empty-state" id="emptyNoOrg" style="padding: 0;">
+      <div class="feature-card">
+
+        <!-- mini preview -->
+        <div class="feature-mini-preview">
+          <div style="width:100%;max-width:420px;">
+            <div class="mini-search">
+              <div class="mini-search-bar"></div>
+              <div class="mini-search-btn"></div>
+            </div>
+            <div class="mini-table">
+              <div class="mini-table-head">
+                <span>Customer</span>
+                <span>Email</span>
+                <span>Phone</span>
+                <span>Status</span>
+              </div>
+              <div class="mini-table-row">
+                <span><span class="mini-avatar" style="background:#2563eb;">JS</span> Jane Smith</span>
+                <span style="color:#9ca3af;">jane@acme.com</span>
+                <span style="color:#9ca3af;">+1 555 0101</span>
+                <span><span class="mini-badge badge-green">Active</span></span>
+              </div>
+              <div class="mini-table-row">
+                <span><span class="mini-avatar" style="background:#7c3aed;">MB</span> Mark Brown</span>
+                <span style="color:#9ca3af;">mark@corp.io</span>
+                <span style="color:#9ca3af;">+1 555 0188</span>
+                <span><span class="mini-badge badge-blue">New</span></span>
+              </div>
+              <div class="mini-table-row">
+                <span><span class="mini-avatar" style="background:#059669;">AL</span> Amy Lee</span>
+                <span style="color:#9ca3af;">amy@store.co</span>
+                <span style="color:#9ca3af;">+1 555 0247</span>
+                <span><span class="mini-badge badge-green">Active</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="feature-headline">Manage your customers in one place</p>
+        <p class="feature-description">
+          The Customer Catalog lets you add and edit customer information, making it instantly reusable
+          when creating Pay By Links — so you spend less time re-entering details and more time getting paid.
+        </p>
+        <div class="feature-actions">
+          <button class="btn-secondary" onclick="toggleOrg()">Select organization</button>
+          <button class="btn-primary">Add new customer</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EMPTY STATE: org selected, no results -->
+    <div class="empty-state" id="emptyNoResults" style="display:none;">
+      <div class="empty-illustration no-results">
+        <div class="bg-shape"></div>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+            <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+            <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <p class="empty-title">No customers found</p>
+      <p class="empty-subtitle">
+        We couldn't find any customers matching <strong id="searchTerm">"your search"</strong> in <strong id="orgName">Acme Corp</strong>.
+        Try a different email, phone number, or clear your filters.
+      </p>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-secondary" onclick="clearSearch()">Clear search</button>
+        <button class="btn-primary">Add new customer</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <div class="footer-logo-dots">
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+          </div>
+          <span class="footer-logo-text">verifone</span>
+        </div>
+        <div class="footer-links">
+          <a href="#">Documentation</a>
+          <a href="#">API Reference</a>
+          <a href="#">Support</a>
+        </div>
+      </div>
+      <div class="footer-copy">
+        <span>© 2026 VeriFone</span>
+        <a href="#" style="color:#4b5563;text-decoration:none;">Privacy and Compliance Policies</a>
+        <a href="#" style="color:#4b5563;text-decoration:none;">Terms and conditions</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- DEMO SWITCHER -->
+  <div class="demo-switcher">
+    <div class="switcher-label">Empty state demo</div>
+    <div class="switcher-btns">
+      <button class="sw-btn active" id="sw1" onclick="showState('noOrg')">No org</button>
+      <button class="sw-btn" id="sw2" onclick="showState('noResults')">No results</button>
+    </div>
+  </div>
+
+  <script>
+    let orgSelected = false;
+
+    function toggleOrg() {
+      orgSelected = true;
+      document.getElementById('orgLabel').textContent = 'Acme Corp';
+      document.getElementById('orgDropdown').style.borderColor = '#2563eb';
+      document.getElementById('orgDropdown').style.color = '#2563eb';
+    }
+
+    function handleSearch() {
+      if (!orgSelected) return;
+      const val = document.getElementById('searchInput').value.trim();
+      if (val) {
+        document.getElementById('searchTerm').textContent = '"' + val + '"';
+        showState('noResults');
+        document.getElementById('sw1').classList.remove('active');
+        document.getElementById('sw2').classList.add('active');
+      }
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      showState('noOrg');
+      document.getElementById('sw1').classList.add('active');
+      document.getElementById('sw2').classList.remove('active');
+      orgSelected = false;
+      document.getElementById('orgLabel').textContent = 'Organizations';
+      document.getElementById('orgDropdown').style.borderColor = '';
+      document.getElementById('orgDropdown').style.color = '';
+    }
+
+    function showState(state) {
+      const noOrg = document.getElementById('emptyNoOrg');
+      const noRes = document.getElementById('emptyNoResults');
+      if (state === 'noOrg') {
+        noOrg.style.display = 'flex';
+        noRes.style.display = 'none';
+        document.getElementById('sw1').classList.add('active');
+        document.getElementById('sw2').classList.remove('active');
+      } else {
+        noOrg.style.display = 'none';
+        noRes.style.display = 'flex';
+        document.getElementById('sw1').classList.remove('active');
+        document.getElementById('sw2').classList.add('active');
+        if (!orgSelected) {
+          orgSelected = true;
+          document.getElementById('orgLabel').textContent = 'Acme Corp';
+          document.getElementById('orgDropdown').style.borderColor = '#2563eb';
+          document.getElementById('orgDropdown').style.color = '#2563eb';
+        }
+      }
+    }
+  </script>
+</body>
+</html>
