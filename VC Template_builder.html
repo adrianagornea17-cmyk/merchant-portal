@@ -1,0 +1,412 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;}
+.layout{display:flex;min-height:600px;background:#F0F2F4;}
+
+.nav{width:168px;flex-shrink:0;background:#111827;display:flex;flex-direction:column;min-height:600px;}
+.nav-logo{padding:14px 14px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.07);}
+.nav-dots{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:18px;height:18px;}
+.nav-dots span{width:8px;height:8px;border-radius:50%;background:#00C9A0;}
+.nav-brand{color:#fff;font-size:13px;font-weight:700;letter-spacing:.02em;}
+.nav-collapse{padding:8px 14px;display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.07);}
+.nav-collapse:hover{color:rgba(255,255,255,.7);}
+.nav-items{flex:1;padding:6px 0;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 14px;color:rgba(255,255,255,.55);cursor:pointer;position:relative;}
+.nav-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.nav-item.active{background:rgba(255,255,255,.08);color:#fff;}
+.nav-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#00C9A0;border-radius:0 3px 3px 0;}
+.nav-icon{font-size:15px;flex-shrink:0;width:18px;text-align:center;}
+.nav-label{font-size:12px;font-weight:500;}
+.nav-bottom{padding:10px 0;border-top:1px solid rgba(255,255,255,.07);}
+.nav-bottom .nav-item{color:rgba(255,255,255,.4);}
+.nav-copy{padding:6px 14px;font-size:10px;color:rgba(255,255,255,.2);}
+
+.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{background:#fff;border-bottom:1px solid #E0E4E8;padding:8px 16px;display:flex;align-items:center;gap:6px;}
+.breadcrumb{font-size:11px;color:#5E7A8A;}
+.breadcrumb a{color:#007B6E;text-decoration:none;}
+.breadcrumb span{color:#9BA8B0;margin:0 4px;}
+
+.content{padding:14px 16px;flex:1;overflow:visible;}
+.page-title{font-size:19px;font-weight:600;color:#1A2E2B;margin-bottom:14px;}
+
+.card{background:#fff;border-radius:10px;border:1px solid #DDE4E1;margin-bottom:10px;}
+.card-body{padding:16px 18px;}
+.card-title{font-size:13px;font-weight:600;color:#1A2E2B;margin-bottom:14px;}
+.flabel{font-size:11px;color:#4A6058;margin-bottom:4px;display:block;font-weight:500;}
+.finput{width:100%;border:1px solid #C8D4D1;border-radius:6px;padding:7px 10px;font-size:12px;color:#1A2E2B;background:#FAFCFB;outline:none;}
+.finput:focus{border-color:#00897B;}
+.fhint{font-size:10px;color:#7A9490;margin-top:3px;}
+.fselect{width:100%;border:1px solid #C8D4D1;border-radius:6px;padding:7px 26px 7px 10px;font-size:12px;color:#7A9490;background:#FAFCFB;appearance:none;outline:none;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.chk-row{display:flex;align-items:center;gap:6px;font-size:12px;color:#2C4A45;margin-top:4px;}
+.chk-row input{width:13px;height:13px;accent-color:#00897B;}
+
+.sb{position:relative;margin-bottom:10px;}
+.sb svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);}
+.sb input{width:100%;border:1px solid #C8D4D1;border-radius:6px;padding:6px 9px 6px 29px;font-size:12px;color:#1A2E2B;background:#FAFCFB;outline:none;}
+.sb input:focus{border-color:#00897B;}
+.sumrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #EEF2F0;}
+.sumrow label{display:flex;align-items:center;gap:5px;font-size:12px;color:#4A6058;cursor:pointer;}
+.sumrow label input{width:13px;height:13px;accent-color:#00897B;}
+.cnt{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600;background:#E8F4F1;color:#005C5A;}
+.cnt.has{background:#D4EDDA;color:#155724;}
+
+.acc{border:1px solid #DDE4E1;border-radius:7px;margin-bottom:5px;overflow:visible;}
+.ach{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;background:#F5F8F7;border-radius:7px;cursor:pointer;user-select:none;}
+.ach:hover{background:#EDF2F0;}
+.ach.open{border-radius:7px 7px 0 0;}
+.al{display:flex;align-items:center;gap:8px;}
+.aico{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.aname{font-size:12px;font-weight:600;color:#1A2E2B;}
+.adesc{font-size:10px;color:#7A9490;margin-top:1px;}
+.ar{display:flex;align-items:center;gap:7px;}
+.abadge{font-size:10px;padding:2px 6px;border-radius:20px;background:#D4EDDA;color:#155724;font-weight:600;display:none;}
+.abadge.on{display:inline;}
+.salbl{display:flex;align-items:center;gap:3px;font-size:10px;color:#4A6058;cursor:pointer;}
+.salbl input{width:12px;height:12px;accent-color:#00897B;}
+.chv{font-size:9px;color:#7A9490;transition:transform .15s;}
+.chv.open{transform:rotate(180deg);}
+.acb{padding:8px 11px;border-top:1px solid #EEF2F0;display:none;}
+.acb.open{display:block;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:0 10px;}
+.fr{display:flex;align-items:flex-start;gap:5px;padding:4px 0;border-bottom:1px solid #F5F8F7;}
+.fr:last-child{border-bottom:none;}
+.ft{flex:1;min-width:0;}
+.fw{display:flex;align-items:center;gap:3px;}
+.fn{font-size:11px;color:#1A2E2B;}
+.fk{font-size:10px;color:#7A9490;margin-top:1px;}
+input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-color:#00897B;cursor:pointer;}
+.iw{position:relative;display:inline-flex;flex-shrink:0;}
+.ii{width:13px;height:13px;border-radius:50%;border:1px solid #C8D4D1;color:#7A9490;font-size:7px;display:inline-flex;align-items:center;justify-content:center;font-style:normal;background:#F5F8F7;cursor:default;}
+.tip{display:none;position:absolute;left:16px;top:50%;transform:translateY(-50%);width:185px;background:#fff;border:1px solid #C8D4D1;border-radius:6px;padding:7px 9px;z-index:999;line-height:1.5;box-shadow:0 4px 12px rgba(0,60,50,.1);}
+.tip b{display:block;font-size:10px;font-weight:600;color:#1A2E2B;margin-bottom:2px;}
+.tip span{font-size:11px;color:#4A6058;}
+.tip code{display:block;font-size:9px;color:#7A9490;margin-top:3px;font-family:monospace;background:#F5F8F7;padding:2px 4px;border-radius:3px;}
+.iw:hover .tip{display:block;}
+.card-footer{display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:10px 18px;border-top:1px solid #EEF2F0;}
+.btn-save{background:#00897B;color:#fff;border:none;border-radius:6px;padding:7px 18px;font-size:12px;cursor:pointer;font-weight:600;}
+.btn-save:hover{background:#00796B;}
+.btn-disc{background:transparent;border:none;color:#CC3300;font-size:12px;cursor:pointer;font-weight:500;}
+</style>
+
+<div class="layout">
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="nav-dots"><span></span><span></span><span></span><span></span></div>
+      <span class="nav-brand">verifone</span>
+    </div>
+    <div class="nav-collapse">
+      <span>&#8592;</span> Collapse
+    </div>
+    <div class="nav-items">
+      <div class="nav-item"><span class="nav-icon">⌂</span><span class="nav-label">Home</span></div>
+      <div class="nav-item active"><span class="nav-icon">🛍</span><span class="nav-label">Commerce</span></div>
+      <div class="nav-item"><span class="nav-icon">📱</span><span class="nav-label">Devices</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙</span><span class="nav-label">Admin</span></div>
+      <div class="nav-item"><span class="nav-icon">🎓</span><span class="nav-label">Boarding</span></div>
+      <div class="nav-item"><span class="nav-icon">🏢</span><span class="nav-label">Org. filter</span></div>
+      <div class="nav-item"><span class="nav-icon">★</span><span class="nav-label">Favorites</span></div>
+    </div>
+    <div class="nav-bottom">
+      <div class="nav-item"><span class="nav-icon">→</span><span class="nav-label">Logout</span></div>
+      <div class="nav-copy">© 2026 Verifone</div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="breadcrumb">
+        <a>Orders/Transactions</a><span>›</span>
+        <a>Transactions report templates</a><span>›</span>
+        Add template
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-title">Add template</div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">General Information</div>
+          <div style="margin-bottom:12px;">
+            <label class="flabel">Report Template Name</label>
+            <input class="finput" type="text" placeholder=""/>
+            <div class="fhint">Identifier for exports and scheduling reports</div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label class="flabel">Organization</label>
+              <select class="fselect"><option>- Select -</option></select>
+              <div class="fhint">All users assigned to this organisation are eligible to use this report template</div>
+            </div>
+            <div style="display:flex;align-items:center;padding-top:18px;">
+              <label class="chk-row"><input type="checkbox"/> Share to all sub-organizations</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">Report Content</div>
+          <div class="sb">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#7A9490" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="#7A9490" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search fields by name or key..."/>
+          </div>
+          <div class="sumrow">
+            <label><input type="checkbox" id="sa_all" onchange="doAll(this)"/> Select all fields</label>
+            <span class="cnt" id="total_cnt">0 / 154 fields selected</span>
+          </div>
+          <div id="accordions"></div>
+        </div>
+        <div class="card-footer">
+          <button class="btn-disc">Discard</button>
+          <button class="btn-save">Save Template</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var cats=[
+  {id:"freq",ico:"★",bg:"#EAF5F1",cl:"#005C5A",name:"Frequently used",abbr:"FREQ",desc:"Core fields selected most often across all report types",fields:[
+    {n:"Transaction ID",k:"Transaction_ID",d:"Unique system-generated identifier for the transaction"},
+    {n:"Transaction state",k:"Transaction_state",d:"Current status of the transaction (e.g. approved, declined)"},
+    {n:"Transaction reference",k:"Reference",d:"Merchant-assigned reference number for the transaction"},
+    {n:"Transaction type",k:"Transaction_type",d:"Type of transaction (e.g. sale, refund, authorization)"},
+    {n:"Creation date and time",k:"Created_datetime",d:"Full timestamp of when the transaction was created"},
+    {n:"Original amount",k:"Original_amount",d:"The initial transaction amount before any modifications"},
+    {n:"Original amount currency",k:"Original_currency",d:"Currency of the original transaction amount"},
+    {n:"Current amount",k:"Current_amount",d:"The current or final transaction amount after adjustments"},
+    {n:"Masked card number",k:"Masked_card_number",d:"Partially hidden card number for security (e.g. **** **** **** 1234)"},
+    {n:"Merchant ID",k:"Merchant_ID",d:"Unique identifier assigned to the merchant"},
+    {n:"Settlement date",k:"Settlement_date",d:"Date on which the transaction was settled"},
+    {n:"Payment method",k:"Payment_method",d:"Method of payment used (e.g. card, wallet, bank transfer)"}
+  ]},
+  {id:"org",ico:"🏢",bg:"#EAF5F1",cl:"#005C5A",name:"Organization & merchant",abbr:"ORG",desc:"Merchant identifiers, store details and organizational hierarchy",fields:[
+    {n:"Organization name",k:"Organization_name",d:"Name of the organization associated with the transaction"},
+    {n:"Organization ID",k:"Internal_organization_ID",d:"Unique internal identifier for the organization"},
+    {n:"Merchant ID",k:"Merchant_ID",d:"Unique identifier assigned to the merchant"},
+    {n:"Merchant reference",k:"Merchant_reference",d:"Merchant-defined reference number for the transaction"},
+    {n:"Merchant country",k:"Merchant_country",d:"Country where the merchant is registered or operating"},
+    {n:"Acquirer merchant ID",k:"Acquirer_merchant_ID(MID)",d:"Merchant ID assigned by the acquiring bank"},
+    {n:"Merchant present",k:"Merchant_present",d:"Indicates whether the merchant was physically present"},
+    {n:"Store identifier",k:"Store_identifier",d:"Unique identifier for the store or outlet"},
+    {n:"Cashier ID",k:"Cashier_ID",d:"Unique identifier of the cashier who processed the transaction"},
+    {n:"Cashier name",k:"Cashier_name",d:"Name of the cashier who processed the transaction"},
+    {n:"Estate management ID",k:"Estate_management_ID",d:"Identifier used for estate or property management grouping"},
+    {n:"Site reference ID",k:"External_site_reference_ID",d:"External reference ID for the merchant's site"},
+    {n:"PPC ID",k:"PPC_ID",d:"Payment processing contract identifier"},
+    {n:"Ancestor name",k:"Ancestor_name",d:"Name of the parent organization in the hierarchy"},
+    {n:"Payment Provider Contract type",k:"Source_PIM",d:"Type of contract between the payment provider and the merchant"}
+  ]},
+  {id:"txn",ico:"⇄",bg:"#E8F5F2",cl:"#00695C",name:"Transaction details",abbr:"TXN",desc:"Fields describing the nature, type and status of each transaction",fields:[
+    {n:"Transaction ID",k:"Transaction_ID",d:"Unique system-generated identifier for the transaction"},
+    {n:"Transaction reference",k:"Reference",d:"Merchant-assigned reference number for the transaction"},
+    {n:"Transaction type",k:"Transaction_type",d:"Type of transaction (e.g. sale, refund, authorization)"},
+    {n:"Transaction state",k:"Transaction_state",d:"Current status of the transaction (e.g. approved, declined)"},
+    {n:"Transaction description",k:"Transaction_description",d:"Free-text description of the transaction"},
+    {n:"Transaction entry mode",k:"Fee_entry_mode",d:"Method used to enter card data (e.g. chip, swipe, contactless)"},
+    {n:"Transaction online flag",k:"Transaction_online_flag",d:"Indicates whether the transaction was processed online or offline"},
+    {n:"Fallback transaction",k:"Fallback_transaction",d:"Indicates whether the transaction fell back to a different entry mode"},
+    {n:"Parent transaction ID",k:"Parent_transaction_ID",d:"Transaction ID of the original transaction this one is linked to"},
+    {n:"3rd party transaction reference",k:"Third_party_reference",d:"Reference number provided by a third-party system"},
+    {n:"Product",k:"Product",d:"Product or service associated with the transaction"},
+    {n:"Payment product type",k:"Payment_product_type",d:"Category of the payment product used"},
+    {n:"Payment method",k:"Payment_method",d:"Method of payment used (e.g. card, wallet, bank transfer)"},
+    {n:"Payment mode",k:"Fee_configuration_card_type",d:"Mode of payment based on the fee configuration card type"},
+    {n:"Payment channel",k:"Channel",d:"Channel through which the payment was made"},
+    {n:"Sales description",k:"Sales_description",d:"Description of the sale or goods purchased"},
+    {n:"Sales channel",k:"Sales_channel",d:"Channel through which the sale was initiated"},
+    {n:"Invoice number",k:"Invoice_number",d:"Invoice number linked to the transaction"},
+    {n:"PO number",k:"PO_number",d:"Purchase order number associated with the transaction"},
+    {n:"Technology",k:"Payment_technology",d:"Payment technology used (e.g. NFC, EMV, magnetic stripe)"},
+    {n:"User agent",k:"Browser_version",d:"Browser or device information of the customer"},
+    {n:"Payment document provider",k:"Payment_document_provider",d:"Provider of the payment document"},
+    {n:"Payment document type",k:"Payment_document_type",d:"Type of payment document (e.g. invoice, receipt)"},
+    {n:"Payment document ID",k:"Payment_document_ID",d:"Unique identifier of the payment document"}
+  ]},
+  {id:"amt",ico:"$",bg:"#FEF9EC",cl:"#7A5200",name:"Amounts & fees",abbr:"AMT",desc:"All monetary values, processing fees, taxes and currency conversion",fields:[
+    {n:"Original amount",k:"Original_amount",d:"The initial transaction amount before any modifications"},
+    {n:"Original amount currency",k:"Original_currency",d:"Currency of the original transaction amount"},
+    {n:"Current amount",k:"Current_amount",d:"The current or final transaction amount after adjustments"},
+    {n:"Current amount currency",k:"Current_currency",d:"Currency of the current transaction amount"},
+    {n:"Payment processing fee",k:"Processing_fee",d:"Fee charged for processing the payment"},
+    {n:"Fee currency",k:"Processing_fee_currency",d:"Currency in which the processing fee is charged"},
+    {n:"Surcharge amount",k:"Surcharge_amount",d:"Additional charge applied on top of the transaction amount"},
+    {n:"Cashback amount",k:"Cashback_amount",d:"Amount of cashback given to the customer"},
+    {n:"Gratuity amount",k:"Gratuity_amount",d:"Tip or gratuity amount added to the transaction"},
+    {n:"Charitable donation",k:"Charity_donation_amount",d:"Amount donated to a charity as part of the transaction"},
+    {n:"Tax amount",k:"Tax_amount",d:"Tax amount applied to the transaction"},
+    {n:"Tax indicator",k:"Tax_indicator",d:"Indicates whether tax is applicable to the transaction"},
+    {n:"Tax discount",k:"Tax_discount",d:"Discount applied on the tax amount"},
+    {n:"Cross border fee",k:"Cross_border_fee",d:"Fee charged for cross-border transactions"},
+    {n:"Platform fee",k:"Platform_fee",d:"Fee charged by the platform for facilitating the transaction"},
+    {n:"DCC accepted",k:"DCC_accepted",d:"Indicates whether dynamic currency conversion was accepted"},
+    {n:"DCC amount",k:"DCC_amount",d:"Transaction amount in the cardholder's home currency under DCC"},
+    {n:"DCC currency",k:"DCC_currency",d:"Currency used in the dynamic currency conversion"},
+    {n:"Currency conversion ID",k:"Currency_conversion_ID",d:"Unique identifier for the currency conversion transaction"},
+    {n:"Exchange rate",k:"Exchange_rate",d:"Exchange rate applied during currency conversion"},
+    {n:"Markup rate",k:"Markup_rate",d:"Markup percentage applied on top of the base exchange rate"},
+    {n:"Markup fee",k:"Markup_fee",d:"Fee amount resulting from the markup applied"}
+  ]},
+  {id:"dt",ico:"🕐",bg:"#F0EEFF",cl:"#3A2E8F",name:"Dates & time",abbr:"DT",desc:"Timestamps and timezone data for transaction creation and processing",fields:[
+    {n:"Creation date and time",k:"Created_datetime",d:"Full timestamp of when the transaction was created"},
+    {n:"Creation date",k:"Creation_date",d:"Date on which the transaction was created"},
+    {n:"Creation time",k:"Creation_time",d:"Time at which the transaction was created"},
+    {n:"Creation timezone",k:"Timezone",d:"Timezone in which the transaction creation time is recorded"},
+    {n:"Creation UTC",k:"Created_in_UTC",d:"Transaction creation time expressed in Coordinated Universal Time"},
+    {n:"Transaction timezone",k:"Transaction_timezone",d:"Timezone in which the transaction took place"},
+    {n:"Auth date time",k:"Auth_date_time",d:"Date and time when the transaction was authorized"},
+    {n:"Confirm date time",k:"Confirm_date_time",d:"Date and time when the transaction was confirmed"}
+  ]},
+  {id:"card",ico:"💳",bg:"#FEF0EE",cl:"#7A2500",name:"Card & payment instrument",abbr:"CARD",desc:"Card details, token types, wallets and instrument identifiers",fields:[
+    {n:"Masked card number",k:"Masked_card_number",d:"Partially hidden card number for security"},
+    {n:"Card BIN",k:"Card_bin",d:"Bank Identification Number — first 6-8 digits identifying the card issuer"},
+    {n:"Card last four digits",k:"Card_last_four_digits",d:"Last four digits of the card number"},
+    {n:"Card expiry month",k:"Card_expiry_month",d:"Month in which the card expires"},
+    {n:"Card expiry year",k:"Card_expiry_year",d:"Year in which the card expires"},
+    {n:"Card issuer country",k:"Card_issuer_country",d:"Country of the bank that issued the card"},
+    {n:"Processor card brand",k:"Processor_card_brand",d:"Card brand as identified by the processor (e.g. Visa, Mastercard)"},
+    {n:"Account type",k:"Account_type",d:"Type of account linked to the card (e.g. credit, debit, prepaid)"},
+    {n:"Acquirer account type",k:"Acquirer_account_type",d:"Account type classification as defined by the acquirer"},
+    {n:"Token type",k:"Token_type",d:"Type of token representing the card"},
+    {n:"Wallet",k:"Wallet",d:"Digital wallet used (e.g. Apple Pay, Google Pay)"},
+    {n:"Scheme identifier",k:"Scheme_identifier",d:"Unique identifier assigned by the card scheme"},
+    {n:"CVV result",k:"CVV_result",d:"Result of the card verification value check"},
+    {n:"Payment account reference",k:"Payment_account_reference",d:"Unique reference linking payment tokens to the underlying card account"},
+    {n:"Cheque account number",k:"Cheque_account_number",d:"Account number on the cheque used for payment"},
+    {n:"Cheque number",k:"Cheque_number",d:"Serial number of the cheque used for payment"},
+    {n:"Fee config card issuer country",k:"Fee_configuration_card_issuer_country",d:"Country of the card issuer as used in fee configuration rules"}
+  ]},
+  {id:"sett",ico:"⊞",bg:"#EAF5F1",cl:"#005C5A",name:"Settlement & batch",abbr:"SETT",desc:"Settlement dates, batch references and acquirer settlement identifiers",fields:[
+    {n:"Settlement date",k:"Settlement_date",d:"Date on which the transaction was settled"},
+    {n:"Settlement ID",k:"Settlement_ID",d:"Unique identifier for the settlement record"},
+    {n:"Batch ID",k:"Batch_ID",d:"Identifier for the batch in which the transaction was processed"},
+    {n:"Acquirer settlement ID",k:"Acquirer_settlement_ID",d:"Settlement identifier assigned by the acquiring bank"}
+  ]},
+  {id:"cust",ico:"👤",bg:"#EAF0FF",cl:"#1A3EA0",name:"Customer information",abbr:"CUST",desc:"Customer identity, contact details and billing address",fields:[
+    {n:"Customer ID",k:"Customer_ID",d:"Unique identifier for the customer"},
+    {n:"Customer email address",k:"Customer_email",d:"Email address of the customer"},
+    {n:"Customer billing first name",k:"Customer_first_name",d:"First name of the customer as provided in the billing details"},
+    {n:"Customer billing city",k:"Customer_billing_city",d:"City from the customer's billing address"},
+    {n:"Customer billing country",k:"Customer_billing_country",d:"Country from the customer's billing address"},
+    {n:"Customer app phone number",k:"Customer_app_phone",d:"Phone number associated with the customer's app account"},
+    {n:"ID check result",k:"Customer_ID_check",d:"Result of the customer identity verification check"}
+  ]},
+  {id:"ship",ico:"📦",bg:"#FEF9EC",cl:"#7A5200",name:"Shipping information",abbr:"SHIP",desc:"Delivery address, recipient contact and shipping logistics",fields:[
+    {n:"Shipping address",k:"Customer_shipping_address",d:"Full shipping address provided by the customer"},
+    {n:"Shipping city",k:"Customer_shipping_city",d:"City in the customer's shipping address"},
+    {n:"Shipping country",k:"Customer_shipping_country",d:"Country in the customer's shipping address"},
+    {n:"Shipping email",k:"Customer_shipping_email",d:"Email address used for shipping notifications"},
+    {n:"Shipping customer first name",k:"Customer_shipping_name",d:"First name of the recipient in the shipping details"},
+    {n:"Shipping phone",k:"Customer_shipping_phone",d:"Phone number for shipping contact"},
+    {n:"Shipping postal code",k:"Customer_shipping_postal_code",d:"Postal or ZIP code from the shipping address"},
+    {n:"Shipping state",k:"Customer_shipping_state",d:"State or region from the shipping address"}
+  ]},
+  {id:"proc",ico:"⚙",bg:"#FEF0EE",cl:"#7A2500",name:"Processor & acquirer",abbr:"PROC",desc:"Processor references, acquirer codes and network identifiers",fields:[
+    {n:"Processor acquirer name",k:"Processor_acquirer_name",d:"Name of the acquiring processor handling the transaction"},
+    {n:"Processor issuer name",k:"Processor_issuer_name",d:"Name of the issuing processor"},
+    {n:"Processor transaction ID",k:"Processor_transaction_ID",d:"Transaction identifier assigned by the processor"},
+    {n:"Processor RRN",k:"Processor_RRN",d:"Retrieval Reference Number assigned by the processor"},
+    {n:"Processor STAN",k:"Processor_STAN",d:"System Trace Audit Number assigned by the processor"},
+    {n:"Acquirer",k:"Acquirer",d:"Name or identifier of the acquiring bank"},
+    {n:"Acquirer response code",k:"Acquirer_response_code",d:"Response code returned by the acquirer"},
+    {n:"Acquirer response message",k:"Acquirer_response",d:"Human-readable response message returned by the acquirer"},
+    {n:"Acquirer reference number (ARN)",k:"ARN",d:"Unique reference number assigned by the acquirer for tracking"},
+    {n:"Receiver registration no. (RRN)",k:"RRN",d:"Registration number of the transaction receiver"},
+    {n:"STAN",k:"STAN",d:"System Trace Audit Number used to identify the transaction"},
+    {n:"Message no.",k:"Message_no",d:"Sequential message number used in transaction processing"},
+    {n:"PRM type",k:"PRM_type",d:"Payment routing method type used by the processor"}
+  ]},
+  {id:"term",ico:"🖥",bg:"#EAF0FF",cl:"#1A3EA0",name:"Terminal & device",abbr:"TERM",desc:"Physical terminal and device identifiers for in-store transactions",fields:[
+    {n:"Terminal ID",k:"Terminal_ID",d:"Unique identifier for the payment terminal"},
+    {n:"Internal terminal ID",k:"Internal_terminal_ID",d:"Internal identifier assigned to the terminal within the system"},
+    {n:"Terminal manufacturer",k:"Terminal_manufacturer",d:"Manufacturer of the payment terminal hardware"},
+    {n:"Device serial number",k:"Device_serial_number",d:"Serial number of the device used for the transaction"},
+    {n:"Sim card identifier (ICCID)",k:"SSN_ICC_ID",d:"Integrated Circuit Card Identifier of the SIM in the payment device"},
+    {n:"POI name",k:"POI_name",d:"Name of the Point of Interaction where the transaction took place"}
+  ]},
+  {id:"auth",ico:"🔒",bg:"#EAF5F1",cl:"#005C5A",name:"Authorization & security",abbr:"AUTH",desc:"Authorization results, AVS checks and stored credential details",fields:[
+    {n:"Authorization response",k:"Authorisation_code",d:"Response code received from the issuer for the authorization request"},
+    {n:"Issuer authorisation result",k:"Issuer_authorisation_result",d:"Result of the authorization decision made by the card issuer"},
+    {n:"Acquirer authorization result",k:"Acquirer_authorisation_result",d:"Result of the authorization as returned by the acquirer"},
+    {n:"Address verification services result",k:"AVS_result_code",d:"Result of the AVS check comparing billing address with card records"},
+    {n:"Response code",k:"Transaction_response_code",d:"Standardized code indicating the outcome of the transaction"},
+    {n:"Capture status",k:"Capture_status",d:"Indicates whether the authorized amount has been captured"},
+    {n:"Stored credentials type",k:"Stored_credential_type",d:"Type of stored credential used (e.g. recurring, instalment, unscheduled)"},
+    {n:"Stored credential reference",k:"Stored_credential_reference",d:"Reference identifier for the stored credential agreement"}
+  ]},
+  {id:"tds",ico:"🛡",bg:"#F0EEFF",cl:"#3A2E8F",name:"3DS & authentication",abbr:"3DS",desc:"3D Secure data, authentication results and challenge indicators",fields:[
+    {n:"3DS electronic commerce indicator",k:"3DS_eci",d:"ECI value indicating the level of 3DS authentication achieved"},
+    {n:"Cardholder auth. verification (CAVV)",k:"CAVV_result",d:"Cryptographic value confirming cardholder authentication"},
+    {n:"Authentication mode",k:"Authentication_mode",d:"Mode used for cardholder authentication"},
+    {n:"3DS status",k:"3DS_status",d:"Overall status of the 3DS authentication process"},
+    {n:"3DS version",k:"3DS_version",d:"Version of the 3DS protocol used (e.g. 1.0, 2.1, 2.2)"},
+    {n:"3DS XID",k:"3DS_XID",d:"Transaction identifier used in 3DS version 1 authentication"},
+    {n:"3DS authentication value",k:"3DS_authentication_value",d:"Cryptographic value generated during 3DS authentication"},
+    {n:"3DS enrollment status",k:"3DS_enrollment_status",d:"Indicates whether the card is enrolled in the 3DS program"},
+    {n:"3DS white list status source",k:"3DS_white_list_status_source",d:"Source that determined the cardholder's 3DS white list status"},
+    {n:"3DS white list status",k:"3DS_white_list_status",d:"Indicates whether the merchant is on the cardholder's 3DS white list"},
+    {n:"3DS scheme transaction ID",k:"3DS_scheme_transaction_ID",d:"Transaction identifier assigned by the card scheme for 3DS"},
+    {n:"3DS challenge indicator",k:"3DS_challenge_indicator",d:"Indicates whether a 3DS challenge was requested or performed"}
+  ]},
+  {id:"fraud",ico:"⚠",bg:"#FEF9EC",cl:"#7A5200",name:"Fraud & risk",abbr:"FRAUD",desc:"Fraud scoring, risk assessment codes and reason indicators",fields:[
+    {n:"Fraud score",k:"Fraud_score",d:"Numerical score indicating the likelihood of the transaction being fraudulent"},
+    {n:"Fraud reason",k:"Fraud_reason_insight",d:"Human-readable explanation for the fraud assessment result"},
+    {n:"Fraud reason code",k:"Fraud_reason_code",d:"Code representing the specific reason for a fraud flag"}
+  ]},
+  {id:"inst",ico:"📅",bg:"#EAF5F1",cl:"#005C5A",name:"Instalments & deferred",abbr:"INST",desc:"Instalment plan details, deferred payment terms and due dates",fields:[
+    {n:"Issuer instalment amount",k:"Issuer_instalment_amount",d:"Amount of each instalment as defined by the issuer"},
+    {n:"Issuer instalments number",k:"Issuer_instalments_count",d:"Total number of instalments in the plan"},
+    {n:"Issuer instalment payment index",k:"Issuer_installment_payment_index",d:"Index indicating the current instalment number in the sequence"},
+    {n:"Issuer instalment down payment amount",k:"Issuer_instalment_down_payment_amount",d:"Initial down payment amount for the instalment plan"},
+    {n:"Deferred months",k:"Deferred_month",d:"Number of months by which the payment is deferred"},
+    {n:"Credit term",k:"Credit_term",d:"Duration of the credit or instalment agreement"},
+    {n:"Issuer due date",k:"Due_date",d:"Due date for the current instalment payment"}
+  ]}
+];
+
+function iw(f){return'<div class="iw"><i class="ii">i</i><div class="tip"><b>'+f.n+'</b><span>'+f.d+'</span><code>'+f.k+'</code></div></div>';}
+
+function build(){
+  var c=document.getElementById('accordions');
+  cats.forEach(function(cat,i){
+    var open=i===0;
+    var rows=cat.fields.map(function(f){return'<div class="fr"><input type="checkbox" class="fchk" data-cat="'+cat.id+'" data-name="'+f.n+'" onchange="upd()"/><div class="ft"><div class="fw"><span class="fn">'+f.n+'</span>'+iw(f)+'</div><div class="fk">'+f.k+'</div></div></div>';}).join('');
+    var el=document.createElement('div');el.className='acc';
+    el.innerHTML='<div class="ach'+(open?' open':'')+'" onclick="tog(this)">'+
+      '<div class="al"><div class="aico" style="background:'+cat.bg+';color:'+cat.cl+';">'+cat.ico+'</div>'+
+      '<div><div class="aname">'+cat.name+'</div><div class="adesc">'+cat.desc+'</div></div></div>'+
+      '<div class="ar"><span class="abadge" id="b_'+cat.id+'">0</span>'+
+      '<label class="salbl" onclick="event.stopPropagation()"><input type="checkbox" id="sa_'+cat.id+'" onchange="selCat(\''+cat.id+'\',this.checked)"/> Select all</label>'+
+      '<span class="chv'+(open?' open':'')+'">&#9660;</span></div></div>'+
+      '<div class="acb'+(open?' open':'')+'"><div class="fg">'+rows+'</div></div>';
+    c.appendChild(el);
+  });
+}
+
+function tog(h){var b=h.nextElementSibling,chv=h.querySelector('.chv'),op=b.classList.contains('open');b.classList.toggle('open',!op);h.classList.toggle('open',!op);chv.classList.toggle('open',!op);}
+
+function upd(){
+  var all=document.querySelectorAll('.fchk'),tot=0,cs={};
+  all.forEach(function(cb){if(cb.checked){tot++;cs[cb.dataset.cat]=(cs[cb.dataset.cat]||0)+1;}});
+  var tb=document.getElementById('total_cnt');
+  tb.textContent=tot+' / 154 fields selected';tb.className='cnt'+(tot>0?' has':'');
+  cats.forEach(function(cat){
+    var n=cs[cat.id]||0,b=document.getElementById('b_'+cat.id);
+    if(b){b.textContent=n+' selected';b.className='abadge'+(n>0?' on':'');}
+    var sa=document.getElementById('sa_'+cat.id);
+    if(sa){var cbs=document.querySelectorAll('.fchk[data-cat="'+cat.id+'"]');sa.checked=(n>0&&n===cbs.length);sa.indeterminate=(n>0&&n<cbs.length);}
+  });
+  var msa=document.getElementById('sa_all'),ch=document.querySelectorAll('.fchk:checked').length,total=document.querySelectorAll('.fchk').length;
+  msa.checked=(ch===total&&total>0);msa.indeterminate=(ch>0&&ch<total);
+}
+
+function selCat(id,v){document.querySelectorAll('.fchk[data-cat="'+id+'"]').forEach(function(cb){cb.checked=v;});upd();}
+function doAll(m){document.querySelectorAll('.fchk').forEach(function(cb){cb.checked=m.checked;});upd();}
+build();
+</script>
