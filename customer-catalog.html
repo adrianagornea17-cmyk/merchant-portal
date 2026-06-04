@@ -9,7 +9,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: #f0f2f5;
+      background: #ebebeb;
       color: #111827;
       min-height: 100vh;
       display: flex;
@@ -42,8 +42,7 @@
     }
 
     .nav-logo-dots span {
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: #4aded0;
     }
@@ -72,15 +71,10 @@
     }
 
     .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
-
-    .nav-link.active {
-      color: #fff;
-      font-weight: 600;
-    }
+    .nav-link.active { color: #fff; font-weight: 600; }
 
     .nav-avatar {
-      width: 32px;
-      height: 32px;
+      width: 32px; height: 32px;
       border-radius: 50%;
       background: #2d6a4f;
       color: #fff;
@@ -92,112 +86,45 @@
       margin-left: auto;
     }
 
-    /* ─── SECTION HERO ─── */
-    .section-hero {
-      background: linear-gradient(135deg, #0d2b2e 0%, #0f3d3a 40%, #0d4a3f 70%, #0a3d33 100%);
-      padding: 28px 40px 32px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .hero-icon {
-      width: 56px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .hero-icon svg {
-      width: 48px;
-      height: 48px;
-      stroke: rgba(255,255,255,0.9);
-      stroke-width: 1.5;
-      fill: none;
-    }
-
-    .hero-title {
-      font-size: 32px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-
-    /* ─── PAGE CONTENT ─── */
+    /* ─── PAGE LAYOUT ─── */
     .page-content {
       flex: 1;
-      padding: 28px 40px 48px;
+      padding: 32px 40px 48px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      align-self: stretch;
     }
 
-    /* ─── TOOLBAR ─── */
-    .toolbar {
+    /* wrapper so max-width centers nicely */
+    .page-outer {
+      display: flex;
+      justify-content: center;
+      flex: 1;
+      background: #ebebeb;
+      padding: 0 0 40px;
+    }
+
+    /* ─── PAGE HEADER ROW ─── */
+    .page-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 20px;
-      gap: 16px;
     }
 
-    .catalog-title {
-      font-size: 20px;
-      font-weight: 700;
+    .page-title {
+      font-size: 22px;
+      font-weight: 800;
       color: #111827;
+      letter-spacing: -0.3px;
     }
 
     .btn-primary {
       background: #2563eb;
       color: #fff;
       border: none;
-      border-radius: 8px;
-      padding: 9px 18px;
-      font-size: 13.5px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.15s;
-    }
-
-    .btn-primary:hover { background: #1d4ed8; }
-
-    /* ─── SEARCH BAR ─── */
-    .search-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .search-wrap {
-      flex: 1;
-      position: relative;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 10px 16px;
-      border: 1.5px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #374151;
-      background: #fff;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    .search-input::placeholder { color: #9ca3af; }
-
-    .search-input:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-    }
-
-    .btn-search {
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
+      border-radius: 20px;
       padding: 10px 22px;
       font-size: 13.5px;
       font-weight: 600;
@@ -205,138 +132,7 @@
       transition: background 0.15s;
     }
 
-    .btn-search:hover { background: #1d4ed8; }
-
-    /* ─── FILTERS ─── */
-    .filters-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 32px;
-    }
-
-    .dropdown-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      background: #fff;
-      border: 1.5px solid #d1d5db;
-      border-radius: 20px;
-      font-size: 13.5px;
-      color: #374151;
-      cursor: pointer;
-      transition: border-color 0.15s;
-    }
-
-    .dropdown-btn:hover { border-color: #9ca3af; }
-
-    .dropdown-btn svg {
-      width: 14px;
-      height: 14px;
-      stroke: #6b7280;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    /* ─── EMPTY STATE ─── */
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 24px;
-      text-align: center;
-    }
-
-    .empty-illustration {
-      width: 120px;
-      height: 120px;
-      margin-bottom: 24px;
-      position: relative;
-    }
-
-    /* No org selected — illustrated ring with magnifier */
-    .empty-illustration.no-org .ring {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 2px dashed #d1d5db;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-    }
-
-    .empty-illustration.no-org .icon-wrap {
-      width: 56px;
-      height: 56px;
-      background: #f3f4f6;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 32px;
-      left: 32px;
-    }
-
-    .empty-illustration.no-org .icon-wrap svg {
-      width: 28px;
-      height: 28px;
-      stroke: #9ca3af;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    /* No results — X inside a document */
-    .empty-illustration.no-results .bg-shape {
-      width: 88px;
-      height: 88px;
-      background: #fef3c7;
-      border-radius: 18px;
-      position: absolute;
-      top: 16px;
-      left: 16px;
-    }
-
-    .empty-illustration.no-results .icon-wrap {
-      width: 56px;
-      height: 56px;
-      background: #fef9ee;
-      border-radius: 14px;
-      border: 1.5px solid #fde68a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 32px;
-      left: 32px;
-    }
-
-    .empty-illustration.no-results .icon-wrap svg {
-      width: 28px;
-      height: 28px;
-      stroke: #d97706;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .empty-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 8px;
-    }
-
-    .empty-subtitle {
-      font-size: 14px;
-      color: #6b7280;
-      max-width: 360px;
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-
-    .empty-subtitle strong { color: #374151; }
+    .btn-primary:hover { background: #1d4ed8; }
 
     .btn-secondary {
       background: #fff;
@@ -352,124 +148,166 @@
 
     .btn-secondary:hover { border-color: #9ca3af; background: #f9fafb; }
 
-    /* ─── FEATURE PREVIEW CARD ─── */
-    .feature-card {
+    /* ─── BIG EMPTY STATE CARD ─── */
+    .empty-card {
       background: #fff;
       border-radius: 16px;
-      padding: 40px 32px 36px;
-      max-width: 720px;
-      margin: 0 auto;
-      width: 100%;
+      border: 1px solid #e0e0e0;
+      padding: 40px 32px 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .feature-mini-preview {
-      background: #f3f4f6;
+    /* ─── MINI PREVIEW ─── */
+    .mini-preview-wrap {
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 32px;
+    }
+
+    .mini-browser {
+      background: #fff;
+      border: 1px solid #d1d5db;
       border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 28px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    .mini-browser-bar {
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px 14px;
       display: flex;
-      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mini-browser-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .mini-browser-dots span {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    .mini-browser-dots span:nth-child(1) { background: #f87171; }
+    .mini-browser-dots span:nth-child(2) { background: #fbbf24; }
+    .mini-browser-dots span:nth-child(3) { background: #4ade80; }
+
+    .mini-browser-title {
+      font-size: 10.5px;
+      color: #9ca3af;
+      font-weight: 500;
+    }
+
+    .mini-table-wrap {
+      padding: 0;
     }
 
     .mini-table {
       width: 100%;
-      max-width: 420px;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #fff;
-      font-size: 12px;
+      border-collapse: collapse;
+      font-size: 11px;
     }
 
-    .mini-table-head {
-      display: grid;
-      grid-template-columns: 1.2fr 1.2fr 1.4fr 2fr 1.4fr;
+    .mini-table thead tr {
       background: #f3f4f6;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 8px 14px;
+    }
+
+    .mini-table thead th {
+      padding: 9px 14px;
+      text-align: left;
       color: #6b7280;
       font-weight: 600;
       font-size: 10.5px;
+      border-bottom: 1px solid #e5e7eb;
+      white-space: nowrap;
     }
 
-    .mini-table-row {
-      display: grid;
-      grid-template-columns: 1.2fr 1.2fr 1.4fr 2fr 1.4fr;
-      padding: 9px 14px;
+    .mini-table tbody tr {
       border-bottom: 1px solid #f3f4f6;
-      align-items: center;
+    }
+
+    .mini-table tbody tr:last-child { border-bottom: none; }
+
+    .mini-table tbody td {
+      padding: 10px 14px;
       color: #374151;
+      white-space: nowrap;
     }
 
-    .mini-table-row:last-child { border-bottom: none; }
+    .mini-table tbody td.muted { color: #9ca3af; }
 
-    .mini-avatar {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 9px;
-      font-weight: 700;
-      color: #fff;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
+    .mini-row-faded { opacity: 0.35; }
+    .mini-row-faded2 { opacity: 0.12; }
 
-    .mini-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 10px;
-      font-weight: 600;
-    }
-
-    .badge-green { background: #d1fae5; color: #065f46; }
-    .badge-blue  { background: #dbeafe; color: #1e40af; }
-
-    .mini-search {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .mini-search-bar {
-      flex: 1;
-      height: 26px;
-      background: #fff;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-    }
-
-    .mini-search-btn {
-      width: 44px;
-      height: 26px;
-      background: #2563eb;
-      border-radius: 6px;
-    }
-
+    /* ─── FEATURE TEXT ─── */
     .feature-headline {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
       color: #111827;
       text-align: center;
-      margin-bottom: 10px;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.4px;
+      margin-bottom: 12px;
     }
 
     .feature-description {
       font-size: 14px;
       color: #6b7280;
       text-align: center;
-      line-height: 1.65;
+      line-height: 1.7;
       max-width: 520px;
-      margin: 0 auto 28px;
+      margin: 0 auto;
     }
 
-    .feature-actions {
+    /* ─── NO RESULTS VARIANT ─── */
+    .no-results-content {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+    }
+
+    .no-results-icon {
+      width: 56px; height: 56px;
+      background: #fef3c7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
       justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .no-results-icon svg {
+      width: 26px; height: 26px;
+      stroke: #d97706;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .no-results-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .no-results-sub {
+      font-size: 14px;
+      color: #6b7280;
+      text-align: center;
+      max-width: 380px;
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    .no-results-sub strong { color: #374151; }
+
+    .no-results-actions {
+      display: flex;
       gap: 10px;
     }
 
@@ -494,13 +332,9 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #6b7280;
-      margin-bottom: 2px;
     }
 
-    .switcher-btns {
-      display: flex;
-      gap: 6px;
-    }
+    .switcher-btns { display: flex; gap: 6px; }
 
     .sw-btn {
       padding: 6px 12px;
@@ -509,24 +343,25 @@
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s;
       background: #2d2d3d;
       color: #9ca3af;
+      transition: background 0.15s, color 0.15s;
     }
 
-    .sw-btn.active {
-      background: #2563eb;
-      color: #fff;
-    }
+    .sw-btn.active { background: #2563eb; color: #fff; }
 
     /* ─── FOOTER ─── */
     footer {
       background: #111827;
       padding: 24px 40px;
+      flex-shrink: 0;
+    }
+
+    .footer-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-shrink: 0;
+      margin-bottom: 12px;
     }
 
     .footer-logo {
@@ -542,22 +377,14 @@
     }
 
     .footer-logo-dots span {
-      width: 5px;
-      height: 5px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: #4aded0;
     }
 
-    .footer-logo-text {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-    }
+    .footer-logo-text { font-size: 13px; font-weight: 700; color: #fff; }
 
-    .footer-links {
-      display: flex;
-      gap: 24px;
-    }
+    .footer-links { display: flex; gap: 24px; }
 
     .footer-links a {
       font-size: 12.5px;
@@ -570,25 +397,13 @@
     .footer-copy {
       font-size: 12px;
       color: #4b5563;
-      margin-top: 12px;
       padding-top: 12px;
       border-top: 1px solid #1f2937;
       display: flex;
       gap: 20px;
     }
 
-    .footer-inner {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      width: 100%;
-    }
-
-    .footer-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .footer-copy a { color: #4b5563; text-decoration: none; }
   </style>
 </head>
 <body>
@@ -612,144 +427,120 @@
     <div class="nav-avatar">A</div>
   </nav>
 
-  <!-- SECTION HERO -->
-  <div class="section-hero">
-    <div class="hero-icon">
-      <svg viewBox="0 0 48 48">
-        <rect x="6" y="10" width="28" height="22" rx="3"/>
-        <path d="M6 16h28"/>
-        <circle cx="10" cy="13" r="1.2" fill="rgba(255,255,255,0.9)" stroke="none"/>
-        <circle cx="14" cy="13" r="1.2" fill="rgba(255,255,255,0.9)" stroke="none"/>
-        <circle cx="38" cy="36" r="6" stroke-width="2"/>
-        <line x1="42.2" y1="40.2" x2="45" y2="43" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <h1 class="hero-title">Commerce</h1>
-  </div>
+  <!-- PAGE BODY -->
+  <div class="page-outer">
+    <div class="page-content">
 
-  <!-- MAIN CONTENT -->
-  <main class="page-content">
+      <!-- HEADER -->
+      <div class="page-header">
+        <h1 class="page-title">Customer Catalog</h1>
+        <button class="btn-primary">Add new customer</button>
+      </div>
 
-    <!-- TOOLBAR -->
-    <div class="toolbar">
-      <h2 class="catalog-title">Customer Catalog</h2>
-      <button class="btn-primary">Add new customer</button>
-    </div>
-
-    <!-- FILTERS -->
-    <div class="filters-row">
-      <button class="dropdown-btn" id="orgDropdown" onclick="toggleOrg()">
-        <span id="orgLabel">Organizations</span>
-        <svg viewBox="0 0 16 16"><polyline points="4,6 8,10 12,6"/></svg>
-      </button>
-    </div>
-
-    <!-- EMPTY STATE: no org selected -->
-    <div class="empty-state" id="emptyNoOrg" style="padding: 0;">
-      <div class="feature-card">
-
-        <!-- mini preview -->
-        <div class="feature-mini-preview">
-          <div style="width:100%;max-width:420px;">
-            <div class="mini-search">
-              <div class="mini-search-bar"></div>
-              <div class="mini-search-btn"></div>
+      <!-- EMPTY STATE: no org / default -->
+      <div class="empty-card" id="emptyNoOrg">
+        <div class="mini-preview-wrap">
+          <div class="mini-browser">
+            <div class="mini-browser-bar">
+              <div class="mini-browser-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <span class="mini-browser-title">Customer Catalog</span>
             </div>
-            <div class="mini-table">
-              <div class="mini-table-head">
-                <span>First Name</span>
-                <span>Last Name</span>
-                <span>Phone Number</span>
-                <span>Email</span>
-                <span>Organization</span>
-              </div>
-              <div class="mini-table-row">
-                <span>Adriana</span>
-                <span>Gornea</span>
-                <span style="color:#9ca3af;">-</span>
-                <span style="color:#9ca3af;">adriana.gornea17@gmail.com</span>
-                <span style="color:#9ca3af;">APAC Test</span>
-              </div>
-              <div class="mini-table-row" style="opacity:0.4;">
-                <span>Mark</span>
-                <span>Brown</span>
-                <span style="color:#9ca3af;">+1 555 0188</span>
-                <span style="color:#9ca3af;">mark@corp.io</span>
-                <span style="color:#9ca3af;">EU Merchants</span>
-              </div>
-              <div class="mini-table-row" style="opacity:0.2;">
-                <span>Amy</span>
-                <span>Lee</span>
-                <span style="color:#9ca3af;">+1 555 0247</span>
-                <span style="color:#9ca3af;">amy@store.co</span>
-                <span style="color:#9ca3af;">APAC Test</span>
-              </div>
+            <div class="mini-table-wrap">
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Organization</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Adriana</td>
+                    <td>Gornea</td>
+                    <td class="muted">-</td>
+                    <td class="muted">adriana.gornea17@gmail.com</td>
+                    <td class="muted">APAC Test</td>
+                  </tr>
+                  <tr class="mini-row-faded">
+                    <td>Mark</td>
+                    <td>Brown</td>
+                    <td class="muted">+1 555 0188</td>
+                    <td class="muted">mark@corp.io</td>
+                    <td class="muted">EU Merchants</td>
+                  </tr>
+                  <tr class="mini-row-faded2">
+                    <td>Amy</td>
+                    <td>Lee</td>
+                    <td class="muted">+1 555 0247</td>
+                    <td class="muted">amy@store.co</td>
+                    <td class="muted">APAC Test</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
         <p class="feature-headline">Manage your customers in one place</p>
         <p class="feature-description">
-          The Customer Catalog lets you add and edit customer information, making it instantly reusable
-          when creating Pay By Links — so you spend less time re-entering details and more time getting paid.
+          The Customer Catalog lets you add and edit customer information, making it instantly
+          reusable when creating Pay By Links — so you spend less time re-entering details
+          and more time getting paid.
         </p>
-        <div class="feature-actions">
-          <button class="btn-secondary" onclick="toggleOrg()">Select organization</button>
-          <button class="btn-primary">Add new customer</button>
+      </div>
+
+      <!-- EMPTY STATE: no results -->
+      <div class="empty-card" id="emptyNoResults" style="display:none;">
+        <div class="no-results-content">
+          <div class="no-results-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+              <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+              <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="no-results-title">No customers found</p>
+          <p class="no-results-sub">
+            We couldn't find any customers in <strong id="orgName">APAC Test</strong>.
+            Try a different organization or add a new customer.
+          </p>
+          <div class="no-results-actions">
+            <button class="btn-secondary" onclick="showState('noOrg')">Clear filters</button>
+            <button class="btn-primary">Add new customer</button>
+          </div>
         </div>
-
       </div>
+
     </div>
-
-    <!-- EMPTY STATE: org selected, no results -->
-    <div class="empty-state" id="emptyNoResults" style="display:none;">
-      <div class="empty-illustration no-results">
-        <div class="bg-shape"></div>
-        <div class="icon-wrap">
-          <svg viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
-            <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
-            <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </div>
-      <p class="empty-title">No customers found</p>
-      <p class="empty-subtitle">
-        We couldn't find any customers matching <strong id="searchTerm">"your search"</strong> in <strong id="orgName">Acme Corp</strong>.
-        Try a different email, phone number, or clear your filters.
-      </p>
-      <div style="display:flex;gap:10px;">
-        <button class="btn-secondary" onclick="clearSearch()">Clear search</button>
-        <button class="btn-primary">Add new customer</button>
-      </div>
-    </div>
-
-  </main>
+  </div>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div class="footer-logo">
-          <div class="footer-logo-dots">
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-          </div>
-          <span class="footer-logo-text">verifone</span>
+    <div class="footer-top">
+      <div class="footer-logo">
+        <div class="footer-logo-dots">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
         </div>
-        <div class="footer-links">
-          <a href="#">Documentation</a>
-          <a href="#">API Reference</a>
-          <a href="#">Support</a>
-        </div>
+        <span class="footer-logo-text">verifone</span>
       </div>
-      <div class="footer-copy">
-        <span>© 2026 VeriFone</span>
-        <a href="#" style="color:#4b5563;text-decoration:none;">Privacy and Compliance Policies</a>
-        <a href="#" style="color:#4b5563;text-decoration:none;">Terms and conditions</a>
+      <div class="footer-links">
+        <a href="#">Documentation</a>
+        <a href="#">API Reference</a>
+        <a href="#">Support</a>
       </div>
+    </div>
+    <div class="footer-copy">
+      <span>© 2026 VeriFone</span>
+      <a href="#">Privacy and Compliance Policies</a>
+      <a href="#">Terms and conditions</a>
     </div>
   </footer>
 
@@ -757,43 +548,12 @@
   <div class="demo-switcher">
     <div class="switcher-label">Empty state demo</div>
     <div class="switcher-btns">
-      <button class="sw-btn active" id="sw1" onclick="showState('noOrg')">No org</button>
+      <button class="sw-btn active" id="sw1" onclick="showState('noOrg')">Default</button>
       <button class="sw-btn" id="sw2" onclick="showState('noResults')">No results</button>
     </div>
   </div>
 
   <script>
-    let orgSelected = false;
-
-    function toggleOrg() {
-      orgSelected = true;
-      document.getElementById('orgLabel').textContent = 'Acme Corp';
-      document.getElementById('orgDropdown').style.borderColor = '#2563eb';
-      document.getElementById('orgDropdown').style.color = '#2563eb';
-    }
-
-    function handleSearch() {
-      if (!orgSelected) return;
-      const val = document.getElementById('searchInput').value.trim();
-      if (val) {
-        document.getElementById('searchTerm').textContent = '"' + val + '"';
-        showState('noResults');
-        document.getElementById('sw1').classList.remove('active');
-        document.getElementById('sw2').classList.add('active');
-      }
-    }
-
-    function clearSearch() {
-      document.getElementById('searchInput').value = '';
-      showState('noOrg');
-      document.getElementById('sw1').classList.add('active');
-      document.getElementById('sw2').classList.remove('active');
-      orgSelected = false;
-      document.getElementById('orgLabel').textContent = 'Organizations';
-      document.getElementById('orgDropdown').style.borderColor = '';
-      document.getElementById('orgDropdown').style.color = '';
-    }
-
     function showState(state) {
       const noOrg = document.getElementById('emptyNoOrg');
       const noRes = document.getElementById('emptyNoResults');
@@ -807,12 +567,6 @@
         noRes.style.display = 'flex';
         document.getElementById('sw1').classList.remove('active');
         document.getElementById('sw2').classList.add('active');
-        if (!orgSelected) {
-          orgSelected = true;
-          document.getElementById('orgLabel').textContent = 'Acme Corp';
-          document.getElementById('orgDropdown').style.borderColor = '#2563eb';
-          document.getElementById('orgDropdown').style.color = '#2563eb';
-        }
       }
     }
   </script>
