@@ -115,7 +115,7 @@
     #nav-rail.collapsed .nav-item:hover::after { opacity: 1; }
 
     .nav-sub { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
-    .nav-sub.open { max-height: 400px; }
+    .nav-sub.open { max-height: 600px; }
     #nav-rail.collapsed .nav-sub { display: none; }
 
     .nav-sub-item {
@@ -358,17 +358,31 @@
       <span class="ni-label">Home</span>
     </button>
 
-    <button class="nav-item open active" data-tooltip="Commerce" onclick="toggleSection(this,'sub-commerce')">
-      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8.5 8.5A5 5 0 1 1 8 16"/></svg></span>
-      <span class="ni-label">Commerce</span>
+    <button class="nav-item" data-tooltip="Reporting tools" onclick="toggleSection(this,'sub-reporting')">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+      <span class="ni-label">Reporting tools</span>
       <span class="ni-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
-    <div class="nav-sub open" id="sub-commerce">
-      <a class="nav-sub-item" href="verifone-transactions.html"><span class="nav-sub-dot"></span>Orders / Transactions</a>
-      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Pay By Link</button>
+    <div class="nav-sub" id="sub-reporting">
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Payments Dashboard</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Orders / Transactions</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>3D Secure Authentications</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Settlements</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Report Scheduler</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Generated Reports</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Audit Log</button>
+    </div>
+
+    <button class="nav-item open active" data-tooltip="Payment tools" onclick="toggleSection(this,'sub-payment')">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+      <span class="ni-label">Payment tools</span>
+      <span class="ni-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </button>
+    <div class="nav-sub open" id="sub-payment">
       <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Virtual Terminal</button>
-      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Product Catalog</button>
-      <button class="nav-sub-item active" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Customer Catalog</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Pay by Link</button>
+      <a class="nav-sub-item active" href="customer-catalog.html"><span class="nav-sub-dot"></span>Customer Catalog</a>
+      <a class="nav-sub-item" href="product-catalog.html"><span class="nav-sub-dot"></span>Product Catalog</a>
     </div>
 
     <button class="nav-item" data-tooltip="Devices" onclick="setActive(this)">
@@ -426,7 +440,7 @@
 
   <header class="topbar">
     <div class="topbar-left">
-      <span class="topbar-bc-root">Commerce</span>
+      <span class="topbar-bc-root">Payment tools</span>
       <span class="topbar-bc-sep">/</span>
       <span class="topbar-bc-cur">Customer Catalog</span>
     </div>
@@ -582,7 +596,7 @@
   const CURRENT_PAGE = {
     id: 'customer-catalog',
     name: 'Customer Catalog',
-    section: 'Commerce',
+    section: 'Payment tools',
     href: 'customer-catalog.html',
     iconBg: '#eff6ff',
     iconColor: '#2563eb'
