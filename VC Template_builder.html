@@ -1059,6 +1059,7 @@ input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-
   function renderFavBtn() {
     const btn = document.getElementById('favBtn');
     const icon = document.getElementById('favBtnIcon');
+    if (!btn || !icon) return;
     if (isCurrentFavorited()) {
       btn.classList.add('starred');
       btn.title = 'Remove from Favorites';
@@ -1074,6 +1075,7 @@ input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-
     const favs = getFavorites();
     const list = document.getElementById('favPopList');
     const footer = document.getElementById('favPopFooter');
+    if (!list || !footer) return;
     list.innerHTML = '';
 
     if (favs.length === 0) {
@@ -1109,6 +1111,7 @@ input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-
 
   function toggleFavPopover() {
     const pop = document.getElementById('favPopover');
+    if (!pop) return;
     if (pop.classList.contains('open')) {
       closeFavPopover();
     } else {
@@ -1135,11 +1138,13 @@ input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-
 
   function openFavPopover() {
     renderFavPopover();
-    document.getElementById('favPopover').classList.add('open');
+    const pop = document.getElementById('favPopover');
+    if (pop) pop.classList.add('open');
   }
 
   function closeFavPopover() {
-    document.getElementById('favPopover').classList.remove('open');
+    const pop = document.getElementById('favPopover');
+    if (pop) pop.classList.remove('open');
   }
 
   function removeFavorite(e, id) {
@@ -1154,7 +1159,7 @@ input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-
   document.addEventListener('click', e => {
     const pop = document.getElementById('favPopover');
     const wrap = document.querySelector('.fav-wrap');
-    if (pop.classList.contains('open') && !wrap.contains(e.target)) closeFavPopover();
+    if (pop && wrap && pop.classList.contains('open') && !wrap.contains(e.target)) closeFavPopover();
   });
 
   document.addEventListener('keydown', e => {
