@@ -32,7 +32,7 @@
       overflow: hidden;
     }
 
-    /* ─── NAV RAIL ─── */
+    /* --- NAV RAIL --- */
 /* ─── NAV RAIL ─── */
     #nav-rail {
       width: var(--nav-w);
@@ -261,7 +261,7 @@
     .portal-home-link .phl { transition: opacity 0.15s; }
     #nav-rail.collapsed .portal-home-link .phl { opacity: 0; }
 
-    /* ─── MAIN ─── */
+    /* --- MAIN --- */
 /* ─── MAIN ─── */
     #main {
       flex: 1;
@@ -685,38 +685,19 @@
     .cb svg { display: none; }
     .cb.checked svg { display: block; }
 
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;}
-
-
-
-
-
 .nav-dots span{width:8px;height:8px;border-radius:50%;background:#00C9A0;}
-
-
 .nav-collapse:hover{color:rgba(255,255,255,.7);}
-
-
 .nav-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
 .nav-item.active{background:rgba(255,255,255,.08);color:#fff;}
 .nav-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#00C9A0;border-radius:0 3px 3px 0;}
-
-
-
-.nav-bottom 
-
-
-
-
+.nav-bottom .nav-item{color:rgba(255,255,255,.4);}
 .breadcrumb{font-size:11px;color:#5E7A8A;}
 .breadcrumb a{color:#007B6E;text-decoration:none;}
 .breadcrumb span{color:#9BA8B0;margin:0 4px;}
-
-
 .page-title{font-size:19px;font-weight:600;color:#1A2E2B;margin-bottom:14px;}
 
 .card{background:#fff;border-radius:10px;border:1px solid #DDE4E1;margin-bottom:10px;}
-.card-
+.card-body{padding:16px 18px;}
 .card-title{font-size:13px;font-weight:600;color:#1A2E2B;margin-bottom:14px;}
 .flabel{font-size:11px;color:#4A6058;margin-bottom:4px;display:block;font-weight:500;}
 .finput{width:100%;border:1px solid #C8D4D1;border-radius:6px;padding:7px 10px;font-size:12px;color:#1A2E2B;background:#FAFCFB;outline:none;}
@@ -896,43 +877,10 @@ input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-
         <span class="nav-sub-dot"></span>Organizations
       </a>
       <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Payment Provider Contracts
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Point of Interaction
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
         <span class="nav-sub-dot"></span>Users
       </button>
       <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Merchant Country Configuration
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Merchant Configuration
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Merchant Settlement
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>3DS Contracts
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Fraud Prevention Services
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Price Lists
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Wallets
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Blocking Rulesets
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Notifications
-      </button>
-      <button class="nav-sub-item" onclick="setSubActive(this)">
-        <span class="nav-sub-dot"></span>Checkout Themes
+        <span class="nav-sub-dot"></span>Roles &amp; Permissions
       </button>
     </div>
 
@@ -981,9 +929,6 @@ input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-
 
 </nav>
 
-<!-- ─────────────────────────────────────────────
-     MAIN AREA
-───────────────────────────────────────────── -->
 <div id="main">
   <header class="topbar">
     <div class="topbar-left">
@@ -1006,7 +951,7 @@ input[type=checkbox]{width:12px;height:12px;flex-shrink:0;margin-top:2px;accent-
     </div>
   </header>
   <div class="page-scroll">
-    <div style="padding: 28px 56px 40px;">
+    <div style="padding: 28px 56px 40px; max-width: 900px;">
 <div class="page-title">Add template</div>
 
       <div class="card">
