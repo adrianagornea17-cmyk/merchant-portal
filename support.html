@@ -279,106 +279,42 @@
 
     /* ─── SUPPORT HERO ─── */
     .support-hero {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #0d4f45 0%, #0a6b5a 30%, #0e8a72 55%, #1aaa8a 80%, #22c5a0 100%);
-      padding: 36px 56px 40px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 28px 56px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
-      gap: 20px;
-      min-height: 150px;
-    }
-
-    /* Decorative blobs */
-    .support-hero::before {
-      content: '';
-      position: absolute;
-      top: -60px;
-      right: -40px;
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .support-hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px;
-      right: 120px;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .support-hero-arc {
-      position: absolute;
-      top: -30px;
-      right: -10px;
-      width: 420px;
-      height: 220px;
-      border-radius: 50% 50% 0 0 / 60% 60% 0 0;
-      background: rgba(255,255,255,0.04);
-      pointer-events: none;
-      transform: rotate(-15deg);
+      gap: 16px;
     }
 
     .support-hero-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.15);
-      border: 1.5px solid rgba(255,255,255,0.25);
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #f0f9ff;
+      border: 1.5px solid #e0f2fe;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-      backdrop-filter: blur(4px);
     }
 
-    .support-hero-text { position: relative; z-index: 1; flex: 1; }
+    .support-hero-text { flex: 1; }
 
     .support-hero-title {
-      font-size: 34px;
+      font-size: 22px;
       font-weight: 700;
-      color: #ffffff;
-      letter-spacing: -0.6px;
+      color: #0f172a;
+      letter-spacing: -0.4px;
     }
 
     .support-hero-sub {
-      font-size: 14.5px;
-      color: rgba(255,255,255,0.78);
-      margin-top: 6px;
+      font-size: 13.5px;
+      color: var(--text-3);
+      margin-top: 4px;
       line-height: 1.5;
     }
-
-    .btn-hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 0 20px;
-      height: 40px;
-      border-radius: 9px;
-      font-size: 13.5px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      background: #ffffff;
-      color: #0a6b5a;
-      white-space: nowrap;
-      text-decoration: none;
-      font-family: inherit;
-      transition: background 0.12s, color 0.12s, transform 0.1s;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-    }
-    .btn-hero-cta:hover { background: #f0fdf4; transform: translateY(-1px); }
 
     /* ─── SUPPORT CONTENT ─── */
     .support-content {
@@ -756,10 +692,8 @@
 
     <!-- Hero banner -->
     <div class="support-hero">
-      <div class="support-hero-arc"></div>
-
       <div class="support-hero-icon">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/>
           <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
           <line x1="12" y1="17" x2="12.01" y2="17"/>
@@ -770,11 +704,6 @@
         <h1 class="support-hero-title">Support</h1>
         <p class="support-hero-sub">Find help, reach our regional teams, and explore developer resources.</p>
       </div>
-
-      <a class="btn-hero-cta" href="https://support.verifone.com" target="_blank" rel="noopener">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        Submit a Ticket
-      </a>
     </div>
 
     <!-- Page content -->
