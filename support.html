@@ -616,6 +616,12 @@
       flex-shrink: 0;
     }
     .btn-outline:hover { border-color: #9ca3af; background: var(--hover-bg); color: var(--text); }
+
+    @media (max-width: 860px) {
+      .resource-grid { grid-template-columns: 1fr; }
+      .support-hero { padding: 28px 24px 32px; }
+      .support-content { padding: 24px 24px 40px; }
+    }
   </style>
 </head>
 <body>
@@ -788,74 +794,166 @@
               </tr>
             </thead>
             <tbody>
+
+              <!-- Global -->
+              <tr><td colspan="2" class="region-header">Global</td></tr>
               <tr>
-                <td>Australia</td>
+                <td>Global Ecommerce</td>
                 <td>
-                  <span class="contact-label">Technical Queries: </span>
-                  <a class="contact-link" href="mailto:ecomm.support@verifone.com">ecomm.support@verifone.com</a>
+                  <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <a class="contact-link" href="mailto:ecommsupport@verifone.com">ecommsupport@verifone.com</a>
+                  <button class="copy-btn" onclick="copyText('ecommsupport@verifone.com', this)" title="Copy email">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  </button>
                 </td>
               </tr>
               <tr>
+                <td>United States</td>
+                <td>
+                  <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span>
+                  <a class="contact-link" href="https://support.verifone.com" target="_blank" rel="noopener">support.verifone.com</a>
+                </td>
+              </tr>
+
+              <!-- EMEA -->
+              <tr><td colspan="2" class="region-header">EMEA</td></tr>
+              <tr>
                 <td>Estonia</td>
-                <td><a class="contact-link" href="mailto:abi@verifone.com">abi@verifone.com</a></td>
+                <td>
+                  <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <a class="contact-link" href="mailto:abi@verifone.com">abi@verifone.com</a>
+                  <button class="copy-btn" onclick="copyText('abi@verifone.com', this)" title="Copy email">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  </button>
+                </td>
               </tr>
               <tr>
                 <td>France</td>
                 <td>
-                  <div style="display:flex;flex-direction:column;gap:4px;">
+                  <div style="display:flex;flex-direction:column;gap:6px;">
                     <div class="contact-line">
                       <span class="contact-label">Ecommerce:</span>
+                      <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
                       <a class="contact-link" href="mailto:support-paybox@verifone.com">support-paybox@verifone.com</a>
-                      <span style="color:var(--text-4);font-size:13px;">Tel: 0 825 305 004</span>
+                      <button class="copy-btn" onclick="copyText('support-paybox@verifone.com', this)" title="Copy email">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                      </button>
+                      <span class="contact-icon" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.8 19.8 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span>
+                      <span style="color:var(--text-3);font-size:13px;">0 825 305 004</span>
                     </div>
                     <div class="contact-line">
-                      <span class="contact-label">Retail &amp; Proximity payment:</span>
+                      <span class="contact-label">Retail &amp; Proximity:</span>
+                      <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
                       <a class="contact-link" href="mailto:Support.partenaires@verifone.com">Support.partenaires@verifone.com</a>
-                      <span style="color:var(--text-4);font-size:13px;">Tel: 0 825 32 12 12</span>
+                      <button class="copy-btn" onclick="copyText('Support.partenaires@verifone.com', this)" title="Copy email">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                      </button>
+                      <span class="contact-icon" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.8 19.8 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span>
+                      <span style="color:var(--text-3);font-size:13px;">0 825 32 12 12</span>
                     </div>
-                    <div class="contact-hours">Monday to Friday from 09h00 to 18h00</div>
+                    <div class="contact-hours">Monday to Friday, 09:00–18:00</div>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td>Global Ecommerce</td>
-                <td><a class="contact-link" href="mailto:ecommsupport@verifone.com">ecommsupport@verifone.com</a></td>
-              </tr>
-              <tr>
                 <td>Iceland</td>
-                <td><a class="contact-link" href="mailto:verifone@verifone.is">verifone@verifone.is</a></td>
+                <td>
+                  <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <a class="contact-link" href="mailto:verifone@verifone.is">verifone@verifone.is</a>
+                  <button class="copy-btn" onclick="copyText('verifone@verifone.is', this)" title="Copy email">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  </button>
+                </td>
               </tr>
               <tr>
                 <td>Latvia</td>
-                <td><a class="contact-link" href="mailto:palidziba@verifone.com">palidziba@verifone.com</a></td>
+                <td>
+                  <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <a class="contact-link" href="mailto:palidziba@verifone.com">palidziba@verifone.com</a>
+                  <button class="copy-btn" onclick="copyText('palidziba@verifone.com', this)" title="Copy email">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  </button>
+                </td>
               </tr>
               <tr>
                 <td>Lithuania</td>
-                <td><a class="contact-link" href="mailto:pagalba@verifone.com">pagalba@verifone.com</a></td>
+                <td>
+                  <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <a class="contact-link" href="mailto:pagalba@verifone.com">pagalba@verifone.com</a>
+                  <button class="copy-btn" onclick="copyText('pagalba@verifone.com', this)" title="Copy email">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  </button>
+                </td>
+              </tr>
+
+              <!-- APAC -->
+              <tr><td colspan="2" class="region-header">APAC</td></tr>
+              <tr>
+                <td>Australia</td>
+                <td>
+                  <span class="contact-label">Technical Queries:</span>
+                  <span class="contact-icon" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <a class="contact-link" href="mailto:ecomm.support@verifone.com">ecomm.support@verifone.com</a>
+                  <button class="copy-btn" onclick="copyText('ecomm.support@verifone.com', this)" title="Copy email">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  </button>
+                </td>
               </tr>
               <tr>
                 <td>New Zealand</td>
-                <td><a class="contact-link" href="https://support.eftpos.co.nz/portal" target="_blank" rel="noopener">support.eftpos.co.nz/portal</a></td>
+                <td>
+                  <span class="contact-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span>
+                  <a class="contact-link" href="https://support.eftpos.co.nz/portal" target="_blank" rel="noopener">support.eftpos.co.nz/portal</a>
+                </td>
               </tr>
-              <tr>
-                <td>United States</td>
-                <td><a class="contact-link" href="https://support.verifone.com" target="_blank" rel="noopener">support.verifone.com</a></td>
-              </tr>
+
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Documentation Portal card -->
-      <div class="docs-card">
-        <div class="docs-card-body">
-          <div class="docs-card-title">Documentation Portal</div>
-          <div class="docs-card-desc">Documentation on API integration, payments processing, alternative methods and more.</div>
+      <!-- Resource cards -->
+      <div>
+        <h2 class="section-title">Resources</h2>
+        <div class="resource-grid">
+
+          <a class="resource-card" href="https://developer.verifone.com" target="_blank" rel="noopener">
+            <div class="resource-card-icon" style="background:#eff6ff;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <div class="resource-card-title">Developer Portal</div>
+            <div class="resource-card-desc">API integration guides, payment processing docs, alternative payment methods, and SDK references.</div>
+            <div class="resource-card-link">
+              Visit portal
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </a>
+
+          <a class="resource-card" href="https://status.verifone.com" target="_blank" rel="noopener">
+            <div class="resource-card-icon" style="background:#f0fdf4;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="resource-card-title">System Status</div>
+            <div class="resource-card-desc">Real-time uptime and incident reports for Verifone services, APIs, and payment infrastructure.</div>
+            <div class="resource-card-link" style="color:#16a34a;">
+              Check status
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </a>
+
+          <a class="resource-card" href="releases-2026.html">
+            <div class="resource-card-icon" style="background:#fdf4ff;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <div class="resource-card-title">Release Notes</div>
+            <div class="resource-card-desc">Latest product updates, new features, bug fixes, and platform improvements by quarter.</div>
+            <div class="resource-card-link" style="color:#9333ea;">
+              View releases
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </a>
+
         </div>
-        <a class="btn-outline" href="https://developer.verifone.com" target="_blank" rel="noopener">
-          Visit Developer Portal
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
       </div>
 
     </div><!-- /support-content -->
@@ -894,6 +992,15 @@
     const parent = el.closest('.nav-sub');
     parent.querySelectorAll('.nav-sub-item').forEach(s => s.classList.remove('active'));
     el.classList.add('active');
+  }
+
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.classList.add('copied');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
+    });
   }
 </script>
 
