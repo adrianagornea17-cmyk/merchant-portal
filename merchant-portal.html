@@ -21,6 +21,9 @@
       --active-text: #ffffff;
       --hover-bg: #f3f4f6;
       --accent: #2563eb;
+      --card-bg: #ffffff;
+      --card-hover: #f8fafc;
+      --radius: 12px;
     }
 
     body {
@@ -990,7 +993,7 @@
       color: var(--text-3); cursor: pointer;
       transition: color 0.1s;
     }
-    .bell:hover { color: #fff; }
+    .bell:hover { color: #374151; background: var(--hover-bg); }
 
     /* Page content */
     .page {
@@ -1012,6 +1015,7 @@
     .stat-card {
       background: var(--card-bg);
       border-radius: var(--radius);
+      border: 1.5px solid var(--border);
       padding: 18px 20px;
     }
 
@@ -1026,7 +1030,7 @@
     .stat-val {
       font-size: 26px;
       font-weight: 700;
-      color: #fff;
+      color: #0f172a;
       margin: 5px 0 3px;
       line-height: 1;
     }
@@ -1059,15 +1063,16 @@
       align-items: center;
       gap: 10px;
       cursor: pointer;
-      border: 1.5px solid transparent;
-      transition: background 0.12s, border-color 0.12s;
+      border: 1.5px solid var(--border);
+      transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
       text-align: center;
       position: relative;
     }
 
     .tool-card:hover {
       background: var(--card-hover);
-      border-color: #333;
+      border-color: #93c5fd;
+      box-shadow: 0 2px 12px rgba(37,99,235,0.07);
     }
 
     /* ─── Card more-menu ─── */
@@ -1086,17 +1091,17 @@
     }
 
     .tool-card:hover .tc-more-btn { opacity: 1; }
-    .tc-more-btn:hover { background: #2e2e2e; color: #fff; }
-    .tc-more-btn.open  { opacity: 1; background: #2e2e2e; color: #fff; }
+    .tc-more-btn:hover { background: #f1f5f9; color: #374151; }
+    .tc-more-btn.open  { opacity: 1; background: #e5e7eb; color: #374151; }
 
     .tc-menu {
       display: none;
       position: absolute;
       top: 36px; right: 8px;
-      background: #1e1e1e;
-      border: 1px solid #333;
+      background: #ffffff;
+      border: 1px solid var(--border);
       border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
       min-width: 160px;
       z-index: 200;
       padding: 4px 0;
@@ -1109,7 +1114,7 @@
       display: flex; align-items: center; gap: 8px;
       padding: 8px 14px;
       font-size: 13px;
-      color: #d1d5db;
+      color: #374151;
       cursor: pointer;
       transition: background 0.08s, color 0.08s;
       background: none;
@@ -1118,12 +1123,12 @@
       text-align: left;
     }
 
-    .tc-menu-item:hover { background: #2a2a2a; color: #fff; }
+    .tc-menu-item:hover { background: #f8fafc; color: #111827; }
 
     .tc-menu-item.danger { color: #f87171; }
     .tc-menu-item.danger:hover { background: #2a1414; color: #fca5a5; }
 
-    .tc-menu-sep { margin: 4px 0; border: none; border-top: 1px solid #2a2a2a; }
+    .tc-menu-sep { margin: 4px 0; border: none; border-top: 1px solid var(--border); }
 
     .tc-icon {
       width: 46px; height: 46px;
@@ -1131,7 +1136,7 @@
       display: flex; align-items: center; justify-content: center;
     }
 
-    .tc-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .tc-name { font-size: 13px; font-weight: 600; color: #0f172a; }
     .tc-sub  { font-size: 11.5px; color: var(--text-3); margin-top: 1px; }
 
     .tc-cta {
@@ -1181,7 +1186,7 @@
     .tp-sub   { font-size: 13px; color: var(--text-3); }
 
     /* Welcome heading */
-    .welcome-title { font-size: 26px; font-weight: 700; color: #fff; }
+    .welcome-title { font-size: 26px; font-weight: 700; color: #0f172a; }
     .welcome-date  { font-size: 13px; color: var(--text-3); margin-top: 3px; margin-bottom: 26px; }
 
     /* ─── PAY BY LINK PAGE ─── */
@@ -1376,14 +1381,14 @@
     .txn-search-btn:hover { background:#1d4ed8; }
 
     .txn-table-card {
-      background:#1a1a1a; border:1px solid var(--border); border-radius:14px; overflow:hidden;
+      background:#ffffff; border:1.5px solid var(--border); border-radius:14px; overflow:hidden;
     }
 
     .txn-table-head {
       display:flex; align-items:center; justify-content:space-between;
       padding:14px 18px 12px; border-bottom:1px solid var(--border);
     }
-    .txn-table-title { font-size:13.5px; font-weight:600; color:#fff; }
+    .txn-table-title { font-size:13.5px; font-weight:600; color:#0f172a; }
     .txn-view-all {
       font-size:12px; font-weight:600; color:#60a5fa;
       background:none; border:none; cursor:pointer; transition:color 0.1s;
@@ -1400,15 +1405,15 @@
     table.txn th:nth-child(4), table.txn td:nth-child(4) { text-align:right; }
 
     table.txn td {
-      padding:13px 18px; font-size:13px; border-bottom:1px solid #222;
+      padding:13px 18px; font-size:13px; color:#374151; border-bottom:1px solid #f1f5f9;
     }
     table.txn tr:last-child td { border-bottom:none; }
-    table.txn tr:hover td { background:#202020; }
+    table.txn tr:hover td { background:#f8fafc; }
 
     .txn-id    { color:#60a5fa; font-family:monospace; font-size:12.5px; }
     .txn-time  { color:var(--text-3); font-size:12px; }
     .txn-type  { color:var(--text-2); }
-    .txn-amt   { color:#fff; font-weight:600; }
+    .txn-amt   { color:#0f172a; font-weight:600; }
 
     .badge {
       display:inline-block; padding:3px 10px; border-radius:20px;
@@ -1444,8 +1449,8 @@
       color: var(--text-3);
       transition: background 0.12s, color 0.12s;
     }
-    .launcher-btn:hover { background: #2a2a2a; color: #fff; }
-    .launcher-btn.open  { background: #333; color: #fff; }
+    .launcher-btn:hover { background: var(--hover-bg); color: #374151; }
+    .launcher-btn.open  { background: #e5e7eb; color: #374151; }
 
     .launcher-panel {
       position: absolute;
@@ -2011,13 +2016,6 @@ function renderHomeMain() {
   `).join('');
 
   return `
-    <div class="topbar">
-      <span class="topbar-title">Home</span>
-      <div class="topbar-right">
-        ${launcherHTML()}
-        <button class="bell">${icon('bell','currentColor',15)}</button>
-      </div>
-    </div>
     <div class="page">
       <div class="welcome-title">Good morning, Adriana</div>
       <div class="welcome-date">Monday, May 4, 2026 — business overview</div>
@@ -2256,17 +2254,6 @@ function renderToolMain() {
   if (t.id === 'transactions' && state.subItem === 'Overview') return renderTransactionsOverview();
 
   return `
-    <div class="topbar">
-      <span class="breadcrumb">
-        <span class="bc-parent">${t.name}</span>
-        <span class="bc-sep">/</span>
-        <span>${state.subItem}</span>
-      </span>
-      <div class="topbar-right">
-        ${launcherHTML()}
-        <button class="bell">${icon('bell','currentColor',15)}</button>
-      </div>
-    </div>
     <div class="tool-content-wrap">
       <div class="tool-placeholder">
         ${toolIconBadge(t, 58)}
@@ -2763,13 +2750,6 @@ function renderHomeMain() {
   `).join('');
 
   return `
-    <div class="topbar">
-      <span class="topbar-title">Home</span>
-      <div class="topbar-right">
-        ${launcherHTML()}
-        <button class="bell">${icon('bell','currentColor',15)}</button>
-      </div>
-    </div>
     <div class="page">
       <div class="welcome-title">Good morning, Adriana</div>
       <div class="welcome-date">Monday, May 4, 2026 — business overview</div>
@@ -3008,17 +2988,6 @@ function renderToolMain() {
   if (t.id === 'transactions' && state.subItem === 'Overview') return renderTransactionsOverview();
 
   return `
-    <div class="topbar">
-      <span class="breadcrumb">
-        <span class="bc-parent">${t.name}</span>
-        <span class="bc-sep">/</span>
-        <span>${state.subItem}</span>
-      </span>
-      <div class="topbar-right">
-        ${launcherHTML()}
-        <button class="bell">${icon('bell','currentColor',15)}</button>
-      </div>
-    </div>
     <div class="tool-content-wrap">
       <div class="tool-placeholder">
         ${toolIconBadge(t, 58)}
