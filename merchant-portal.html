@@ -1752,7 +1752,9 @@
       </button>
       <div class="avatar" title="Adriana Gornea">A</div>
     </div>
-  </header></div>
+  </header>
+  <div id="page-content" style="flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;"></div>
+</div>
 
 <script>
 /* ── SVG icon library ─────────────────────────────────────────────────── */
@@ -2277,9 +2279,7 @@ function renderToolMain() {
 
 /* ── Render engine ────────────────────────────────────────────────────── */
 function render() {
-  document.getElementById('sidebar').innerHTML =
-    state.view === 'home' ? renderHomeSidebar() : renderToolSidebar();
-  document.getElementById('main').innerHTML =
+  document.getElementById('page-content').innerHTML =
     state.view === 'home' ? renderHomeMain() : renderToolMain();
 }
 
@@ -2320,7 +2320,7 @@ document.addEventListener('click', () => { closeLauncher(); closeAllMenus(); });
 
 /* ── Sidebar toggle ──────────────────────────────────────────────────── */
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('collapsed');
+  document.getElementById('nav-rail').classList.toggle('collapsed');
 }
 
 function toggleCardMenu(e, id) {
@@ -3031,9 +3031,7 @@ function renderToolMain() {
 
 /* ── Render engine ────────────────────────────────────────────────────── */
 function render() {
-  document.getElementById('sidebar').innerHTML =
-    state.view === 'home' ? renderHomeSidebar() : renderToolSidebar();
-  document.getElementById('main').innerHTML =
+  document.getElementById('page-content').innerHTML =
     state.view === 'home' ? renderHomeMain() : renderToolMain();
 }
 
@@ -3074,7 +3072,7 @@ document.addEventListener('click', () => { closeLauncher(); closeAllMenus(); });
 
 /* ── Sidebar toggle ──────────────────────────────────────────────────── */
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('collapsed');
+  document.getElementById('nav-rail').classList.toggle('collapsed');
 }
 
 function toggleCardMenu(e, id) {
