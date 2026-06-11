@@ -254,9 +254,9 @@
     }
 
     .ppc-table th {
-      padding: 11px 16px;
+      padding: 10px 16px;
       text-align: left;
-      vertical-align: middle;
+      vertical-align: top;
       border-right: 1px solid var(--border);
     }
     .ppc-table th:last-child { border-right: none; }
@@ -266,9 +266,31 @@
       font-size: 12px; font-weight: 600; color: var(--text-2);
       text-transform: uppercase; letter-spacing: 0.4px;
       white-space: nowrap; user-select: none;
+      margin-bottom: 8px;
     }
     .th-sort { color: var(--text-4); display: flex; align-items: center; cursor: pointer; }
     .th-sort:hover { color: var(--text-2); }
+
+    .col-filter {
+      width: 100%; height: 30px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0 10px; font-size: 12.5px; color: var(--text);
+      background: #fff; outline: none; font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    .col-filter:focus { border-color: var(--accent); }
+    .col-filter::placeholder { color: var(--text-4); }
+
+    .col-filter-select {
+      width: 100%; height: 30px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0 28px 0 10px;
+      font-size: 12.5px; color: var(--text);
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;
+      appearance: none; outline: none; cursor: pointer;
+      font-family: inherit; transition: border-color 0.15s;
+    }
+    .col-filter-select:focus { border-color: var(--accent); }
 
     .ppc-table tbody tr {
       border-bottom: 1px solid #f1f5f9;
@@ -287,6 +309,21 @@
     }
     .ppc-table td:last-child { border-right: none; }
     .ppc-table td.td-name { color: var(--accent); font-weight: 500; }
+
+    /* Payment type chips in table cells */
+    .pt-cell { display: flex; align-items: center; gap: 5px; flex-wrap: nowrap; }
+    .pt-chip {
+      display: inline-block;
+      background: #f0f9ff; color: #0369a1;
+      border-radius: 5px; font-size: 11.5px; font-weight: 500;
+      padding: 2px 7px; white-space: nowrap;
+    }
+    .pt-more {
+      display: inline-block;
+      background: #f3f4f6; color: var(--text-3);
+      border-radius: 5px; font-size: 11.5px; font-weight: 500;
+      padding: 2px 7px; white-space: nowrap; cursor: default;
+    }
 
     .status-badge {
       display: inline-flex; align-items: center; gap: 5px;
@@ -761,8 +798,8 @@
 
       <!-- Search bar -->
       <div class="search-bar">
-        <input class="search-bar-input" type="text" placeholder="Search by Contract name" oninput="liveSearch(this.value)">
-        <button class="search-bar-btn">Search</button>
+        <input class="search-bar-input" type="text" placeholder="Search by Contract name" oninput="syncNameFilter(this.value)" onkeydown="if(event.key==='Enter')filterTable()">
+        <button class="search-bar-btn" onclick="filterTable()">Search</button>
       </div>
 
       <div class="list-meta" id="listMeta">1 – 10 of 58,701 contracts</div>
@@ -778,8 +815,21 @@
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
                   </span>
                 </div>
+                <input class="col-filter" type="text" placeholder="Search…" oninput="filterTable()">
               </th>
-              <th style="width:22%"><div class="th-inner">Organization</div></th>
+              <th style="width:22%">
+                <div class="th-inner">Organization</div>
+                <select class="col-filter-select" onchange="filterTable()">
+                  <option value="">All</option>
+                  <option>713130 CST Organisation</option>
+                  <option>APMAWS1015.1</option>
+                  <option>APMAWS1015.3</option>
+                  <option>Bargteheide - Location 2</option>
+                  <option>Bludan SmallMerchant</option>
+                  <option>Cezar_test_1</option>
+                  <option>Test WF GBX</option>
+                </select>
+              </th>
               <th style="width:14%">
                 <div class="th-inner">
                   Merchant ID
@@ -787,10 +837,41 @@
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
                   </span>
                 </div>
+                <input class="col-filter" type="text" placeholder="Search…" oninput="filterTable()">
               </th>
-              <th style="width:14%"><div class="th-inner">Processor</div></th>
-              <th style="width:14%"><div class="th-inner">Payment type</div></th>
-              <th style="width:10%"><div class="th-inner">Status</div></th>
+              <th style="width:14%">
+                <div class="th-inner">Processor</div>
+                <select class="col-filter-select" onchange="filterTable()">
+                  <option value="">All</option>
+                  <option>American Express</option>
+                  <option>Elavon ISO UK</option>
+                  <option>Nets</option>
+                  <option>Simulator</option>
+                  <option>Verifone Europe</option>
+                  <option>Verifone Payments GmbH</option>
+                  <option>Vipps</option>
+                  <option>Woodforest National Bank</option>
+                </select>
+              </th>
+              <th style="width:14%">
+                <div class="th-inner">Payment type</div>
+                <select class="col-filter-select" onchange="filterTable()">
+                  <option value="">All</option>
+                  <option>American Express</option>
+                  <option>Maestro</option>
+                  <option>Mastercard</option>
+                  <option>Visa</option>
+                  <option>Vipps</option>
+                </select>
+              </th>
+              <th style="width:10%">
+                <div class="th-inner">Status</div>
+                <select class="col-filter-select" onchange="filterTable()">
+                  <option value="">All</option>
+                  <option>Enabled</option>
+                  <option>Disabled</option>
+                </select>
+              </th>
             </tr>
           </thead>
           <tbody id="ppcTbody">
@@ -799,7 +880,7 @@
               <td>Test WF GBX</td>
               <td>675675675675</td>
               <td>Woodforest National Bank</td>
-              <td>Visa</td>
+              <td><div class="pt-cell"><span class="pt-chip">Visa</span><span class="pt-chip">Mastercard</span></div></td>
               <td><span class="status-badge status-disabled"><span class="status-dot"></span>Disabled</span></td>
             </tr>
             <tr onclick="openSidePanel('WWWWWw')">
@@ -807,7 +888,7 @@
               <td style="font-size:11px;">WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWHENRI</td>
               <td>000000000000000</td>
               <td>Vipps</td>
-              <td>Vipps</td>
+              <td><div class="pt-cell"><span class="pt-chip">Vipps</span></div></td>
               <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
             </tr>
             <tr onclick="openSidePanel('713130 NETS (AMEX)')">
@@ -815,7 +896,7 @@
               <td>713130 CST Organisation</td>
               <td>708020</td>
               <td>Nets</td>
-              <td>American Express</td>
+              <td><div class="pt-cell"><span class="pt-chip">American Express</span></div></td>
               <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
             </tr>
             <tr onclick="openSidePanel('APMAWS1015.1 PPC')">
@@ -823,7 +904,7 @@
               <td>APMAWS1015.1</td>
               <td>7890324</td>
               <td>Verifone Payments GmbH</td>
-              <td>Visa</td>
+              <td><div class="pt-cell"><span class="pt-chip">Visa</span><span class="pt-chip">Mastercard</span><span class="pt-more">+1 more</span></div></td>
               <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
             </tr>
             <tr onclick="openSidePanel('APMAWS1015.3 PPC')">
@@ -831,7 +912,7 @@
               <td>APMAWS1015.3</td>
               <td>79849802</td>
               <td>Verifone Payments GmbH</td>
-              <td>Mastercard</td>
+              <td><div class="pt-cell"><span class="pt-chip">Mastercard</span><span class="pt-chip">Visa</span></div></td>
               <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
             </tr>
             <tr onclick="openSidePanel('Bargteheide - PPC')">
@@ -839,7 +920,7 @@
               <td>Bargteheide - Location 2</td>
               <td>—</td>
               <td>Simulator</td>
-              <td>Visa</td>
+              <td><div class="pt-cell"><span class="pt-chip">Visa</span></div></td>
               <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
             </tr>
             <tr onclick="openSidePanel('Bludan SmallMerchant-165442313139114-AMEX_GB')">
@@ -847,7 +928,7 @@
               <td>Bludan SmallMerchant</td>
               <td>3434343</td>
               <td>American Express</td>
-              <td>American Express</td>
+              <td><div class="pt-cell"><span class="pt-chip">American Express</span><span class="pt-chip">Visa</span><span class="pt-more">+1 more</span></div></td>
               <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
             </tr>
             <tr onclick="openSidePanel('Bludan SmallMerchant-165442313139114-NETS')">
@@ -855,7 +936,7 @@
               <td>Bludan SmallMerchant</td>
               <td>3434343</td>
               <td>Nets</td>
-              <td>Maestro</td>
+              <td><div class="pt-cell"><span class="pt-chip">Maestro</span><span class="pt-chip">Visa</span></div></td>
               <td><span class="status-badge status-disabled"><span class="status-dot"></span>Disabled</span></td>
             </tr>
             <tr onclick="openSidePanel('Bludan SmallMerchant-165442313139114-VERIFONE_EU')">
@@ -863,7 +944,7 @@
               <td>Bludan SmallMerchant</td>
               <td>165442313139114</td>
               <td>Verifone Europe</td>
-              <td>Visa</td>
+              <td><div class="pt-cell"><span class="pt-chip">Visa</span><span class="pt-chip">Mastercard</span></div></td>
               <td><span class="status-badge status-disabled"><span class="status-dot"></span>Disabled</span></td>
             </tr>
             <tr onclick="openSidePanel('Cezar_PPC_Visa')">
@@ -871,7 +952,7 @@
               <td>Cezar_test_1</td>
               <td>2101025128</td>
               <td>Elavon ISO UK</td>
-              <td>Visa</td>
+              <td><div class="pt-cell"><span class="pt-chip">Visa</span></div></td>
               <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
             </tr>
           </tbody>
@@ -1325,20 +1406,32 @@
     document.getElementById(counterId).textContent = input.value.length + ' / ' + max;
   }
 
-  /* ─── LIVE SEARCH ─── */
-  function liveSearch(val) {
-    const v = val.toLowerCase().trim();
+  /* ─── NAME SEARCH BAR → syncs with column filter ─── */
+  function syncNameFilter(val) {
+    const nameFilter = document.querySelector('#ppcTable thead .col-filter');
+    if (nameFilter) { nameFilter.value = val; filterTable(); }
+  }
+
+  /* ─── COLUMN FILTERS ─── */
+  function filterTable() {
+    const filters = document.querySelectorAll('#ppcTable thead .col-filter, #ppcTable thead .col-filter-select');
     const rows = document.querySelectorAll('#ppcTbody tr');
     let visible = 0;
     rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      const show = !v || text.includes(v);
+      const cells = row.querySelectorAll('td');
+      let show = true;
+      filters.forEach((f, i) => {
+        const val = f.value.toLowerCase().trim();
+        if (!val) return;
+        const cell = cells[i] ? cells[i].textContent.toLowerCase() : '';
+        if (!cell.includes(val)) show = false;
+      });
       row.style.display = show ? '' : 'none';
       if (show) visible++;
     });
     document.getElementById('listMeta').textContent =
-      v ? visible + ' result' + (visible !== 1 ? 's' : '') + ' for "' + val + '"'
-        : '1 – 10 of 58,701 contracts';
+      visible < 10 ? visible + ' contract' + (visible !== 1 ? 's' : '') + ' shown'
+                   : '1 – 10 of 58,701 contracts';
   }
 
   /* ─── SORT ─── */
