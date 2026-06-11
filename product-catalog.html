@@ -613,6 +613,8 @@
     .modal-save:hover { background: #4f63d2; }
 
     /* ─── LIST VIEW ─── */
+    .list-meta { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
+
     .list-toolbar {
       display: flex;
       align-items: center;
@@ -719,12 +721,15 @@
       min-width: 120px;
     }
     .prod-table th:last-child { border-right: none; }
-    .th-label {
+    .th-inner {
       display: flex; align-items: center; gap: 5px;
       font-size: 12px; font-weight: 600; color: var(--text-2);
       text-transform: uppercase; letter-spacing: 0.4px;
-      margin-bottom: 8px; white-space: nowrap;
+      white-space: nowrap; user-select: none;
+      margin-bottom: 8px;
     }
+    .th-sort { color: var(--text-4); display: flex; align-items: center; cursor: pointer; }
+    .th-sort:hover { color: var(--text-2); }
     .col-filter {
       width: 100%; height: 30px;
       border: 1.5px solid var(--border); border-radius: 7px;
@@ -1178,20 +1183,34 @@
 
       <!-- VIEW LIST STATE -->
       <div id="viewList" style="display:none;">
+        <!-- Search bar (PPC style) -->
+        <div class="list-toolbar">
+          <div class="list-search-wrap">
+            <input class="list-search-input" type="text" placeholder="Search by Product Name">
+            <button class="list-search-btn">Search</button>
+          </div>
+        </div>
+        <!-- List meta -->
+        <div class="list-meta">1 – 10 of 846 products</div>
         <!-- Table card -->
         <div class="table-card">
           <table class="prod-table">
             <thead>
               <tr>
-                <th>
-                  <div class="th-label">Name</div>
+                <th style="width:22%">
+                  <div class="th-inner">
+                    Name
+                    <span class="th-sort" title="Sort">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+                    </span>
+                  </div>
                   <input class="col-filter" type="text" placeholder="Search…">
                 </th>
-                <th><div class="th-label">ID/SKU</div></th>
-                <th><div class="th-label">Amount/Price</div></th>
-                <th><div class="th-label">Currency</div></th>
-                <th>
-                  <div class="th-label">Organization</div>
+                <th style="width:14%"><div class="th-inner">ID/SKU</div></th>
+                <th style="width:14%"><div class="th-inner">Amount/Price</div></th>
+                <th style="width:10%"><div class="th-inner">Currency</div></th>
+                <th style="width:30%">
+                  <div class="th-inner">Organization</div>
                   <select class="col-filter-select">
                     <option value="">All</option>
                     <option>Parent</option>
@@ -1201,7 +1220,7 @@
                     <option>Site 933 QAT</option>
                   </select>
                 </th>
-                <th><div class="th-label">Action</div></th>
+                <th style="width:10%"><div class="th-inner">Action</div></th>
               </tr>
             </thead>
             <tbody>
