@@ -310,6 +310,24 @@
     .ppc-table td:last-child { border-right: none; }
     .ppc-table td.td-name { color: var(--accent); font-weight: 500; }
 
+    /* ─── NO RESULTS STATE ─── */
+    .no-results-content {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 56px 24px;
+    }
+    .no-results-icon {
+      width: 56px; height: 56px; background: #fef3c7; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .no-results-icon svg { width: 26px; height: 26px; stroke: #d97706; stroke-width: 2; fill: none; }
+    .no-results-title { font-size: 17px; font-weight: 700; color: #111827; margin-bottom: 8px; }
+    .no-results-sub {
+      font-size: 13.5px; color: #6b7280; text-align: center;
+      max-width: 380px; line-height: 1.65; margin-bottom: 24px;
+    }
+    .no-results-sub strong { color: #374151; }
+    .no-results-actions { display: flex; gap: 10px; }
+
     /* Payment type chips in table cells */
     .pt-cell { display: flex; align-items: center; gap: 5px; flex-wrap: nowrap; }
     .pt-chip {
@@ -949,6 +967,28 @@
               <td><div class="pt-cell"><span class="pt-chip">Visa</span></div></td>
               <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
             </tr>
+            <tr id="noResultsRow" style="display:none;">
+              <td colspan="6" style="padding:0; border:none;">
+                <div class="no-results-content">
+                  <div class="no-results-icon">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="8"/>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+                      <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+                      <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <p class="no-results-title">No contracts found</p>
+                  <p class="no-results-sub">
+                    No contracts match your current filters.<br>
+                    Try different values or <strong>clear the filters</strong> to see all contracts.
+                  </p>
+                  <div class="no-results-actions">
+                    <button class="btn btn-ghost" onclick="clearFilters()">Clear filters</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
 
@@ -1409,7 +1449,7 @@
   /* ─── COLUMN FILTERS ─── */
   function filterTable() {
     const filters = document.querySelectorAll('#ppcTable thead .col-filter, #ppcTable thead .col-filter-select');
-    const rows = document.querySelectorAll('#ppcTbody tr');
+    const rows = Array.from(document.querySelectorAll('#ppcTbody tr')).filter(r => r.id !== 'noResultsRow');
     let visible = 0;
     rows.forEach(row => {
       const cells = row.querySelectorAll('td');
@@ -1423,9 +1463,20 @@
       row.style.display = show ? '' : 'none';
       if (show) visible++;
     });
+    const noRow = document.getElementById('noResultsRow');
+    const pagination = document.querySelector('.pagination');
+    noRow.style.display = visible === 0 ? '' : 'none';
+    if (pagination) pagination.style.display = visible === 0 ? 'none' : '';
     document.getElementById('listMeta').textContent =
-      visible < 10 ? visible + ' contract' + (visible !== 1 ? 's' : '') + ' shown'
-                   : '1 – 10 of 58,701 contracts';
+      visible === 0 ? '' :
+      visible < 10  ? visible + ' contract' + (visible !== 1 ? 's' : '') + ' shown'
+                    : '1 – 10 of 58,701 contracts';
+  }
+
+  function clearFilters() {
+    document.querySelectorAll('#ppcTable thead .col-filter').forEach(f => f.value = '');
+    document.querySelectorAll('#ppcTable thead .col-filter-select').forEach(f => f.selectedIndex = 0);
+    filterTable();
   }
 
   /* ─── SORT ─── */
