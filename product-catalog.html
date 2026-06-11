@@ -852,6 +852,148 @@
     .pag-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .pag-nav-btn.active-pg { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+    /* ─── EDIT SIDE PANEL ─── */
+    .ep-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,0.4);
+      z-index: 400;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .ep-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .ep-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 480px;
+      background: #fff;
+      box-shadow: -8px 0 48px rgba(0,0,0,0.14);
+      z-index: 401;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+    .ep-backdrop.open .ep-panel { transform: translateX(0); }
+
+    .ep-header {
+      padding: 24px 24px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .ep-title { font-size: 22px; font-weight: 700; color: #111827; letter-spacing: -0.3px; }
+    .ep-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: none; background: #111827; color: #fff;
+      font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.12s; flex-shrink: 0;
+    }
+    .ep-close:hover { background: #374151; }
+
+    .ep-body {
+      flex: 1; overflow-y: auto; padding: 0 24px 24px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .ep-body::-webkit-scrollbar { width: 4px; }
+    .ep-body::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+    .ep-field { display: flex; flex-direction: column; gap: 7px; }
+    .ep-label {
+      font-size: 13.5px; font-weight: 500; color: #374151;
+    }
+    .ep-label span { font-weight: 400; color: #9ca3af; font-size: 12.5px; margin-left: 4px; }
+    .ep-input, .ep-select, .ep-textarea {
+      border: 1.5px solid #e5e7eb; border-radius: 999px;
+      padding: 0 16px; height: 44px;
+      font-size: 14px; color: #111827;
+      background: #fff; outline: none; font-family: inherit;
+      transition: border-color 0.15s; width: 100%;
+      appearance: none;
+    }
+    .ep-input:disabled, .ep-select:disabled {
+      background: #f3f4f6; color: #9ca3af; cursor: not-allowed;
+    }
+    .ep-input::placeholder { color: #d1d5db; }
+    .ep-input:focus, .ep-select:focus, .ep-textarea:focus { border-color: #2563eb; }
+    .ep-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 16px center;
+      padding-right: 40px; cursor: pointer;
+    }
+    .ep-textarea {
+      border-radius: 16px; height: 110px;
+      padding: 12px 16px; resize: none;
+    }
+    .ep-currency-wrap {
+      display: flex; align-items: stretch;
+      border: 1.5px solid #e5e7eb; border-radius: 999px;
+      overflow: hidden; height: 44px; transition: border-color 0.15s;
+    }
+    .ep-currency-wrap:focus-within { border-color: #2563eb; }
+    .ep-currency-tab {
+      background: #f3f4f6; border: none;
+      border-right: 1.5px solid #e5e7eb;
+      padding: 0 16px; font-size: 13.5px; font-weight: 600; color: #374151;
+      cursor: default; white-space: nowrap; flex-shrink: 0;
+    }
+    .ep-currency-input {
+      border: none; outline: none; padding: 0 16px;
+      font-size: 14px; color: #111827;
+      font-family: inherit; width: 100%; background: transparent;
+      text-align: right;
+    }
+
+    /* Toggle */
+    .ep-toggle-row {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; color: #374151; font-weight: 500;
+    }
+    .ep-toggle {
+      position: relative; width: 44px; height: 24px; flex-shrink: 0;
+    }
+    .ep-toggle input { opacity: 0; width: 0; height: 0; }
+    .ep-toggle-track {
+      position: absolute; inset: 0;
+      background: #d1d5db; border-radius: 999px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .ep-toggle input:checked + .ep-toggle-track { background: #2563eb; }
+    .ep-toggle-track::after {
+      content: ''; position: absolute;
+      left: 3px; top: 3px; width: 18px; height: 18px;
+      background: #fff; border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .ep-toggle input:checked + .ep-toggle-track::after { transform: translateX(20px); }
+
+    /* Warning */
+    .ep-warning {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; color: #374151; font-style: italic;
+      line-height: 1.5;
+    }
+    .ep-warning-icon { flex-shrink: 0; margin-top: 1px; }
+
+    .ep-footer {
+      padding: 16px 24px 20px;
+      border-top: 1px solid #f3f4f6;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .ep-cancel {
+      background: none; border: none; color: #ef4444;
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      padding: 8px 4px; font-family: inherit; transition: color 0.12s;
+    }
+    .ep-cancel:hover { color: #dc2626; }
+    .ep-save {
+      background: #6b7fe8; border: none; color: #fff;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      padding: 0 28px; height: 42px; border-radius: 999px;
+      font-family: inherit; transition: background 0.12s;
+    }
+    .ep-save:hover { background: #4f63d2; }
+
     /* ─── DEMO SWITCHER ─── */
     .demo-switcher {
       position: fixed;
@@ -1183,13 +1325,6 @@
 
       <!-- VIEW LIST STATE -->
       <div id="viewList" style="display:none;">
-        <!-- Search bar (PPC style) -->
-        <div class="list-toolbar">
-          <div class="list-search-wrap">
-            <input class="list-search-input" type="text" placeholder="Search by Product Name">
-            <button class="list-search-btn">Search</button>
-          </div>
-        </div>
         <!-- List meta -->
         <div class="list-meta">1 – 10 of 846 products</div>
         <!-- Table card -->
@@ -1224,16 +1359,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td>Product 1</td><td>12356</td><td>23.34</td><td>GBP</td><td>Parent</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr><td>Test</td><td>test</td><td>1.34</td><td>AUD</td><td>MCDONALDS DARA201</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr><td>pr1</td><td>101911</td><td>1.00</td><td>AUD</td><td>Site 287 QAT_b12a</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="row-selected"><td>a1</td><td>00120</td><td>11.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr><td>PBLAccUBUL</td><td>ACC-JEWJ</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr><td>PBLAccUUX1</td><td>ACC-5GW2</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr><td>aaa</td><td>0001</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr><td>PBLQU5JV</td><td>PBLQU5JV</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr><td>PBLPCACT</td><td>PBLPCACT</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr><td>PROD 111</td><td>0012</td><td>1.00</td><td>AUD</td><td>Site 933 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="Product 1" data-sku="12356" data-price="23.34" data-currency="GBP" data-org="Parent"><td>Product 1</td><td>12356</td><td>23.34</td><td>GBP</td><td>Parent</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="Test" data-sku="test" data-price="1.34" data-currency="AUD" data-org="MCDONALDS DARA201"><td>Test</td><td>test</td><td>1.34</td><td>AUD</td><td>MCDONALDS DARA201</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="pr1" data-sku="101911" data-price="1.00" data-currency="AUD" data-org="Site 287 QAT_b12a"><td>pr1</td><td>101911</td><td>1.00</td><td>AUD</td><td>Site 287 QAT_b12a</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row row-selected" onclick="openEditPanel(this)" data-name="a1" data-sku="00120" data-price="11.00" data-currency="AUD" data-org="Site 538 QAT"><td>a1</td><td>00120</td><td>11.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLAccUBUL" data-sku="ACC-JEWJ" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLAccUBUL</td><td>ACC-JEWJ</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLAccUUX1" data-sku="ACC-5GW2" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLAccUUX1</td><td>ACC-5GW2</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="aaa" data-sku="0001" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>aaa</td><td>0001</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLQU5JV" data-sku="PBLQU5JV" data-price="1111.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLQU5JV</td><td>PBLQU5JV</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLPCACT" data-sku="PBLPCACT" data-price="1111.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLPCACT</td><td>PBLPCACT</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PROD 111" data-sku="0012" data-price="1.00" data-currency="AUD" data-org="Site 933 QAT"><td>PROD 111</td><td>0012</td><td>1.00</td><td>AUD</td><td>Site 933 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
             </tbody>
           </table>
           <!-- Pagination -->
@@ -1264,6 +1399,68 @@
         </div>
       </div><!-- /viewList -->
 
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PRODUCT SIDE PANEL -->
+<div class="ep-backdrop" id="editPanelBackdrop" onclick="handleEpBackdrop(event)">
+  <div class="ep-panel" role="dialog" aria-modal="true" aria-label="Edit Product">
+    <div class="ep-header">
+      <span class="ep-title">Edit Product</span>
+      <button class="ep-close" onclick="closeEditPanel()" aria-label="Close">✕</button>
+    </div>
+    <div class="ep-body">
+      <div class="ep-field">
+        <label class="ep-label">Organization</label>
+        <select class="ep-select" id="ep-org">
+          <option>Parent</option>
+          <option>MCDONALDS DARA201</option>
+          <option>Site 287 QAT_b12a</option>
+          <option>Site 538 QAT</option>
+          <option>Site 933 QAT</option>
+        </select>
+      </div>
+      <div class="ep-field">
+        <label class="ep-label">Product Name</label>
+        <input class="ep-input" id="ep-name" type="text" placeholder="Enter a name">
+      </div>
+      <div class="ep-field">
+        <label class="ep-label">Product Description <span>(Optional)</span></label>
+        <textarea class="ep-textarea" id="ep-desc" placeholder="Enter a description"></textarea>
+      </div>
+      <div class="ep-field">
+        <label class="ep-label">Product Currency/Price</label>
+        <div class="ep-currency-wrap">
+          <div class="ep-currency-tab" id="ep-currency-tab">AUD</div>
+          <input class="ep-currency-input" id="ep-price" type="number" min="0" step="0.01">
+        </div>
+      </div>
+      <div class="ep-toggle-row">
+        <label class="ep-toggle">
+          <input type="checkbox" id="ep-gst" checked>
+          <div class="ep-toggle-track"></div>
+        </label>
+        GST 10%
+      </div>
+      <div class="ep-warning" id="ep-tax-warning">
+        <span class="ep-warning-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" fill="#fbbf24"/><line x1="12" y1="9" x2="12" y2="13" stroke="#92400e" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#92400e"/></svg>
+        </span>
+        <span>Tax was disabled at the time of product creation. Click "Save" to update the product.</span>
+      </div>
+      <div class="ep-field">
+        <label class="ep-label">Product ID/SKU</label>
+        <input class="ep-input" id="ep-sku" type="text" disabled>
+      </div>
+      <div class="ep-field">
+        <label class="ep-label">Product URL <span>(Optional)</span></label>
+        <input class="ep-input" id="ep-url" type="url" placeholder="Insert product url">
+      </div>
+    </div>
+    <div class="ep-footer">
+      <button class="ep-cancel" onclick="closeEditPanel()">Cancel</button>
+      <button class="ep-save">Save &amp; Close</button>
     </div>
   </div>
 </div>
@@ -1342,6 +1539,32 @@
   (function() {
     if (localStorage.getItem('navCollapsed') === 'true') nav.classList.add('collapsed');
   })();
+
+  /* ─── EDIT PANEL ─── */
+  function openEditPanel(row) {
+    const d = row.dataset;
+    document.getElementById('ep-org').value = d.org || '';
+    document.getElementById('ep-name').value = d.name || '';
+    document.getElementById('ep-desc').value = '';
+    document.getElementById('ep-currency-tab').textContent = d.currency || 'USD';
+    document.getElementById('ep-price').value = d.price || '';
+    document.getElementById('ep-sku').value = d.sku || '';
+    document.getElementById('ep-url').value = '';
+    document.getElementById('editPanelBackdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.querySelectorAll('.prod-row').forEach(r => r.classList.remove('row-selected'));
+    row.classList.add('row-selected');
+  }
+  function closeEditPanel() {
+    document.getElementById('editPanelBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleEpBackdrop(e) {
+    if (e.target === document.getElementById('editPanelBackdrop')) closeEditPanel();
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeEditPanel(); closeModal(); }
+  });
 
   /* ─── NAV ACTIVE STATE ─── */
   function setActive(el) {
@@ -1448,10 +1671,6 @@
   document.getElementById('productModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
-  });
-
   /* ─── DEMO SWITCHER ─── */
   function showState(state) {
     const def   = document.getElementById('emptyDefault');
