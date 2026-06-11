@@ -286,31 +286,60 @@
     .field-select:focus { border-color: var(--accent); }
     .field-select:disabled { background-color: #f9fafb; color: var(--text-3); cursor: not-allowed; }
 
-    /* Clearable select (with X) */
-    .field-select-wrap { position: relative; display: flex; align-items: center; }
-    .field-select-clearable {
+    /* Custom clearable dropdown */
+    .custom-select-wrap { position: relative; }
+    .custom-select-trigger {
       height: 40px;
       border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 0 60px 0 14px;
       font-size: 13.5px; color: var(--text);
-      background: #fff; outline: none; cursor: pointer;
+      background: #fff; cursor: pointer;
       font-family: inherit; width: 100%;
-      transition: border-color 0.15s;
       display: flex; align-items: center;
+      transition: border-color 0.15s;
+      user-select: none;
     }
-    .select-actions {
-      position: absolute; right: 10px;
+    .custom-select-trigger.open { border-color: var(--accent); border-radius: 10px 10px 0 0; }
+    .custom-select-trigger.empty { color: var(--text-4); }
+    .custom-select-actions {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
       display: flex; align-items: center; gap: 4px;
     }
-    .select-clear {
+    .custom-select-clear {
       width: 18px; height: 18px; border-radius: 50%;
       border: none; background: #e5e7eb; color: #6b7280;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 10px; transition: background 0.1s;
+      font-size: 10px; transition: background 0.1s; line-height: 1;
     }
-    .select-clear:hover { background: #d1d5db; }
-    .select-chevron { color: var(--text-4); display: flex; align-items: center; }
+    .custom-select-clear:hover { background: #d1d5db; }
+    .custom-select-chevron { color: var(--text-4); display: flex; align-items: center; transition: transform 0.2s; }
+    .custom-select-trigger.open ~ .custom-select-actions .custom-select-chevron { transform: rotate(180deg); }
+    .custom-select-dropdown {
+      position: absolute; left: 0; right: 0; top: calc(100% - 2px);
+      background: #fff;
+      border: 1.5px solid var(--accent);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: none;
+    }
+    .custom-select-dropdown.open { display: block; }
+    .custom-select-option {
+      padding: 10px 14px;
+      font-size: 13.5px; color: var(--text-2);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .custom-select-option:hover { background: var(--hover-bg); }
+    .custom-select-option.selected { background: #eff6ff; color: var(--accent); font-weight: 500; }
+
+    /* Printer Format helper text */
+    .field-hint {
+      font-size: 12px; color: var(--text-3); margin-top: 4px;
+    }
 
     /* Checkbox item */
     .check-item {
@@ -574,13 +603,23 @@
 
             <div class="field">
               <label class="field-label">Type</label>
-              <div class="field-select-wrap">
-                <div class="field-select-clearable">Unattended</div>
-                <div class="select-actions">
-                  <button class="select-clear" title="Clear">✕</button>
-                  <span class="select-chevron">
+              <div class="custom-select-wrap" id="typeSelectWrap">
+                <div class="custom-select-trigger" id="typeSelectTrigger" onclick="toggleTypeDropdown()">
+                  <span id="typeSelectValue">Unattended</span>
+                </div>
+                <div class="custom-select-actions">
+                  <button class="custom-select-clear" id="typeSelectClear" onclick="clearTypeSelect(event)" title="Clear">✕</button>
+                  <span class="custom-select-chevron" id="typeSelectChevron">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                   </span>
+                </div>
+                <div class="custom-select-dropdown" id="typeDropdown">
+                  <div class="custom-select-option" data-value="InFlight Commerce Terminal" onclick="selectType(this)">InFlight Commerce Terminal</div>
+                  <div class="custom-select-option" data-value="Inter Voice Response" onclick="selectType(this)">Inter Voice Response</div>
+                  <div class="custom-select-option" data-value="Point of Sale" onclick="selectType(this)">Point of Sale</div>
+                  <div class="custom-select-option" data-value="Kiosk" onclick="selectType(this)">Kiosk</div>
+                  <div class="custom-select-option selected" data-value="Unattended" onclick="selectType(this)">Unattended</div>
+                  <div class="custom-select-option" data-value="Standalone" onclick="selectType(this)">Standalone</div>
                 </div>
               </div>
             </div>
@@ -606,9 +645,19 @@
             <div class="field">
               <label class="field-label">Device ID <span class="opt">(Optional)</span></label>
               <div class="field-input-wrap">
-                <input class="field-input has-counter" type="text" value="202020">
+                <input class="field-input has-counter" id="deviceSerialForPrinter" type="text" value="202020" oninput="syncPrinterFormat()">
                 <span class="field-input-counter">6 / 45</span>
               </div>
+            </div>
+
+            <div class="field" id="printerFormatField" style="display:none;">
+              <label class="field-label">Printer Format</label>
+              <select class="field-select" id="printerFormatSelect" disabled>
+                <option value="" selected></option>
+                <option>40 Column</option>
+                <option>Receipt</option>
+              </select>
+              <span class="field-hint" id="printerFormatHint">To select the printer format you first need to add a device serial number</span>
             </div>
 
             <div class="field">
@@ -755,6 +804,73 @@
     input.addEventListener('input', () => {
       counter.textContent = `${input.value.length} / ${max}`;
     });
+  });
+
+  /* ─── TYPE CUSTOM DROPDOWN ─── */
+  let currentType = 'Unattended';
+
+  function toggleTypeDropdown() {
+    const trigger = document.getElementById('typeSelectTrigger');
+    const dropdown = document.getElementById('typeDropdown');
+    const chevron = document.getElementById('typeSelectChevron');
+    const open = dropdown.classList.contains('open');
+    dropdown.classList.toggle('open', !open);
+    trigger.classList.toggle('open', !open);
+    chevron.style.transform = open ? '' : 'rotate(180deg)';
+  }
+
+  function selectType(el) {
+    const val = el.dataset.value;
+    currentType = val;
+    document.getElementById('typeSelectValue').textContent = val;
+    document.getElementById('typeSelectTrigger').classList.remove('empty');
+    document.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('typeDropdown').classList.remove('open');
+    document.getElementById('typeSelectTrigger').classList.remove('open');
+    document.getElementById('typeSelectChevron').style.transform = '';
+    onTypeChange(val);
+  }
+
+  function clearTypeSelect(e) {
+    e.stopPropagation();
+    currentType = '';
+    document.getElementById('typeSelectValue').textContent = '';
+    document.getElementById('typeSelectTrigger').classList.add('empty');
+    document.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('typeDropdown').classList.remove('open');
+    document.getElementById('typeSelectTrigger').classList.remove('open');
+    onTypeChange('');
+  }
+
+  function onTypeChange(val) {
+    const printerField = document.getElementById('printerFormatField');
+    if (val === 'Point of Sale') {
+      printerField.style.display = '';
+      syncPrinterFormat();
+    } else {
+      printerField.style.display = 'none';
+    }
+  }
+
+  function syncPrinterFormat() {
+    const serial = document.getElementById('deviceSerialForPrinter');
+    const sel = document.getElementById('printerFormatSelect');
+    const hint = document.getElementById('printerFormatHint');
+    const hasSerial = serial && serial.value.trim().length > 0;
+    sel.disabled = !hasSerial;
+    sel.style.background = hasSerial ? '#fff' : '';
+    hint.style.display = hasSerial ? 'none' : '';
+  }
+
+  /* Close dropdown on outside click */
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('typeSelectWrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('typeDropdown').classList.remove('open');
+      document.getElementById('typeSelectTrigger').classList.remove('open');
+      document.getElementById('typeSelectChevron').style.transform = '';
+    }
   });
 </script>
 
