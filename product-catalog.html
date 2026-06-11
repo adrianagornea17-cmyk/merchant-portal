@@ -1302,8 +1302,9 @@
 
       <!-- EMPTY STATE: no results -->
       <div id="emptyNoResults" style="display:none;">
+        <div class="list-meta">0 products</div>
         <div class="table-card">
-          <table class="prod-table">
+          <table class="prod-table" style="table-layout:fixed;">
             <thead>
               <tr>
                 <th style="width:22%">
@@ -1358,6 +1359,31 @@
               </tr>
             </tbody>
           </table>
+          <!-- Pagination (disabled in empty state) -->
+          <div class="list-pagination">
+            <div class="pag-left">
+              <span>Results per page</span>
+              <div class="pag-per-page">
+                10
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="pag-right">
+              <div class="pag-goto">
+                <span>Go to page</span>
+                <input class="pag-goto-input" type="number" placeholder="" disabled>
+              </div>
+              <span>Page 0 of 0</span>
+              <div class="pag-nav">
+                <button class="pag-nav-btn" disabled>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button class="pag-nav-btn" disabled>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1367,7 +1393,7 @@
         <div class="list-meta">1 – 10 of 846 products</div>
         <!-- Table card -->
         <div class="table-card">
-          <table class="prod-table">
+          <table class="prod-table" style="table-layout:fixed;">
             <thead>
               <tr>
                 <th style="width:22%">
