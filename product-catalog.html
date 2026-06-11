@@ -612,6 +612,219 @@
     }
     .modal-save:hover { background: #4f63d2; }
 
+    /* ─── LIST VIEW ─── */
+    .list-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .list-search-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      height: 40px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .list-search-wrap:focus-within { border-color: var(--accent); }
+    .list-search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 0 14px;
+      font-size: 13.5px;
+      color: var(--text);
+      font-family: inherit;
+      background: transparent;
+    }
+    .list-search-input::placeholder { color: var(--text-4); }
+    .list-search-btn {
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      height: 100%;
+      padding: 0 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s;
+      white-space: nowrap;
+    }
+    .list-search-btn:hover { background: #1d4ed8; }
+
+    .list-filter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      background: #fff;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .filter-pill:hover { border-color: #9ca3af; background: var(--hover-bg); }
+    .filter-clear {
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: #ef4444;
+      cursor: pointer;
+      padding: 0;
+      font-family: inherit;
+      transition: color 0.1s;
+    }
+    .filter-clear:hover { color: #dc2626; }
+    .list-total {
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--text-3);
+    }
+
+    .table-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .prod-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .prod-table thead tr {
+      background: #f8fafc;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .prod-table th {
+      padding: 11px 16px;
+      text-align: left;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-2);
+      white-space: nowrap;
+      border-right: 1px solid var(--border);
+    }
+    .prod-table th:last-child { border-right: none; }
+    .prod-table tbody tr {
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.08s;
+    }
+    .prod-table tbody tr:last-child { border-bottom: none; }
+    .prod-table tbody tr:hover { background: #f8fafc; }
+    .prod-table tbody tr.row-selected { background: #f1f5f9; }
+    .prod-table td {
+      padding: 13px 16px;
+      color: var(--text-2);
+      border-right: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .prod-table td:last-child { border-right: none; }
+    .td-delete {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ef4444;
+      padding: 4px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.1s;
+    }
+    .td-delete:hover { background: #fee2e2; }
+
+    .list-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 20px;
+      border-top: 1.5px solid var(--border);
+      background: #fff;
+    }
+    .pag-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-3);
+    }
+    .pag-per-page {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      background: #fff;
+      cursor: pointer;
+    }
+    .pag-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-3);
+    }
+    .pag-goto {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .pag-goto-input {
+      width: 44px;
+      height: 32px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 0 8px;
+      font-size: 13px;
+      color: var(--text);
+      text-align: center;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    .pag-goto-input:focus { border-color: var(--accent); }
+    .pag-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .pag-nav-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-2);
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .pag-nav-btn:hover { background: var(--hover-bg); border-color: #9ca3af; }
+    .pag-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .pag-nav-btn.active-pg { background: var(--accent); border-color: var(--accent); color: #fff; }
+
     /* ─── DEMO SWITCHER ─── */
     .demo-switcher {
       position: fixed;
@@ -941,6 +1154,79 @@
         </div>
       </div>
 
+      <!-- VIEW LIST STATE -->
+      <div id="viewList" style="display:none;">
+        <!-- Search bar -->
+        <div class="list-toolbar">
+          <div class="list-search-wrap">
+            <input class="list-search-input" type="text" placeholder="Search by Product Name">
+            <button class="list-search-btn">Search</button>
+          </div>
+        </div>
+        <!-- Filter row -->
+        <div class="list-filter-row">
+          <button class="filter-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Organizations (+1)
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <button class="filter-clear">Clear filter</button>
+          <span class="list-total">Total Products: 846</span>
+        </div>
+        <!-- Table card -->
+        <div class="table-card">
+          <table class="prod-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>ID/SKU</th>
+                <th>Amount/Price</th>
+                <th>Currency</th>
+                <th>Organization</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Product 1</td><td>12356</td><td>23.34</td><td>GBP</td><td>Parent</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr><td>Test</td><td>test</td><td>1.34</td><td>AUD</td><td>MCDONALDS DARA201</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr><td>pr1</td><td>101911</td><td>1.00</td><td>AUD</td><td>Site 287 QAT_b12a</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="row-selected"><td>a1</td><td>00120</td><td>11.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr><td>PBLAccUBUL</td><td>ACC-JEWJ</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr><td>PBLAccUUX1</td><td>ACC-5GW2</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr><td>aaa</td><td>0001</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr><td>PBLQU5JV</td><td>PBLQU5JV</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr><td>PBLPCACT</td><td>PBLPCACT</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr><td>PROD 111</td><td>0012</td><td>1.00</td><td>AUD</td><td>Site 933 QAT</td><td><button class="td-delete" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+            </tbody>
+          </table>
+          <!-- Pagination -->
+          <div class="list-pagination">
+            <div class="pag-left">
+              <span>Results per page</span>
+              <div class="pag-per-page">
+                10
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="pag-right">
+              <div class="pag-goto">
+                <span>Go to page</span>
+                <input class="pag-goto-input" type="number" value="" placeholder="">
+              </div>
+              <span>Page 1 of 85</span>
+              <div class="pag-nav">
+                <button class="pag-nav-btn" disabled>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button class="pag-nav-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /viewList -->
+
     </div>
   </div>
 </div>
@@ -1005,6 +1291,7 @@
   <div class="switcher-btns">
     <button class="sw-btn active" id="sw1" onclick="showState('default')">Default</button>
     <button class="sw-btn" id="sw2" onclick="showState('noResults')">No results</button>
+    <button class="sw-btn" id="sw3" onclick="showState('list')">View list</button>
   </div>
 </div>
 
@@ -1130,16 +1417,24 @@
 
   /* ─── DEMO SWITCHER ─── */
   function showState(state) {
-    const def = document.getElementById('emptyDefault');
+    const def   = document.getElementById('emptyDefault');
     const noRes = document.getElementById('emptyNoResults');
+    const list  = document.getElementById('viewList');
+    def.style.display = 'none';
+    noRes.style.display = 'none';
+    list.style.display = 'none';
+    document.getElementById('sw1').classList.remove('active');
+    document.getElementById('sw2').classList.remove('active');
+    document.getElementById('sw3').classList.remove('active');
     if (state === 'default') {
-      def.style.display = 'flex'; noRes.style.display = 'none';
+      def.style.display = 'flex';
       document.getElementById('sw1').classList.add('active');
-      document.getElementById('sw2').classList.remove('active');
-    } else {
-      def.style.display = 'none'; noRes.style.display = 'flex';
-      document.getElementById('sw1').classList.remove('active');
+    } else if (state === 'noResults') {
+      noRes.style.display = 'flex';
       document.getElementById('sw2').classList.add('active');
+    } else {
+      list.style.display = 'block';
+      document.getElementById('sw3').classList.add('active');
     }
   }
 </script>
