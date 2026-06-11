@@ -760,23 +760,17 @@
     </div>
   </div>
 
-  <!-- Help Button -->
-  <button onclick="vaToggle()" title="Help" style="background:none;border:none;cursor:pointer;padding:0;">
-    <div id="va-btn-inner" style="background:#1e293b;border-radius:24px;padding:9px 18px 9px 12px;display:inline-flex;align-items:center;gap:9px;box-shadow:0 4px 20px rgba(0,0,0,0.22);transition:background 0.15s;" onmouseover="this.style.background='#0f172a'" onmouseout="this.style.background='#1e293b'">
-      <div style="width:28px;height:28px;background:#334155;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      </div>
-      <span style="font-size:13px;font-weight:600;color:#e2e8f0;letter-spacing:0.1px;">Help</span>
-    </div>
+  <!-- Small round floating button (fallback for pages without topbar) -->
+  <button id="va-float-btn" onclick="vaToggle()" title="Help" style="width:44px;height:44px;border-radius:50%;background:#1e293b;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.22);transition:background 0.15s;" onmouseover="this.style.background='#0f172a'" onmouseout="this.style.background='#1e293b'">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
   </button>
 </div>
 
 <script>
 (function(){
-  var GREET={role:'a',text:"Hi there! I’m the <strong>Verifone Assistant</strong>. I can help you navigate Verifone Central, answer questions about settlements, devices, transactions, and more.",links:[{label:'Sign-in',href:'#'},{label:'Hierarchies',href:'#'},{label:'Add a tenant',href:'#'},{label:'Settlements',href:'#'}]};
-  var RESPONSES=["For device onboarding, go to <strong>Devices</strong> in the sidebar, then click <strong>Add Device</strong> and follow the setup wizard to configure and activate your terminal.","Transaction reports are under <strong>Reporting tools → Orders / Transactions</strong>. Use the filter bar to narrow by date, type, or status, and export results to CSV.","Payment provider contracts live under <strong>Admin → Payment Provider Contracts</strong>. You can create, edit, and link contracts to organizations from there.","Settlement data is in <strong>Reporting tools → Settlements</strong>. You can view batch summaries, reconciliation status, and download settlement reports.","For user management go to <strong>Admin → Users</strong>. You can invite users, assign roles (Reseller Manager, Merchant Admin), and control permissions per organization.","I’m not sure about that specific topic. For detailed support you can also reach out to the Verifone support team directly."];
+  var GREET={role:'a',text:"Hi there! I'm the <strong>Verifone Assistant</strong>. I can help you navigate Verifone Central, answer questions about settlements, devices, transactions, and more.",links:[{label:'Sign-in',href:'#'},{label:'Hierarchies',href:'#'},{label:'Add a tenant',href:'#'},{label:'Settlements',href:'#'}]};
+  var RESPONSES=["For device onboarding, go to <strong>Devices</strong> in the sidebar, then click <strong>Add Device</strong> and follow the setup wizard to configure and activate your terminal.","Transaction reports are under <strong>Reporting tools → Orders / Transactions</strong>. Use the filter bar to narrow by date, type, or status, and export results to CSV.","Payment provider contracts live under <strong>Admin → Payment Provider Contracts</strong>. You can create, edit, and link contracts to organizations from there.","Settlement data is in <strong>Reporting tools → Settlements</strong>. You can view batch summaries, reconciliation status, and download settlement reports.","For user management go to <strong>Admin → Users</strong>. You can invite users, assign roles (Reseller Manager, Merchant Admin), and control permissions per organization.","I'm not sure about that specific topic. For detailed support you can also reach out to the Verifone support team directly."];
   var msgs=[],open=false,rIdx=0;
-  function esc(s){return s;}
   function bubble(m){
     var isU=m.role==='u';
     var lHtml='';
@@ -789,9 +783,18 @@
   window.vaClose=function(){document.getElementById('va-panel').style.display='none';open=false;};
   window.vaToggle=function(){if(open)vaClose();else vaOpen();};
   window.vaSend=function(){var i=document.getElementById('va-input');var t=(i.value||'').trim();if(!t)return;msgs.push({role:'u',text:t});i.value='';render();var r=RESPONSES[rIdx%RESPONSES.length];rIdx++;setTimeout(function(){msgs.push({role:'a',text:r});render();},650);};
+  /* Wire topbar help button and hide float btn when topbar btn is present */
+  document.addEventListener('DOMContentLoaded',function(){
+    var tb=document.querySelector('.topbar-icon-btn[title="Help"]');
+    if(tb){
+      tb.addEventListener('click',vaToggle);
+
+    }
+  });
 })();
 </script>
 <!-- ─── END VERIFONE ASSISTANT WIDGET ─── -->
+
 
 </body>
 </html>
