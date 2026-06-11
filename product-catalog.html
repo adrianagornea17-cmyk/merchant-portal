@@ -712,15 +712,37 @@
       border-bottom: 1.5px solid var(--border);
     }
     .prod-table th {
-      padding: 11px 16px;
+      padding: 10px 16px 10px;
       text-align: left;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-2);
-      white-space: nowrap;
+      vertical-align: top;
       border-right: 1px solid var(--border);
+      min-width: 120px;
     }
     .prod-table th:last-child { border-right: none; }
+    .th-label {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: var(--text-2);
+      text-transform: uppercase; letter-spacing: 0.4px;
+      margin-bottom: 8px; white-space: nowrap;
+    }
+    .col-filter {
+      width: 100%; height: 30px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0 10px; font-size: 12.5px; color: var(--text);
+      background: #fff; outline: none; font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    .col-filter:focus { border-color: var(--accent); }
+    .col-filter::placeholder { color: var(--text-4); }
+    .col-filter-select {
+      width: 100%; height: 30px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0 28px 0 10px; font-size: 12.5px; color: var(--text);
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;
+      appearance: none; outline: none; cursor: pointer;
+      font-family: inherit; transition: border-color 0.15s;
+    }
+    .col-filter-select:focus { border-color: var(--accent); }
     .prod-table tbody tr {
       border-bottom: 1px solid #f1f5f9;
       transition: background 0.08s;
@@ -1156,34 +1178,30 @@
 
       <!-- VIEW LIST STATE -->
       <div id="viewList" style="display:none;">
-        <!-- Search bar -->
-        <div class="list-toolbar">
-          <div class="list-search-wrap">
-            <input class="list-search-input" type="text" placeholder="Search by Product Name">
-            <button class="list-search-btn">Search</button>
-          </div>
-        </div>
-        <!-- Filter row -->
-        <div class="list-filter-row">
-          <button class="filter-pill">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-            Organizations (+1)
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <button class="filter-clear">Clear filter</button>
-          <span class="list-total">Total Products: 846</span>
-        </div>
         <!-- Table card -->
         <div class="table-card">
           <table class="prod-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>ID/SKU</th>
-                <th>Amount/Price</th>
-                <th>Currency</th>
-                <th>Organization</th>
-                <th>Action</th>
+                <th>
+                  <div class="th-label">Name</div>
+                  <input class="col-filter" type="text" placeholder="Search…">
+                </th>
+                <th><div class="th-label">ID/SKU</div></th>
+                <th><div class="th-label">Amount/Price</div></th>
+                <th><div class="th-label">Currency</div></th>
+                <th>
+                  <div class="th-label">Organization</div>
+                  <select class="col-filter-select">
+                    <option value="">All</option>
+                    <option>Parent</option>
+                    <option>MCDONALDS DARA201</option>
+                    <option>Site 287 QAT_b12a</option>
+                    <option>Site 538 QAT</option>
+                    <option>Site 933 QAT</option>
+                  </select>
+                </th>
+                <th><div class="th-label">Action</div></th>
               </tr>
             </thead>
             <tbody>
