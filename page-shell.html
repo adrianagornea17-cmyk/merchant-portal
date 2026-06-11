@@ -1261,5 +1261,76 @@
   renderTable();
 </script>
 
+
+<!-- ─── VERIFONE ASSISTANT WIDGET ─── -->
+<div id="va-widget" style="position:fixed;bottom:24px;right:24px;z-index:9999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;display:flex;flex-direction:column;align-items:flex-end;">
+
+  <!-- Chat Panel -->
+  <div id="va-panel" style="display:none;flex-direction:column;width:380px;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.16),0 2px 8px rgba(0,0,0,0.08);overflow:hidden;margin-bottom:12px;">
+
+    <!-- Header -->
+    <div style="background:#0f172a;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;background:#1e293b;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 32 32" fill="none"><circle cx="10" cy="10" r="3" fill="#38bdf8"/><circle cx="22" cy="10" r="3" fill="#38bdf8"/><circle cx="10" cy="22" r="3" fill="#60a5fa"/><circle cx="22" cy="22" r="3" fill="#60a5fa"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#fff;line-height:1.2;">Verifone Assistant</div>
+          <div style="display:flex;align-items:center;gap:5px;margin-top:2px;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;"></span>
+            <span style="font-size:11.5px;color:#94a3b8;">Online</span>
+          </div>
+        </div>
+      </div>
+      <button onclick="vaClose()" style="background:none;border:none;cursor:pointer;color:#64748b;padding:5px;border-radius:7px;display:flex;align-items:center;justify-content:center;transition:color 0.1s,background 0.1s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.color='#64748b';this.style.background='none'" title="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div id="va-messages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:300px;max-height:360px;scrollbar-width:thin;scrollbar-color:#d1d5db transparent;"></div>
+
+    <!-- Input -->
+    <div style="padding:12px 14px;border-top:1px solid #e5e7eb;display:flex;align-items:center;gap:8px;flex-shrink:0;background:#fff;">
+      <input id="va-input" type="text" placeholder="Ask a question..." onkeydown="if(event.key==='Enter')vaSend()" style="flex:1;border:1.5px solid #e5e7eb;border-radius:10px;padding:9px 13px;font-size:13.5px;color:#111827;outline:none;font-family:inherit;background:#fff;transition:border-color 0.15s;" onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e5e7eb'">
+      <button onclick="vaSend()" title="Send" style="width:34px;height:34px;border-radius:50%;background:#2563eb;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.1s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Help Button -->
+  <button onclick="vaToggle()" title="Help" style="background:none;border:none;cursor:pointer;padding:0;">
+    <div id="va-btn-inner" style="background:#1e293b;border-radius:24px;padding:9px 18px 9px 12px;display:inline-flex;align-items:center;gap:9px;box-shadow:0 4px 20px rgba(0,0,0,0.22);transition:background 0.15s;" onmouseover="this.style.background='#0f172a'" onmouseout="this.style.background='#1e293b'">
+      <div style="width:28px;height:28px;background:#334155;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <span style="font-size:13px;font-weight:600;color:#e2e8f0;letter-spacing:0.1px;">Help</span>
+    </div>
+  </button>
+</div>
+
+<script>
+(function(){
+  var GREET={role:'a',text:"Hi there! I’m the <strong>Verifone Assistant</strong>. I can help you navigate Verifone Central, answer questions about settlements, devices, transactions, and more.",links:[{label:'Sign-in',href:'#'},{label:'Hierarchies',href:'#'},{label:'Add a tenant',href:'#'},{label:'Settlements',href:'#'}]};
+  var RESPONSES=["For device onboarding, go to <strong>Devices</strong> in the sidebar, then click <strong>Add Device</strong> and follow the setup wizard to configure and activate your terminal.","Transaction reports are under <strong>Reporting tools → Orders / Transactions</strong>. Use the filter bar to narrow by date, type, or status, and export results to CSV.","Payment provider contracts live under <strong>Admin → Payment Provider Contracts</strong>. You can create, edit, and link contracts to organizations from there.","Settlement data is in <strong>Reporting tools → Settlements</strong>. You can view batch summaries, reconciliation status, and download settlement reports.","For user management go to <strong>Admin → Users</strong>. You can invite users, assign roles (Reseller Manager, Merchant Admin), and control permissions per organization.","I’m not sure about that specific topic. For detailed support you can also reach out to the Verifone support team directly."];
+  var msgs=[],open=false,rIdx=0;
+  function esc(s){return s;}
+  function bubble(m){
+    var isU=m.role==='u';
+    var lHtml='';
+    if(m.links&&m.links.length){lHtml='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">'+m.links.map(function(l){return'<a href="'+l.href+'" style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;border:1.5px solid #e2e8f0;background:#fff;font-size:12px;font-weight:500;color:#374151;text-decoration:none;" onmouseover="this.style.borderColor=\'#2563eb\';this.style.color=\'#2563eb\'" onmouseout="this.style.borderColor=\'#e2e8f0\';this.style.color=\'#374151\'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'+l.label+'</a>';}).join('')+'</div>';}
+    if(isU){return'<div style="display:flex;justify-content:flex-end;"><div style="max-width:80%;background:#2563eb;color:#fff;padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:13.5px;line-height:1.55;">'+m.text+'</div></div>';}
+    return'<div style="display:flex;justify-content:flex-start;"><div style="max-width:90%;background:#f1f5f9;color:#1e293b;padding:10px 14px;border-radius:16px 16px 16px 4px;font-size:13.5px;line-height:1.55;">'+m.text+lHtml+'</div></div>';
+  }
+  function render(){var el=document.getElementById('va-messages');if(!el)return;el.innerHTML=msgs.map(bubble).join('');el.scrollTop=el.scrollHeight;}
+  window.vaOpen=function(){if(!msgs.length)msgs=[GREET];var p=document.getElementById('va-panel');p.style.display='flex';p.style.flexDirection='column';open=true;render();setTimeout(function(){var i=document.getElementById('va-input');if(i)i.focus();},60);};
+  window.vaClose=function(){document.getElementById('va-panel').style.display='none';open=false;};
+  window.vaToggle=function(){if(open)vaClose();else vaOpen();};
+  window.vaSend=function(){var i=document.getElementById('va-input');var t=(i.value||'').trim();if(!t)return;msgs.push({role:'u',text:t});i.value='';render();var r=RESPONSES[rIdx%RESPONSES.length];rIdx++;setTimeout(function(){msgs.push({role:'a',text:r});render();},650);};
+})();
+</script>
+<!-- ─── END VERIFONE ASSISTANT WIDGET ─── -->
+
 </body>
 </html>
