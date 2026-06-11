@@ -397,6 +397,67 @@
     #nav-rail.collapsed ~ #main .action-bar { left: var(--nav-collapsed-w); }
 
     .action-bar-left { display: flex; align-items: center; gap: 8px; }
+
+    /* ─── MODAL ─── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,0.45);
+      backdrop-filter: blur(2px);
+      z-index: 300;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08);
+      width: 100%; max-width: 960px;
+      max-height: calc(100vh - 48px);
+      display: flex; flex-direction: column;
+      transform: translateY(16px);
+      transition: transform 0.2s;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+
+    .modal-header {
+      padding: 20px 28px 16px;
+      border-bottom: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .modal-header-leading { display: flex; align-items: center; gap: 10px; }
+    .modal-title { font-size: 18px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; }
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1.5px solid var(--border); background: #fff;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); transition: background 0.1s, color 0.1s;
+    }
+    .modal-close:hover { background: var(--hover-bg); color: var(--text); }
+
+    .modal-body {
+      flex: 1; overflow-y: auto; padding: 24px 28px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .modal-body::-webkit-scrollbar { width: 4px; }
+    .modal-body::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .modal-footer {
+      padding: 16px 28px;
+      border-top: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -559,6 +620,10 @@
         </button>
       </div>
       <div class="page-header-trailing">
+        <button class="btn btn-ghost" onclick="openModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          Edit in modal
+        </button>
         <button class="btn btn-ghost">Enable POI</button>
         <button class="btn btn-danger">Delete POI</button>
       </div>
@@ -736,6 +801,174 @@
 </div><!-- /main -->
 
 
+<!-- ─────────────────────────────────────────
+     MODAL
+───────────────────────────────────────── -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="modal-header-leading">
+        <h2 class="modal-title" id="modalTitle">120-000-010</h2>
+        <button class="fav-btn" onclick="this.classList.toggle('starred')" title="Add to Favorites">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </button>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+
+      <!-- 2-column grid -->
+      <div class="modal-grid">
+
+        <!-- LEFT: General Information -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">General information</div></div>
+          <div class="card-body">
+
+            <div class="field">
+              <label class="field-label">Point of Interaction Name</label>
+              <div class="field-input-wrap">
+                <input class="field-input has-counter" type="text" value="120-000-010">
+                <span class="field-input-counter">12 / 35</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Organization</label>
+              <select class="field-select" disabled><option>POS Cloud Testing Site-1</option></select>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Description <span class="opt">(Optional)</span></label>
+              <input class="field-input" type="text" value="Testing simulator">
+            </div>
+
+            <div class="field">
+              <label class="field-label">Terminal ID</label>
+              <input class="field-input" type="text" value="101010">
+            </div>
+
+            <div class="field">
+              <label class="field-label">Type</label>
+              <div class="custom-select-wrap" id="mTypeSelectWrap">
+                <div class="custom-select-trigger" id="mTypeSelectTrigger" onclick="toggleModalTypeDropdown()">
+                  <span id="mTypeSelectValue">Unattended</span>
+                </div>
+                <div class="custom-select-actions">
+                  <button class="custom-select-clear" onclick="clearModalTypeSelect(event)" title="Clear">✕</button>
+                  <span class="custom-select-chevron" id="mTypeSelectChevron">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                  </span>
+                </div>
+                <div class="custom-select-dropdown" id="mTypeDropdown">
+                  <div class="custom-select-option" data-value="InFlight Commerce Terminal" onclick="selectModalType(this)">InFlight Commerce Terminal</div>
+                  <div class="custom-select-option" data-value="Inter Voice Response" onclick="selectModalType(this)">Inter Voice Response</div>
+                  <div class="custom-select-option" data-value="Point of Sale" onclick="selectModalType(this)">Point of Sale</div>
+                  <div class="custom-select-option" data-value="Kiosk" onclick="selectModalType(this)">Kiosk</div>
+                  <div class="custom-select-option selected" data-value="Unattended" onclick="selectModalType(this)">Unattended</div>
+                  <div class="custom-select-option" data-value="Standalone" onclick="selectModalType(this)">Standalone</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- RIGHT: Device Information -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Device information</div></div>
+          <div class="card-body">
+
+            <div class="field">
+              <label class="field-label">Device serial number <span class="note">(Mandatory for POS Cloud application)</span></label>
+              <input class="field-input" id="mDeviceSerial" type="text" placeholder="E.g. 123456789" oninput="syncModalPrinterFormat()">
+            </div>
+
+            <div class="field">
+              <label class="field-label">Device ID <span class="opt">(Optional)</span></label>
+              <div class="field-input-wrap">
+                <input class="field-input has-counter" type="text" value="202020">
+                <span class="field-input-counter">6 / 45</span>
+              </div>
+            </div>
+
+            <div class="field" id="mPrinterFormatField" style="display:none;">
+              <label class="field-label">Printer Format</label>
+              <select class="field-select" id="mPrinterFormatSelect" disabled>
+                <option value="" selected></option>
+                <option>40 Column</option>
+                <option>Receipt</option>
+              </select>
+              <span class="field-hint" id="mPrinterFormatHint">To select the printer format you first need to add a device serial number</span>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Cutover Configuration ID <span class="opt">(Optional)</span></label>
+              <select class="field-select">
+                <option value="" selected></option>
+                <option>Config A</option>
+                <option>Config B</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /modal-grid -->
+
+      <!-- Associated entities -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">Associated entities</div></div>
+        <div class="card-body" style="padding-bottom:16px;">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#374151;margin-bottom:12px;">Payment Provider Contracts</div>
+            <div style="font-size:12px;font-weight:500;color:var(--text-3);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.4px;">Select Payment Provider Contracts</div>
+            <div class="check-item">
+              <div class="checkbox checked" onclick="this.classList.toggle('checked')"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="check-item-label">POS Cloud Testing Site - PPC IC</span>
+              <div class="check-item-input">
+                <span class="check-item-input-label">Acquirer Terminal ID <span class="opt">(Optional)</span></span>
+                <input type="text" placeholder="">
+              </div>
+            </div>
+            <div class="check-item">
+              <div class="checkbox" onclick="this.classList.toggle('checked')"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="check-item-label">POS Cloud Testing Site - PPC VISA</span>
+              <div class="check-item-input">
+                <span class="check-item-input-label">Acquirer Terminal ID <span class="opt">(Optional)</span></span>
+                <input type="text" placeholder="">
+              </div>
+            </div>
+            <div class="check-item">
+              <div class="checkbox" onclick="this.classList.toggle('checked')"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="check-item-label">POS Cloud Testing Site - PPC MC</span>
+              <div class="check-item-input">
+                <span class="check-item-input-label">Acquirer Terminal ID <span class="opt">(Optional)</span></span>
+                <input type="text" placeholder="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /modal-body -->
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Discard changes</button>
+      <button class="btn btn-primary" onclick="saveModalChanges(this)">Save changes</button>
+    </div>
+
+  </div><!-- /modal -->
+</div><!-- /modal-backdrop -->
+
+
 <script>
   const nav = document.getElementById('nav-rail');
 
@@ -864,7 +1097,7 @@
     hint.style.display = hasSerial ? 'none' : '';
   }
 
-  /* Close dropdown on outside click */
+  /* Close page dropdown on outside click */
   document.addEventListener('click', e => {
     const wrap = document.getElementById('typeSelectWrap');
     if (wrap && !wrap.contains(e.target)) {
@@ -872,7 +1105,90 @@
       document.getElementById('typeSelectTrigger').classList.remove('open');
       document.getElementById('typeSelectChevron').style.transform = '';
     }
+    const mWrap = document.getElementById('mTypeSelectWrap');
+    if (mWrap && !mWrap.contains(e.target)) {
+      document.getElementById('mTypeDropdown').classList.remove('open');
+      document.getElementById('mTypeSelectTrigger').classList.remove('open');
+      document.getElementById('mTypeSelectChevron').style.transform = '';
+    }
   });
+
+  /* ─── MODAL ─── */
+  function openModal() {
+    document.getElementById('modalBackdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modalBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleBackdropClick(e) {
+    if (e.target === document.getElementById('modalBackdrop')) closeModal();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  function saveModalChanges(btn) {
+    const orig = btn.textContent;
+    btn.textContent = 'Saved ✓';
+    btn.style.background = '#16a34a';
+    btn.style.borderColor = '#16a34a';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+      btn.style.borderColor = '';
+      closeModal();
+    }, 1400);
+  }
+
+  /* Modal Type dropdown */
+  function toggleModalTypeDropdown() {
+    const trigger = document.getElementById('mTypeSelectTrigger');
+    const dropdown = document.getElementById('mTypeDropdown');
+    const chevron = document.getElementById('mTypeSelectChevron');
+    const open = dropdown.classList.contains('open');
+    dropdown.classList.toggle('open', !open);
+    trigger.classList.toggle('open', !open);
+    chevron.style.transform = open ? '' : 'rotate(180deg)';
+  }
+
+  function selectModalType(el) {
+    const val = el.dataset.value;
+    document.getElementById('mTypeSelectValue').textContent = val;
+    document.getElementById('mTypeSelectTrigger').classList.remove('empty');
+    document.querySelectorAll('#mTypeDropdown .custom-select-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('mTypeDropdown').classList.remove('open');
+    document.getElementById('mTypeSelectTrigger').classList.remove('open');
+    document.getElementById('mTypeSelectChevron').style.transform = '';
+    const printerField = document.getElementById('mPrinterFormatField');
+    printerField.style.display = val === 'Point of Sale' ? '' : 'none';
+    if (val === 'Point of Sale') syncModalPrinterFormat();
+  }
+
+  function clearModalTypeSelect(e) {
+    e.stopPropagation();
+    document.getElementById('mTypeSelectValue').textContent = '';
+    document.getElementById('mTypeSelectTrigger').classList.add('empty');
+    document.querySelectorAll('#mTypeDropdown .custom-select-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('mTypeDropdown').classList.remove('open');
+    document.getElementById('mTypeSelectTrigger').classList.remove('open');
+    document.getElementById('mPrinterFormatField').style.display = 'none';
+  }
+
+  function syncModalPrinterFormat() {
+    const serial = document.getElementById('mDeviceSerial');
+    const sel = document.getElementById('mPrinterFormatSelect');
+    const hint = document.getElementById('mPrinterFormatHint');
+    const hasSerial = serial && serial.value.trim().length > 0;
+    sel.disabled = !hasSerial;
+    sel.style.background = hasSerial ? '#fff' : '';
+    hint.style.display = hasSerial ? 'none' : '';
+  }
 </script>
 
 </body>
