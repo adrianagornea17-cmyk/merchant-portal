@@ -1201,6 +1201,32 @@
     .prev-secure { text-align:center; font-size:12px; color:var(--text-4); display:flex; align-items:center; justify-content:center; gap:4px; padding-bottom:18px; }
     .prev-secure strong { color:#374151; }
 
+    /* ─── CUSTOMER DETAILS FORM ─── */
+    .cd-note { font-size:12px; color:var(--text-4); padding:6px 28px 10px; font-style:italic; }
+    .cd-inner { border:1.5px solid var(--border); border-radius:10px; padding:16px 16px 12px; margin-bottom:10px; }
+    .cd-section-title { font-size:14px; font-weight:600; color:var(--text); margin:0 0 14px; }
+    .cd-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+    .cd-field { display:flex; flex-direction:column; gap:4px; }
+    .cd-label { font-size:12.5px; font-weight:600; color:var(--text-2); }
+    .cd-label .opt { font-weight:400; color:var(--text-4); font-size:11.5px; }
+    .cd-hint { font-size:11.5px; color:var(--text-4); line-height:1.4; }
+    .cd-phone-row { display:flex; }
+    .cd-phone-cc { display:flex; align-items:center; gap:5px; height:38px; padding:0 10px; border:1.5px solid var(--border); border-right:none; border-radius:8px 0 0 8px; font-size:13px; color:var(--text-2); cursor:pointer; background:#f8fafc; white-space:nowrap; flex-shrink:0; }
+    .cd-phone-num { flex:1; min-width:0; height:38px; border:1.5px solid var(--border); border-radius:0 8px 8px 0; padding:0 10px; font-size:13px; font-family:inherit; color:var(--text-2); outline:none; transition:border-color 0.15s; }
+    .cd-phone-num:focus { border-color:var(--accent); }
+    .cd-search-wrap { position:relative; margin-bottom:14px; }
+    .cd-search-input { width:100%; height:38px; border:1.5px solid var(--border); border-radius:10px; padding:0 36px 0 12px; font-size:13px; font-family:inherit; color:var(--text-2); outline:none; transition:border-color 0.15s; }
+    .cd-search-input:focus { border-color:var(--accent); }
+    .cd-search-chevron { position:absolute; right:12px; top:50%; transform:translateY(-50%); pointer-events:none; color:var(--text-3); }
+    .cd-divider { border:none; border-top:1px solid var(--border); margin:14px 0; }
+    .cd-toggle-row { display:flex; align-items:center; gap:10px; margin-top:12px; font-size:13px; color:var(--text-2); cursor:pointer; user-select:none; }
+    .cd-toggle { position:relative; width:36px; height:20px; flex-shrink:0; }
+    .cd-toggle input { opacity:0; width:0; height:0; position:absolute; }
+    .cd-toggle-slider { position:absolute; inset:0; background:#d1d5db; border-radius:20px; transition:background 0.2s; }
+    .cd-toggle-slider::before { content:''; position:absolute; width:16px; height:16px; left:2px; top:2px; background:#fff; border-radius:50%; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+    .cd-toggle input:checked ~ .cd-toggle-slider { background:var(--accent); }
+    .cd-toggle input:checked ~ .cd-toggle-slider::before { transform:translateX(16px); }
+
     /* ─── FILTER SIDE PANEL ─── */
     :root { --fp-w: 280px; }
     #filter-panel { position:fixed; top:0; right:0; bottom:0; width:var(--fp-w); background:#fff; border-left:1.5px solid var(--border); display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.25s ease; z-index:100; overflow:hidden; }
@@ -1823,6 +1849,99 @@
                 </div>
               </div>
 
+              <!-- Customer details card -->
+              <div class="cs-card">
+                <div class="cs-options">
+                  <div class="cs-option-row" style="border-bottom:none;padding-bottom:0;" onclick="toggleCdOption(this)">
+                    <div class="cb-box" id="cd-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="cs-opt-label">Customer details</span>
+                    <span class="cs-opt-hint">pre-fill before sending</span>
+                  </div>
+                </div>
+
+                <!-- Note when unchecked -->
+                <div id="cd-note" class="cd-note">Customer details will be added by the shopper at checkout</div>
+
+                <!-- Full form when checked -->
+                <div id="cd-form" style="display:none;padding-top:12px;">
+
+                  <!-- Search -->
+                  <div class="cd-field" style="margin-bottom:14px;">
+                    <label class="cd-label">Search customer</label>
+                    <div class="cd-search-wrap" style="margin-bottom:0;">
+                      <input class="cd-search-input" type="text" placeholder="Search by email or phone number">
+                      <svg class="cd-search-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+
+                  <!-- Details -->
+                  <div class="cd-inner">
+                    <div class="cd-section-title">Details</div>
+                    <div class="cd-grid">
+                      <div class="cd-field"><label class="cd-label">First Name</label><input class="form-input" type="text" placeholder=""></div>
+                      <div class="cd-field"><label class="cd-label">Last Name</label><input class="form-input" type="text" placeholder=""></div>
+                    </div>
+                    <div class="cd-grid">
+                      <div class="cd-field">
+                        <label class="cd-label">Email <span class="opt">(optional)</span></label>
+                        <input class="form-input" type="email" placeholder="">
+                        <span class="cd-hint">Needed to authenticate the customer for processing</span>
+                      </div>
+                      <div class="cd-field">
+                        <label class="cd-label">Phone <span class="opt">(optional)</span></label>
+                        <div class="cd-phone-row">
+                          <div class="cd-phone-cc">🇦🇺 +61 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+                          <input class="cd-phone-num" type="tel" placeholder="000 000 000">
+                        </div>
+                        <span class="cd-hint">Will be shared with payment providers for processing</span>
+                      </div>
+                    </div>
+                    <div style="max-width:calc(50% - 5px);">
+                      <div class="cd-field">
+                        <label class="cd-label">Identifier <span class="opt">(optional)</span></label>
+                        <input class="form-input" type="text" placeholder="">
+                      </div>
+                    </div>
+
+                    <div class="cd-divider"></div>
+
+                    <!-- Billing Details -->
+                    <div class="cd-section-title" style="margin-top:0;">Billing Details</div>
+                    <div class="cd-grid">
+                      <div class="cd-field"><label class="cd-label">First Name</label><input class="form-input" type="text" placeholder=""></div>
+                      <div class="cd-field"><label class="cd-label">Last Name</label><input class="form-input" type="text" placeholder=""></div>
+                    </div>
+                    <div class="cd-grid">
+                      <div class="cd-field"><label class="cd-label">Address Line 1 <span class="opt">(optional)</span></label><input class="form-input" type="text" placeholder=""></div>
+                      <div class="cd-field"><label class="cd-label">Address Line 2 <span class="opt">(optional)</span></label><input class="form-input" type="text" placeholder=""></div>
+                    </div>
+                    <div class="cd-grid">
+                      <div class="cd-field"><label class="cd-label">Zip Code <span class="opt">(optional)</span></label><input class="form-input" type="text" placeholder=""></div>
+                      <div class="cd-field"><label class="cd-label">City <span class="opt">(optional)</span></label><input class="form-input" type="text" placeholder=""></div>
+                    </div>
+                    <div class="cd-grid" style="margin-bottom:0;">
+                      <div class="cd-field">
+                        <label class="cd-label">State / Province / Region <span class="opt">(optional)</span></label>
+                        <select class="form-select"><option value=""></option><option>New South Wales</option><option>Victoria</option><option>Queensland</option></select>
+                      </div>
+                      <div class="cd-field">
+                        <label class="cd-label">Country <span class="opt">(optional)</span></label>
+                        <select class="form-select"><option>Australia</option><option>United Kingdom</option><option>United States</option><option>Germany</option><option>France</option><option>Sweden</option><option>New Zealand</option></select>
+                      </div>
+                    </div>
+
+                    <label class="cd-toggle-row">
+                      <span class="cd-toggle">
+                        <input type="checkbox" checked>
+                        <span class="cd-toggle-slider"></span>
+                      </span>
+                      The shipping address is same as the Billing Address
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+
               <!-- Action bar -->
               <div class="cs-action-bar">
                 <button class="btn-danger-text" onclick="closeCreateModal()">Discard</button>
@@ -2118,6 +2237,15 @@
       elDesc.textContent = description || 'Description';
       elDesc.classList.toggle('has-value', !!description);
     }
+  }
+
+  function toggleCdOption(row) {
+    const cb = document.getElementById('cd-cb');
+    const note = document.getElementById('cd-note');
+    const form = document.getElementById('cd-form');
+    const isChecked = cb.classList.toggle('checked');
+    note.style.display = isChecked ? 'none' : '';
+    form.style.display = isChecked ? 'block' : 'none';
   }
 
   function toggleOption(row, fieldId) {
