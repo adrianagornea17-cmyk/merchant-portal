@@ -1155,10 +1155,10 @@
     .sb-search-btn:hover { background:#1d4ed8; }
 
     /* Date in page header */
-    #header-date-wrap { position:relative; }
-    .hdr-date-btn { display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 13px; border:1.5px solid var(--border); border-radius:8px; background:#fff; font-size:13px; font-weight:500; color:var(--text-2); cursor:pointer; font-family:inherit; white-space:nowrap; transition:border-color 0.15s,color 0.15s; }
-    .hdr-date-btn:hover { border-color:var(--accent); color:var(--accent); }
-    .hdr-date-btn.active { border-color:var(--accent); background:#eff6ff; color:var(--accent); }
+    .col-date-wrap { position:relative; margin-bottom:8px; }
+    .col-date-btn { display:flex; align-items:center; gap:5px; width:100%; height:30px; border:1.5px solid var(--accent); border-radius:6px; padding:0 9px; font-size:12px; font-weight:500; font-family:inherit; color:var(--accent); background:#eff6ff; cursor:pointer; white-space:nowrap; transition:opacity 0.1s; }
+    .col-date-btn span { flex:1; text-align:left; overflow:hidden; text-overflow:ellipsis; }
+    .col-date-btn:hover { opacity:0.85; }
 
     /* ─── CREATE SPLIT PANE ─── */
     .create-split { display:flex; gap:24px; align-items:flex-start; }
@@ -1424,31 +1424,6 @@
         </div>
       </div>
       <div class="page-header-trailing">
-        <!-- Date filter — visible in list view only -->
-        <div id="header-date-wrap" style="position:relative;">
-          <button class="hdr-date-btn active" id="date-filter-btn" onclick="toggleDatePicker()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span id="date-filter-label">5/1/2026 — 6/14/2026</span>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div id="date-picker-dropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);padding:16px;z-index:300;min-width:300px;">
-            <div style="font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Date range</div>
-            <div style="display:flex;gap:8px;margin-bottom:12px;">
-              <div style="flex:1;"><label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">From</label><input type="date" value="2026-05-01" id="date-from" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);"></div>
-              <div style="flex:1;"><label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">To</label><input type="date" value="2026-06-14" id="date-to" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);"></div>
-            </div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-              <button onclick="setDatePreset('today')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Today</button>
-              <button onclick="setDatePreset('7d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Last 7 days</button>
-              <button onclick="setDatePreset('30d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--accent);background:#eff6ff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--accent);font-weight:500;">Last 30 days</button>
-              <button onclick="setDatePreset('mtd')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">This month</button>
-            </div>
-            <div style="display:flex;justify-content:flex-end;gap:8px;">
-              <button onclick="toggleDatePicker()" style="padding:0 12px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:12.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Cancel</button>
-              <button onclick="applyDateFilter()" style="padding:0 12px;height:30px;border-radius:7px;border:none;background:var(--accent);font-size:12.5px;cursor:pointer;font-family:inherit;color:#fff;font-weight:500;">Apply</button>
-            </div>
-          </div>
-        </div>
         <button class="btn btn-primary" onclick="showCreateFlow()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Create Payment link
@@ -1501,9 +1476,32 @@
             <table style="width:100%;border-collapse:collapse;">
               <thead>
                 <tr>
-                  <th class="col-th" style="width:170px;">
+                  <th class="col-th" style="width:200px;">
                     <div class="col-th-inner">Created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><polyline points="7 10 12 5 17 10"/><polyline points="7 14 12 19 17 14"/></svg></div>
-                    <input class="col-search" type="text" placeholder="Search...">
+                    <div class="col-date-wrap" id="header-date-wrap">
+                      <button class="col-date-btn" id="date-filter-btn" onclick="toggleDatePicker()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <span id="date-filter-label">5/1/2026 — 6/14/2026</span>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                      </button>
+                      <div id="date-picker-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);padding:16px;z-index:350;min-width:300px;">
+                        <div style="font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Date range</div>
+                        <div style="display:flex;gap:8px;margin-bottom:12px;">
+                          <div style="flex:1;"><label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">From</label><input type="date" value="2026-05-01" id="date-from" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);"></div>
+                          <div style="flex:1;"><label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">To</label><input type="date" value="2026-06-14" id="date-to" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);"></div>
+                        </div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+                          <button onclick="setDatePreset('today')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Today</button>
+                          <button onclick="setDatePreset('7d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Last 7 days</button>
+                          <button onclick="setDatePreset('30d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--accent);background:#eff6ff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--accent);font-weight:500;">Last 30 days</button>
+                          <button onclick="setDatePreset('mtd')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">This month</button>
+                        </div>
+                        <div style="display:flex;justify-content:flex-end;gap:8px;">
+                          <button onclick="toggleDatePicker()" style="padding:0 12px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:12.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Cancel</button>
+                          <button onclick="applyDateFilter()" style="padding:0 12px;height:30px;border-radius:7px;border:none;background:var(--accent);font-size:12.5px;cursor:pointer;font-family:inherit;color:#fff;font-weight:500;">Apply</button>
+                        </div>
+                      </div>
+                    </div>
                   </th>
                   <th class="col-th" style="width:120px;">
                     <div class="col-th-inner">Amount</div>
@@ -2207,9 +2205,9 @@
   }
 
   document.addEventListener('click', e => {
+    const dateWrap = document.getElementById('header-date-wrap');
     const dp = document.getElementById('date-picker-dropdown');
-    const btn = document.getElementById('date-filter-btn');
-    if (dp && dp.style.display === 'block' && !dp.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+    if (dp && dp.style.display === 'block' && dateWrap && !dateWrap.contains(e.target)) {
       dp.style.display = 'none';
     }
   });
