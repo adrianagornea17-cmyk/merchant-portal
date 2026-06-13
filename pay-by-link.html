@@ -940,7 +940,7 @@
 
     /* Column header search inputs */
     .col-th {
-      padding: 11px 14px 0;
+      padding: 11px 14px 11px;
       text-align: left;
       font-size: 11.5px;
       font-weight: 600;
@@ -1200,6 +1200,43 @@
     .prev-pay-btn-el { width:100%; height:42px; background:#1d4ed8; color:#fff; border:none; border-radius:10px; font-size:13.5px; font-weight:600; cursor:default; margin:14px 0 10px; font-family:inherit; display:block; }
     .prev-secure { text-align:center; font-size:11px; color:var(--text-4); display:flex; align-items:center; justify-content:center; gap:4px; padding-bottom:14px; }
     .prev-secure strong { color:#374151; }
+
+    /* ─── FILTER SIDE PANEL ─── */
+    :root { --fp-w: 280px; }
+    #filter-panel { position:fixed; top:0; right:0; bottom:0; width:var(--fp-w); background:#fff; border-left:1.5px solid var(--border); display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.25s ease; z-index:100; overflow:hidden; }
+    #filter-panel.open { transform:translateX(0); box-shadow:-4px 0 24px rgba(0,0,0,0.1); }
+    .page-scroll { transition:margin-right 0.25s ease; }
+    #main.fp-open .page-scroll { margin-right:var(--fp-w); }
+    .fp-head { display:flex; align-items:center; justify-content:space-between; padding:16px 18px 14px; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .fp-title { font-size:14px; font-weight:700; color:#0f172a; }
+    .fp-close { width:28px; height:28px; border-radius:50%; background:#f3f4f6; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-3); transition:background 0.1s; }
+    .fp-close:hover { background:#e5e7eb; color:var(--text); }
+    .fp-body { flex:1; overflow-y:auto; padding:18px; }
+    .fp-body::-webkit-scrollbar { width:3px; }
+    .fp-body::-webkit-scrollbar-thumb { background:#e5e7eb; border-radius:3px; }
+    .fp-section { margin-bottom:20px; }
+    .fp-section-label { font-size:11px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:var(--text-4); margin-bottom:10px; }
+    .fp-field { margin-bottom:12px; }
+    .fp-field-label { font-size:12px; font-weight:600; color:var(--text-2); margin-bottom:6px; display:block; }
+    .fp-select { width:100%; padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; color:var(--text-2); background:#fff; appearance:none; outline:none; cursor:pointer; font-family:inherit; transition:border-color 0.1s; }
+    .fp-select:focus { border-color:var(--accent); }
+    .fp-date-row { display:flex; gap:8px; }
+    .fp-date-input { flex:1; padding:7px 10px; border:1.5px solid var(--border); border-radius:8px; font-size:12.5px; color:var(--text-2); background:#fff; outline:none; font-family:inherit; transition:border-color 0.1s; }
+    .fp-date-input:focus { border-color:var(--accent); }
+    .fp-divider { margin:16px 0; border:none; border-top:1px solid var(--border); }
+    .fp-checkbox-list { display:flex; flex-direction:column; gap:8px; }
+    .fp-checkbox { display:flex; align-items:center; gap:9px; font-size:13px; color:var(--text-2); cursor:pointer; }
+    .fp-checkbox input[type=checkbox] { width:15px; height:15px; accent-color:var(--accent); cursor:pointer; flex-shrink:0; }
+    .fp-foot { display:flex; gap:8px; padding:14px 18px; border-top:1px solid var(--border); flex-shrink:0; }
+    .fp-btn-clear { flex:1; padding:8px; border:1.5px solid var(--border); border-radius:20px; background:#fff; color:var(--text-2); font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:background 0.1s; }
+    .fp-btn-clear:hover { background:#f9fafb; }
+    .fp-btn-apply { flex:1; padding:8px; background:var(--accent); color:#fff; border:none; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:background 0.1s; }
+    .fp-btn-apply:hover { background:#1d4ed8; }
+    .filter-panel-btn { display:flex; align-items:center; gap:6px; height:38px; padding:0 14px; border:1.5px solid var(--border); border-radius:10px; background:#fff; color:var(--text-2); font-size:13px; font-weight:500; cursor:pointer; font-family:inherit; white-space:nowrap; transition:border-color 0.1s, background 0.1s; }
+    .filter-panel-btn:hover { border-color:#d1d5db; background:#f9fafb; }
+    .filter-panel-btn.active { border-color:var(--accent); color:var(--accent); background:#eff6ff; }
+    .fp-badge { background:var(--accent); color:#fff; font-size:10px; font-weight:700; padding:1px 6px; border-radius:20px; display:none; }
+    .fp-badge.visible { display:inline; }
   </style>
 </head>
 <body>
@@ -1459,15 +1496,11 @@
             </div>
             <button class="sb-search-btn" onclick="doTopSearch()">Search</button>
             <button style="background:none;border:none;font-size:12.5px;color:var(--text-4);cursor:pointer;font-family:inherit;padding:0 4px;" onclick="clearTopSearch()">Clear</button>
-          </div>
-
-          <!-- Toolbar filters -->
-          <div class="pbl-toolbar">
-            <button style="display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--accent);background:#eff6ff;color:var(--accent);font-family:inherit;">
-              Organizations (+1)
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <button class="filter-panel-btn" id="fp-toggle-btn" onclick="toggleFilterPanel()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              Filters
+              <span class="fp-badge" id="fp-badge">0</span>
             </button>
-            <button style="background:none;border:none;font-size:12.5px;color:var(--accent);cursor:pointer;font-family:inherit;padding:0 4px;font-weight:500;" onclick="clearAllFilters()">Clear filters</button>
           </div>
 
           <div class="pbl-total" id="lv-total">Total: 10 Payment links</div>
@@ -1476,85 +1509,23 @@
             <table style="width:100%;border-collapse:collapse;">
               <thead>
                 <tr>
-                  <th class="col-th" style="width:200px;">
+                  <th class="col-th" style="width:170px;">
                     <div class="col-th-inner">Created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><polyline points="7 10 12 5 17 10"/><polyline points="7 14 12 19 17 14"/></svg></div>
-                    <div class="col-date-wrap" id="header-date-wrap">
-                      <button class="col-date-btn" id="date-filter-btn" onclick="toggleDatePicker()">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        <span id="date-filter-label">5/1/2026 — 6/14/2026</span>
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                      </button>
-                      <div id="date-picker-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);padding:16px;z-index:350;min-width:300px;">
-                        <div style="font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Date range</div>
-                        <div style="display:flex;gap:8px;margin-bottom:12px;">
-                          <div style="flex:1;"><label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">From</label><input type="date" value="2026-05-01" id="date-from" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);"></div>
-                          <div style="flex:1;"><label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">To</label><input type="date" value="2026-06-14" id="date-to" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);"></div>
-                        </div>
-                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-                          <button onclick="setDatePreset('today')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Today</button>
-                          <button onclick="setDatePreset('7d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Last 7 days</button>
-                          <button onclick="setDatePreset('30d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--accent);background:#eff6ff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--accent);font-weight:500;">Last 30 days</button>
-                          <button onclick="setDatePreset('mtd')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">This month</button>
-                        </div>
-                        <div style="display:flex;justify-content:flex-end;gap:8px;">
-                          <button onclick="toggleDatePicker()" style="padding:0 12px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:12.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Cancel</button>
-                          <button onclick="applyDateFilter()" style="padding:0 12px;height:30px;border-radius:7px;border:none;background:var(--accent);font-size:12.5px;cursor:pointer;font-family:inherit;color:#fff;font-weight:500;">Apply</button>
-                        </div>
-                      </div>
-                    </div>
                   </th>
                   <th class="col-th" style="width:120px;">
                     <div class="col-th-inner">Amount</div>
-                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Email (Recipient)</div>
-                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Email (Customer)</div>
-                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Merchant Reference</div>
-                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
-                  <th class="col-th" style="width:140px;">
+                  <th class="col-th" style="width:120px;">
                     <div class="col-th-inner">Status</div>
-                    <div class="sf-wrap" id="sf-wrap">
-                      <button class="sf-btn" id="sf-btn" onclick="toggleStatusFilter(event)">
-                        <span id="sf-label">All</span>
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                      </button>
-                      <div class="sf-dropdown" id="sf-dropdown">
-                        <div class="sf-dd-hd">
-                          <span class="sf-dd-title">STATUS</span>
-                          <button class="sf-select-all" onclick="sfSelectAll()">Select All</button>
-                        </div>
-                        <div class="sf-options">
-                          <div class="sf-opt" data-val="expired" onclick="sfToggle(this)">
-                            <div class="sf-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                            <span class="sf-opt-label">Expired</span>
-                          </div>
-                          <div class="sf-opt" data-val="failed" onclick="sfToggle(this)">
-                            <div class="sf-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                            <span class="sf-opt-label">Failed</span>
-                          </div>
-                          <div class="sf-opt" data-val="notpaid" onclick="sfToggle(this)">
-                            <div class="sf-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                            <span class="sf-opt-label">Not paid</span>
-                          </div>
-                          <div class="sf-opt" data-val="paid" onclick="sfToggle(this)">
-                            <div class="sf-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                            <span class="sf-opt-label">Paid</span>
-                          </div>
-                        </div>
-                        <div class="sf-footer">
-                          <button class="sf-clear-btn" onclick="sfClear()">Clear</button>
-                          <button class="sf-apply-btn" onclick="sfApply()">Apply</button>
-                        </div>
-                      </div>
-                    </div>
                   </th>
                 </tr>
               </thead>
@@ -2079,6 +2050,7 @@
     if (e.key === 'Escape') {
       closeFavPopover();
       closeCreateModal();
+      closeFilterPanel();
     }
   });
 
@@ -2181,38 +2153,6 @@
     if (box) box.classList.toggle('checked');
   }
 
-  function toggleDatePicker() {
-    const dd = document.getElementById('date-picker-dropdown');
-    dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
-  }
-
-  function setDatePreset(preset) {
-    const inputs = document.querySelectorAll('#date-picker-dropdown input[type=date]');
-    const today = new Date();
-    const fmt = d => d.toISOString().split('T')[0];
-    if (preset === 'today') { inputs[0].value = fmt(today); inputs[1].value = fmt(today); }
-    else if (preset === '7d') { const s = new Date(today); s.setDate(s.getDate()-7); inputs[0].value = fmt(s); inputs[1].value = fmt(today); }
-    else if (preset === '30d') { const s = new Date(today); s.setDate(s.getDate()-30); inputs[0].value = fmt(s); inputs[1].value = fmt(today); }
-    else if (preset === 'mtd') { inputs[0].value = fmt(new Date(today.getFullYear(), today.getMonth(), 1)); inputs[1].value = fmt(today); }
-  }
-
-  function applyDateFilter() {
-    const inputs = document.querySelectorAll('#date-picker-dropdown input[type=date]');
-    const fmt = v => { const [y,m,d] = v.split('-'); return `${parseInt(m)}/${parseInt(d)}/${y}`; };
-    const lbl = document.getElementById('date-filter-label');
-    if (lbl) lbl.textContent = `${fmt(inputs[0].value)} — ${fmt(inputs[1].value)}`;
-    toggleDatePicker();
-  }
-
-  document.addEventListener('click', e => {
-    const dateWrap = document.getElementById('header-date-wrap');
-    const dp = document.getElementById('date-picker-dropdown');
-    if (dp && dp.style.display === 'block' && dateWrap && !dateWrap.contains(e.target)) {
-      dp.style.display = 'none';
-    }
-  });
-
-
   /* ─── UI HELPERS ─── */
   function toggleCb(row) {
     // If called on a cb-row, find the cb-box inside
@@ -2229,48 +2169,49 @@
     setTimeout(() => { btn.innerHTML = orig; }, 1800);
   }
 
-  /* ─── STATUS FILTER ─── */
-  let sfSelected = new Set();
-  let sfApplied  = new Set();
+  /* ─── FILTER PANEL ─── */
+  let fpState = { statusSet: new Set(), dateFrom: '', dateTo: '', org: '' };
 
-  function toggleStatusFilter(e) {
-    e.stopPropagation();
-    document.getElementById('sf-dropdown').classList.toggle('open');
+  function toggleFilterPanel() {
+    const panel = document.getElementById('filter-panel');
+    const main  = document.getElementById('main');
+    const btn   = document.getElementById('fp-toggle-btn');
+    const isOpen = panel.classList.toggle('open');
+    main.classList.toggle('fp-open', isOpen);
+    btn.classList.toggle('active', isOpen);
   }
 
-  function sfToggle(row) {
-    const val = row.dataset.val;
-    const cb = row.querySelector('.sf-cb');
-    if (sfSelected.has(val)) { sfSelected.delete(val); cb.classList.remove('checked'); }
-    else { sfSelected.add(val); cb.classList.add('checked'); }
+  function closeFilterPanel() {
+    document.getElementById('filter-panel').classList.remove('open');
+    document.getElementById('main').classList.remove('fp-open');
+    document.getElementById('fp-toggle-btn').classList.remove('active');
   }
 
-  function sfSelectAll() {
-    ['expired','failed','notpaid','paid'].forEach(v => {
-      sfSelected.add(v);
-      const opt = document.querySelector(`.sf-opt[data-val="${v}"] .sf-cb`);
-      if (opt) opt.classList.add('checked');
-    });
-  }
-
-  function sfClear() {
-    sfSelected.clear(); sfApplied.clear();
-    document.querySelectorAll('.sf-cb').forEach(cb => cb.classList.remove('checked'));
-    document.getElementById('sf-label').textContent = 'All';
-    document.getElementById('sf-btn').classList.remove('active');
-    document.getElementById('sf-dropdown').classList.remove('open');
+  function fpClear() {
+    document.querySelectorAll('.fp-status-cb').forEach(cb => cb.checked = false);
+    document.getElementById('fp-date-from').value = '2026-05-01';
+    document.getElementById('fp-date-to').value = '2026-06-14';
+    document.getElementById('fp-org').value = '';
+    fpState = { statusSet: new Set(), dateFrom: '', dateTo: '', org: '' };
+    updateFpBadge();
     applyFilters();
   }
 
-  function sfApply() {
-    sfApplied = new Set(sfSelected);
-    const n = sfApplied.size;
-    const lbl = document.getElementById('sf-label');
-    const btn = document.getElementById('sf-btn');
-    lbl.textContent = (n === 0 || n === 4) ? 'All' : n + ' selected';
-    btn.classList.toggle('active', n > 0 && n < 4);
-    document.getElementById('sf-dropdown').classList.remove('open');
+  function fpApply() {
+    const checked = Array.from(document.querySelectorAll('.fp-status-cb:checked')).map(cb => cb.value);
+    fpState.statusSet = new Set(checked);
+    fpState.dateFrom  = document.getElementById('fp-date-from').value || '';
+    fpState.dateTo    = document.getElementById('fp-date-to').value || '';
+    fpState.org       = document.getElementById('fp-org').value;
+    updateFpBadge();
+    closeFilterPanel();
     applyFilters();
+  }
+
+  function updateFpBadge() {
+    const n = fpState.statusSet.size + (fpState.org ? 1 : 0) + (fpState.dateFrom || fpState.dateTo ? 1 : 0);
+    const badge = document.getElementById('fp-badge');
+    if (badge) { badge.textContent = n; badge.classList.toggle('visible', n > 0); }
   }
 
   /* ─── SEARCH BAR ─── */
@@ -2313,17 +2254,25 @@
         else if (sbField === 'lastname') val = (tr.dataset.lastname || '').toLowerCase();
         match = val.includes(q);
       }
-      // per-column text filters (cols 1–5, not the status col)
-      if (match) match = colFilters.every((cq, i) => {
-        if (!cq) return true;
-        const cell = tr.querySelector(`td:nth-child(${i + 1})`);
-        return cell ? cell.textContent.toLowerCase().includes(cq) : true;
-      });
-      // status checkbox filter
-      if (match && sfApplied.size > 0 && sfApplied.size < 4) {
+      // status filter
+      if (match && fpState.statusSet.size > 0 && fpState.statusSet.size < 4) {
         const pill = tr.querySelector('td:last-child .status-pill');
         const cls = pill ? pill.className : '';
-        match = Array.from(sfApplied).some(v => cls.includes('status-pill-' + v));
+        match = Array.from(fpState.statusSet).some(v => cls.includes('status-pill-' + v));
+      }
+      // date filter
+      if (match && (fpState.dateFrom || fpState.dateTo)) {
+        const dateText = tr.querySelector('td:first-child')?.textContent || '';
+        const rowDate = new Date(dateText);
+        if (!isNaN(rowDate)) {
+          if (fpState.dateFrom) match = match && rowDate >= new Date(fpState.dateFrom);
+          if (fpState.dateTo) { const to = new Date(fpState.dateTo); to.setHours(23,59,59,999); match = match && rowDate <= to; }
+        }
+      }
+      // org filter
+      if (match && fpState.org) {
+        const ref = tr.querySelector('td:nth-child(5)')?.textContent || '';
+        match = ref.toLowerCase().includes(fpState.org.toLowerCase());
       }
       tr.style.display = match ? '' : 'none';
       if (match) visible++;
@@ -2332,47 +2281,10 @@
     if (tot) tot.textContent = `Total: ${visible} Payment link${visible !== 1 ? 's' : ''}`;
   }
 
-  function clearAllFilters() {
-    clearTopSearch();
-    sfClear();
-    document.querySelectorAll('.col-search').forEach(i => { i.value = ''; });
-    colFilters.fill('');
-    applyFilters();
-  }
-
-  /* ─── PER-COLUMN SEARCH ─── */
-  const colFilters = [];
-
-  function initColSearch() {
-    document.querySelectorAll('.col-search').forEach((input, i) => {
-      colFilters[i] = '';
-      input.addEventListener('input', () => {
-        colFilters[i] = input.value.toLowerCase().trim();
-        applyFilters();
-      });
-    });
-    document.querySelectorAll('.col-search-select').forEach((sel, i) => {
-      const idx = Array.from(document.querySelectorAll('.col-th')).indexOf(sel.closest('.col-th'));
-      colFilters[idx] = '';
-      sel.addEventListener('change', () => {
-        colFilters[idx] = sel.value.toLowerCase();
-        applyFilters();
-      });
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    initColSearch();
-  });
-
   document.addEventListener('click', e => {
     const sbWrap = document.getElementById('sb-field-wrap');
     if (sbWrap && !sbWrap.contains(e.target)) {
       document.getElementById('sb-dropdown')?.classList.remove('open');
-    }
-    const sfWrap = document.getElementById('sf-wrap');
-    if (sfWrap && !sfWrap.contains(e.target)) {
-      document.getElementById('sf-dropdown')?.classList.remove('open');
     }
   });
 </script>
@@ -2506,7 +2418,60 @@
 </script>
 <!-- ─── END VERIFONE ASSISTANT WIDGET ─── -->
 
+<!-- ─── FILTER SIDE PANEL ─── -->
+<div id="filter-panel">
+  <div class="fp-head">
+    <span class="fp-title">Filters</span>
+    <button class="fp-close" onclick="closeFilterPanel()" title="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="fp-body">
 
+    <!-- Date range -->
+    <div class="fp-section">
+      <div class="fp-section-label">Date range</div>
+      <div class="fp-field">
+        <label class="fp-field-label">Created</label>
+        <div class="fp-date-row">
+          <input class="fp-date-input" type="date" id="fp-date-from" value="2026-05-01" placeholder="From">
+          <input class="fp-date-input" type="date" id="fp-date-to" value="2026-06-14" placeholder="To">
+        </div>
+      </div>
+    </div>
+
+    <hr class="fp-divider">
+
+    <!-- Payment status -->
+    <div class="fp-section">
+      <div class="fp-section-label">Payment status</div>
+      <div class="fp-checkbox-list">
+        <label class="fp-checkbox"><input type="checkbox" class="fp-status-cb" value="expired"> Expired</label>
+        <label class="fp-checkbox"><input type="checkbox" class="fp-status-cb" value="failed"> Failed</label>
+        <label class="fp-checkbox"><input type="checkbox" class="fp-status-cb" value="notpaid"> Not paid</label>
+        <label class="fp-checkbox"><input type="checkbox" class="fp-status-cb" value="paid"> Paid</label>
+      </div>
+    </div>
+
+    <hr class="fp-divider">
+
+    <!-- Organization -->
+    <div class="fp-section">
+      <div class="fp-section-label">Organization</div>
+      <div class="fp-field">
+        <select class="fp-select" id="fp-org">
+          <option value="">All organizations</option>
+          <option value="DefaultMerch">DefaultMerch</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+  <div class="fp-foot">
+    <button class="fp-btn-clear" onclick="fpClear()">Clear all</button>
+    <button class="fp-btn-apply" onclick="fpApply()">Apply</button>
+  </div>
+</div>
 
 </body>
 </html>
