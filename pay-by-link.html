@@ -990,6 +990,28 @@
     }
     .col-search-select:focus { border-color: var(--accent); }
 
+    /* ─── STATUS FILTER DROPDOWN ─── */
+    .sf-wrap { position:relative; margin-bottom:8px; }
+    .sf-btn { display:flex; align-items:center; justify-content:space-between; width:100%; height:30px; border:1.5px solid var(--border); border-radius:6px; padding:0 9px; font-size:12.5px; font-family:inherit; color:var(--text-2); background:#fff; cursor:pointer; transition:border-color 0.15s; }
+    .sf-btn:hover { border-color:var(--accent); }
+    .sf-btn.active { border-color:var(--accent); color:var(--accent); background:#eff6ff; }
+    .sf-dropdown { position:absolute; top:calc(100% + 4px); right:0; background:#fff; border:1.5px solid var(--border); border-radius:12px; box-shadow:0 6px 28px rgba(0,0,0,0.13); z-index:350; min-width:190px; display:none; }
+    .sf-dropdown.open { display:block; }
+    .sf-dd-hd { display:flex; align-items:center; justify-content:space-between; padding:10px 14px 8px; border-bottom:1px solid var(--border); }
+    .sf-dd-title { font-size:11px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.5px; }
+    .sf-select-all { font-size:12.5px; color:var(--accent); font-weight:500; background:none; border:none; font-family:inherit; cursor:pointer; padding:0; }
+    .sf-options { padding:6px 0; }
+    .sf-opt { display:flex; align-items:center; gap:9px; padding:8px 14px; cursor:pointer; user-select:none; }
+    .sf-opt:hover { background:#f8fafc; }
+    .sf-cb { width:16px; height:16px; border:1.5px solid #d1d5db; border-radius:4px; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background 0.1s, border-color 0.1s; }
+    .sf-cb.checked { background:var(--accent); border-color:var(--accent); }
+    .sf-opt-label { font-size:13px; color:var(--text-2); }
+    .sf-footer { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-top:1px solid var(--border); }
+    .sf-clear-btn { height:32px; padding:0 18px; border-radius:20px; border:1.5px solid var(--border); background:#fff; font-size:13px; color:var(--text-2); cursor:pointer; font-family:inherit; transition:background 0.1s; }
+    .sf-clear-btn:hover { background:#f3f4f6; }
+    .sf-apply-btn { height:32px; padding:0 22px; border-radius:20px; border:none; background:var(--accent); color:#fff; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:opacity 0.1s; }
+    .sf-apply-btn:hover { opacity:0.88; }
+
     /* Status pills */
     .status-pill { display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap; }
     .status-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
@@ -1470,11 +1492,7 @@
               Organizations (+1)
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <button style="display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text-2);font-family:inherit;">
-              Payment status
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <button style="background:none;border:none;font-size:12.5px;color:var(--accent);cursor:pointer;font-family:inherit;padding:0 4px;font-weight:500;" onclick="clearTopSearch()">Clear filters</button>
+            <button style="background:none;border:none;font-size:12.5px;color:var(--accent);cursor:pointer;font-family:inherit;padding:0 4px;font-weight:500;" onclick="clearAllFilters()">Clear filters</button>
           </div>
 
           <div class="pbl-total" id="lv-total">Total: 10 Payment links</div>
@@ -1503,14 +1521,42 @@
                     <div class="col-th-inner">Merchant Reference</div>
                     <input class="col-search" type="text" placeholder="Search...">
                   </th>
-                  <th class="col-th" style="width:130px;">
+                  <th class="col-th" style="width:140px;">
                     <div class="col-th-inner">Status</div>
-                    <select class="col-search-select">
-                      <option value="">All</option>
-                      <option value="paid">Paid</option>
-                      <option value="notpaid">Not paid</option>
-                      <option value="expired">Expired</option>
-                    </select>
+                    <div class="sf-wrap" id="sf-wrap">
+                      <button class="sf-btn" id="sf-btn" onclick="toggleStatusFilter(event)">
+                        <span id="sf-label">All</span>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                      </button>
+                      <div class="sf-dropdown" id="sf-dropdown">
+                        <div class="sf-dd-hd">
+                          <span class="sf-dd-title">STATUS</span>
+                          <button class="sf-select-all" onclick="sfSelectAll()">Select All</button>
+                        </div>
+                        <div class="sf-options">
+                          <div class="sf-opt" data-val="expired" onclick="sfToggle(this)">
+                            <div class="sf-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                            <span class="sf-opt-label">Expired</span>
+                          </div>
+                          <div class="sf-opt" data-val="failed" onclick="sfToggle(this)">
+                            <div class="sf-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                            <span class="sf-opt-label">Failed</span>
+                          </div>
+                          <div class="sf-opt" data-val="notpaid" onclick="sfToggle(this)">
+                            <div class="sf-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                            <span class="sf-opt-label">Not paid</span>
+                          </div>
+                          <div class="sf-opt" data-val="paid" onclick="sfToggle(this)">
+                            <div class="sf-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                            <span class="sf-opt-label">Paid</span>
+                          </div>
+                        </div>
+                        <div class="sf-footer">
+                          <button class="sf-clear-btn" onclick="sfClear()">Clear</button>
+                          <button class="sf-apply-btn" onclick="sfApply()">Apply</button>
+                        </div>
+                      </div>
+                    </div>
                   </th>
                 </tr>
               </thead>
@@ -2185,6 +2231,50 @@
     setTimeout(() => { btn.innerHTML = orig; }, 1800);
   }
 
+  /* ─── STATUS FILTER ─── */
+  let sfSelected = new Set();
+  let sfApplied  = new Set();
+
+  function toggleStatusFilter(e) {
+    e.stopPropagation();
+    document.getElementById('sf-dropdown').classList.toggle('open');
+  }
+
+  function sfToggle(row) {
+    const val = row.dataset.val;
+    const cb = row.querySelector('.sf-cb');
+    if (sfSelected.has(val)) { sfSelected.delete(val); cb.classList.remove('checked'); }
+    else { sfSelected.add(val); cb.classList.add('checked'); }
+  }
+
+  function sfSelectAll() {
+    ['expired','failed','notpaid','paid'].forEach(v => {
+      sfSelected.add(v);
+      const opt = document.querySelector(`.sf-opt[data-val="${v}"] .sf-cb`);
+      if (opt) opt.classList.add('checked');
+    });
+  }
+
+  function sfClear() {
+    sfSelected.clear(); sfApplied.clear();
+    document.querySelectorAll('.sf-cb').forEach(cb => cb.classList.remove('checked'));
+    document.getElementById('sf-label').textContent = 'All';
+    document.getElementById('sf-btn').classList.remove('active');
+    document.getElementById('sf-dropdown').classList.remove('open');
+    applyFilters();
+  }
+
+  function sfApply() {
+    sfApplied = new Set(sfSelected);
+    const n = sfApplied.size;
+    const lbl = document.getElementById('sf-label');
+    const btn = document.getElementById('sf-btn');
+    lbl.textContent = (n === 0 || n === 4) ? 'All' : n + ' selected';
+    btn.classList.toggle('active', n > 0 && n < 4);
+    document.getElementById('sf-dropdown').classList.remove('open');
+    applyFilters();
+  }
+
   /* ─── SEARCH BAR ─── */
   let sbField = 'merchant-ref';
 
@@ -2215,6 +2305,7 @@
     let visible = 0;
     rows.forEach(tr => {
       let match = true;
+      // top search bar
       if (q) {
         let val = '';
         if (sbField === 'merchant-ref') val = (tr.querySelector('td:nth-child(5)')?.textContent || '').toLowerCase();
@@ -2224,17 +2315,31 @@
         else if (sbField === 'lastname') val = (tr.dataset.lastname || '').toLowerCase();
         match = val.includes(q);
       }
-      // per-column filters
+      // per-column text filters (cols 1–5, not the status col)
       if (match) match = colFilters.every((cq, i) => {
         if (!cq) return true;
         const cell = tr.querySelector(`td:nth-child(${i + 1})`);
         return cell ? cell.textContent.toLowerCase().includes(cq) : true;
       });
+      // status checkbox filter
+      if (match && sfApplied.size > 0 && sfApplied.size < 4) {
+        const pill = tr.querySelector('td:last-child .status-pill');
+        const cls = pill ? pill.className : '';
+        match = Array.from(sfApplied).some(v => cls.includes('status-pill-' + v));
+      }
       tr.style.display = match ? '' : 'none';
       if (match) visible++;
     });
     const tot = document.getElementById('lv-total');
     if (tot) tot.textContent = `Total: ${visible} Payment link${visible !== 1 ? 's' : ''}`;
+  }
+
+  function clearAllFilters() {
+    clearTopSearch();
+    sfClear();
+    document.querySelectorAll('.col-search').forEach(i => { i.value = ''; });
+    colFilters.fill('');
+    applyFilters();
   }
 
   /* ─── PER-COLUMN SEARCH ─── */
@@ -2263,9 +2368,13 @@
   });
 
   document.addEventListener('click', e => {
-    const wrap = document.getElementById('sb-field-wrap');
-    if (wrap && !wrap.contains(e.target)) {
+    const sbWrap = document.getElementById('sb-field-wrap');
+    if (sbWrap && !sbWrap.contains(e.target)) {
       document.getElementById('sb-dropdown')?.classList.remove('open');
+    }
+    const sfWrap = document.getElementById('sf-wrap');
+    if (sfWrap && !sfWrap.contains(e.target)) {
+      document.getElementById('sf-dropdown')?.classList.remove('open');
     }
   });
 </script>
