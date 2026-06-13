@@ -940,7 +940,7 @@
 
     /* Column header search inputs */
     .col-th {
-      padding: 11px 14px 11px;
+      padding: 11px 14px 0;
       text-align: left;
       font-size: 11.5px;
       font-weight: 600;
@@ -1511,21 +1511,32 @@
                 <tr>
                   <th class="col-th" style="width:170px;">
                     <div class="col-th-inner">Created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><polyline points="7 10 12 5 17 10"/><polyline points="7 14 12 19 17 14"/></svg></div>
+                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
                   <th class="col-th" style="width:120px;">
                     <div class="col-th-inner">Amount</div>
+                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Email (Recipient)</div>
+                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Email (Customer)</div>
+                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Merchant Reference</div>
+                    <input class="col-search" type="text" placeholder="Search...">
                   </th>
-                  <th class="col-th" style="width:120px;">
+                  <th class="col-th" style="width:130px;">
                     <div class="col-th-inner">Status</div>
+                    <select class="col-search-select" id="col-status-select">
+                      <option value="">All</option>
+                      <option value="paid">Paid</option>
+                      <option value="not paid">Not paid</option>
+                      <option value="expired">Expired</option>
+                    </select>
                   </th>
                 </tr>
               </thead>
@@ -2238,8 +2249,23 @@
     applyFilters();
   }
 
+  /* ─── PER-COLUMN SEARCH ─── */
+  const colFilters = [];
+
+  function initColSearch() {
+    document.querySelectorAll('.col-search').forEach((input, i) => {
+      colFilters[i] = '';
+      input.addEventListener('input', () => { colFilters[i] = input.value.toLowerCase().trim(); applyFilters(); });
+    });
+    const statusSel = document.getElementById('col-status-select');
+    if (statusSel) statusSel.addEventListener('change', () => applyFilters());
+  }
+
+  document.addEventListener('DOMContentLoaded', initColSearch);
+
   function applyFilters() {
     const q = (document.getElementById('sb-input')?.value || '').toLowerCase().trim();
+    const colStatusQ = (document.getElementById('col-status-select')?.value || '').toLowerCase();
     const rows = document.querySelectorAll('#pbl-tbody tr');
     let visible = 0;
     rows.forEach(tr => {
@@ -2254,13 +2280,24 @@
         else if (sbField === 'lastname') val = (tr.dataset.lastname || '').toLowerCase();
         match = val.includes(q);
       }
-      // status filter
+      // per-column text filters
+      if (match) match = colFilters.every((cq, i) => {
+        if (!cq) return true;
+        const cell = tr.querySelector(`td:nth-child(${i + 1})`);
+        return cell ? cell.textContent.toLowerCase().includes(cq) : true;
+      });
+      // column status select
+      if (match && colStatusQ) {
+        const pill = tr.querySelector('td:last-child .status-pill');
+        match = (pill?.textContent || '').toLowerCase().includes(colStatusQ);
+      }
+      // panel: status checkboxes
       if (match && fpState.statusSet.size > 0 && fpState.statusSet.size < 4) {
         const pill = tr.querySelector('td:last-child .status-pill');
         const cls = pill ? pill.className : '';
         match = Array.from(fpState.statusSet).some(v => cls.includes('status-pill-' + v));
       }
-      // date filter
+      // panel: date filter
       if (match && (fpState.dateFrom || fpState.dateTo)) {
         const dateText = tr.querySelector('td:first-child')?.textContent || '';
         const rowDate = new Date(dateText);
@@ -2269,7 +2306,7 @@
           if (fpState.dateTo) { const to = new Date(fpState.dateTo); to.setHours(23,59,59,999); match = match && rowDate <= to; }
         }
       }
-      // org filter
+      // panel: org filter
       if (match && fpState.org) {
         const ref = tr.querySelector('td:nth-child(5)')?.textContent || '';
         match = ref.toLowerCase().includes(fpState.org.toLowerCase());
