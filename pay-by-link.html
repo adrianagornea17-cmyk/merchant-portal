@@ -930,44 +930,6 @@
       margin-bottom: 12px;
       flex-wrap: wrap;
     }
-    .pbl-search-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-    .pbl-search-input {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 0 12px;
-      height: 34px;
-      background: #fff;
-      flex: 1;
-      max-width: 600px;
-    }
-    .pbl-search-input input {
-      border: none; background: none;
-      font-size: 13px; color: var(--text);
-      outline: none; flex: 1;
-      font-family: inherit;
-    }
-    .pbl-search-input input::placeholder { color: var(--text-4); }
-    .pbl-search-btn {
-      height: 34px;
-      padding: 0 16px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .pbl-search-btn:hover { background: #1d4ed8; }
     .pbl-total { font-size: 12.5px; color: var(--text-3); margin-bottom: 10px; }
     .pbl-table-wrap {
       background: #fff;
@@ -975,16 +937,162 @@
       border-radius: 12px;
       overflow: hidden;
     }
+
+    /* Column header search inputs */
+    .col-th {
+      padding: 11px 14px 0;
+      text-align: left;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      vertical-align: top;
+      background: #f8fafc;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .col-th-inner { display: flex; align-items: center; gap: 4px; margin-bottom: 7px; cursor: pointer; user-select: none; }
+    .col-th-inner:hover { color: var(--text-2); }
+    .col-search {
+      display: block;
+      width: 100%;
+      height: 30px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 0 9px;
+      font-size: 12.5px;
+      font-family: inherit;
+      color: var(--text-2);
+      background: #fff;
+      outline: none;
+      margin-bottom: 8px;
+      transition: border-color 0.15s;
+    }
+    .col-search:focus { border-color: var(--accent); }
+    .col-search::placeholder { color: var(--text-4); font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .col-search-select {
+      display: block;
+      width: 100%;
+      height: 30px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 0 26px 0 9px;
+      font-size: 12.5px;
+      font-family: inherit;
+      color: var(--text-2);
+      background: #fff url("data:image/svg+xml,%3Csvg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 7px center;
+      appearance: none;
+      outline: none;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: border-color 0.15s;
+    }
+    .col-search-select:focus { border-color: var(--accent); }
+
+    /* Status pills */
+    .status-pill { display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap; }
+    .status-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
     .status-pill-paid    { background: #f0fdf4; color: #16a34a; }
     .status-pill-paid .status-dot    { background: #16a34a; }
     .status-pill-expired { background: #f3f4f6; color: #374151; }
     .status-pill-expired .status-dot { background: #6b7280; }
-    .status-pill-pending { background: #fffbeb; color: #d97706; }
-    .status-pill-pending .status-dot { background: #f59e0b; }
+    .status-pill-notpaid { background: #fffbeb; color: #b45309; }
+    .status-pill-notpaid .status-dot { background: #f59e0b; }
 
-    /* ─── CREATE FLOW wrapper ─── */
-    .create-flow { display: none; }
-    .create-flow.active { display: block; }
+    /* ─── EMPTY STATE ─── */
+    .empty-state-wrap {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+    }
+    .empty-state-wrap.active { display: flex; }
+    .empty-state-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 40px 36px;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .empty-preview {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px 14px;
+      margin-bottom: 24px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+    .empty-preview::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 36px;
+      background: linear-gradient(transparent, #f8fafc);
+      pointer-events: none;
+    }
+    .ep-back { font-size: 11px; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 3px; }
+    .ep-title { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+    .ep-steps { display: flex; align-items: center; margin-bottom: 14px; }
+    .ep-step { display: flex; align-items: center; gap: 6px; }
+    .ep-dot { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; flex-shrink: 0; }
+    .ep-dot.ep-active { background: var(--accent); color: #fff; }
+    .ep-dot.ep-inactive { background: #fff; border: 2px solid #d1d5db; color: #9ca3af; }
+    .ep-step-label { font-size: 11px; font-weight: 500; }
+    .ep-step-label.ep-active { color: #0f172a; }
+    .ep-step-label.ep-inactive { color: #9ca3af; }
+    .ep-line { flex: 1; height: 2px; background: #e5e7eb; margin: 0 6px; min-width: 36px; }
+    .ep-field-label { font-size: 10.5px; color: var(--text-3); margin-bottom: 3px; font-weight: 500; }
+    .ep-field { height: 26px; background: #fff; border: 1.5px solid var(--border); border-radius: 5px; margin-bottom: 7px; }
+    .ep-section { font-size: 11.5px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+    .empty-state-title { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+    .empty-state-desc { font-size: 13.5px; color: var(--text-3); line-height: 1.6; }
+
+    /* ─── VIEW TOGGLE BAR (prototype) ─── */
+    .view-toggle-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      background: #1e293b;
+      border-radius: 10px;
+      padding: 5px 10px 5px 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      z-index: 500;
+      white-space: nowrap;
+    }
+    .vtb-label { font-size: 12px; font-weight: 500; color: #94a3b8; margin-right: 10px; }
+    .vtb-btn {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #94a3b8;
+      font-family: inherit;
+      transition: background 0.1s, color 0.1s;
+    }
+    .vtb-btn.vtb-active { background: #fff; color: #0f172a; }
+    .vtb-btn:not(.vtb-active):hover { color: #e2e8f0; }
+
+    /* ─── CREATE MODAL OVERLAY ─── */
+    .create-flow { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:400; align-items:flex-start; justify-content:center; padding:28px 20px; }
+    .create-flow.active { display:flex; }
+    .create-modal { background:#fff; border-radius:16px; width:100%; max-width:980px; max-height:92vh; display:flex; flex-direction:column; box-shadow:0 24px 64px rgba(0,0,0,0.22); margin:auto; }
+    .create-modal-hd { display:flex; align-items:center; justify-content:space-between; padding:18px 24px 16px; border-bottom:1.5px solid var(--border); flex-shrink:0; }
+    .create-modal-title { font-size:16px; font-weight:600; color:var(--text); }
+    .create-modal-close { width:32px; height:32px; border-radius:8px; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-3); font-size:20px; line-height:1; font-family:inherit; }
+    .create-modal-close:hover { background:var(--hover-bg); color:var(--text); }
+    .create-modal-body { padding:24px; overflow-y:auto; flex:1; }
 
     .pm-checkbox-list { display: flex; flex-direction: column; gap: 0; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
     .pm-cb-row {
@@ -1004,6 +1112,31 @@
     /* Step panels */
     .step-panel { display: none; }
     .step-panel.active { display: block; }
+
+    /* ─── SEARCH BAR ─── */
+    .search-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+    .sb-combo { display:flex; align-items:stretch; border:1.5px solid var(--border); border-radius:10px; background:#fff; overflow:visible; transition:border-color 0.15s; height:38px; flex:1; max-width:640px; }
+    .sb-combo:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,0.08); }
+
+    .sb-field-wrap { position:relative; flex-shrink:0; }
+    .sb-field-btn { display:flex; align-items:center; gap:8px; height:36px; padding:0 14px; background:none; border:none; border-right:1.5px solid var(--border); font-size:13px; font-weight:500; color:var(--text-2); cursor:pointer; white-space:nowrap; font-family:inherit; min-width:178px; border-radius:8px 0 0 8px; transition:background 0.1s; justify-content:space-between; }
+    .sb-field-btn:hover { background:var(--hover-bg); color:var(--text); }
+    .sb-field-btn svg { flex-shrink:0; color:var(--text-3); }
+    .sb-dropdown { position:absolute; top:calc(100% + 6px); left:-2px; background:#fff; border:1.5px solid var(--border); border-radius:10px; box-shadow:0 4px 24px rgba(0,0,0,0.1),0 1px 4px rgba(0,0,0,0.06); z-index:200; min-width:220px; overflow:hidden; display:none; }
+    .sb-dropdown.open { display:block; }
+    .sb-option { padding:9px 16px; font-size:13px; color:var(--text-2); cursor:pointer; transition:background 0.1s; }
+    .sb-option:hover:not(.sb-selected) { background:var(--hover-bg); }
+    .sb-option.sb-selected { background:var(--accent); color:#fff; font-weight:500; }
+    .sb-input { flex:1; border:none; background:none; padding:0 14px; font-size:13px; color:var(--text); font-family:inherit; outline:none; min-width:0; }
+    .sb-input::placeholder { color:var(--text-4); }
+    .sb-search-btn { height:38px; padding:0 18px; background:var(--accent); color:#fff; border:none; border-radius:0 8px 8px 0; font-size:13px; font-weight:500; cursor:pointer; font-family:inherit; flex-shrink:0; transition:background 0.1s; }
+    .sb-search-btn:hover { background:#1d4ed8; }
+
+    /* Date in page header */
+    #header-date-wrap { position:relative; }
+    .hdr-date-btn { display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 13px; border:1.5px solid var(--border); border-radius:8px; background:#fff; font-size:13px; font-weight:500; color:var(--text-2); cursor:pointer; font-family:inherit; white-space:nowrap; transition:border-color 0.15s,color 0.15s; }
+    .hdr-date-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .hdr-date-btn.active { border-color:var(--accent); background:#eff6ff; color:var(--accent); }
 
     /* ─── CREATE SPLIT PANE ─── */
     .create-split { display:flex; gap:24px; align-items:flex-start; }
@@ -1269,6 +1402,31 @@
         </div>
       </div>
       <div class="page-header-trailing">
+        <!-- Date filter — visible in list view only -->
+        <div id="header-date-wrap" style="position:relative;">
+          <button class="hdr-date-btn active" id="date-filter-btn" onclick="toggleDatePicker()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="date-filter-label">5/1/2026 — 6/14/2026</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="date-picker-dropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);padding:16px;z-index:300;min-width:300px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Date range</div>
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+              <div style="flex:1;"><label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">From</label><input type="date" value="2026-05-01" id="date-from" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);"></div>
+              <div style="flex:1;"><label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">To</label><input type="date" value="2026-06-14" id="date-to" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);"></div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+              <button onclick="setDatePreset('today')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Today</button>
+              <button onclick="setDatePreset('7d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Last 7 days</button>
+              <button onclick="setDatePreset('30d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--accent);background:#eff6ff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--accent);font-weight:500;">Last 30 days</button>
+              <button onclick="setDatePreset('mtd')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">This month</button>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:8px;">
+              <button onclick="toggleDatePicker()" style="padding:0 12px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:12.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Cancel</button>
+              <button onclick="applyDateFilter()" style="padding:0 12px;height:30px;border-radius:7px;border:none;background:var(--accent);font-size:12.5px;cursor:pointer;font-family:inherit;color:#fff;font-weight:500;">Apply</button>
+            </div>
+          </div>
+        </div>
         <button class="btn btn-primary" onclick="showCreateFlow()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Create Payment link
@@ -1282,175 +1440,261 @@
       <!-- ══════════════ LIST VIEW ══════════════ -->
       <div class="list-view active" id="list-view">
 
-        <!-- Toolbar / filters -->
-        <div class="pbl-search-row">
-          <div class="pbl-search-input">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Type a Merchant Reference">
+        <!-- DEFAULT: populated table -->
+        <div id="lv-default">
+          <!-- Field-selector search bar -->
+          <div class="search-bar-row">
+            <div class="sb-combo">
+              <div class="sb-field-wrap" id="sb-field-wrap">
+                <button class="sb-field-btn" id="sb-field-btn" onclick="toggleSbDropdown()">
+                  <span id="sb-field-label">Merchant Reference</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="sb-dropdown" id="sb-dropdown">
+                  <div class="sb-option sb-selected" data-field="merchant-ref" onclick="selectSbField(this)">Merchant Reference</div>
+                  <div class="sb-option" data-field="email-customer" onclick="selectSbField(this)">Email (Customer)</div>
+                  <div class="sb-option" data-field="phone" onclick="selectSbField(this)">Phone Number (Customer)</div>
+                  <div class="sb-option" data-field="firstname" onclick="selectSbField(this)">First Name (Customer)</div>
+                  <div class="sb-option" data-field="lastname" onclick="selectSbField(this)">Last Name (Customer)</div>
+                </div>
+              </div>
+              <input class="sb-input" id="sb-input" type="text" placeholder="Search..." oninput="doTopSearch()">
+            </div>
+            <button class="sb-search-btn" onclick="doTopSearch()">Search</button>
+            <button style="background:none;border:none;font-size:12.5px;color:var(--text-4);cursor:pointer;font-family:inherit;padding:0 4px;" onclick="clearTopSearch()">Clear</button>
           </div>
-          <button class="pbl-search-btn">Search</button>
-        </div>
 
-        <div class="pbl-toolbar">
-          <div style="position:relative;display:inline-block;">
-            <button class="filter-chip active" id="date-filter-btn" style="display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--accent);background:#eff6ff;color:var(--accent);font-family:inherit;" onclick="toggleDatePicker()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              21/03/2024 — 28/03/2024
+          <!-- Toolbar filters -->
+          <div class="pbl-toolbar">
+            <button style="display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--accent);background:#eff6ff;color:var(--accent);font-family:inherit;">
+              Organizations (+1)
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <!-- Date picker dropdown -->
-            <div id="date-picker-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);padding:16px;z-index:100;min-width:300px;">
-              <div style="font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Date range</div>
-              <div style="display:flex;gap:8px;margin-bottom:12px;">
-                <div style="flex:1;">
-                  <label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">From</label>
-                  <input type="date" value="2024-03-21" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);">
-                </div>
-                <div style="flex:1;">
-                  <label style="font-size:11.5px;color:var(--text-3);display:block;margin-bottom:4px;">To</label>
-                  <input type="date" value="2024-03-28" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:12.5px;font-family:inherit;color:var(--text-2);">
+            <button style="display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text-2);font-family:inherit;">
+              Payment status
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <button style="background:none;border:none;font-size:12.5px;color:var(--accent);cursor:pointer;font-family:inherit;padding:0 4px;font-weight:500;" onclick="clearTopSearch()">Clear filters</button>
+          </div>
+
+          <div class="pbl-total" id="lv-total">Total: 10 Payment links</div>
+
+          <div class="pbl-table-wrap">
+            <table style="width:100%;border-collapse:collapse;">
+              <thead>
+                <tr>
+                  <th class="col-th" style="width:170px;">
+                    <div class="col-th-inner">Created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><polyline points="7 10 12 5 17 10"/><polyline points="7 14 12 19 17 14"/></svg></div>
+                    <input class="col-search" type="text" placeholder="Search...">
+                  </th>
+                  <th class="col-th" style="width:120px;">
+                    <div class="col-th-inner">Amount</div>
+                    <input class="col-search" type="text" placeholder="Search...">
+                  </th>
+                  <th class="col-th">
+                    <div class="col-th-inner">Email (Recipient)</div>
+                    <input class="col-search" type="text" placeholder="Search...">
+                  </th>
+                  <th class="col-th">
+                    <div class="col-th-inner">Email (Customer)</div>
+                    <input class="col-search" type="text" placeholder="Search...">
+                  </th>
+                  <th class="col-th">
+                    <div class="col-th-inner">Merchant Reference</div>
+                    <input class="col-search" type="text" placeholder="Search...">
+                  </th>
+                  <th class="col-th" style="width:130px;">
+                    <div class="col-th-inner">Status</div>
+                    <select class="col-search-select">
+                      <option value="">All</option>
+                      <option value="paid">Paid</option>
+                      <option value="notpaid">Not paid</option>
+                      <option value="expired">Expired</option>
+                    </select>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="pbl-tbody">
+                <tr data-email="adriana.gornea17@gmail.com" data-phone="+61412345678" data-firstname="Adriana" data-lastname="Gornea" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/13/2026, 23:46:21</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">23.00 GBP</td>
+                  <td style="padding:13px 14px;font-size:13px;color:#2563eb;">adriana.gornea17@gmail.com</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-notpaid"><span class="status-dot"></span>Not paid</span></td>
+                </tr>
+                <tr data-email="Ayushi.Gupta@VERIFONE.com" data-phone="+61423456789" data-firstname="Ayushi" data-lastname="Gupta" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/10/2026, 15:49:24</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">20.00 EUR</td>
+                  <td style="padding:13px 14px;font-size:13px;color:#2563eb;">Ayushi.Gupta@VERIFONE.com</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
+                </tr>
+                <tr data-email="adriana.gornea17@gmail.com" data-phone="+61412345678" data-firstname="Adriana" data-lastname="Gornea" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/10/2026, 15:09:08</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">10.00 GBP</td>
+                  <td style="padding:13px 14px;font-size:13px;color:#2563eb;">adriana.gornea17@gmail.com</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
+                </tr>
+                <tr data-email="" data-phone="" data-firstname="" data-lastname="" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/10/2026, 14:51:16</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">200.00 EUR</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
+                </tr>
+                <tr data-email="" data-phone="" data-firstname="" data-lastname="" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/9/2026, 17:01:21</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">20.00 GBP</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
+                </tr>
+                <tr data-email="adriana.gornea17@gmail.com" data-phone="+61412345678" data-firstname="Adriana" data-lastname="Gornea" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/8/2026, 00:43:10</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">20.00 GBP</td>
+                  <td style="padding:13px 14px;font-size:13px;color:#2563eb;">adriana.gornea17@gmail.com</td>
+                  <td style="padding:13px 14px;font-size:13px;color:#2563eb;">adriana.gornea17@gmail.com</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-notpaid"><span class="status-dot"></span>Not paid</span></td>
+                </tr>
+                <tr data-email="" data-phone="" data-firstname="" data-lastname="" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/5/2026, 12:31:34</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">200.00 EUR</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
+                </tr>
+                <tr data-email="" data-phone="" data-firstname="" data-lastname="" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/5/2026, 12:22:30</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">20.00 EUR</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
+                </tr>
+                <tr data-email="" data-phone="" data-firstname="" data-lastname="" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/4/2026, 14:05:58</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">20.00 EUR</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-3);">—</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
+                </tr>
+                <tr data-email="john.doe@example.com" data-phone="+12125551234" data-firstname="John" data-lastname="Doe" style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);white-space:nowrap;">6/3/2026, 09:14:22</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">50.00 GBP</td>
+                  <td style="padding:13px 14px;font-size:13px;color:#2563eb;">john.doe@example.com</td>
+                  <td style="padding:13px 14px;font-size:13px;color:#2563eb;">john.doe@example.com</td>
+                  <td style="padding:13px 14px;font-size:13px;color:var(--text-2);">DefaultMerch</td>
+                  <td style="padding:13px 14px;"><span class="status-pill status-pill-paid"><span class="status-dot"></span>Paid</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-top:1.5px solid var(--border);background:#f8fafc;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-3);">
+                Results per page
+                <div style="display:flex;align-items:center;gap:2px;border:1.5px solid var(--border);border-radius:6px;background:#fff;padding:0 8px;height:28px;">
+                  <span style="font-size:13px;color:var(--text-2);">10</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
               </div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-                <button onclick="setDatePreset('today')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Today</button>
-                <button onclick="setDatePreset('7d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Last 7 days</button>
-                <button onclick="setDatePreset('30d')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--accent);background:#eff6ff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--accent);font-weight:500;">Last 30 days</button>
-                <button onclick="setDatePreset('mtd')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">This month</button>
-              </div>
-              <div style="display:flex;justify-content:flex-end;gap:8px;">
-                <button onclick="toggleDatePicker()" style="padding:0 12px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:12.5px;cursor:pointer;font-family:inherit;color:var(--text-2);">Cancel</button>
-                <button onclick="applyDateFilter()" style="padding:0 12px;height:30px;border-radius:7px;border:none;background:var(--accent);font-size:12.5px;cursor:pointer;font-family:inherit;color:#fff;font-weight:500;">Apply</button>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:12.5px;color:var(--text-3);">Go to page</span>
+                <input type="number" value="1" style="width:44px;height:28px;border:1.5px solid var(--border);border-radius:6px;text-align:center;font-size:13px;font-family:inherit;color:var(--text-2);">
+                <span style="font-size:12.5px;color:var(--text-3);">Page 1 of 3</span>
+                <div style="display:flex;gap:4px;">
+                  <button style="width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0.4;" disabled>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                  </button>
+                  <button style="width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-          <button class="filter-chip" style="display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text-2);font-family:inherit;">
-            Organizations
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <button class="filter-chip" style="display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text-2);font-family:inherit;">
-            Payment status
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <button style="background:none;border:none;font-size:12.5px;color:var(--accent);cursor:pointer;font-family:inherit;padding:0 4px;font-weight:500;">Clear filter</button>
-        </div>
+        </div><!-- /lv-default -->
 
-        <div class="pbl-total">Total: 13 Payment links</div>
-
-        <div class="pbl-table-wrap">
-          <table style="width:100%;border-collapse:collapse;">
-            <thead>
-              <tr style="background:#f8fafc;border-bottom:1.5px solid var(--border);">
-                <th style="padding:11px 16px;text-align:left;font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;white-space:nowrap;cursor:pointer;user-select:none;">Created <span style="opacity:0.6;">↕</span></th>
-                <th style="padding:11px 16px;text-align:left;font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;white-space:nowrap;cursor:pointer;">Amount <span style="opacity:0.4;">↕</span></th>
-                <th style="padding:11px 16px;text-align:left;font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;white-space:nowrap;cursor:pointer;">Email <span style="opacity:0.4;">↕</span></th>
-                <th style="padding:11px 16px;text-align:left;font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;white-space:nowrap;cursor:pointer;">Merchant Reference <span style="opacity:0.4;">↕</span></th>
-                <th style="padding:11px 16px;text-align:left;font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;white-space:nowrap;">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">24/03/2024 20:52:24</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">150.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">With and without tax</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-paid"><span class="status-dot"></span>Paid</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">24/03/2024 16:22:41</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">10.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">22/03/2024 15:51:34</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">10.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">Ben Test</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">21/03/2024 17:57:25</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">100.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:#2563eb;">lauren@test.com</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">lauren test</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">21/03/2024 16:57:45</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">10.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">21/03/2024 16:24:49</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">30.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-paid"><span class="status-dot"></span>Paid</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">21/03/2024 16:18:17</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">2.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">21/03/2024 16:18:00</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">10.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-paid"><span class="status-dot"></span>Paid</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">21/03/2024 15:59:16</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">10.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-paid"><span class="status-dot"></span>Paid</span></td>
-              </tr>
-              <tr style="cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);white-space:nowrap;">21/03/2024 15:56:01</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-2);">1,000.00 AUD</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;font-size:13px;color:var(--text-3);">—</td>
-                <td style="padding:13px 16px;"><span class="status-pill status-pill-expired"><span class="status-dot"></span>Expired</span></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <!-- Pagination -->
-          <div class="pagination" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1.5px solid var(--border);background:#f8fafc;">
-            <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-3);">
-              Results per page
-              <div style="display:flex;align-items:center;gap:2px;border:1.5px solid var(--border);border-radius:6px;background:#fff;padding:0 8px;height:28px;">
-                <span style="font-size:13px;color:var(--text-2);">10</span>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        <!-- EMPTY STATE -->
+        <div class="empty-state-wrap" id="lv-empty">
+          <div class="empty-state-card">
+            <!-- Miniature preview of the create flow -->
+            <div class="empty-preview">
+              <div class="ep-back">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Payment links
+              </div>
+              <div class="ep-title">Create Payment link</div>
+              <div class="ep-steps">
+                <div class="ep-step">
+                  <div class="ep-dot ep-active">1</div>
+                  <span class="ep-step-label ep-active">Payment Settings</span>
+                </div>
+                <div class="ep-line"></div>
+                <div class="ep-step">
+                  <div class="ep-dot ep-inactive">2</div>
+                  <span class="ep-step-label ep-inactive">Link Settings</span>
+                </div>
+                <div class="ep-line"></div>
+                <div class="ep-step">
+                  <div class="ep-dot ep-inactive">3</div>
+                  <span class="ep-step-label ep-inactive">Done</span>
+                </div>
+              </div>
+              <div style="background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;">
+                <div class="ep-section">Payment Settings</div>
+                <div class="ep-field-label">Organization</div>
+                <div class="ep-field"></div>
+                <div class="ep-field-label">Cart information</div>
+                <div style="display:flex;gap:12px;margin-bottom:7px;">
+                  <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-3);">
+                    <div style="width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;"><div style="width:5px;height:5px;border-radius:50%;background:var(--accent);"></div></div>
+                    Amount
+                  </div>
+                  <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-4);">
+                    <div style="width:12px;height:12px;border-radius:50%;border:2px solid #d1d5db;"></div>
+                    Amount &amp; Product
+                  </div>
+                </div>
+                <div class="ep-field-label">Transaction Amount</div>
+                <div style="display:flex;gap:6px;margin-bottom:7px;">
+                  <div style="width:60px;height:26px;border:1.5px solid var(--border);border-radius:5px;background:#fff;display:flex;align-items:center;padding:0 8px;font-size:11px;color:var(--text-3);">GBP</div>
+                  <div class="ep-field" style="flex:1;margin-bottom:0;"></div>
+                </div>
               </div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-size:12.5px;color:var(--text-3);">Go to page</span>
-              <input type="number" style="width:44px;height:28px;border:1.5px solid var(--border);border-radius:6px;text-align:center;font-size:13px;font-family:inherit;color:var(--text-2);" value="1">
-              <span style="font-size:12.5px;color:var(--text-3);">Page 1 of 2</span>
-              <div style="display:flex;gap:4px;">
-                <button style="width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;" disabled>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                </button>
-                <button style="width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
-              </div>
-            </div>
+            <div class="empty-state-title">Collect payments with Pay by Link</div>
+            <div class="empty-state-desc">A simple and secure way to collect payments by generating a shareable payment link with amount and currency details. Customers complete the payment online, and you can track the status and transaction details in Verifone Central.</div>
           </div>
-        </div>
+        </div><!-- /lv-empty -->
 
       </div><!-- /list-view -->
 
-      <!-- ══════════════ CREATE FLOW ══════════════ -->
-      <div class="create-flow" id="create-flow">
+      <!-- ─── VIEW TOGGLE BAR ─── -->
+      <div class="view-toggle-bar" id="vtb">
+        <span class="vtb-label">VIEW</span>
+        <button class="vtb-btn vtb-active" id="vtb-default" onclick="setListView('default')">Default</button>
+        <button class="vtb-btn" id="vtb-empty" onclick="setListView('empty')">Empty state</button>
+      </div>
+
+      <!-- ══════════════ CREATE MODAL ══════════════ -->
+      <div class="create-flow" id="create-flow" onclick="if(event.target===this)closeCreateModal()">
+        <div class="create-modal">
+          <div class="create-modal-hd">
+            <div class="create-modal-title">Create Payment link</div>
+            <button class="create-modal-close" onclick="closeCreateModal()" title="Close">✕</button>
+          </div>
+          <div class="create-modal-body">
 
         <!-- ── FORM VIEW ── -->
         <div id="create-form-view">
@@ -1555,7 +1799,7 @@
 
               <!-- Action bar -->
               <div class="cs-action-bar">
-                <button class="btn-danger-text" onclick="showListView()">Discard</button>
+                <button class="btn-danger-text" onclick="closeCreateModal()">Discard</button>
                 <div style="flex:1;"></div>
                 <button class="btn btn-outline" style="height:38px;">Save as Draft</button>
                 <button class="btn btn-primary" style="height:38px;" onclick="createLink()">
@@ -1651,7 +1895,7 @@
             </div>
 
             <div class="return-row">
-              <a class="return-link" onclick="showListView()">
+              <a class="return-link" onclick="closeCreateModal()">
                 Return to payment links
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </a>
@@ -1660,6 +1904,8 @@
         </div><!-- /create-success-view -->
 
 
+          </div><!-- /create-modal-body -->
+        </div><!-- /create-modal -->
       </div><!-- /create-flow -->
 
     </div><!-- /page-content -->
@@ -1785,32 +2031,49 @@
     const wrap = document.querySelector('.fav-wrap');
     if (pop.classList.contains('open') && !wrap.contains(e.target)) closeFavPopover();
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFavPopover(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeFavPopover();
+      closeCreateModal();
+    }
+  });
 
   renderFavBtn();
   renderFavPopover();
 
 
-  /* ─── CREATE FLOW ─── */
+  /* ─── CREATE MODAL ─── */
   function showCreateFlow() {
-    document.getElementById('list-view').classList.remove('active');
-    document.getElementById('create-flow').classList.add('active');
     document.getElementById('create-form-view').style.display = '';
     document.getElementById('create-success-view').style.display = 'none';
-    document.getElementById('bc-cur').textContent = 'Create Payment link';
-    const btn = document.querySelector('.page-header-trailing .btn-primary');
-    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to list';
-    btn.onclick = showListView;
+    document.getElementById('create-flow').classList.add('active');
+    document.body.style.overflow = 'hidden';
     updatePreview();
   }
 
-  function showListView() {
+  function closeCreateModal() {
     document.getElementById('create-flow').classList.remove('active');
-    document.getElementById('list-view').classList.add('active');
-    document.getElementById('bc-cur').textContent = 'Payment links';
-    const btn = document.querySelector('.page-header-trailing .btn-primary');
-    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create Payment link';
-    btn.onclick = showCreateFlow;
+    document.body.style.overflow = '';
+  }
+
+  function showListView() { closeCreateModal(); }
+
+  function setListView(mode) {
+    const def = document.getElementById('lv-default');
+    const empty = document.getElementById('lv-empty');
+    const btnDef = document.getElementById('vtb-default');
+    const btnEmp = document.getElementById('vtb-empty');
+    if (mode === 'empty') {
+      def.style.display = 'none';
+      empty.classList.add('active');
+      btnDef.classList.remove('vtb-active');
+      btnEmp.classList.add('vtb-active');
+    } else {
+      def.style.display = '';
+      empty.classList.remove('active');
+      btnDef.classList.add('vtb-active');
+      btnEmp.classList.remove('vtb-active');
+    }
   }
 
   function updatePreview() {
@@ -1866,7 +2129,7 @@
 
     document.getElementById('create-form-view').style.display = 'none';
     document.getElementById('create-success-view').style.display = 'block';
-    document.querySelector('.page-scroll').scrollTop = 0;
+    document.querySelector('.create-modal-body').scrollTop = 0;
   }
 
   function togglePmCb(row) {
@@ -1891,8 +2154,9 @@
 
   function applyDateFilter() {
     const inputs = document.querySelectorAll('#date-picker-dropdown input[type=date]');
-    const fmt = v => { const [y,m,d] = v.split('-'); return `${d}/${m}/${y}`; };
-    document.getElementById('date-filter-btn').childNodes[2].textContent = ` ${fmt(inputs[0].value)} — ${fmt(inputs[1].value)} `;
+    const fmt = v => { const [y,m,d] = v.split('-'); return `${parseInt(m)}/${parseInt(d)}/${y}`; };
+    const lbl = document.getElementById('date-filter-label');
+    if (lbl) lbl.textContent = `${fmt(inputs[0].value)} — ${fmt(inputs[1].value)}`;
     toggleDatePicker();
   }
 
@@ -1920,6 +2184,90 @@
     btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
     setTimeout(() => { btn.innerHTML = orig; }, 1800);
   }
+
+  /* ─── SEARCH BAR ─── */
+  let sbField = 'merchant-ref';
+
+  function toggleSbDropdown() {
+    document.getElementById('sb-dropdown').classList.toggle('open');
+  }
+
+  function selectSbField(el) {
+    sbField = el.dataset.field;
+    document.getElementById('sb-field-label').textContent = el.textContent;
+    document.querySelectorAll('.sb-option').forEach(o => o.classList.remove('sb-selected'));
+    el.classList.add('sb-selected');
+    document.getElementById('sb-dropdown').classList.remove('open');
+    document.getElementById('sb-input').value = '';
+    applyFilters();
+  }
+
+  function doTopSearch() { applyFilters(); }
+
+  function clearTopSearch() {
+    document.getElementById('sb-input').value = '';
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const q = (document.getElementById('sb-input')?.value || '').toLowerCase().trim();
+    const rows = document.querySelectorAll('#pbl-tbody tr');
+    let visible = 0;
+    rows.forEach(tr => {
+      let match = true;
+      if (q) {
+        let val = '';
+        if (sbField === 'merchant-ref') val = (tr.querySelector('td:nth-child(5)')?.textContent || '').toLowerCase();
+        else if (sbField === 'email-customer') val = (tr.dataset.email || '').toLowerCase();
+        else if (sbField === 'phone') val = (tr.dataset.phone || '').toLowerCase();
+        else if (sbField === 'firstname') val = (tr.dataset.firstname || '').toLowerCase();
+        else if (sbField === 'lastname') val = (tr.dataset.lastname || '').toLowerCase();
+        match = val.includes(q);
+      }
+      // per-column filters
+      if (match) match = colFilters.every((cq, i) => {
+        if (!cq) return true;
+        const cell = tr.querySelector(`td:nth-child(${i + 1})`);
+        return cell ? cell.textContent.toLowerCase().includes(cq) : true;
+      });
+      tr.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    const tot = document.getElementById('lv-total');
+    if (tot) tot.textContent = `Total: ${visible} Payment link${visible !== 1 ? 's' : ''}`;
+  }
+
+  /* ─── PER-COLUMN SEARCH ─── */
+  const colFilters = [];
+
+  function initColSearch() {
+    document.querySelectorAll('.col-search').forEach((input, i) => {
+      colFilters[i] = '';
+      input.addEventListener('input', () => {
+        colFilters[i] = input.value.toLowerCase().trim();
+        applyFilters();
+      });
+    });
+    document.querySelectorAll('.col-search-select').forEach((sel, i) => {
+      const idx = Array.from(document.querySelectorAll('.col-th')).indexOf(sel.closest('.col-th'));
+      colFilters[idx] = '';
+      sel.addEventListener('change', () => {
+        colFilters[idx] = sel.value.toLowerCase();
+        applyFilters();
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initColSearch();
+  });
+
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('sb-field-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('sb-dropdown')?.classList.remove('open');
+    }
+  });
 </script>
 
 
