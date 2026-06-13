@@ -1004,6 +1004,47 @@
     /* Step panels */
     .step-panel { display: none; }
     .step-panel.active { display: block; }
+
+    /* ─── CREATE SPLIT PANE ─── */
+    .create-split { display:flex; gap:24px; align-items:flex-start; }
+    .create-left { flex:1; min-width:0; display:flex; flex-direction:column; gap:14px; }
+    .create-right { width:296px; min-width:296px; position:sticky; top:20px; flex-shrink:0; }
+
+    .cs-card { background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+    .cs-card-title { font-size:11.5px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:14px; }
+
+    .cs-options { display:flex; flex-direction:column; }
+    .cs-option-row { display:flex; align-items:center; gap:10px; padding:9px 0; cursor:pointer; border-bottom:1px solid #f1f5f9; user-select:none; }
+    .cs-option-row:first-of-type { padding-top:0; }
+    .cs-option-row:last-of-type { border-bottom:none; padding-bottom:0; }
+    .cs-opt-label { font-size:13.5px; color:var(--text-2); font-weight:500; flex:1; }
+    .cs-opt-hint { font-size:12px; color:var(--text-4); font-weight:400; }
+    .cs-opt-fields { padding:6px 0 10px 28px; display:none; flex-direction:column; gap:8px; }
+    .cs-opt-fields.open { display:flex; }
+
+    .cs-action-bar { display:flex; align-items:center; gap:10px; padding-top:4px; }
+
+    /* Preview panel */
+    .prev-wrap-label { font-size:11px; font-weight:600; color:var(--text-4); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; }
+    .checkout-preview { background:#fff; border-radius:14px; border:1.5px solid var(--border); box-shadow:0 4px 24px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.05); overflow:hidden; }
+    .prev-hd { display:flex; align-items:center; justify-content:space-between; padding:16px 18px 12px; border-bottom:1px solid var(--border); }
+    .prev-brand { font-size:14px; font-weight:700; color:#0f172a; }
+    .prev-brand em { color:#2563eb; font-style:normal; }
+    .prev-val { font-size:14px; font-weight:700; color:#0f172a; }
+    .prev-desc-line { padding:8px 18px 10px; font-size:13px; color:var(--text-4); border-bottom:1px solid var(--border); min-height:36px; }
+    .prev-desc-line.has-value { color:var(--text-2); }
+    .prev-body { padding:14px 18px; }
+    .prev-sec-title { font-size:12.5px; font-weight:600; color:#0f172a; margin-bottom:10px; }
+    .prev-pm { display:flex; align-items:center; gap:8px; padding:8px 10px; border:1.5px solid var(--accent); border-radius:8px; margin-bottom:10px; }
+    .prev-pm-radio { width:12px; height:12px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--accent); flex-shrink:0; }
+    .prev-pm-name { font-size:12.5px; font-weight:500; color:var(--text-2); flex:1; }
+    .prev-field { height:32px; background:#f8fafc; border:1.5px solid var(--border); border-radius:7px; display:flex; align-items:center; padding:0 10px; font-size:12px; color:var(--text-4); margin-bottom:7px; }
+    .prev-field-row { display:flex; gap:7px; margin-bottom:7px; }
+    .prev-field-row .prev-field { flex:1; margin-bottom:0; }
+    .prev-cust-row { display:flex; align-items:center; gap:6px; padding:8px 0 2px; border-top:1px solid #f1f5f9; margin-top:2px; font-size:12.5px; color:var(--text-3); cursor:default; }
+    .prev-pay-btn-el { width:100%; height:42px; background:#1d4ed8; color:#fff; border:none; border-radius:10px; font-size:13.5px; font-weight:600; cursor:default; margin:14px 0 10px; font-family:inherit; display:block; }
+    .prev-secure { text-align:center; font-size:11px; color:var(--text-4); display:flex; align-items:center; justify-content:center; gap:4px; padding-bottom:14px; }
+    .prev-secure strong { color:#374151; }
   </style>
 </head>
 <body>
@@ -1411,503 +1452,213 @@
       <!-- ══════════════ CREATE FLOW ══════════════ -->
       <div class="create-flow" id="create-flow">
 
-      <!-- Stepper -->
-      <div class="stepper" id="stepper">
-        <div class="step-item">
-          <div class="step-circle active" id="step1-circle">1</div>
-          <span class="step-label active" id="step1-label">Payment Settings</span>
-        </div>
-        <div class="step-connector" id="connector-1-2"></div>
-        <div class="step-item">
-          <div class="step-circle inactive" id="step2-circle">2</div>
-          <span class="step-label" id="step2-label">Link Settings</span>
-        </div>
-        <div class="step-connector" id="connector-2-3"></div>
-        <div class="step-item">
-          <div class="step-circle inactive" id="step3-circle">3</div>
-          <span class="step-label" id="step3-label">Done</span>
-        </div>
-      </div>
+        <!-- ── FORM VIEW ── -->
+        <div id="create-form-view">
+          <div class="create-split">
 
-      <!-- ══════════════ STEP 1 ══════════════ -->
-      <div class="step-panel active" id="panel-step1">
-        <div class="flow-card">
+            <!-- LEFT: Settings panel -->
+            <div class="create-left">
 
-          <!-- Payment Settings section -->
-          <div class="flow-section-title">Payment Settings</div>
+              <!-- Amount + Description -->
+              <div class="cs-card">
+                <div class="cs-card-title">Amount</div>
+                <div style="display:flex;gap:8px;margin-bottom:14px;">
+                  <select id="cs-currency" class="form-select" style="width:96px;flex-shrink:0;" onchange="updatePreview()">
+                    <option>AUD</option><option>GBP</option><option>USD</option><option>EUR</option><option>SEK</option><option>NZD</option>
+                  </select>
+                  <input id="cs-amount" class="form-input" type="number" placeholder="0.00" min="0" step="0.01" oninput="updatePreview()">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label">Description <span class="optional">(optional)</span></label>
+                  <input id="cs-description" class="form-input" type="text" placeholder="e.g. Invoice #1042 — Office Supplies" oninput="updatePreview()">
+                </div>
+              </div>
 
-          <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">Organization</label>
-            <select class="form-select">
-              <option selected>Parent</option>
-              <option>Child Org 1</option>
-              <option>Child Org 2</option>
-            </select>
-          </div>
+              <!-- Payment methods -->
+              <div class="cs-card">
+                <div class="cs-card-title">Payment methods</div>
+                <div class="pm-checkbox-list">
+                  <div class="pm-cb-row" onclick="togglePmCb(this)">
+                    <div class="cb-box checked" style="flex-shrink:0;"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="pm-cb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+                    <div><span class="pm-cb-label">Card</span><div style="font-size:11.5px;color:var(--text-4);margin-top:1px;">Visa, Mastercard, Amex, JCB &amp; more</div></div>
+                    <div class="card-brands" style="margin-left:auto;">
+                      <span class="card-brand brand-visa">VISA</span>
+                      <span class="card-brand brand-mc">MC</span>
+                      <span class="card-brand brand-jcb">JCB</span>
+                    </div>
+                  </div>
+                  <div class="pm-cb-row" onclick="togglePmCb(this)">
+                    <div class="cb-box" style="flex-shrink:0;"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="pm-cb-icon" style="font-size:11px;font-weight:700;color:#5f6368;letter-spacing:-0.5px;">G Pay</div>
+                    <span class="pm-cb-label">Google Pay</span>
+                  </div>
+                  <div class="pm-cb-row" onclick="togglePmCb(this)">
+                    <div class="cb-box" style="flex-shrink:0;"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="pm-cb-icon" style="font-size:14px;color:#000;">⌘</div>
+                    <span class="pm-cb-label">Apple Pay</span>
+                  </div>
+                </div>
+              </div>
 
-          <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">Cart information</label>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" name="cart" value="amount" checked onchange="toggleProductSection(false)"> Amount
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="cart" value="amount-product" onchange="toggleProductSection(true)"> Amount &amp; Product
-              </label>
+              <!-- Options -->
+              <div class="cs-card">
+                <div class="cs-card-title">Options</div>
+                <div class="cs-options">
+
+                  <div class="cs-option-row" onclick="toggleOption(this,'opt-reference')">
+                    <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="cs-opt-label">Add reference</span>
+                    <span class="cs-opt-hint">invoice or order number</span>
+                  </div>
+                  <div class="cs-opt-fields" id="opt-reference">
+                    <input class="form-input" type="text" placeholder="e.g. INV-001 or Order #4200">
+                  </div>
+
+                  <div class="cs-option-row" onclick="toggleOption(this,'opt-customer')">
+                    <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="cs-opt-label">Send to customer</span>
+                    <span class="cs-opt-hint">email or SMS</span>
+                  </div>
+                  <div class="cs-opt-fields" id="opt-customer">
+                    <input class="form-input" type="email" placeholder="Customer email (optional)">
+                    <div class="phone-input">
+                      <div class="phone-flag">
+                        <span>🇦🇺</span><span>+61</span>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                      </div>
+                      <input type="tel" placeholder="Phone number (optional)">
+                    </div>
+                  </div>
+
+                  <div class="cs-option-row" onclick="toggleOption(this,'opt-expiry')">
+                    <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="cs-opt-label">Set link expiration</span>
+                    <span class="cs-opt-hint">default: 30 days</span>
+                  </div>
+                  <div class="cs-opt-fields" id="opt-expiry">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <input class="form-input" type="number" value="1" min="1" max="30" style="width:72px;flex-shrink:0;">
+                      <select class="form-select" style="width:100px;flex-shrink:0;"><option>days</option><option>hours</option></select>
+                      <span style="font-size:12px;color:var(--text-4);">max 30 days</span>
+                    </div>
+                  </div>
+
+                  <div class="cs-option-row" style="border-bottom:none;padding-bottom:0;" onclick="this.querySelector('.cb-box').classList.toggle('checked')">
+                    <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="cs-opt-label">Allow tip</span>
+                    <span class="cs-opt-hint">customer can add gratuity at checkout</span>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Action bar -->
+              <div class="cs-action-bar">
+                <button class="btn-danger-text" onclick="showListView()">Discard</button>
+                <div style="flex:1;"></div>
+                <button class="btn btn-outline" style="height:38px;">Save as Draft</button>
+                <button class="btn btn-primary" style="height:38px;" onclick="createLink()">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                  Create &amp; Send Link
+                </button>
+              </div>
+
+            </div><!-- /create-left -->
+
+            <!-- RIGHT: Checkout preview -->
+            <div class="create-right">
+              <div class="prev-wrap-label">Preview</div>
+              <div class="checkout-preview">
+                <div class="prev-hd">
+                  <div class="prev-brand"><em>V</em>erifone®</div>
+                  <div class="prev-val" id="prev-amount">AUD 0.00</div>
+                </div>
+                <div class="prev-desc-line" id="prev-desc">Description</div>
+                <div class="prev-body">
+                  <div class="prev-sec-title">Payment Details</div>
+                  <div class="prev-pm">
+                    <div class="prev-pm-radio"></div>
+                    <span class="prev-pm-name">Payment Card</span>
+                    <span class="card-brand brand-visa" style="margin-right:2px;">VISA</span>
+                    <span class="card-brand brand-mc" style="margin-right:2px;">MC</span>
+                    <span class="card-brand" style="background:#006fcf;color:#fff;height:20px;padding:0 4px;border-radius:3px;font-size:9px;font-weight:700;display:inline-flex;align-items:center;">AMEX</span>
+                  </div>
+                  <div class="prev-field" style="font-family:monospace;letter-spacing:1px;">1234 5678 9012 3456</div>
+                  <div class="prev-field-row">
+                    <div class="prev-field">MM/YY</div>
+                    <div class="prev-field">CVV</div>
+                  </div>
+                  <div class="prev-cust-row">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    Customer Details
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                  <button class="prev-pay-btn-el" id="prev-pay-btn">Pay AUD 0.00</button>
+                  <div class="prev-secure">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    Secure payments by <strong>Verifone</strong>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /create-right -->
+
+          </div><!-- /create-split -->
+        </div><!-- /create-form-view -->
+
+        <!-- ── SUCCESS STATE ── -->
+        <div id="create-success-view" style="display:none;max-width:560px;margin:0 auto;">
+          <div class="flow-card">
+            <div class="success-card">
+              <div class="success-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="success-title">Payment link created</div>
+              <div class="link-copy-row">
+                <input class="link-url-input" type="text" readonly value="https://qat.checkout.vficloud.net/v2/checkout/8c80b526-945f-4130-847...">
+                <button class="btn btn-primary" onclick="copyLink()" style="flex-shrink:0;gap:5px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                  Copy link
+                </button>
+              </div>
+              <div class="success-expire">Expires on 14 Jul 2026</div>
+              <div style="text-align:left;margin-bottom:10px;">
+                <div class="sent-to-label">This link was sent to:</div>
+                <div id="success-sent-to" style="display:flex;gap:18px;flex-wrap:wrap;"></div>
+              </div>
+              <div class="send-link-btn-row">
+                <button class="btn btn-outline">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  Send to another customer
+                </button>
+              </div>
             </div>
-          </div>
 
-          <!-- Product info (shown when Amount & Product selected) -->
-          <div id="product-info-section" style="display:none;border:1.5px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-              <div style="font-size:13.5px;font-weight:600;color:#0f172a;">Product information</div>
-              <a href="product-catalog.html" style="font-size:12px;color:var(--accent);font-weight:500;text-decoration:none;display:flex;align-items:center;gap:4px;" title="Browse saved products">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                Load from Product Catalog
+            <div class="link-details-card">
+              <div class="link-details-header">Link details</div>
+              <div class="link-detail-row">
+                <span class="link-detail-key">Transaction amount</span>
+                <span class="link-detail-val" id="success-amount">—</span>
+              </div>
+              <div class="link-detail-row">
+                <span class="link-detail-key">Description</span>
+                <span class="link-detail-val" id="success-desc" style="color:var(--text-4);">—</span>
+              </div>
+              <div class="link-detail-row">
+                <span class="link-detail-key">Payment methods</span>
+                <span class="link-detail-val" id="success-pm">Card</span>
+              </div>
+            </div>
+
+            <div class="return-row">
+              <a class="return-link" onclick="showListView()">
+                Return to payment links
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </a>
             </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label class="form-label">Product description</label>
-              <input class="form-input" type="text" placeholder="What are you charging for?">
-            </div>
-            <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:12px;">
-              <div class="form-group" style="margin-bottom:0;width:80px;">
-                <label class="form-label">Quantity</label>
-                <select class="form-select" style="width:80px;">
-                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-                </select>
-              </div>
-              <div class="form-group" style="margin-bottom:0;flex:1;">
-                <label class="form-label">Price per unit</label>
-                <div class="amount-row">
-                  <select class="form-select currency-select"><option>GBP</option><option>USD</option><option>EUR</option></select>
-                  <input class="form-input amount-input" type="number" value="0.00" step="0.01">
-                </div>
-              </div>
-              <div class="form-group" style="margin-bottom:0;flex:1;">
-                <label class="form-label">Product Code <span class="optional">(optional)</span></label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-            </div>
-            <div style="display:flex;justify-content:flex-end;font-size:13.5px;font-weight:600;color:#0f172a;padding-top:8px;border-top:1px solid var(--border);margin-bottom:10px;">
-              <span style="color:var(--text-3);margin-right:auto;">Total Price</span>
-              GBP 0.00
-            </div>
-            <button class="btn btn-primary" style="font-size:12.5px;height:32px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Add Product
-            </button>
-            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:#0f172a;">
-              <span style="color:var(--text-3);">Total Price</span>
-              GBP 0.00
-            </div>
           </div>
+        </div><!-- /create-success-view -->
 
-          <div class="form-group" style="margin-bottom:4px;">
-            <label class="form-label">Transaction Amount</label>
-            <div class="amount-row">
-              <select class="form-select currency-select">
-                <option selected>GBP</option>
-                <option>USD</option>
-                <option>EUR</option>
-                <option>SEK</option>
-              </select>
-              <input class="form-input amount-input" type="number" value="0" min="0" step="0.01">
-            </div>
-          </div>
-          <div class="form-error" style="margin-bottom:12px;">Amount cannot be zero</div>
-
-          <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">Merchant Reference <span class="optional">(optional)</span></label>
-            <input class="form-input" type="text" placeholder="">
-            <div class="form-hint">Your internal reference for this payment (e.g. order ID). Different from Invoice Number.</div>
-          </div>
-
-          <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">Invoice Number <span class="optional">(optional)</span></label>
-            <input class="form-input" type="text" placeholder="">
-            <div class="form-hint">Invoice tracking number. Not the same as Merchant Reference — both can be set independently.</div>
-          </div>
-
-          <div class="form-group" style="margin-bottom:6px;">
-            <label class="form-label">Sales Identifier <span class="optional">(optional)</span></label>
-            <input class="form-input" type="text" placeholder="">
-            <div class="form-hint">Maps to "Customer Transaction Reference" on the Transactions page</div>
-          </div>
-
-          <hr class="card-divider">
-
-          <!-- Payment methods section -->
-          <div class="flow-section-title" style="margin-bottom:4px;">Payment methods for GBP</div>
-          <div style="font-size:12.5px;color:var(--text-3);margin-bottom:12px;">Select the payment methods your customer will choose from in the checkout:</div>
-
-          <div class="pm-checkbox-list">
-            <!-- Card -->
-            <div class="pm-cb-row" onclick="togglePmCb(this)" id="card-pm-row">
-              <div class="cb-box" style="flex-shrink:0;">
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              <div class="pm-cb-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-              </div>
-              <div>
-                <span class="pm-cb-label">Card</span>
-                <div style="font-size:11.5px;color:var(--text-4);margin-top:1px;">Supports 3D Secure authentication for added security</div>
-              </div>
-              <div class="card-brands" style="margin-left:auto;">
-                <span class="card-brand brand-visa">VISA</span>
-                <span class="card-brand brand-mc">MC</span>
-                <span class="card-brand brand-jcb">JCB</span>
-                <span class="card-brand brand-maestro">MAE</span>
-                <span class="card-brand brand-discover">DISC</span>
-              </div>
-            </div>
-            <!-- Google Pay -->
-            <div class="pm-cb-row" onclick="togglePmCb(this)">
-              <div class="cb-box" style="flex-shrink:0;">
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              <div class="pm-cb-icon" style="font-size:11px;font-weight:700;color:#5f6368;letter-spacing:-0.5px;">G Pay</div>
-              <span class="pm-cb-label">Google Pay</span>
-            </div>
-            <!-- Apple Pay -->
-            <div class="pm-cb-row" onclick="togglePmCb(this)">
-              <div class="cb-box" style="flex-shrink:0;">
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              <div class="pm-cb-icon" style="font-size:12px;color:#000;">⌘</div>
-              <span class="pm-cb-label">Apple Pay</span>
-            </div>
-          </div>
-
-          <!-- Auto-capture toggle -->
-          <div class="capture-row" style="margin-top:14px;">
-            <div class="cb-box checked" onclick="toggleCb(this)">
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="cb-text">Automatically send transaction for capture</span>
-            <span class="cb-info" title="When enabled, transactions are automatically captured after authorization.">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            </span>
-          </div>
-
-          <hr class="card-divider">
-
-          <!-- Customer details -->
-          <div class="cust-toggle-link" onclick="toggleCustDetails()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            <span id="custToggleText">Continue without customer details</span>
-          </div>
-
-          <div class="cust-section" id="cust-details-section">
-
-            <div class="form-group" style="margin-bottom:14px; margin-top:12px;">
-              <label class="form-label">Search customer</label>
-              <div style="position:relative;">
-                <input class="form-input" type="text" placeholder="Search by email or phone number" style="padding-right:36px;">
-                <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text-4);pointer-events:none;">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                </span>
-              </div>
-            </div>
-
-            <div class="cust-sub-title">Details</div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">First Name</label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Last Name</label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Email <span class="optional">(optional)</span></label>
-                <input class="form-input" type="email" placeholder="">
-                <div class="form-hint">Needed to authenticate the customer for processing</div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Phone <span class="optional">(optional)</span></label>
-                <div class="phone-input">
-                  <div class="phone-flag">
-                    <span>🇸🇪</span>
-                    <span>+46</span>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                  </div>
-                  <input type="tel" placeholder="">
-                </div>
-                <div class="form-hint">Will be shared with payment providers for processing</div>
-              </div>
-            </div>
-
-            <div class="form-group" style="margin-bottom:14px;">
-              <label class="form-label">Identifier <span class="optional">(optional)</span></label>
-              <input class="form-input" type="text" placeholder="">
-              <div class="form-hint" style="color:#d97706;">Purpose unclear — consider mapping to a specific CRM field or removing</div>
-            </div>
-
-            <div class="cust-sub-title">Billing Details</div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">First Name</label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Last Name</label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Address Line 1 <span class="optional">(optional)</span></label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Address Line 2 <span class="optional">(optional)</span></label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Post Code <span class="optional">(optional)</span></label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-              <div class="form-group">
-                <label class="form-label">City <span class="optional">(optional)</span></label>
-                <input class="form-input" type="text" placeholder="">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">State / Province</label>
-                <select class="form-select">
-                  <option value="">— Select —</option>
-                  <option>Stockholm</option>
-                  <option>Gothenburg</option>
-                  <option>Malmö</option>
-                  <option>New South Wales</option>
-                  <option>Victoria</option>
-                  <option>Wellington</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Country <span class="optional">(optional)</span></label>
-                <select class="form-select">
-                  <option value="">— Select country —</option>
-                  <option selected>Sweden</option>
-                  <option>United Kingdom</option>
-                  <option>United States</option>
-                  <option>Australia</option>
-                  <option>New Zealand</option>
-                  <option>Germany</option>
-                  <option>France</option>
-                  <option>Romania</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="toggle-row">
-              <div class="toggle-switch on" id="shippingToggle" onclick="this.classList.toggle('on')"></div>
-              <span class="toggle-label">The shipping address is same as the Billing Address</span>
-            </div>
-
-          </div><!-- /cust-details-section -->
-
-          <!-- Action bar -->
-          <div class="action-bar">
-            <button class="btn-danger-text" onclick="showListView()">Discard</button>
-            <div class="action-bar-spacer"></div>
-            <button class="btn btn-primary" onclick="goToStep(2)">
-              Continue to link settings
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" transform="scale(-1,1) translate(-24,0)"/></svg>
-            </button>
-          </div>
-
-        </div><!-- /flow-card -->
-      </div><!-- /panel-step1 -->
-
-
-      <!-- ══════════════ STEP 2 ══════════════ -->
-      <div class="step-panel" id="panel-step2">
-        <div class="flow-card">
-
-          <!-- Summary bar -->
-          <div class="summary-bar">
-            <span class="summary-bar-label">Payment settings summary</span>
-            <span class="summary-bar-amount">GBP 20.00</span>
-          </div>
-
-          <!-- Link settings -->
-          <div class="flow-section-title">Link settings</div>
-
-          <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">Link expiration</label>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <input class="form-input" type="number" value="1" min="1" max="30" style="width:80px;flex-shrink:0;">
-              <select class="form-select" style="width:110px;flex-shrink:0;">
-                <option selected>days</option>
-                <option>hours</option>
-              </select>
-              <span style="font-size:12.5px;color:var(--text-4);">30 days maximum</span>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">Preselected language</label>
-            <div class="multi-select" style="min-height:36px;flex-wrap:nowrap;">
-              <span class="ms-tag" style="white-space:nowrap;">English (English) <span class="ms-x">✕</span></span>
-              <span class="ms-arrow" style="margin-left:auto;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-              </span>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom:6px;">
-            <label class="form-label">Checkout theme</label>
-            <select class="form-select">
-              <option selected>Default theme</option>
-              <option>Dark theme</option>
-              <option>Custom theme</option>
-            </select>
-          </div>
-
-          <hr class="card-divider">
-
-          <!-- Delivery settings -->
-          <div class="flow-section-title" style="margin-bottom:12px;">Delivery settings</div>
-
-          <div class="cb-row" onclick="toggleCb(this)" style="margin-bottom:4px;">
-            <div class="cb-box">
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="cb-text">Send link by email</span>
-          </div>
-
-          <div class="cb-row" onclick="toggleCb(this)" style="margin-bottom:14px;">
-            <div class="cb-box">
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <span class="cb-text">Send link by phone number</span>
-          </div>
-
-          <hr class="card-divider">
-
-          <!-- Notifications -->
-          <div class="flow-section-title" style="margin-bottom:12px;">Notifications</div>
-
-          <div class="cb-row" onclick="toggleCb(this)">
-            <div class="cb-box">
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div>
-              <span class="cb-text">Notify me by email when payment is received</span>
-              <div style="font-size:11.5px;color:var(--text-4);margin-top:1px;">You'll receive a confirmation email as soon as the customer completes payment</div>
-            </div>
-          </div>
-
-          <!-- Action bar -->
-          <div class="action-bar">
-            <button class="btn btn-outline" onclick="goToStep(1)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-              Back to payment settings
-            </button>
-            <button class="btn-danger-text" onclick="showListView()">Discard</button>
-            <div class="action-bar-spacer"></div>
-            <button class="btn btn-primary" onclick="goToStep(3)">
-              Create payment link
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-            </button>
-          </div>
-
-        </div><!-- /flow-card -->
-      </div><!-- /panel-step2 -->
-
-
-      <!-- ══════════════ STEP 3 ══════════════ -->
-      <div class="step-panel" id="panel-step3">
-        <div class="flow-card">
-
-          <!-- Success block -->
-          <div class="success-card">
-            <div class="success-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="success-title">Payment link is successfully created</div>
-
-            <div class="link-copy-row">
-              <input class="link-url-input" type="text" readonly value="https://qat.checkout.vficloud.net/v2/checkout/2e4d10c6-e3ec-432c-823...">
-              <button class="btn btn-primary" onclick="copyLink()" style="flex-shrink:0;gap:5px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-                Copy link
-              </button>
-            </div>
-
-            <div class="success-expire">Expires on 28 Jun 2026 00:43</div>
-
-            <div style="text-align:left;margin-bottom:10px;">
-              <div class="sent-to-label">This link was sent to:</div>
-              <div style="display:flex;gap:18px;flex-wrap:wrap;">
-                <div class="sent-contact">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                  adriana.gornea17@gmail.com
-                </div>
-                <div class="sent-contact">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.64A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-                  +40729121530
-                </div>
-              </div>
-            </div>
-
-            <div class="send-link-btn-row">
-              <button class="btn btn-outline">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                Send payment link
-              </button>
-            </div>
-          </div>
-
-          <!-- Link details -->
-          <div class="link-details-card">
-            <div class="link-details-header">Link details</div>
-            <div class="link-detail-row">
-              <span class="link-detail-key">Organization</span>
-              <span class="link-detail-val">Parent</span>
-            </div>
-            <div class="link-detail-row">
-              <span class="link-detail-key">Transaction amount</span>
-              <span class="link-detail-val">GBP 20.00</span>
-            </div>
-            <div class="link-detail-row">
-              <span class="link-detail-key">Merchant Reference</span>
-              <span class="link-detail-val">DefaultMerch</span>
-            </div>
-            <div class="link-detail-row">
-              <span class="link-detail-key">Product(s)</span>
-              <span class="link-detail-val" style="color:var(--text-4);">—</span>
-            </div>
-            <div class="link-detail-row">
-              <span class="link-detail-key">Customer name</span>
-              <span class="link-detail-val">Adriana Gornea</span>
-            </div>
-          </div>
-
-          <div class="return-row">
-            <a class="return-link" onclick="showListView()">
-              Return to payment links
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-          </div>
-
-        </div><!-- /flow-card -->
-      </div><!-- /panel-step3 -->
 
       </div><!-- /create-flow -->
 
@@ -2040,78 +1791,17 @@
   renderFavPopover();
 
 
-  /* ─── STEP FLOW ─── */
-  let currentStep = 1;
-
-  const CHECKMARK_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
-
-  function goToStep(step) {
-    // Hide all panels
-    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('panel-step' + step).classList.add('active');
-    currentStep = step;
-    updateStepper(step);
-    // Scroll to top of content
-    document.querySelector('.page-scroll').scrollTop = 0;
-  }
-
-  function updateStepper(active) {
-    // Step 1
-    const c1 = document.getElementById('step1-circle');
-    const l1 = document.getElementById('step1-label');
-    const c2 = document.getElementById('step2-circle');
-    const l2 = document.getElementById('step2-label');
-    const c3 = document.getElementById('step3-circle');
-    const l3 = document.getElementById('step3-label');
-    const conn12 = document.getElementById('connector-1-2');
-    const conn23 = document.getElementById('connector-2-3');
-
-    // Reset all
-    [c1,c2,c3].forEach(c => { c.className = 'step-circle inactive'; c.innerHTML = c.getAttribute('data-num') || c.innerHTML; });
-    [l1,l2,l3].forEach(l => l.className = 'step-label');
-    conn12.className = 'step-connector';
-    conn23.className = 'step-connector';
-
-    // Preserve numbers
-    c1.setAttribute('data-num', '1');
-    c2.setAttribute('data-num', '2');
-    c3.setAttribute('data-num', '3');
-
-    if (active === 1) {
-      c1.className = 'step-circle active'; c1.innerHTML = '1';
-      l1.className = 'step-label active';
-    } else if (active === 2) {
-      c1.className = 'step-circle done'; c1.innerHTML = CHECKMARK_SVG;
-      l1.className = 'step-label done';
-      c2.className = 'step-circle active'; c2.innerHTML = '2';
-      l2.className = 'step-label active';
-      conn12.className = 'step-connector done';
-    } else if (active === 3) {
-      c1.className = 'step-circle done'; c1.innerHTML = CHECKMARK_SVG;
-      l1.className = 'step-label done';
-      c2.className = 'step-circle done'; c2.innerHTML = CHECKMARK_SVG;
-      l2.className = 'step-label done';
-      c3.className = 'step-circle active'; c3.innerHTML = '3';
-      l3.className = 'step-label active';
-      conn12.className = 'step-connector done';
-      conn23.className = 'step-connector done';
-    }
-  }
-
-  function resetFlow() {
-    goToStep(1);
-    showCreateFlow();
-  }
-
+  /* ─── CREATE FLOW ─── */
   function showCreateFlow() {
     document.getElementById('list-view').classList.remove('active');
     document.getElementById('create-flow').classList.add('active');
+    document.getElementById('create-form-view').style.display = '';
+    document.getElementById('create-success-view').style.display = 'none';
     document.getElementById('bc-cur').textContent = 'Create Payment link';
-    goToStep(1);
-    document.querySelector('.page-header-trailing .btn-primary').textContent = '';
     const btn = document.querySelector('.page-header-trailing .btn-primary');
     btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to list';
     btn.onclick = showListView;
+    updatePreview();
   }
 
   function showListView() {
@@ -2123,8 +1813,60 @@
     btn.onclick = showCreateFlow;
   }
 
-  function toggleProductSection(show) {
-    document.getElementById('product-info-section').style.display = show ? 'block' : 'none';
+  function updatePreview() {
+    const currency = document.getElementById('cs-currency')?.value || 'AUD';
+    const rawAmt = document.getElementById('cs-amount')?.value;
+    const amount = rawAmt ? parseFloat(rawAmt) : 0;
+    const description = document.getElementById('cs-description')?.value || '';
+    const amtStr = currency + ' ' + (isNaN(amount) ? '0.00' : amount.toFixed(2));
+    const elAmt = document.getElementById('prev-amount');
+    const elBtn = document.getElementById('prev-pay-btn');
+    const elDesc = document.getElementById('prev-desc');
+    if (elAmt) elAmt.textContent = amtStr;
+    if (elBtn) elBtn.textContent = 'Pay ' + amtStr;
+    if (elDesc) {
+      elDesc.textContent = description || 'Description';
+      elDesc.classList.toggle('has-value', !!description);
+    }
+  }
+
+  function toggleOption(row, fieldId) {
+    const box = row.querySelector('.cb-box');
+    const fields = document.getElementById(fieldId);
+    if (box) box.classList.toggle('checked');
+    if (fields) fields.classList.toggle('open');
+  }
+
+  function createLink() {
+    const amountEl = document.getElementById('cs-amount');
+    const amount = parseFloat(amountEl?.value) || 0;
+    if (!amount || amount <= 0) {
+      if (amountEl) { amountEl.style.borderColor = '#ef4444'; amountEl.focus(); }
+      return;
+    }
+    if (amountEl) amountEl.style.borderColor = '';
+    const currency = document.getElementById('cs-currency')?.value || 'AUD';
+    const description = document.getElementById('cs-description')?.value || '';
+    const emailVal = (document.querySelector('#opt-customer input[type="email"]')?.value || '').trim();
+    const phoneVal = (document.querySelector('#opt-customer input[type="tel"]')?.value || '').trim();
+
+    document.getElementById('success-amount').textContent = currency + ' ' + amount.toFixed(2);
+    const descEl = document.getElementById('success-desc');
+    if (descEl) { descEl.textContent = description || '—'; descEl.style.color = description ? '' : 'var(--text-4)'; }
+
+    const sentTo = document.getElementById('success-sent-to');
+    if (sentTo) {
+      const EMAIL_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+      const PHONE_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.64A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>';
+      sentTo.innerHTML = '';
+      if (emailVal) sentTo.innerHTML += `<div class="sent-contact">${EMAIL_SVG}${emailVal}</div>`;
+      if (phoneVal) sentTo.innerHTML += `<div class="sent-contact">${PHONE_SVG}${phoneVal}</div>`;
+      if (!emailVal && !phoneVal) sentTo.innerHTML = '<span style="color:var(--text-4);font-size:13px;">Link not sent — copy and share manually</span>';
+    }
+
+    document.getElementById('create-form-view').style.display = 'none';
+    document.getElementById('create-success-view').style.display = 'block';
+    document.querySelector('.page-scroll').scrollTop = 0;
   }
 
   function togglePmCb(row) {
@@ -2168,15 +1910,6 @@
     // If called on a cb-row, find the cb-box inside
     const box = row.classList.contains('cb-box') ? row : row.querySelector('.cb-box');
     if (box) box.classList.toggle('checked');
-  }
-
-  let custDetailsVisible = true;
-  function toggleCustDetails() {
-    custDetailsVisible = !custDetailsVisible;
-    const section = document.getElementById('cust-details-section');
-    const text = document.getElementById('custToggleText');
-    section.style.display = custDetailsVisible ? 'block' : 'none';
-    text.textContent = custDetailsVisible ? 'Continue without customer details' : 'Add customer details';
   }
 
   function copyLink() {
