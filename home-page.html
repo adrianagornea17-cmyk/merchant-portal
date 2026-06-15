@@ -493,6 +493,38 @@
     .stats-grid-5 { grid-template-columns: repeat(5, 1fr); }
     .stats-grid-4 { grid-template-columns: repeat(4, 1fr); }
 
+    /* ─── PERIOD TOGGLE ─── */
+    .sph-period-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .period-toggle {
+      display: inline-flex;
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .pt-btn {
+      border: none;
+      background: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-3);
+      padding: 4px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-family: inherit;
+    }
+    .pt-btn.active {
+      background: #fff;
+      color: var(--accent);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+    }
+    .pt-btn:hover:not(.active) { color: var(--text-2); }
+
     .stat-card {
       background: #fff;
       border: 1.5px solid var(--border);
@@ -770,11 +802,18 @@
       subtitle: 'Native transaction data and financial reporting tools',
       cols: 5,
       items: [
-        { color: '#4338ca', label: 'Transactions today',     value: '1,284',  note: '+3.2% vs yesterday',  cls: 'positive' },
-        { color: '#16a34a', label: 'Approval rate',          value: '97.4%',  note: 'Last 24 hours',        cls: '' },
+        { color: '#4338ca', label: 'Transactions today',     value: '1,284',  note: '+3.2% vs yesterday',       cls: 'positive' },
+        { color: '#f59e0b', label: 'Refunds',                value: '23',     note: '1.8% of transactions',     cls: '' },
         { color: '#dc2626', label: 'Failed transactions',    value: '34',     note: '<span class="alert">Needs review</span>', cls: '' },
-        { color: '#f59e0b', label: 'Avg. transaction value', value: '$284',   note: 'Unchanged',            cls: '' },
-        { color: '#0284c7', label: 'Reports generated',      value: '47',     note: '+5 this week',         cls: 'positive' },
+        { color: '#0284c7', label: 'Avg. transaction value', value: '$284',   note: 'Unchanged',                cls: '' },
+        { color: '#16a34a', label: 'Reports generated',      value: '47',     note: '+5 this week',             cls: 'positive' },
+      ],
+      week: [
+        { color: '#4338ca', label: 'Transactions this week', value: '8,940',  note: '+4.1% vs last week',       cls: 'positive' },
+        { color: '#f59e0b', label: 'Refunds',                value: '148',    note: '1.6% of transactions',     cls: 'positive' },
+        { color: '#dc2626', label: 'Failed transactions',    value: '198',    note: '<span class="alert">Needs review</span>', cls: '' },
+        { color: '#0284c7', label: 'Avg. transaction value', value: '$291',   note: '+2.5% vs last week',       cls: 'positive' },
+        { color: '#16a34a', label: 'Reports generated',      value: '47',     note: 'This week',                cls: '' },
       ]
     },
     payments: {
@@ -789,6 +828,12 @@
         { color: '#16a34a', label: 'Active',      value: '347',   note: 'Awaiting payment',         cls: '' },
         { color: '#f59e0b', label: 'Paid',        value: '891',   note: '$214,320 total collected', cls: 'positive' },
         { color: '#dc2626', label: 'Expired',     value: '46',    note: '<span class="alert">3 expired today</span>', cls: '' },
+      ],
+      week: [
+        { color: '#2563eb', label: 'Links created', value: '312',   note: '+22 vs last week',              cls: 'positive' },
+        { color: '#16a34a', label: 'Active',         value: '1,842', note: 'Weekly total created',          cls: '' },
+        { color: '#f59e0b', label: 'Paid',           value: '6,210', note: '$1.49M total collected',        cls: 'positive' },
+        { color: '#dc2626', label: 'Expired',        value: '287',   note: '<span class="alert">21 expired this week</span>', cls: '' },
       ]
     },
     boarding: {
@@ -804,6 +849,13 @@
         { color: '#dc2626', label: 'Rejected',             value: '3',    note: '<span class="alert">This month</span>', cls: '' },
         { color: '#f59e0b', label: 'AML/KYC checks',       value: '18',   note: 'In progress',        cls: '' },
         { color: '#0284c7', label: 'Avg. boarding time',   value: '4.2d', note: 'Unchanged',          cls: '' },
+      ],
+      week: [
+        { color: '#059669', label: 'Pending applications', value: '12',   note: 'Awaiting review',           cls: '' },
+        { color: '#16a34a', label: 'Approved this week',   value: '9',    note: '+2 vs last week',           cls: 'positive' },
+        { color: '#dc2626', label: 'Rejected',             value: '1',    note: '<span class="alert">This week</span>', cls: '' },
+        { color: '#f59e0b', label: 'AML/KYC checks',       value: '18',   note: 'In progress',               cls: '' },
+        { color: '#0284c7', label: 'Avg. boarding time',   value: '4.2d', note: 'Unchanged',                 cls: '' },
       ]
     },
     premier: {
@@ -815,6 +867,12 @@
         { color: '#0284c7', label: 'SSO sessions today',  value: '214',   note: '+11% vs yesterday',        cls: 'positive' },
         { color: '#7c3aed', label: 'Open support cases',  value: '17',    note: '<span class="alert">4 high priority</span>', cls: '' },
         { color: '#16a34a', label: 'Avg. session time',   value: '8m 42s',note: 'Unchanged',               cls: '' },
+      ],
+      week: [
+        { color: '#c2410c', label: 'Active merchants',       value: '3,142',  note: '+28 this month',        cls: 'positive' },
+        { color: '#0284c7', label: 'SSO sessions this week', value: '1,320',  note: '+9% vs last week',      cls: 'positive' },
+        { color: '#7c3aed', label: 'Open support cases',     value: '17',     note: '<span class="alert">4 high priority</span>', cls: '' },
+        { color: '#16a34a', label: 'Avg. session time',      value: '9m 15s', note: '+33s vs last week',     cls: 'positive' },
       ]
     },
     vhq: {
@@ -827,11 +885,18 @@
         { color: '#f59e0b', label: 'Pending updates',     value: '342',    note: '<span class="alert">Action required</span>', cls: '' },
         { color: '#16a34a', label: 'Updates completed',   value: '1,204',  note: 'Last 30 days',            cls: 'positive' },
         { color: '#0284c7', label: 'Offline terminals',   value: '23',     note: 'Being investigated',      cls: '' },
+      ],
+      week: [
+        { color: '#be185d', label: 'Managed terminals',        value: '12,580', note: '+65 this month',          cls: 'positive' },
+        { color: '#f59e0b', label: 'Pending updates',          value: '342',    note: '<span class="alert">Action required</span>', cls: '' },
+        { color: '#16a34a', label: 'Updates completed',        value: '8,420',  note: 'Last 7 days',             cls: 'positive' },
+        { color: '#0284c7', label: 'Offline terminals',        value: '23',     note: 'Being investigated',      cls: '' },
       ]
     }
   };
 
   let activeStats = null;
+  let activePeriod = '1d';
 
   function statsCardsHTML(items, cols) {
     return `<div class="stats-grid stats-grid-${cols}">` +
@@ -858,6 +923,15 @@
     if (card) card.classList.add('details-open');
 
     activeStats = key;
+    activePeriod = '1d';
+
+    const toggleHTML = `
+      <div class="sph-period-row">
+        <div class="period-toggle">
+          <button class="pt-btn active" onclick="switchPeriod('1d')">1D</button>
+          <button class="pt-btn" onclick="switchPeriod('1w')">1W</button>
+        </div>
+      </div>`;
 
     if (data.type === 'section') {
       const btns = data.actions.map(a =>
@@ -880,25 +954,38 @@
             <button class="sph-close" onclick="closeStats()" title="Close">✕</button>
           </div>
         </div>
-        ${statsCardsHTML(data.items, data.cols)}`;
+        ${toggleHTML}
+        <div id="statsCardsContainer">${statsCardsHTML(data.items, data.cols)}</div>`;
     } else {
       inner.innerHTML = `
         <div class="sph-wrap flat">
           <div class="sph-left">
+            <div class="sph-icon" style="background:${data.iconBg || ''}">${data.icon || ''}</div>
             <div>
-              <div class="sph-title">${data.title}</div>
-              <div class="sph-sub">${data.subtitle}</div>
+              <div class="sph-title">${data.title || data.label || ''}</div>
+              <div class="sph-sub">${data.subtitle || ''}</div>
             </div>
           </div>
           <div class="sph-right">
             <button class="sph-close" onclick="closeStats()" title="Close">✕</button>
           </div>
         </div>
-        ${statsCardsHTML(data.items, data.cols)}`;
+        ${toggleHTML}
+        <div id="statsCardsContainer">${statsCardsHTML(data.items, data.cols)}</div>`;
     }
 
     panel.classList.add('open');
     panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function switchPeriod(p) {
+    activePeriod = p;
+    document.querySelectorAll('.pt-btn').forEach(b =>
+      b.classList.toggle('active', b.textContent.trim().toLowerCase() === p)
+    );
+    const data = STATS[activeStats];
+    const items = p === '1w' && data.week ? data.week : data.items;
+    document.getElementById('statsCardsContainer').innerHTML = statsCardsHTML(items, data.cols);
   }
 
   function closeStats() {
