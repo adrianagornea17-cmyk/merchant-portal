@@ -928,8 +928,8 @@
     const toggleHTML = `
       <div class="sph-period-row">
         <div class="period-toggle">
-          <button class="pt-btn active" onclick="switchPeriod('1d')">1D</button>
-          <button class="pt-btn" onclick="switchPeriod('1w')">1W</button>
+          <button class="pt-btn active" data-period="1d" onclick="switchPeriod('1d')">Today</button>
+          <button class="pt-btn" data-period="1w" onclick="switchPeriod('1w')">This week</button>
         </div>
       </div>`;
 
@@ -981,7 +981,7 @@
   function switchPeriod(p) {
     activePeriod = p;
     document.querySelectorAll('.pt-btn').forEach(b =>
-      b.classList.toggle('active', b.textContent.trim().toLowerCase() === p)
+      b.classList.toggle('active', b.dataset.period === p)
     );
     const data = STATS[activeStats];
     const items = p === '1w' && data.week ? data.week : data.items;
