@@ -437,6 +437,12 @@
       justify-content: space-between;
       margin-bottom: 12px;
     }
+    .sph-wrap.flat {
+      background: none;
+      border: none;
+      border-radius: 0;
+      padding: 0 4px 14px;
+    }
     .sph-left { display: flex; align-items: center; gap: 14px; }
     .sph-icon {
       width: 42px; height: 42px;
@@ -852,7 +858,7 @@
         ${statsCardsHTML(data.items, data.cols)}`;
     } else {
       inner.innerHTML = `
-        <div class="sph-wrap">
+        <div class="sph-wrap flat">
           <div class="sph-left">
             <div class="sph-icon" style="background:${data.iconBg}">${data.icon}</div>
             <div>
