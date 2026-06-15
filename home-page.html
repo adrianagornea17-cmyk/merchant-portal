@@ -764,18 +764,12 @@
       ]
     },
     payments: {
-      type: 'section',
-      icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
-      title: 'Pay by Link',
-      subtitle: 'Create and manage payment links for your organisation',
-      actions: [
-        { label: 'Export',              style: 'outline' },
-        { label: '+ Create Pay by Link', style: 'primary' },
-      ],
+      type: 'simple',
+      label: 'Payment Tools — overview',
       cols: 4,
       items: [
-        { color: '#2563eb', label: 'Total links', value: '1,284', note: '+48 this month',          cls: 'positive' },
-        { color: '#16a34a', label: 'Active',      value: '347',   note: 'Awaiting payment',        cls: '' },
+        { color: '#2563eb', label: 'Total links', value: '1,284', note: '+48 this month',           cls: 'positive' },
+        { color: '#16a34a', label: 'Active',      value: '347',   note: 'Awaiting payment',         cls: '' },
         { color: '#f59e0b', label: 'Paid',        value: '891',   note: '$214,320 total collected', cls: 'positive' },
         { color: '#dc2626', label: 'Expired',     value: '46',    note: '<span class="alert">3 expired today</span>', cls: '' },
       ]
