@@ -709,7 +709,7 @@
     <div class="cards-grid cards-grid-2">
 
       <!-- Premier Portal -->
-      <div class="tool-card">
+      <div class="tool-card" data-stats-key="premier">
         <div class="tc-icon" style="background:#fed7aa;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
         </div>
@@ -721,10 +721,11 @@
             Open Portal
           </button>
         </div>
+        <button class="tc-details" onclick="showStats('premier')">Details</button>
       </div>
 
       <!-- VHQ 2.0 -->
-      <div class="tool-card">
+      <div class="tool-card" data-stats-key="vhq">
         <div class="tc-icon" style="background:#fce7f3;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#be185d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
@@ -736,6 +737,7 @@
             Open VHQ
           </button>
         </div>
+        <button class="tc-details" onclick="showStats('vhq')">Details</button>
       </div>
 
     </div>
@@ -802,6 +804,28 @@
         { color: '#dc2626', label: 'Rejected',             value: '3',    note: '<span class="alert">This month</span>', cls: '' },
         { color: '#f59e0b', label: 'AML/KYC checks',       value: '18',   note: 'In progress',        cls: '' },
         { color: '#0284c7', label: 'Avg. boarding time',   value: '4.2d', note: 'Unchanged',          cls: '' },
+      ]
+    },
+    premier: {
+      type: 'simple',
+      label: 'Premier Portal — overview',
+      cols: 4,
+      items: [
+        { color: '#c2410c', label: 'Active merchants',    value: '3,142', note: '+28 this month',           cls: 'positive' },
+        { color: '#0284c7', label: 'SSO sessions today',  value: '214',   note: '+11% vs yesterday',        cls: 'positive' },
+        { color: '#7c3aed', label: 'Open support cases',  value: '17',    note: '<span class="alert">4 high priority</span>', cls: '' },
+        { color: '#16a34a', label: 'Avg. session time',   value: '8m 42s',note: 'Unchanged',               cls: '' },
+      ]
+    },
+    vhq: {
+      type: 'simple',
+      label: 'VHQ 2.0 — overview',
+      cols: 4,
+      items: [
+        { color: '#be185d', label: 'Managed terminals',   value: '12,580', note: '+65 this month',          cls: 'positive' },
+        { color: '#f59e0b', label: 'Pending updates',     value: '342',    note: '<span class="alert">Action required</span>', cls: '' },
+        { color: '#16a34a', label: 'Updates completed',   value: '1,204',  note: 'Last 30 days',            cls: 'positive' },
+        { color: '#0284c7', label: 'Offline terminals',   value: '23',     note: 'Being investigated',      cls: '' },
       ]
     }
   };
