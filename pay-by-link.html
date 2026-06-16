@@ -1116,20 +1116,25 @@
     .create-modal-close:hover { background:var(--hover-bg); color:var(--text); }
     .create-modal-body { padding:24px; overflow-y:auto; flex:1; }
 
-    .pm-checkbox-list { display: flex; flex-direction: column; gap: 0; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .pm-cb-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      transition: background 0.1s;
-    }
-    .pm-cb-row:last-child { border-bottom: none; }
-    .pm-cb-row:hover { background: var(--hover-bg); }
-    .pm-cb-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .pm-cb-label { font-size: 13.5px; font-weight: 500; color: var(--text-2); }
+    .pm-multiselect { position:relative; }
+    .pm-ms-box { display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:7px 12px 7px 10px; border:1.5px solid var(--border); border-radius:10px; cursor:pointer; min-height:42px; background:#fff; transition:border-color 0.1s; }
+    .pm-ms-box.open { border-color:var(--accent); }
+    .pm-chip { display:inline-flex; align-items:center; gap:5px; background:#eff6ff; color:var(--accent); border-radius:20px; padding:3px 8px 3px 10px; font-size:12.5px; font-weight:500; white-space:nowrap; }
+    .pm-chip-x { cursor:pointer; font-size:16px; line-height:1; color:#93c5fd; margin-left:1px; padding:0 1px; }
+    .pm-chip-x:hover { color:var(--accent); }
+    .pm-ms-chevron { margin-left:auto; flex-shrink:0; color:var(--text-3); transition:transform 0.2s; padding-left:6px; }
+    .pm-ms-box.open .pm-ms-chevron { transform:rotate(180deg); }
+    .pm-ms-dropdown { position:absolute; top:calc(100% + 4px); left:0; right:0; background:#fff; border:1.5px solid var(--border); border-radius:10px; box-shadow:0 4px 16px rgba(0,0,0,0.1); z-index:200; overflow:hidden; display:none; }
+    .pm-ms-dropdown.open { display:block; }
+    .pm-ms-option { display:flex; align-items:center; gap:12px; padding:10px 14px; cursor:pointer; transition:background 0.1s; user-select:none; }
+    .pm-ms-option:hover { background:var(--hover-bg); }
+    .pm-ms-option:not(:last-child) { border-bottom:1px solid var(--border); }
+    .pm-ms-icon { width:26px; height:26px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pm-ms-label { font-size:13.5px; font-weight:500; color:var(--text-2); flex:1; }
+    .prev-pm-row { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; margin-bottom:8px; }
+    .prev-pm-row.is-selected { border-color:var(--accent); }
+    .prev-pm-radio-dot { width:14px; height:14px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 2px #fff,0 0 0 4px var(--accent); flex-shrink:0; }
+    .prev-pm-radio-empty { width:14px; height:14px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; }
 
     /* Step panels */
     .step-panel { display: none; }
@@ -1806,27 +1811,43 @@
 
               <!-- Payment methods -->
               <div class="cs-card">
-                <div class="cs-card-title">Payment methods</div>
-                <div class="pm-checkbox-list">
-                  <div class="pm-cb-row" onclick="togglePmCb(this)">
-                    <div class="cb-box checked" style="flex-shrink:0;"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <div class="pm-cb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-                    <div><span class="pm-cb-label">Card</span><div style="font-size:11.5px;color:var(--text-4);margin-top:1px;">Visa, Mastercard, Amex, JCB &amp; more</div></div>
-                    <div class="card-brands" style="margin-left:auto;">
-                      <span class="card-brand brand-visa">VISA</span>
-                      <span class="card-brand brand-mc">MC</span>
-                      <span class="card-brand brand-jcb">JCB</span>
+                <div class="cs-card-title">Accepted Payment Methods <span style="color:#ef4444;">*</span></div>
+                <div class="pm-multiselect" id="pm-multiselect">
+                  <div class="pm-ms-box" id="pm-ms-box" onclick="togglePmDropdown()">
+                    <div id="pm-chips" style="display:flex;flex-wrap:wrap;gap:6px;flex:1;"></div>
+                    <svg class="pm-ms-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                  <div class="pm-ms-dropdown" id="pm-ms-dropdown">
+                    <div class="pm-ms-option" id="pm-opt-card" onclick="togglePmOption('card',event)">
+                      <div class="cb-box checked"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                      <div class="pm-ms-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+                      <span class="pm-ms-label">Card</span>
                     </div>
-                  </div>
-                  <div class="pm-cb-row" onclick="togglePmCb(this)">
-                    <div class="cb-box" style="flex-shrink:0;"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <div class="pm-cb-icon" style="font-size:11px;font-weight:700;color:#5f6368;letter-spacing:-0.5px;">G Pay</div>
-                    <span class="pm-cb-label">Google Pay</span>
-                  </div>
-                  <div class="pm-cb-row" onclick="togglePmCb(this)">
-                    <div class="cb-box" style="flex-shrink:0;"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <div class="pm-cb-icon" style="font-size:14px;color:#000;">⌘</div>
-                    <span class="pm-cb-label">Apple Pay</span>
+                    <div class="pm-ms-option" id="pm-opt-apple-pay" onclick="togglePmOption('apple-pay',event)">
+                      <div class="cb-box checked"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                      <div class="pm-ms-icon" style="font-size:15px;"></div>
+                      <span class="pm-ms-label">Apple Pay</span>
+                    </div>
+                    <div class="pm-ms-option" id="pm-opt-google-pay" onclick="togglePmOption('google-pay',event)">
+                      <div class="cb-box checked"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                      <div class="pm-ms-icon" style="font-size:10px;font-weight:700;color:#5f6368;letter-spacing:-0.5px;">G Pay</div>
+                      <span class="pm-ms-label">Google Pay</span>
+                    </div>
+                    <div class="pm-ms-option" id="pm-opt-bank-transfer" onclick="togglePmOption('bank-transfer',event)">
+                      <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                      <div class="pm-ms-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+                      <span class="pm-ms-label">Bank Transfer</span>
+                    </div>
+                    <div class="pm-ms-option" id="pm-opt-paypal" onclick="togglePmOption('paypal',event)">
+                      <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                      <div class="pm-ms-icon" style="font-size:11px;font-weight:700;color:#003087;">PP</div>
+                      <span class="pm-ms-label">PayPal</span>
+                    </div>
+                    <div class="pm-ms-option" id="pm-opt-crypto" onclick="togglePmOption('crypto',event)">
+                      <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                      <div class="pm-ms-icon" style="font-size:14px;color:#f7931a;">₿</div>
+                      <span class="pm-ms-label">Crypto</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1999,12 +2020,33 @@
                 <div class="prev-desc-line" id="prev-desc">Description</div>
                 <div class="prev-body">
                   <div class="prev-sec-title">Payment Details</div>
-                  <div class="prev-pm">
-                    <div class="prev-pm-radio"></div>
+                  <div id="prev-pm-card" class="prev-pm-row is-selected">
+                    <div class="prev-pm-radio-dot"></div>
                     <span class="prev-pm-name">Payment Card</span>
                     <span class="card-brand brand-visa" style="margin-right:2px;">VISA</span>
                     <span class="card-brand brand-mc" style="margin-right:2px;">MC</span>
                     <span class="card-brand" style="background:#006fcf;color:#fff;height:20px;padding:0 4px;border-radius:3px;font-size:9px;font-weight:700;display:inline-flex;align-items:center;">AMEX</span>
+                  </div>
+                  <div id="prev-pm-apple-pay" class="prev-pm-row">
+                    <div class="prev-pm-radio-empty"></div>
+                    <span class="prev-pm-name"> Apple Pay</span>
+                  </div>
+                  <div id="prev-pm-google-pay" class="prev-pm-row">
+                    <div class="prev-pm-radio-empty"></div>
+                    <span class="prev-pm-name" style="font-size:12px;font-weight:700;color:#5f6368;letter-spacing:-0.5px;">G Pay</span>
+                    <span class="prev-pm-name" style="font-size:13px;color:var(--text-2);font-weight:400;">Google Pay</span>
+                  </div>
+                  <div id="prev-pm-bank-transfer" class="prev-pm-row" style="display:none;">
+                    <div class="prev-pm-radio-empty"></div>
+                    <span class="prev-pm-name">Bank Transfer</span>
+                  </div>
+                  <div id="prev-pm-paypal" class="prev-pm-row" style="display:none;">
+                    <div class="prev-pm-radio-empty"></div>
+                    <span class="prev-pm-name" style="font-size:12px;font-weight:700;color:#003087;">PayPal</span>
+                  </div>
+                  <div id="prev-pm-crypto" class="prev-pm-row" style="display:none;">
+                    <div class="prev-pm-radio-empty"></div>
+                    <span class="prev-pm-name">₿ Crypto</span>
                   </div>
                   <div class="prev-field" style="font-family:monospace;letter-spacing:1px;">1234 5678 9012 3456</div>
                   <div class="prev-field-row">
@@ -2228,6 +2270,8 @@
     document.getElementById('create-flow').classList.add('active');
     document.body.style.overflow = 'hidden';
     updatePreview();
+    renderPmChips();
+    updatePmPreview();
   }
 
   function closeCreateModal() {
@@ -2320,10 +2364,62 @@
     document.querySelector('.create-modal-body').scrollTop = 0;
   }
 
-  function togglePmCb(row) {
-    const box = row.querySelector('.cb-box');
-    if (box) box.classList.toggle('checked');
+  /* ─── PAYMENT METHOD MULTI-SELECT ─── */
+  const PM_LABELS = { card:'Card', 'apple-pay':'Apple Pay', 'google-pay':'Google Pay', 'bank-transfer':'Bank Transfer', paypal:'PayPal', crypto:'Crypto' };
+  let pmSelected = new Set(['card','apple-pay','google-pay']);
+
+  function togglePmDropdown() {
+    document.getElementById('pm-ms-box').classList.toggle('open');
+    document.getElementById('pm-ms-dropdown').classList.toggle('open');
   }
+
+  function togglePmOption(key, event) {
+    event.stopPropagation();
+    if (pmSelected.has(key)) {
+      if (pmSelected.size === 1) return;
+      pmSelected.delete(key);
+    } else {
+      pmSelected.add(key);
+    }
+    renderPmChips();
+    updatePmPreview();
+  }
+
+  function removePmChip(key, event) {
+    event.stopPropagation();
+    if (pmSelected.size === 1) return;
+    pmSelected.delete(key);
+    renderPmChips();
+    updatePmPreview();
+  }
+
+  function renderPmChips() {
+    document.getElementById('pm-chips').innerHTML = Array.from(pmSelected)
+      .map(k => `<span class="pm-chip">${PM_LABELS[k]} <span class="pm-chip-x" onclick="removePmChip('${k}',event)">×</span></span>`)
+      .join('');
+    Object.keys(PM_LABELS).forEach(k => {
+      const opt = document.getElementById('pm-opt-' + k);
+      if (opt) opt.querySelector('.cb-box').classList.toggle('checked', pmSelected.has(k));
+    });
+  }
+
+  function updatePmPreview() {
+    Object.keys(PM_LABELS).forEach(k => {
+      const el = document.getElementById('prev-pm-' + k);
+      if (el) el.style.display = pmSelected.has(k) ? '' : 'none';
+    });
+  }
+
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('pm-multiselect');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('pm-ms-box')?.classList.remove('open');
+      document.getElementById('pm-ms-dropdown')?.classList.remove('open');
+    }
+  });
+
+  // init chips on load
+  document.addEventListener('DOMContentLoaded', renderPmChips);
 
   /* ─── UI HELPERS ─── */
   function toggleCb(row) {
