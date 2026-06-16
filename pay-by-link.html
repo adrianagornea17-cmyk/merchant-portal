@@ -2961,7 +2961,7 @@
       const dt = new Date(`${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}T${tp||'00:00:00'}`);
       if (isNaN(dt)) return rawDate;
       const mon = dt.toLocaleString('en',{month:'short'});
-      return `${dt.getDate()} ${mon} ${dt.getFullYear()} ${tp||'00:00:00'}`;
+      return `${dt.getDate()} ${mon} ${dt.getFullYear()}`;
     } catch(e) { return rawDate; }
   }
 
@@ -2973,7 +2973,7 @@
       if (isNaN(dt)) return rawDate;
       dt.setDate(dt.getDate() + days);
       const mon = dt.toLocaleString('en',{month:'short'});
-      return `${dt.getDate()} ${mon} ${dt.getFullYear()} ${(tp||'00:00:00')}`;
+      return `${dt.getDate()} ${mon} ${dt.getFullYear()}`;
     } catch(e) { return rawDate; }
   }
 
@@ -3091,8 +3091,10 @@ function dpCopyLink() {
         <button class="dp-copy-btn" onclick="dpCopyLink()">Copy link</button>
       </div>
       <div class="dp-section">
-        <div class="dp-meta-item"><div class="dp-meta-label">Link created</div><div class="dp-meta-val" id="dp-created"></div></div>
-        <div class="dp-meta-item"><div class="dp-meta-label">Link expiration</div><div class="dp-meta-val" id="dp-expiry"></div></div>
+        <div style="display:flex;gap:12px;margin-bottom:14px;">
+          <div style="flex:1;"><div class="dp-meta-label">Link created</div><div class="dp-meta-val" id="dp-created"></div></div>
+          <div style="flex:1;"><div class="dp-meta-label">Link expiration</div><div class="dp-meta-val" id="dp-expiry"></div></div>
+        </div>
         <div class="dp-meta-item"><div class="dp-meta-label">Organization</div><div class="dp-meta-val" id="dp-org"></div></div>
         <div class="dp-meta-item"><div class="dp-meta-label">Payment Methods</div><div class="dp-meta-val" id="dp-pm"></div></div>
       </div>
