@@ -2352,7 +2352,7 @@
   }
 
   /* ─── FILTER PANEL ─── */
-  let fpState = { statusSet: new Set(), dateFrom: '', dateTo: '', org: '' };
+  let fpState = { statusSet: new Set(), phone: '', firstname: '', lastname: '' };
 
   function toggleFilterPanel() {
     const panel = document.getElementById('filter-panel');
@@ -2371,10 +2371,10 @@
 
   function fpClear() {
     document.querySelectorAll('.fp-status-cb').forEach(cb => cb.checked = false);
-    document.getElementById('fp-date-from').value = '2026-05-01';
-    document.getElementById('fp-date-to').value = '2026-06-14';
-    document.getElementById('fp-org').value = '';
-    fpState = { statusSet: new Set(), dateFrom: '', dateTo: '', org: '' };
+    document.getElementById('fp-phone').value = '';
+    document.getElementById('fp-firstname').value = '';
+    document.getElementById('fp-lastname').value = '';
+    fpState = { statusSet: new Set(), phone: '', firstname: '', lastname: '' };
     updateFpBadge();
     applyFilters();
   }
@@ -2382,16 +2382,16 @@
   function fpApply() {
     const checked = Array.from(document.querySelectorAll('.fp-status-cb:checked')).map(cb => cb.value);
     fpState.statusSet = new Set(checked);
-    fpState.dateFrom  = document.getElementById('fp-date-from').value || '';
-    fpState.dateTo    = document.getElementById('fp-date-to').value || '';
-    fpState.org       = document.getElementById('fp-org').value;
+    fpState.phone     = document.getElementById('fp-phone').value.trim().toLowerCase();
+    fpState.firstname = document.getElementById('fp-firstname').value.trim().toLowerCase();
+    fpState.lastname  = document.getElementById('fp-lastname').value.trim().toLowerCase();
     updateFpBadge();
     closeFilterPanel();
     applyFilters();
   }
 
   function updateFpBadge() {
-    const n = fpState.statusSet.size + (fpState.org ? 1 : 0) + (fpState.dateFrom || fpState.dateTo ? 1 : 0);
+    const n = fpState.statusSet.size + (fpState.phone ? 1 : 0) + (fpState.firstname ? 1 : 0) + (fpState.lastname ? 1 : 0);
     const badge = document.getElementById('fp-badge');
     if (badge) { badge.textContent = n; badge.classList.toggle('visible', n > 0); }
   }
@@ -2468,20 +2468,10 @@
         const cls = pill ? pill.className : '';
         match = Array.from(fpState.statusSet).some(v => cls.includes('status-pill-' + v));
       }
-      // panel: date filter
-      if (match && (fpState.dateFrom || fpState.dateTo)) {
-        const dateText = tr.querySelector('td:first-child')?.textContent || '';
-        const rowDate = new Date(dateText);
-        if (!isNaN(rowDate)) {
-          if (fpState.dateFrom) match = match && rowDate >= new Date(fpState.dateFrom);
-          if (fpState.dateTo) { const to = new Date(fpState.dateTo); to.setHours(23,59,59,999); match = match && rowDate <= to; }
-        }
-      }
-      // panel: org filter
-      if (match && fpState.org) {
-        const ref = tr.querySelector('td:nth-child(5)')?.textContent || '';
-        match = ref.toLowerCase().includes(fpState.org.toLowerCase());
-      }
+      // panel: customer filters
+      if (match && fpState.phone)     match = (tr.dataset.phone     || '').toLowerCase().includes(fpState.phone);
+      if (match && fpState.firstname) match = (tr.dataset.firstname || '').toLowerCase().includes(fpState.firstname);
+      if (match && fpState.lastname)  match = (tr.dataset.lastname  || '').toLowerCase().includes(fpState.lastname);
       tr.style.display = match ? '' : 'none';
       if (match) visible++;
     });
@@ -2708,20 +2698,6 @@ function dpCopyLink() {
   </div>
   <div class="fp-body">
 
-    <!-- Date range -->
-    <div class="fp-section">
-      <div class="fp-section-label">Date range</div>
-      <div class="fp-field">
-        <label class="fp-field-label">Created</label>
-        <div class="fp-date-row">
-          <input class="fp-date-input" type="date" id="fp-date-from" value="2026-05-01" placeholder="From">
-          <input class="fp-date-input" type="date" id="fp-date-to" value="2026-06-14" placeholder="To">
-        </div>
-      </div>
-    </div>
-
-    <hr class="fp-divider">
-
     <!-- Payment status -->
     <div class="fp-section">
       <div class="fp-section-label">Payment status</div>
@@ -2735,14 +2711,20 @@ function dpCopyLink() {
 
     <hr class="fp-divider">
 
-    <!-- Organization -->
+    <!-- Customer search fields -->
     <div class="fp-section">
-      <div class="fp-section-label">Organization</div>
+      <div class="fp-section-label">Customer</div>
       <div class="fp-field">
-        <select class="fp-select" id="fp-org">
-          <option value="">All organizations</option>
-          <option value="DefaultMerch">DefaultMerch</option>
-        </select>
+        <label class="fp-field-label">Phone Number</label>
+        <input class="fp-date-input" type="text" id="fp-phone" placeholder="e.g. +61…" style="width:100%;">
+      </div>
+      <div class="fp-field" style="margin-top:10px;">
+        <label class="fp-field-label">First Name</label>
+        <input class="fp-date-input" type="text" id="fp-firstname" placeholder="" style="width:100%;">
+      </div>
+      <div class="fp-field" style="margin-top:10px;">
+        <label class="fp-field-label">Last Name</label>
+        <input class="fp-date-input" type="text" id="fp-lastname" placeholder="" style="width:100%;">
       </div>
     </div>
 
