@@ -970,35 +970,6 @@
       gap: 16px;
       margin-top: 16px;
     }
-    .mobile-preview-card {
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .mobile-preview-hd {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--border);
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--text-4);
-    }
-    .mobile-preview-body {
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f8fafc;
-      min-height: 110px;
-    }
-    .qr-placeholder {
-      width: 80px; height: 80px;
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(7,1fr);
-      gap: 2px;
-    }
     .success-footer-bar {
       display: none;
       align-items: center;
@@ -2295,38 +2266,36 @@
             </div>
 
             <div class="success-bottom-grid">
-              <div class="mobile-preview-card">
-                <div class="mobile-preview-hd">Mobile preview</div>
-                <div class="mobile-preview-body">
-                  <svg width="90" height="90" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
-                    <!-- QR placeholder: finder patterns + data cells -->
-                    <rect width="90" height="90" fill="#fff"/>
-                    <!-- top-left finder -->
-                    <rect x="5" y="5" width="25" height="25" rx="3" fill="#1e293b"/>
-                    <rect x="9" y="9" width="17" height="17" rx="2" fill="#fff"/>
-                    <rect x="13" y="13" width="9" height="9" rx="1" fill="#1e293b"/>
-                    <!-- top-right finder -->
-                    <rect x="60" y="5" width="25" height="25" rx="3" fill="#1e293b"/>
-                    <rect x="64" y="9" width="17" height="17" rx="2" fill="#fff"/>
-                    <rect x="68" y="13" width="9" height="9" rx="1" fill="#1e293b"/>
-                    <!-- bottom-left finder -->
-                    <rect x="5" y="60" width="25" height="25" rx="3" fill="#1e293b"/>
-                    <rect x="9" y="64" width="17" height="17" rx="2" fill="#fff"/>
-                    <rect x="13" y="68" width="9" height="9" rx="1" fill="#1e293b"/>
-                    <!-- data cells (random-ish pattern) -->
-                    <rect x="35" y="5" width="5" height="5" fill="#1e293b"/><rect x="43" y="5" width="5" height="5" fill="#1e293b"/><rect x="51" y="5" width="5" height="5" fill="#1e293b"/>
-                    <rect x="35" y="13" width="5" height="5" fill="#1e293b"/><rect x="51" y="13" width="5" height="5" fill="#1e293b"/>
-                    <rect x="39" y="19" width="5" height="5" fill="#1e293b"/><rect x="47" y="19" width="5" height="5" fill="#1e293b"/>
-                    <rect x="5" y="35" width="5" height="5" fill="#1e293b"/><rect x="13" y="35" width="5" height="5" fill="#1e293b"/><rect x="21" y="35" width="5" height="5" fill="#1e293b"/>
-                    <rect x="35" y="35" width="5" height="5" fill="#1e293b"/><rect x="43" y="35" width="5" height="5" fill="#1e293b"/><rect x="55" y="35" width="5" height="5" fill="#1e293b"/><rect x="63" y="35" width="5" height="5" fill="#1e293b"/><rect x="71" y="35" width="5" height="5" fill="#1e293b"/>
-                    <rect x="5" y="43" width="5" height="5" fill="#1e293b"/><rect x="17" y="43" width="5" height="5" fill="#1e293b"/><rect x="27" y="43" width="5" height="5" fill="#1e293b"/>
-                    <rect x="39" y="43" width="5" height="5" fill="#1e293b"/><rect x="51" y="43" width="5" height="5" fill="#1e293b"/><rect x="63" y="43" width="5" height="5" fill="#1e293b"/>
-                    <rect x="5" y="51" width="5" height="5" fill="#1e293b"/><rect x="21" y="51" width="5" height="5" fill="#1e293b"/>
-                    <rect x="35" y="51" width="5" height="5" fill="#1e293b"/><rect x="47" y="51" width="5" height="5" fill="#1e293b"/><rect x="59" y="51" width="5" height="5" fill="#1e293b"/><rect x="71" y="51" width="5" height="5" fill="#1e293b"/>
-                    <rect x="35" y="63" width="5" height="5" fill="#1e293b"/><rect x="47" y="63" width="5" height="5" fill="#1e293b"/><rect x="59" y="63" width="5" height="5" fill="#1e293b"/>
-                    <rect x="39" y="71" width="5" height="5" fill="#1e293b"/><rect x="51" y="71" width="5" height="5" fill="#1e293b"/><rect x="63" y="71" width="5" height="5" fill="#1e293b"/><rect x="71" y="71" width="5" height="5" fill="#1e293b"/>
-                    <rect x="35" y="79" width="5" height="5" fill="#1e293b"/><rect x="55" y="79" width="5" height="5" fill="#1e293b"/><rect x="71" y="79" width="5" height="5" fill="#1e293b"/>
-                  </svg>
+              <div class="checkout-preview" style="border-radius:12px;">
+                <div class="prev-hd">
+                  <div class="prev-brand"><em>V</em>erifone®</div>
+                  <div class="prev-val" id="succ-prev-amount">AUD 0.00</div>
+                </div>
+                <div class="prev-desc-line" id="succ-prev-desc">Description</div>
+                <div class="prev-body">
+                  <div class="prev-sec-title">Payment Details</div>
+                  <div class="prev-pm-row is-selected">
+                    <div class="prev-pm-radio-dot"></div>
+                    <span class="prev-pm-name">Payment Card</span>
+                    <span class="card-brand brand-visa" style="margin-right:2px;">VISA</span>
+                    <span class="card-brand brand-mc" style="margin-right:2px;">MC</span>
+                    <span class="card-brand" style="background:#006fcf;color:#fff;height:20px;padding:0 4px;border-radius:3px;font-size:9px;font-weight:700;display:inline-flex;align-items:center;">AMEX</span>
+                  </div>
+                  <div class="prev-field" style="font-family:monospace;letter-spacing:1px;">1234 5678 9012 3456</div>
+                  <div class="prev-field-row">
+                    <div class="prev-field">MM/YY</div>
+                    <div class="prev-field">CVV</div>
+                  </div>
+                  <div class="prev-cust-row">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    Customer Details
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                  <button class="prev-pay-btn-el" id="succ-prev-pay-btn">Pay AUD 0.00</button>
+                  <div class="prev-secure">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    Secure payments by <strong>Verifone</strong>
+                  </div>
                 </div>
               </div>
 
@@ -2595,9 +2564,16 @@
     const emailVal = (document.querySelector('#opt-customer input[type="email"]')?.value || '').trim();
     const phoneVal = (document.querySelector('#opt-customer input[type="tel"]')?.value || '').trim();
 
-    document.getElementById('success-amount').textContent = currency + ' ' + amount.toFixed(2);
+    const amtStr = currency + ' ' + amount.toFixed(2);
+    document.getElementById('success-amount').textContent = amtStr;
     const descEl = document.getElementById('success-desc');
     if (descEl) { descEl.textContent = description || '—'; descEl.style.color = description ? '' : 'var(--text-4)'; }
+    const succPrevAmt = document.getElementById('succ-prev-amount');
+    if (succPrevAmt) succPrevAmt.textContent = amtStr;
+    const succPrevDesc = document.getElementById('succ-prev-desc');
+    if (succPrevDesc) { succPrevDesc.textContent = description || 'Description'; succPrevDesc.style.color = description ? '' : 'var(--text-4)'; }
+    const succPayBtn = document.getElementById('succ-prev-pay-btn');
+    if (succPayBtn) succPayBtn.textContent = 'Pay ' + amtStr;
 
     const sentToWrap = document.getElementById('success-sent-to-wrap');
     const titleEl = document.getElementById('success-title');
