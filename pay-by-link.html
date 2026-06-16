@@ -1906,81 +1906,71 @@
 
               <!-- Customer details card -->
               <div class="cs-card">
-                <div class="cs-options">
-                  <div class="cs-option-row" style="border-bottom:none;padding-bottom:0;" onclick="toggleCdOption(this)">
-                    <div class="cb-box" id="cd-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <span class="cs-opt-label">Customer details</span>
-                    <span class="cs-opt-hint">pre-fill before sending</span>
-                  </div>
-                </div>
+                <div class="cs-card-title">Customer details</div>
 
-                <!-- Note when unchecked -->
-                <div id="cd-note" class="cd-note">Customer details will be added by the shopper at checkout</div>
+                <!-- Full form -->
+                <div id="cd-form" style="padding-top:4px;">
 
-                <!-- Full form when checked -->
-                <div id="cd-form" style="display:none;padding-top:12px;">
-
-                  <!-- Search -->
-                  <div class="cd-field" style="margin-bottom:14px;">
-                    <label class="cd-label">Search customer</label>
-                    <div class="cd-search-wrap" style="margin-bottom:0;">
-                      <input class="cd-search-input" type="text" placeholder="Search by email or phone number">
-                      <svg class="cd-search-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                    </div>
-                  </div>
-
-                  <!-- Details -->
                   <div class="cd-inner">
-                    <div class="cd-section-title">Details</div>
-                    <div class="cd-grid">
-                      <div class="cd-field"><label class="cd-label">First Name</label><input class="form-input" type="text" placeholder=""></div>
-                      <div class="cd-field"><label class="cd-label">Last Name</label><input class="form-input" type="text" placeholder=""></div>
-                    </div>
+                    <!-- Row 1: First Name / Last Name -->
                     <div class="cd-grid">
                       <div class="cd-field">
-                        <label class="cd-label">Email <span class="opt">(optional)</span></label>
-                        <input class="form-input" type="email" placeholder="">
-                        <span class="cd-hint">Needed to authenticate the customer for processing</span>
+                        <label class="cd-label">First Name <span style="color:#e11d48;">*</span></label>
+                        <input class="form-input" type="text" placeholder="First name">
                       </div>
                       <div class="cd-field">
-                        <label class="cd-label">Phone <span class="opt">(optional)</span></label>
-                        <div class="cd-phone-row">
-                          <div class="cd-phone-cc">🇦🇺 +61 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                          <input class="cd-phone-num" type="tel" placeholder="000 000 000">
-                        </div>
-                        <span class="cd-hint">Will be shared with payment providers for processing</span>
+                        <label class="cd-label">Last Name <span style="color:#e11d48;">*</span></label>
+                        <input class="form-input" type="text" placeholder="Last name">
                       </div>
                     </div>
-                    <div style="max-width:calc(50% - 5px);">
+                    <!-- Row 2: Company / Email -->
+                    <div class="cd-grid">
                       <div class="cd-field">
-                        <label class="cd-label">Identifier <span class="opt">(optional)</span></label>
-                        <input class="form-input" type="text" placeholder="">
+                        <label class="cd-label">Company <span class="opt">Optional</span></label>
+                        <input class="form-input" type="text" placeholder="Company name">
+                      </div>
+                      <div class="cd-field">
+                        <label class="cd-label">Email Address <span style="color:#e11d48;">*</span></label>
+                        <input class="form-input" type="email" placeholder="customer@example.com">
                       </div>
                     </div>
+                    <!-- Row 3: Phone / Send Link Via -->
+                    <div class="cd-grid" style="margin-bottom:0;">
+                      <div class="cd-field">
+                        <label class="cd-label">Phone <span class="opt">Optional</span></label>
+                        <input class="form-input" type="tel" placeholder="+61 4XX XXX XXX">
+                      </div>
+                      <div class="cd-field">
+                        <label class="cd-label">Send Link Via <span style="color:#e11d48;">*</span></label>
+                        <select class="form-select">
+                          <option>Email</option>
+                          <option>SMS</option>
+                          <option>Email and SMS</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
 
-                    <div class="cd-divider"></div>
+                  <div class="cd-divider"></div>
 
-                    <!-- Billing Details -->
-                    <div class="cd-section-title" style="margin-top:0;">Billing Details</div>
+                  <!-- Billing Address -->
+                  <div class="cd-section-title" style="margin:0 0 12px;">Billing Address <span class="opt" style="font-weight:400;">Optional</span></div>
+                  <div class="cd-inner">
                     <div class="cd-grid">
-                      <div class="cd-field"><label class="cd-label">First Name</label><input class="form-input" type="text" placeholder=""></div>
-                      <div class="cd-field"><label class="cd-label">Last Name</label><input class="form-input" type="text" placeholder=""></div>
+                      <div class="cd-field"><label class="cd-label">Address Line 1</label><input class="form-input" type="text" placeholder=""></div>
+                      <div class="cd-field"><label class="cd-label">Address Line 2</label><input class="form-input" type="text" placeholder=""></div>
                     </div>
                     <div class="cd-grid">
-                      <div class="cd-field"><label class="cd-label">Address Line 1 <span class="opt">(optional)</span></label><input class="form-input" type="text" placeholder=""></div>
-                      <div class="cd-field"><label class="cd-label">Address Line 2 <span class="opt">(optional)</span></label><input class="form-input" type="text" placeholder=""></div>
-                    </div>
-                    <div class="cd-grid">
-                      <div class="cd-field"><label class="cd-label">Zip Code <span class="opt">(optional)</span></label><input class="form-input" type="text" placeholder=""></div>
-                      <div class="cd-field"><label class="cd-label">City <span class="opt">(optional)</span></label><input class="form-input" type="text" placeholder=""></div>
+                      <div class="cd-field"><label class="cd-label">City</label><input class="form-input" type="text" placeholder=""></div>
+                      <div class="cd-field"><label class="cd-label">Zip Code</label><input class="form-input" type="text" placeholder=""></div>
                     </div>
                     <div class="cd-grid" style="margin-bottom:0;">
                       <div class="cd-field">
-                        <label class="cd-label">State / Province / Region <span class="opt">(optional)</span></label>
-                        <select class="form-select"><option value=""></option><option>New South Wales</option><option>Victoria</option><option>Queensland</option></select>
+                        <label class="cd-label">State / Province</label>
+                        <input class="form-input" type="text" placeholder="">
                       </div>
                       <div class="cd-field">
-                        <label class="cd-label">Country <span class="opt">(optional)</span></label>
+                        <label class="cd-label">Country</label>
                         <select class="form-select"><option>Australia</option><option>United Kingdom</option><option>United States</option><option>Germany</option><option>France</option><option>Sweden</option><option>New Zealand</option></select>
                       </div>
                     </div>
@@ -1995,16 +1985,6 @@
                   </div>
 
                 </div>
-              </div>
-
-              <!-- Action bar -->
-              <div class="cs-action-bar">
-                <button class="btn-danger-text" onclick="closeCreateModal()">Discard</button>
-                <div style="flex:1;"></div>
-                <button class="btn btn-primary" style="height:38px;" onclick="createLink()">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-                  Create &amp; Send Link
-                </button>
               </div>
 
             </div><!-- /create-left -->
@@ -2068,6 +2048,16 @@
             </div><!-- /create-right -->
 
           </div><!-- /create-split -->
+
+          <!-- Action bar — full width, button pinned right -->
+          <div class="cs-action-bar" style="margin-top:20px;justify-content:flex-end;">
+            <button class="btn-danger-text" onclick="closeCreateModal()">Discard</button>
+            <button class="btn btn-primary" style="height:38px;" onclick="createLink()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+              Create &amp; Send Link
+            </button>
+          </div>
+
         </div><!-- /create-form-view -->
 
         <!-- ── SUCCESS STATE ── -->
@@ -2316,14 +2306,6 @@
     }
   }
 
-  function toggleCdOption(row) {
-    const cb = document.getElementById('cd-cb');
-    const note = document.getElementById('cd-note');
-    const form = document.getElementById('cd-form');
-    const isChecked = cb.classList.toggle('checked');
-    note.style.display = isChecked ? 'none' : '';
-    form.style.display = isChecked ? 'block' : 'none';
-  }
 
   function toggleOption(row, fieldId) {
     const box = row.querySelector('.cb-box');
