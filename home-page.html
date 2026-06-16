@@ -453,7 +453,7 @@
     }
     .sph-title { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
     .sph-sub   { font-size: 13px; color: var(--text-3); }
-    .sph-right { display: flex; align-items: center; gap: 10px; }
+    .sph-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
     .sph-btn-outline {
       padding: 0 18px; height: 36px;
       border-radius: 20px;
@@ -948,9 +948,9 @@
             </div>
           </div>
           <div class="sph-right">
-            ${btns}
-            ${toggleHTML}
             <button class="sph-close" onclick="closeStats()" title="Close">✕</button>
+            ${toggleHTML}
+            ${btns}
           </div>
         </div>
         <div id="statsCardsContainer">${statsCardsHTML(data.items, data.cols)}</div>`;
@@ -965,8 +965,8 @@
             </div>
           </div>
           <div class="sph-right">
-            ${toggleHTML}
             <button class="sph-close" onclick="closeStats()" title="Close">✕</button>
+            ${toggleHTML}
           </div>
         </div>
         <div id="statsCardsContainer">${statsCardsHTML(data.items, data.cols)}</div>`;
@@ -991,6 +991,8 @@
     document.querySelectorAll('.tool-card.details-open').forEach(c => c.classList.remove('details-open'));
     activeStats = null;
   }
+
+  showStats('transactions');
 </script>
 </body>
 </html>
