@@ -1838,39 +1838,26 @@
                   </div>
                 </div>
 
-                <!-- Manual product form (hidden until selected) -->
+                <!-- Manual product section (hidden until selected) -->
                 <div id="pn-manual-form" style="display:none;margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
-                  <div class="form-group" style="margin-bottom:14px;">
-                    <label class="form-label">Product Name <span style="color:#e11d48;">*</span></label>
-                    <input id="pn-manual-name" class="form-input" type="text" placeholder="Enter product name" oninput="updatePnTotal()">
-                    <div id="pn-manual-name-err" style="display:none;font-size:12px;color:#e11d48;margin-top:4px;">Please fill up the required field</div>
+
+                  <!-- Section header with close -->
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+                    <span style="font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;">Products</span>
+                    <button onclick="pnCloseManual()" style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:18px;line-height:1;padding:2px 4px;border-radius:6px;font-family:inherit;" title="Remove">×</button>
                   </div>
-                  <div class="form-group" style="margin-bottom:14px;">
-                    <label class="form-label">Product Description <span class="optional">(Optional)</span></label>
-                    <textarea class="form-input" placeholder="Enter a description" style="height:96px;resize:vertical;padding-top:8px;line-height:1.5;"></textarea>
-                  </div>
-                  <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:14px;">
-                    <div style="flex:0 0 80px;">
-                      <label class="form-label">Quantity</label>
-                      <div class="pn-qty-wrap">
-                        <select id="pn-qty" class="form-select" style="padding-right:28px;" onchange="updatePnTotal()">
-                          <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>10</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div style="flex:1;">
-                      <label class="form-label">Price per Unit</label>
-                      <div style="display:flex;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;">
-                        <div id="pn-currency-badge" style="padding:0 12px;background:#f3f4f6;border-right:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--text-3);display:flex;align-items:center;flex-shrink:0;">GBP</div>
-                        <input id="pn-price" class="form-input" type="number" placeholder="0" min="0" step="0.01" style="border:none;border-radius:0;flex:1;" oninput="updatePnTotal()">
-                      </div>
-                    </div>
-                    <div style="flex:1;">
-                      <label class="form-label">Product ID/SKU <span class="optional">(Optional)</span></label>
-                      <input class="form-input" type="text" placeholder="">
-                    </div>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);">
+
+                  <!-- Product list -->
+                  <div id="pn-product-list"></div>
+
+                  <!-- Add another product -->
+                  <button onclick="pnAddProduct()" style="display:flex;align-items:center;gap:6px;background:none;border:1.5px dashed var(--border);border-radius:10px;width:100%;padding:10px 14px;font-size:13px;font-weight:500;color:var(--accent);cursor:pointer;font-family:inherit;transition:background 0.1s;margin-top:4px;" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='none'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add another product
+                  </button>
+
+                  <!-- Total -->
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:12px;border-top:1.5px solid var(--border);">
                     <span style="font-size:14px;font-weight:700;color:#0f172a;">Total Price</span>
                     <span id="pn-total" style="font-size:15px;font-weight:700;color:#0f172a;">GBP 0.00</span>
                   </div>
@@ -2437,32 +2424,85 @@
     document.getElementById('pn-dropdown').classList.toggle('open');
   }
 
+  let pnProductCount = 0;
+
   function pnSelect(action) {
     document.getElementById('pn-box').classList.remove('open');
     document.getElementById('pn-dropdown').classList.remove('open');
-    const manualForm = document.getElementById('pn-manual-form');
     if (action === 'manual') {
-      manualForm.style.display = 'block';
       document.getElementById('pn-input').value = '';
-      // sync currency badge to selected currency
-      const cur = document.getElementById('cs-currency')?.value || 'GBP';
-      document.getElementById('pn-currency-badge').textContent = cur;
-      document.getElementById('pn-total').textContent = cur + ' 0.00';
-      document.getElementById('pn-manual-name')?.focus();
+      document.getElementById('pn-manual-form').style.display = 'block';
+      document.getElementById('pn-product-list').innerHTML = '';
+      pnProductCount = 0;
+      pnAddProduct();
     } else {
-      manualForm.style.display = 'none';
+      document.getElementById('pn-manual-form').style.display = 'none';
     }
   }
 
+  function pnCloseManual() {
+    document.getElementById('pn-manual-form').style.display = 'none';
+    document.getElementById('pn-product-list').innerHTML = '';
+    pnProductCount = 0;
+  }
+
+  function pnAddProduct() {
+    const cur = document.getElementById('cs-currency')?.value || 'GBP';
+    const idx = ++pnProductCount;
+    const div = document.createElement('div');
+    div.id = 'pn-prod-' + idx;
+    div.style.cssText = 'border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;position:relative;';
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span style="font-size:12.5px;font-weight:600;color:var(--text-3);">Product ${idx}</span>
+        <button onclick="pnRemoveProduct(${idx})" style="background:none;border:none;cursor:pointer;color:var(--text-4);font-size:18px;line-height:1;padding:0 2px;font-family:inherit;" title="Remove">×</button>
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label">Product Name <span style="color:#e11d48;">*</span></label>
+        <input class="form-input" type="text" placeholder="Enter product name">
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label">Product Description <span class="optional">(Optional)</span></label>
+        <textarea class="form-input" placeholder="Enter a description" style="height:72px;resize:vertical;padding-top:8px;line-height:1.5;"></textarea>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-end;">
+        <div style="flex:0 0 80px;">
+          <label class="form-label">Quantity</label>
+          <select class="form-select pn-qty-sel" onchange="updatePnTotal()"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>10</option></select>
+        </div>
+        <div style="flex:1;">
+          <label class="form-label">Price per Unit</label>
+          <div style="display:flex;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;">
+            <div class="pn-cur-badge" style="padding:0 12px;background:#f3f4f6;border-right:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--text-3);display:flex;align-items:center;flex-shrink:0;">${cur}</div>
+            <input class="form-input pn-price-inp" type="number" placeholder="0" min="0" step="0.01" style="border:none;border-radius:0;flex:1;" oninput="updatePnTotal()">
+          </div>
+        </div>
+        <div style="flex:1;">
+          <label class="form-label">Product ID/SKU <span class="optional">(Optional)</span></label>
+          <input class="form-input" type="text" placeholder="">
+        </div>
+      </div>`;
+    document.getElementById('pn-product-list').appendChild(div);
+    updatePnTotal();
+  }
+
+  function pnRemoveProduct(idx) {
+    const el = document.getElementById('pn-prod-' + idx);
+    if (el) el.remove();
+    updatePnTotal();
+  }
+
   function updatePnTotal() {
-    const qty   = parseInt(document.getElementById('pn-qty')?.value || '1');
-    const price = parseFloat(document.getElementById('pn-price')?.value || '0');
-    const cur   = document.getElementById('cs-currency')?.value || 'GBP';
-    const total = (qty * (isNaN(price) ? 0 : price)).toFixed(2);
+    const cur = document.getElementById('cs-currency')?.value || 'GBP';
+    let total = 0;
+    document.querySelectorAll('#pn-product-list > div').forEach(card => {
+      const qty   = parseInt(card.querySelector('.pn-qty-sel')?.value || '1');
+      const price = parseFloat(card.querySelector('.pn-price-inp')?.value || '0');
+      total += qty * (isNaN(price) ? 0 : price);
+      card.querySelectorAll('.pn-cur-badge').forEach(b => b.textContent = cur);
+    });
     const el = document.getElementById('pn-total');
-    if (el) el.textContent = cur + ' ' + total;
-    const badge = document.getElementById('pn-currency-badge');
-    if (badge) badge.textContent = cur;
+    if (el) el.textContent = cur + ' ' + total.toFixed(2);
   }
 
   document.addEventListener('click', e => {
