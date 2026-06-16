@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Time Report W2 — Jun 8–Jun 14, 2026 | ET Q3 2026</title>
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+       background: #f2f2f2; color: #222; padding: 40px; }
+.page { max-width: 980px; margin: 0 auto; }
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 19px; font-weight: 700; }
+.page-header p  { font-size: 12px; color: #888; margin-top: 3px; }
+.back-link { font-size: 12px; color: #1a73e8; text-decoration: none; display: inline-block; margin-bottom: 16px; }
+.back-link:hover { text-decoration: underline; }
+.card { background: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 24px; margin-bottom: 22px; }
+.card-title { font-size: 10.5px; font-weight: 800; letter-spacing: .1em;
+              text-transform: uppercase; color: #111; margin-bottom: 18px; }
+.metric-row { display: grid; grid-template-columns: repeat(5,1fr);
+              border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+.metric-cell { padding: 16px 18px 14px; border-right: 1px solid #e0e0e0; }
+.metric-cell:last-child { border-right: none; }
+.m-label { font-size: 12px; color: #666; margin-bottom: 10px; }
+.m-val   { font-size: 38px; font-weight: 700; line-height: 1; color: #111; }
+.m-val.red    { color: #c0392b; }
+.m-val.green  { color: #27884a; }
+.m-val.amber  { color: #c47d0e; }
+.m-val.purple { color: #6d3faa; }
+.m-sub { font-size: 11px; margin-top: 7px; color: #999; }
+.m-sub.red   { color: #c0392b; }
+.m-sub.green { color: #27884a; }
+.m-sub.amber { color: #c47d0e; }
+.bar-intro { font-size: 12px; color: #555; margin: 18px 0 8px; }
+.bar-track { display: flex; height: 24px; border-radius: 3px; overflow: hidden; width: 100%; margin-bottom: 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 20px; font-size: 11.5px; color: #444; }
+.legend-item { display: flex; align-items: flex-start; gap: 7px; }
+.l-dot { width: 13px; height: 13px; border-radius: 2px; flex-shrink: 0; margin-top: 1px; }
+.epic-list { display: flex; flex-direction: column; gap: 10px; }
+.epic-card { display: flex; align-items: stretch; border: 1px solid #e0e0e0;
+             border-radius: 4px; overflow: hidden; background: #fff; }
+.epic-stripe { width: 5px; flex-shrink: 0; }
+.epic-body { flex: 1; padding: 14px 16px; }
+.epic-meta { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.epic-key  { font-size: 11px; font-weight: 700; color: #888; }
+.epic-status { font-size: 11px; color: #777; }
+.epic-name { font-size: 14px; font-weight: 600; color: #111; margin-bottom: 8px; line-height: 1.3; }
+.epic-bar-wrap { background: #eee; border-radius: 3px; height: 8px; margin-bottom: 8px; overflow: hidden; }
+.epic-bar-fill { height: 100%; border-radius: 3px; }
+.epic-note { font-size: 11px; color: #888; }
+.epic-right { display: flex; flex-direction: column; align-items: flex-end;
+              justify-content: center; padding: 14px 20px; min-width: 90px; flex-shrink: 0; }
+.epic-count { font-size: 12px; color: #999; margin-bottom: 3px; }
+.epic-pct   { font-size: 28px; font-weight: 700; line-height: 1; }
+.wow-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.wow-table thead tr { background: #1b1b2f; color: #fff; }
+.wow-table thead th { padding: 11px 16px; text-align: left; font-size: 12.5px; font-weight: 600; }
+.wow-table tbody tr { border-bottom: 1px solid #efefef; }
+.wow-table tbody tr:nth-child(even) { background: #fafafa; }
+.wow-table tbody td { padding: 12px 16px; vertical-align: middle; }
+.t-red  { color: #c0392b; font-weight: 600; }
+.t-green{ color: #27884a; font-weight: 600; }
+.t-amber{ color: #c47d0e; font-weight: 600; }
+.t-grey { color: #888; }
+.t-target { color: #555; font-size: 12px; }
+
+.summary-grid { display:grid; grid-template-columns:repeat(7,1fr);
+                border:1px solid #e0e0e0; border-radius:4px; overflow:hidden; margin-bottom:22px; }
+.sum-cell { padding:16px 14px 14px; border-right:1px solid #e0e0e0; text-align:center; }
+.sum-cell:last-child { border-right:none; }
+.sum-name  { font-size:11px; color:#666; margin-bottom:8px;
+              white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sum-hours { font-size:28px; font-weight:700; line-height:1; color:#111; }
+.sum-hours.zero { color:#ccc; }
+.sum-sub   { font-size:10px; color:#aaa; margin-top:5px; }
+.bar-section { margin-bottom:6px; }
+.bar-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.bar-person { font-size:12px; font-weight:600; color:#333; width:160px; flex-shrink:0; }
+.bar-track-wrap { flex:1; background:#f0f0f0; border-radius:3px; height:22px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:3px; }
+.bar-val { font-size:12px; font-weight:700; color:#333; width:40px; text-align:right; flex-shrink:0; }
+.person-card { border:1px solid #e4e4e4; border-radius:4px; overflow:hidden; margin-bottom:14px; }
+.person-header { display:flex; align-items:center; justify-content:space-between;
+                  padding:14px 18px; border-bottom:1px solid #f0f0f0; }
+.person-left { display:flex; align-items:center; gap:12px; }
+.person-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center;
+                  justify-content:center; font-size:13px; font-weight:700; color:#fff; flex-shrink:0; }
+.person-name  { font-size:14px; font-weight:700; color:#111; }
+.person-role  { font-size:11px; color:#888; margin-top:2px; }
+.person-total { font-size:26px; font-weight:700; color:#111;
+                 display:flex; align-items:baseline; gap:4px; }
+.person-total span { font-size:12px; font-weight:400; color:#999; }
+.person-total.zero { color:#ccc; }
+.log-table { width:100%; border-collapse:collapse; font-size:12px; }
+.log-table th { text-align:left; padding:8px 18px; background:#fafafa;
+                 border-bottom:1px solid #efefef; color:#888; font-weight:600; font-size:11px; }
+.log-table td { padding:9px 18px; border-bottom:1px solid #f5f5f5; color:#333; }
+.log-table tr:last-child td { border-bottom:none; }
+.log-table tr:hover td { background:#fafbff; }
+.ticket-key { font-weight:700; color:#1a73e8; font-size:11px; }
+.day-chip { display:inline-block; padding:2px 8px; border-radius:8px;
+             font-size:10px; font-weight:600; background:#f0f0f0; color:#555; }
+.day-mon { background:#e8f0fe; color:#1a73e8; }
+.day-tue { background:#e6f4ea; color:#188038; }
+.day-wed { background:#fef7e0; color:#b06000; }
+.day-thu { background:#fce8e6; color:#c5221f; }
+.day-fri { background:#f3e8fd; color:#7627bb; }
+.hours-cell { font-weight:700; color:#333; text-align:right; }
+.no-logs { padding:20px 18px; color:#bbb; font-size:12px; font-style:italic; }
+.total-row td { background:#f7f7f7; font-weight:700;
+                 border-top:2px solid #e0e0e0 !important; border-bottom:none !important; }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="index.html">← Weekly Reports Home</a>
+  <div class="page-header">
+    <h1>Weekly Time Report — W2, Jun 8–Jun 14, 2026</h1>
+    <p>Project: ET &nbsp;·&nbsp; Fix Version: [Q3 2026] Verifone Central &nbsp;·&nbsp; Generated: 16 Jun 2026, 23:30</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Team Summary</div>
+    <div class="summary-grid">
+      <div class="sum-cell">
+        <div class="sum-name">Anand BS</div>
+        <div class="sum-hours">40h</div>
+        <div class="sum-sub">18 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Sruthi Nakul Mysore</div>
+        <div class="sum-hours zero">0h</div>
+        <div class="sum-sub">no logs</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Senthil Chidambaram</div>
+        <div class="sum-hours">6h 30m</div>
+        <div class="sum-sub">3 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Akshat Aggarwal</div>
+        <div class="sum-hours zero">0h</div>
+        <div class="sum-sub">no logs</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Tanya Saxena</div>
+        <div class="sum-hours">35h 30m</div>
+        <div class="sum-sub">14 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Ashish Verma</div>
+        <div class="sum-hours">43h</div>
+        <div class="sum-sub">9 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Sumit Ashish</div>
+        <div class="sum-hours">40h</div>
+        <div class="sum-sub">16 entries</div>
+      </div>
+    </div>
+    <div class="bar-section">
+      <div class="bar-row">
+        <div class="bar-person">Ashish Verma</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:100%;background:#1a73e8;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">43h</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Anand BS</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:93%;background:#5f6368;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">40h</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Sumit Ashish</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:93%;background:#188038;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">40h</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Tanya Saxena</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:83%;background:#b06000;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">35h 30m</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Senthil Chidambaram</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:15%;background:#c5221f;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">6h 30m</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Sruthi Mysore</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:0%;background:#e0e0e0;"></div>
+        </div>
+        <div class="bar-val" style="color:#ccc;">0h</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Akshat Aggarwal</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:0%;background:#e0e0e0;"></div>
+        </div>
+        <div class="bar-val" style="color:#ccc;">0h</div>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:13px;font-weight:700;color:#333;
+                margin-top:14px;padding-top:12px;border-top:1px solid #f0f0f0;">
+      Team Total &nbsp;<span style="font-size:22px;">165h</span>
+    </div>
+  </div>
+
+  
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#5f6368;">AB</div>
+        <div>
+          <div class="person-name">Anand BS</div>
+          <div class="person-role">Technical Manager — Software Development</div>
+        </div>
+      </div>
+      <div class="person-total">40h <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2434</td>
+            <td>PIV test cases</td>
+            <td><span class="day-chip day-mon">Mon Jun 8</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1528</td>
+            <td>Verifone Central document for Release dates, planned tickets and dependencies</td>
+            <td><span class="day-chip day-mon">Mon Jun 8</span></td>
+            <td class="hours-cell">3h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1527</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-mon">Mon Jun 8</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2442</td>
+            <td>Create a service account for VHQ Customer Dunkin</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">0h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2434</td>
+            <td>PIV test cases</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">3h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2384</td>
+            <td>Incidents</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2099</td>
+            <td>BLR Leadership & Engineering Leads Meetings</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1528</td>
+            <td>Verifone Central document for Release dates, planned tickets and dependencies</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2434</td>
+            <td>PIV test cases</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2174</td>
+            <td>Investigate Cookiebot not displaying in VC environment</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2085</td>
+            <td>SSO between Premier portal and VFC</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1527</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2434</td>
+            <td>PIV test cases</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">4h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1528</td>
+            <td>Verifone Central document for Release dates, planned tickets and dependencies</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">1h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1527</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2434</td>
+            <td>PIV test cases</td>
+            <td><span class="day-chip day-fri">Fri Jun 12</span></td>
+            <td class="hours-cell">6h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2174</td>
+            <td>Investigate Cookiebot not displaying in VC environment</td>
+            <td><span class="day-chip day-fri">Fri Jun 12</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1527</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-fri">Fri Jun 12</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">40h</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#e91e63;">SN</div>
+        <div>
+          <div class="person-name">Sruthi Nakul Mysore</div>
+          <div class="person-role">Principal Developer, Cloud Engineering</div>
+        </div>
+      </div>
+      <div class="person-total zero">0h <span>logged</span></div>
+    </div>
+    <div class="no-logs">No worklogs found for this week.</div>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#c5221f;">SC</div>
+        <div>
+          <div class="person-name">Senthil Chidambaram</div>
+          <div class="person-role">Engineer Manager / Principal Engineer</div>
+        </div>
+      </div>
+      <div class="person-total">6h 30m <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2340</td>
+            <td>CLONE - Westpac eComm > Portal > Orders/Transaction Page > Organization filter -…</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-609</td>
+            <td>Re-label "Peak Times" as "Sales by Period"</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">3h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-552</td>
+            <td>VF Central Payments Dashboard Enhancements - Display breakdown of transaction co…</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">1h 30m</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">6h 30m</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#7627bb;">AA</div>
+        <div>
+          <div class="person-name">Akshat Aggarwal</div>
+          <div class="person-role">Software Development Lead</div>
+        </div>
+      </div>
+      <div class="person-total zero">0h <span>logged</span></div>
+    </div>
+    <div class="no-logs">No worklogs found for this week.</div>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#b06000;">TS</div>
+        <div>
+          <div class="person-name">Tanya Saxena</div>
+          <div class="person-role">Senior Software Engineer</div>
+        </div>
+      </div>
+      <div class="person-total">35h 30m <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-mon">Mon Jun 8</span></td>
+            <td class="hours-cell">3h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2359</td>
+            <td>UI not setting phone number callingCode in the order</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">3h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1975</td>
+            <td>MOP MFE</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1602</td>
+            <td>[MOPUI] Appliction stuck in company structure</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2359</td>
+            <td>UI not setting phone number callingCode in the order</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2005</td>
+            <td>UI enahancements - Search via Verifone Central through GitBook public doc</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1975</td>
+            <td>MOP MFE</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2005</td>
+            <td>UI enahancements - Search via Verifone Central through GitBook public doc</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1975</td>
+            <td>MOP MFE</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1974</td>
+            <td>Payments Portal MFE</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1475</td>
+            <td>Publish packages to NPM artifactory through jenkins </td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">2h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">35h 30m</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#1a73e8;">AV</div>
+        <div>
+          <div class="person-name">Ashish Verma</div>
+          <div class="person-role">Senior Software Engineer</div>
+        </div>
+      </div>
+      <div class="person-total">43h <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2113</td>
+            <td>FormForge support for Customer Survey  </td>
+            <td><span class="day-chip day-mon">Mon Jun 8</span></td>
+            <td class="hours-cell">8h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2113</td>
+            <td>FormForge support for Customer Survey  </td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">10h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2113</td>
+            <td>FormForge support for Customer Survey  </td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1974</td>
+            <td>Payments Portal MFE</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2113</td>
+            <td>FormForge support for Customer Survey  </td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1974</td>
+            <td>Payments Portal MFE</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">5h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1527</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2113</td>
+            <td>FormForge support for Customer Survey  </td>
+            <td><span class="day-chip day-fri">Fri Jun 12</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1974</td>
+            <td>Payments Portal MFE</td>
+            <td><span class="day-chip day-fri">Fri Jun 12</span></td>
+            <td class="hours-cell">6h</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">43h</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#188038;">SA</div>
+        <div>
+          <div class="person-name">Sumit Ashish</div>
+          <div class="person-role">Senior Web Engineer</div>
+        </div>
+      </div>
+      <div class="person-total">40h <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2037</td>
+            <td>Nexus App - MFE Detail Page Enhancement</td>
+            <td><span class="day-chip day-mon">Mon Jun 8</span></td>
+            <td class="hours-cell">5h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1340</td>
+            <td>Create shell application to host and orchestrate MFEs</td>
+            <td><span class="day-chip day-mon">Mon Jun 8</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-mon">Mon Jun 8</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2267</td>
+            <td>Tap-to-Activate MFE</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2037</td>
+            <td>Nexus App - MFE Detail Page Enhancement</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1340</td>
+            <td>Create shell application to host and orchestrate MFEs</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">3h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-tue">Tue Jun 9</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2353</td>
+            <td>Fix Pay by Link page to cancel in-flight requests on filter change or refresh</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2267</td>
+            <td>Tap-to-Activate MFE</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1340</td>
+            <td>Create shell application to host and orchestrate MFEs</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-wed">Wed Jun 10</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1340</td>
+            <td>Create shell application to host and orchestrate MFEs</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">5h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1340</td>
+            <td>Create shell application to host and orchestrate MFEs</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-thu">Thu Jun 11</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1340</td>
+            <td>Create shell application to host and orchestrate MFEs</td>
+            <td><span class="day-chip day-fri">Fri Jun 12</span></td>
+            <td class="hours-cell">6h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-fri">Fri Jun 12</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">40h</td>
+          </tr></tbody>
+      </table>
+  </div>
+</div>
+</body>
+</html>
