@@ -1423,16 +1423,18 @@
     .dp-hist-item:last-child { margin-bottom:0; }
     .dp-hist-label { font-size:13.5px; color:#0f172a; }
     .dp-hist-date { font-size:12.5px; color:var(--text-3); margin-top:2px; }
-    .dp-url-val { font-size:12.5px; color:var(--accent); word-break:break-all; margin-bottom:12px; line-height:1.5; }
+    .dp-url-val { font-size:13px; color:#0f172a; word-break:break-all; line-height:1.4; background:#efefef; border-radius:40px; padding:11px 18px; margin-bottom:10px; }
     .dp-copy-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 20px; background:var(--accent); color:#fff; border:none; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:background 0.1s; }
     .dp-copy-btn:hover { background:#1d4ed8; }
-    .dp-meta-item { margin-bottom:12px; }
+    .dp-meta-item { margin-bottom:14px; }
     .dp-meta-item:last-child { margin-bottom:0; }
-    .dp-meta-label { font-size:12px; color:var(--text-3); margin-bottom:2px; }
-    .dp-meta-val { font-size:13.5px; color:#0f172a; }
-    .dp-addr-title { font-size:13px; font-weight:600; color:var(--text-3); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.4px; }
-    .dp-cust-name { font-size:14px; color:#0f172a; margin-bottom:2px; }
-    .dp-cust-email { font-size:13px; color:var(--text-3); }
+    .dp-meta-label { font-size:13px; font-weight:500; color:#0f172a; margin-bottom:6px; }
+    .dp-meta-val { font-size:13.5px; color:#0f172a; background:#efefef; border-radius:40px; padding:11px 18px; min-height:42px; display:flex; align-items:center; }
+    .dp-addr-title { font-size:13px; font-weight:600; color:var(--text-3); margin-bottom:14px; text-transform:uppercase; letter-spacing:0.4px; }
+    .dp-cust-field { margin-bottom:14px; }
+    .dp-cust-field:last-child { margin-bottom:0; }
+    .dp-cust-field-label { font-size:13px; font-weight:500; color:#0f172a; margin-bottom:6px; }
+    .dp-cust-pill { font-size:13.5px; color:#0f172a; background:#efefef; border-radius:40px; padding:11px 18px; min-height:42px; display:flex; align-items:center; }
     .row-copy-btn { display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:#fff;cursor:pointer;color:var(--text-3);transition:background 0.1s,color 0.1s; }
     .row-copy-btn:hover { background:var(--hover-bg);color:var(--accent); }
     .dp-collapse-hd { display:flex; align-items:center; justify-content:space-between; padding:13px 18px; cursor:pointer; user-select:none; border-bottom:1px solid var(--border); transition:background 0.1s; }
@@ -1442,10 +1444,10 @@
     .dp-collapse-hd.is-closed .dp-collapse-chevron { transform:rotate(-90deg); }
     .dp-collapse-body { }
     .dp-collapse-body.is-closed { display:none; }
-    .dp-addr-row { margin-bottom:10px; }
+    .dp-addr-row { margin-bottom:14px; }
     .dp-addr-row:last-child { margin-bottom:0; }
-    .dp-addr-label { font-size:12px; color:var(--text-3); margin-bottom:2px; }
-    .dp-addr-val { font-size:13.5px; color:#0f172a; }
+    .dp-addr-label { font-size:13px; font-weight:500; color:#0f172a; margin-bottom:6px; }
+    .dp-addr-val { font-size:13.5px; color:#0f172a; background:#efefef; border-radius:40px; padding:11px 18px; min-height:42px; display:flex; align-items:center; }
     .dp-action-title { font-size:14px; font-weight:600; color:#0f172a; margin-bottom:6px; }
     .dp-action-desc { font-size:13px; color:var(--text-3); margin-bottom:12px; line-height:1.5; }
     .dp-view-txn-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 20px; background:#eff6ff; color:var(--accent); border:none; border-radius:20px; font-size:13px; font-weight:600; font-family:inherit; opacity:0.65; cursor:default; }
@@ -3106,8 +3108,14 @@ function dpCopyLink() {
       </div>
       <div class="dp-collapse-body is-closed" id="dp-cust-body">
         <div class="dp-section">
-          <div class="dp-cust-name" id="dp-cust-name"></div>
-          <div class="dp-cust-email" id="dp-cust-email"></div>
+          <div class="dp-cust-field">
+            <div class="dp-cust-field-label">Name</div>
+            <div class="dp-cust-pill" id="dp-cust-name"></div>
+          </div>
+          <div class="dp-cust-field">
+            <div class="dp-cust-field-label">Email</div>
+            <div class="dp-cust-pill" id="dp-cust-email"></div>
+          </div>
         </div>
       </div>
 
