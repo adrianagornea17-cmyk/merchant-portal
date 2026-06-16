@@ -808,12 +808,12 @@
     .summary-bar-amount { font-size: 15px; font-weight: 700; color: #0f172a; }
 
     /* ─── STEP 3 ─── */
-    .success-card {
+    .success-top {
       background: #f8fafc;
       border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-      margin-bottom: 20px;
+      border-radius: 12px;
+      padding: 28px 24px 20px;
+      margin-bottom: 16px;
       text-align: center;
     }
     .success-icon {
@@ -827,13 +827,27 @@
       font-size: 16px;
       font-weight: 700;
       color: #0f172a;
-      margin-bottom: 16px;
+      margin-bottom: 4px;
+    }
+    .success-subtitle {
+      font-size: 13px;
+      color: var(--text-4);
+      margin-bottom: 20px;
+    }
+    .success-section-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      color: var(--text-4);
+      text-transform: uppercase;
+      text-align: left;
+      margin-bottom: 8px;
     }
     .link-copy-row {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
     .link-url-input {
       flex: 1;
@@ -848,36 +862,66 @@
       outline: none;
     }
     .success-expire {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--text-4);
-      margin-bottom: 14px;
-    }
-    .sent-to-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      font-size: 13px;
-      color: var(--text-2);
-      flex-wrap: wrap;
-    }
-    .sent-to-label {
-      color: var(--text-4);
-      font-size: 12.5px;
-      margin-bottom: 6px;
+      margin-bottom: 18px;
       text-align: left;
     }
-    .sent-contact {
+    .sent-to-section-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      color: var(--text-4);
+      text-transform: uppercase;
+      text-align: left;
+      margin-bottom: 8px;
+    }
+    .sent-to-box {
+      border: 1.5px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 14px 16px;
+      background: #f0f9ff;
+      text-align: left;
+    }
+    .sent-to-contact-row {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sent-to-icon-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #2563eb;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .sent-to-meta { display: flex; flex-direction: column; gap: 2px; }
+    .sent-to-email { font-size: 13.5px; font-weight: 600; color: var(--text-1); }
+    .sent-to-caption { font-size: 12px; color: var(--text-4); }
+    .sent-to-no-email {
       font-size: 13px;
-      color: var(--text-2);
+      color: var(--text-4);
+      text-align: left;
+      padding: 2px 0 12px;
     }
-    .sent-contact svg { color: var(--text-4); }
-    .send-link-btn-row {
-      margin-top: 16px;
+    .send-again-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 32px; padding: 0 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: #fff; font-size: 13px; font-weight: 500;
+      color: var(--text-2); cursor: pointer; transition: background 0.1s;
     }
+    .send-again-btn:hover { background: var(--hover-bg); }
+    .send-another-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 34px; padding: 0 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: #fff; font-size: 13px; font-weight: 500;
+      color: var(--text-2); cursor: pointer; margin-top: 14px;
+      transition: background 0.1s;
+    }
+    .send-another-btn:hover { background: var(--hover-bg); }
 
     .link-details-card {
       background: #fff;
@@ -2161,28 +2205,32 @@
         </div><!-- /create-form-view -->
 
         <!-- ── SUCCESS STATE ── -->
-        <div id="create-success-view" style="display:none;max-width:560px;margin:0 auto;">
+        <div id="create-success-view" style="display:none;max-width:580px;margin:0 auto;">
           <div class="flow-card">
-            <div class="success-card">
+
+            <div class="success-top">
               <div class="success-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
-              <div class="success-title">Payment link created</div>
+              <div class="success-title" id="success-title">Payment link created</div>
+              <div class="success-subtitle" id="success-subtitle"></div>
+
+              <div class="success-section-label">Payment link</div>
               <div class="link-copy-row">
-                <input class="link-url-input" type="text" readonly value="https://qat.checkout.vficloud.net/v2/checkout/8c80b526-945f-4130-847...">
-                <button class="btn btn-primary" onclick="copyLink()" style="flex-shrink:0;gap:5px;">
+                <input class="link-url-input" type="text" readonly value="https://qat.checkout.vficloud.net/v2/checkout/8c80b526-945f-4130-847f-e2d9...">
+                <button class="btn btn-primary" onclick="copyLink()" style="flex-shrink:0;gap:6px;height:36px;padding:0 14px;">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
                   Copy link
                 </button>
               </div>
               <div class="success-expire">Expires on 14 Jul 2026</div>
-              <div style="text-align:left;margin-bottom:10px;">
-                <div class="sent-to-label">This link was sent to:</div>
-                <div id="success-sent-to" style="display:flex;gap:18px;flex-wrap:wrap;"></div>
-              </div>
-              <div class="send-link-btn-row">
-                <button class="btn btn-outline">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+
+              <div class="sent-to-section-label">This link was sent to</div>
+              <div id="success-sent-to-wrap"></div>
+
+              <div id="success-send-another-wrap">
+                <button class="send-another-btn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                   Send to another customer
                 </button>
               </div>
@@ -2440,14 +2488,28 @@
     const descEl = document.getElementById('success-desc');
     if (descEl) { descEl.textContent = description || '—'; descEl.style.color = description ? '' : 'var(--text-4)'; }
 
-    const sentTo = document.getElementById('success-sent-to');
-    if (sentTo) {
-      const EMAIL_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
-      const PHONE_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.64A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>';
-      sentTo.innerHTML = '';
-      if (emailVal) sentTo.innerHTML += `<div class="sent-contact">${EMAIL_SVG}${emailVal}</div>`;
-      if (phoneVal) sentTo.innerHTML += `<div class="sent-contact">${PHONE_SVG}${phoneVal}</div>`;
-      if (!emailVal && !phoneVal) sentTo.innerHTML = '<span style="color:var(--text-4);font-size:13px;">Link not sent — copy and share manually</span>';
+    const sentToWrap = document.getElementById('success-sent-to-wrap');
+    const titleEl = document.getElementById('success-title');
+    const subtitleEl = document.getElementById('success-subtitle');
+    const sendAnotherWrap = document.getElementById('success-send-another-wrap');
+    if (sentToWrap) {
+      const EMAIL_ICON = `<div class="sent-to-icon-circle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>`;
+      const SEND_ICON = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`;
+      sentToWrap.innerHTML = '';
+      if (emailVal) {
+        if (titleEl) titleEl.textContent = 'Payment link successfully created';
+        if (subtitleEl) subtitleEl.textContent = 'Your link has been created and sent to the recipient';
+        sentToWrap.innerHTML = `<div class="sent-to-box">
+          <div class="sent-to-contact-row">${EMAIL_ICON}<div class="sent-to-meta"><span class="sent-to-email">${emailVal}</span><span class="sent-to-caption">Payment link delivered via email</span></div></div>
+          <button class="send-again-btn">${SEND_ICON} Send payment link again</button>
+        </div>`;
+        if (sendAnotherWrap) sendAnotherWrap.style.display = 'none';
+      } else {
+        if (titleEl) titleEl.textContent = 'Payment link created';
+        if (subtitleEl) subtitleEl.textContent = '';
+        sentToWrap.innerHTML = '<div class="sent-to-no-email">Link not sent — copy and share manually</div>';
+        if (sendAnotherWrap) sendAnotherWrap.style.display = 'block';
+      }
     }
 
     document.getElementById('create-form-view').style.display = 'none';
