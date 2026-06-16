@@ -2564,10 +2564,10 @@
     badge.className = 'dp-status-badge ' + statusCls;
 
     // History
-    const histHtml = [
-      emailCell !== '—' && emailCell ? `<div class="dp-hist-item"><div class="dp-hist-label">Link delivered via email</div><div class="dp-hist-date">${createdFmt}</div></div>` : '',
-      smsCell   !== '—' && smsCell   ? `<div class="dp-hist-item"><div class="dp-hist-label">Link delivered via SMS</div><div class="dp-hist-date">${createdFmt}</div></div>` : '',
-    ].filter(Boolean).join('');
+    const hasEmail = emailCell !== '—' && emailCell;
+    const hasSms   = smsCell   !== '—' && smsCell;
+    const channels = [hasEmail && 'email', hasSms && 'SMS'].filter(Boolean).join(' and ');
+    const histHtml = channels ? `<div class="dp-hist-item"><div class="dp-hist-label">Link delivered via ${channels}</div><div class="dp-hist-date">${createdFmt}</div></div>` : '';
     const histSec = document.getElementById('dp-history-section');
     if (histHtml) { document.getElementById('dp-history-items').innerHTML = histHtml; histSec.style.display = ''; }
     else { histSec.style.display = 'none'; }
