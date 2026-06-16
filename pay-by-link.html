@@ -2654,7 +2654,10 @@
     document.querySelectorAll('#pbl-tbody tr').forEach(tr => {
       const td = document.createElement('td');
       td.style.cssText = 'padding:8px 10px;text-align:center;';
-      td.innerHTML = `<button class="row-copy-btn" title="Copy link" onclick="copyRowLink(this,event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></button>`;
+      const isExpired = tr.querySelector('.status-pill-expired') !== null;
+      if (!isExpired) {
+        td.innerHTML = `<button class="row-copy-btn" title="Copy link" onclick="copyRowLink(this,event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></button>`;
+      }
       tr.appendChild(td);
     });
   }
