@@ -1278,15 +1278,10 @@
     .dp-status-badge.expired { background:#f3f4f6; color:#6b7280; }
     .dp-close { width:28px; height:28px; border-radius:50%; background:#f3f4f6; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-3); transition:background 0.1s; flex-shrink:0; }
     .dp-close:hover { background:#e5e7eb; }
-    .dp-tabs { display:flex; border-bottom:1.5px solid var(--border); padding:0 18px; flex-shrink:0; }
-    .dp-tab { padding:10px 14px; font-size:13.5px; font-weight:500; color:var(--text-3); background:none; border:none; border-bottom:2px solid transparent; cursor:pointer; margin-bottom:-1.5px; transition:color 0.1s; white-space:nowrap; font-family:inherit; }
-    .dp-tab:hover { color:var(--text-2); }
-    .dp-tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
     .dp-tab-body { flex:1; overflow-y:auto; }
     .dp-tab-body::-webkit-scrollbar { width:3px; }
     .dp-tab-body::-webkit-scrollbar-thumb { background:#e5e7eb; border-radius:3px; }
-    .dp-pane { display:none; }
-    .dp-pane.active { display:block; }
+    .dp-pane { display:block; }
     .dp-section { padding:16px 18px; border-bottom:1px solid var(--border); }
     .dp-section:last-child { border-bottom:none; }
     .dp-sec-title { font-size:12.5px; font-weight:600; color:var(--text-3); margin-bottom:12px; }
@@ -2607,9 +2602,9 @@
       document.getElementById(`dp-${p}-ctry`).textContent  = ctry;
     });
 
-    // Reset to first tab and open
-    switchDpTab('payment-link', document.querySelector('#detail-panel .dp-tab'));
-    document.getElementById('detail-panel').classList.add('open');
+    const dp = document.getElementById('detail-panel');
+    dp.querySelector('.dp-tab-body').scrollTop = 0;
+    dp.classList.add('open');
     document.getElementById('main').classList.add('dp-open');
   }
 
@@ -2618,15 +2613,7 @@
     document.getElementById('main').classList.remove('dp-open');
   }
 
-  function switchDpTab(tabId, btn) {
-    document.querySelectorAll('#detail-panel .dp-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('#detail-panel .dp-pane').forEach(p => p.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    const pane = document.getElementById('dp-pane-' + tabId);
-    if (pane) pane.classList.add('active');
-  }
-
-  function dpCopyLink() {
+function dpCopyLink() {
     navigator.clipboard.writeText(_dpLinkUrl).catch(() => {});
     document.querySelectorAll('.dp-copy-btn').forEach(btn => {
       const orig = btn.textContent;
@@ -2648,16 +2635,11 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div class="dp-tabs">
-      <button class="dp-tab active" onclick="switchDpTab('payment-link',this)">Payment link</button>
-      <button class="dp-tab" onclick="switchDpTab('customer',this)">Customer</button>
-      <button class="dp-tab" onclick="switchDpTab('actions',this)">Actions</button>
-    </div>
   </div>
   <div class="dp-tab-body">
 
-    <!-- ── Payment link pane ── -->
-    <div class="dp-pane active" id="dp-pane-payment-link">
+    <!-- ── Payment link details ── -->
+    <div class="dp-pane" id="dp-pane-payment-link">
       <div class="dp-section" id="dp-history-section">
         <div class="dp-sec-title">History</div>
         <div id="dp-history-items"></div>
@@ -2676,8 +2658,8 @@
       </div>
     </div>
 
-    <!-- ── Customer pane ── -->
-    <div class="dp-pane" id="dp-pane-customer">
+    <!-- ── Customer details ── -->
+    <div class="dp-pane" id="dp-pane-customer" style="border-top:2px solid var(--border);">
       <div class="dp-section">
         <div class="dp-addr-title">Customer details</div>
         <div class="dp-cust-name" id="dp-cust-name"></div>
@@ -2701,8 +2683,8 @@
       </div>
     </div>
 
-    <!-- ── Actions pane ── -->
-    <div class="dp-pane" id="dp-pane-actions">
+    <!-- ── Actions ── -->
+    <div class="dp-pane" id="dp-pane-actions" style="border-top:2px solid var(--border);">
       <div class="dp-section">
         <div class="dp-action-title">Link URL</div>
         <div class="dp-url-val" id="dp-link-url-actions"></div>
