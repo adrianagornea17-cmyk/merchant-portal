@@ -1116,6 +1116,22 @@
     .create-modal-close:hover { background:var(--hover-bg); color:var(--text); }
     .create-modal-body { padding:24px; overflow-y:auto; flex:1; }
 
+    .pn-wrap { position:relative; }
+    .pn-box { display:flex; align-items:center; border:1.5px solid var(--border); border-radius:10px; padding:0 12px; height:38px; background:#fff; transition:border-color 0.1s; }
+    .pn-box.open { border-color:#e11d48; }
+    .pn-input { flex:1; border:none; outline:none; font-size:13px; font-family:inherit; color:var(--text-2); background:transparent; }
+    .pn-input::placeholder { color:var(--text-4); }
+    .pn-chevron { flex-shrink:0; color:var(--text-3); transition:transform 0.2s; }
+    .pn-box.open .pn-chevron { transform:rotate(180deg); }
+    .pn-dropdown { display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; background:#fff; border:1.5px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.08); z-index:200; }
+    .pn-dropdown.open { display:block; }
+    .pn-option { padding:11px 16px; font-size:13.5px; cursor:pointer; transition:background 0.1s; }
+    .pn-option:hover { background:var(--hover-bg); }
+    .pn-option:not(:last-child) { border-bottom:1px solid var(--border); }
+    .pn-action { color:var(--accent); font-weight:500; background:#f5f8ff; }
+    .pn-action:hover { background:#eff6ff; }
+    .pn-plus { font-size:16px; margin-right:4px; }
+    .pn-hint { padding:8px 16px; font-size:12.5px; color:var(--text-4); font-style:italic; background:#fff; }
     .pm-multiselect { position:relative; }
     .pm-ms-box { display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:7px 12px 7px 10px; border:1.5px solid var(--border); border-radius:10px; cursor:pointer; min-height:42px; background:#fff; transition:border-color 0.1s; }
     .pm-ms-box.open { border-color:var(--accent); }
@@ -1803,22 +1819,23 @@
                   </select>
                   <input id="cs-amount" class="form-input" type="number" placeholder="0.00" min="0" step="0.01" oninput="updatePreview()">
                 </div>
-                <div class="cs-options" style="margin-bottom:14px;">
-                  <div class="cs-option-row" style="border-bottom:none;padding-bottom:0;" onclick="toggleOption(this,'opt-product')">
-                    <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <span class="cs-opt-label">Search for a product</span>
-                    <span class="cs-opt-hint">link to a product or SKU</span>
-                  </div>
-                  <div class="cs-opt-fields" id="opt-product">
-                    <div class="cd-search-wrap" style="margin-bottom:0;">
-                      <input class="cd-search-input" type="text" placeholder="Search by product name or SKU">
-                      <svg class="cd-search-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label">Product Name</label>
+                  <div class="pn-wrap" id="pn-wrap">
+                    <div class="pn-box" id="pn-box" onclick="togglePnDropdown()">
+                      <input class="pn-input" id="pn-input" type="text" placeholder="Search by product name" autocomplete="off" oninput="updatePreview()">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--text-4);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    <div class="pn-dropdown" id="pn-dropdown">
+                      <div class="pn-option pn-action" onclick="pnSelect('add-catalog')">
+                        <span class="pn-plus">+</span> Add to product catalog
+                      </div>
+                      <div class="pn-option pn-action" onclick="pnSelect('manual')">
+                        <span class="pn-plus">+</span> Manually enter product
+                      </div>
+                      <div class="pn-hint">Type to search...</div>
                     </div>
                   </div>
-                </div>
-                <div class="form-group" style="margin-bottom:0;">
-                  <label class="form-label">Description <span class="optional">(optional)</span></label>
-                  <input id="cs-description" class="form-input" type="text" placeholder="e.g. Invoice #1042 — Office Supplies" oninput="updatePreview()">
                 </div>
               </div>
 
@@ -2375,6 +2392,25 @@
     document.getElementById('create-success-view').style.display = 'block';
     document.querySelector('.create-modal-body').scrollTop = 0;
   }
+
+  /* ─── PRODUCT NAME DROPDOWN ─── */
+  function togglePnDropdown() {
+    document.getElementById('pn-box').classList.toggle('open');
+    document.getElementById('pn-dropdown').classList.toggle('open');
+  }
+
+  function pnSelect(action) {
+    document.getElementById('pn-box').classList.remove('open');
+    document.getElementById('pn-dropdown').classList.remove('open');
+  }
+
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('pn-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('pn-box')?.classList.remove('open');
+      document.getElementById('pn-dropdown')?.classList.remove('open');
+    }
+  });
 
   /* ─── PAYMENT METHOD MULTI-SELECT ─── */
   const PM_LABELS = { card:'Card', 'apple-pay':'Apple Pay', 'google-pay':'Google Pay', 'bank-transfer':'Bank Transfer', paypal:'PayPal', crypto:'Crypto' };
