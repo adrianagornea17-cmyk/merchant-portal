@@ -2541,7 +2541,7 @@
     const dateRaw   = cells[0].textContent.trim();
     const amount    = cells[1].textContent.trim();
     const emailCell = cells[2].textContent.trim();
-    const smsCell   = cells[3].textContent.trim();
+    const smsCell   = tr.dataset.phone || '';
     const org       = cells[4].textContent.trim();
     const statusEl  = cells[5].querySelector('.status-pill');
     const statusTxt = statusEl ? statusEl.textContent.trim() : '';
