@@ -1296,9 +1296,16 @@
     .dp-meta-item:last-child { margin-bottom:0; }
     .dp-meta-label { font-size:12px; color:var(--text-3); margin-bottom:2px; }
     .dp-meta-val { font-size:13.5px; color:#0f172a; }
-    .dp-addr-title { font-size:14px; font-weight:600; color:#0f172a; margin-bottom:12px; }
+    .dp-addr-title { font-size:13px; font-weight:600; color:var(--text-3); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.4px; }
     .dp-cust-name { font-size:14px; color:#0f172a; margin-bottom:2px; }
     .dp-cust-email { font-size:13px; color:var(--text-3); }
+    .dp-collapse-hd { display:flex; align-items:center; justify-content:space-between; padding:13px 18px; cursor:pointer; user-select:none; border-bottom:1px solid var(--border); transition:background 0.1s; }
+    .dp-collapse-hd:hover { background:var(--hover-bg); }
+    .dp-collapse-title { font-size:13.5px; font-weight:600; color:#0f172a; }
+    .dp-collapse-chevron { color:var(--text-3); flex-shrink:0; transition:transform 0.2s; }
+    .dp-collapse-hd.is-closed .dp-collapse-chevron { transform:rotate(-90deg); }
+    .dp-collapse-body { }
+    .dp-collapse-body.is-closed { display:none; }
     .dp-addr-row { margin-bottom:10px; }
     .dp-addr-row:last-child { margin-bottom:0; }
     .dp-addr-label { font-size:12px; color:var(--text-3); margin-bottom:2px; }
@@ -2510,7 +2517,6 @@
     document.getElementById('dp-expiry').textContent     = expiryFmt;
     document.getElementById('dp-org').textContent        = org || '—';
     document.getElementById('dp-pm').textContent         = 'visa, mastercard, jcb, maestro, discover';
-    document.getElementById('dp-txn-amount').textContent = amount;
 
     // Customer
     const fullName = [firstName, lastName].filter(Boolean).join(' ') || '—';
@@ -2533,6 +2539,12 @@
     dp.querySelector('.dp-tab-body').scrollTop = 0;
     dp.classList.add('open');
     document.getElementById('main').classList.add('dp-open');
+  }
+
+  function toggleDpSection(bodyId, hd) {
+    const body = document.getElementById(bodyId);
+    body.classList.toggle('is-closed');
+    hd.classList.toggle('is-closed');
   }
 
   function closeDetailPanel() {
@@ -2581,33 +2593,48 @@ function dpCopyLink() {
         <div class="dp-meta-item"><div class="dp-meta-label">Link expiration</div><div class="dp-meta-val" id="dp-expiry"></div></div>
         <div class="dp-meta-item"><div class="dp-meta-label">Organization</div><div class="dp-meta-val" id="dp-org"></div></div>
         <div class="dp-meta-item"><div class="dp-meta-label">Payment Methods</div><div class="dp-meta-val" id="dp-pm"></div></div>
-        <div class="dp-meta-item"><div class="dp-meta-label">Transaction Amount</div><div class="dp-meta-val" id="dp-txn-amount"></div></div>
       </div>
     </div>
 
     <!-- ── Customer details ── -->
     <div class="dp-pane" id="dp-pane-customer" style="border-top:2px solid var(--border);">
-      <div class="dp-section">
-        <div class="dp-addr-title">Customer details</div>
-        <div class="dp-cust-name" id="dp-cust-name"></div>
-        <div class="dp-cust-email" id="dp-cust-email"></div>
+
+      <!-- Collapsible: Customer details -->
+      <div class="dp-collapse-hd" onclick="toggleDpSection('dp-cust-body', this)">
+        <span class="dp-collapse-title">Customer details</span>
+        <svg class="dp-collapse-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-      <div class="dp-section">
-        <div class="dp-addr-title">Billing address</div>
-        <div class="dp-addr-row"><div class="dp-addr-label">Address</div><div class="dp-addr-val" id="dp-bill-addr"></div></div>
-        <div class="dp-addr-row"><div class="dp-addr-label">City</div><div class="dp-addr-val" id="dp-bill-city"></div></div>
-        <div class="dp-addr-row"><div class="dp-addr-label">Province / State</div><div class="dp-addr-val" id="dp-bill-state"></div></div>
-        <div class="dp-addr-row"><div class="dp-addr-label">Zip code</div><div class="dp-addr-val" id="dp-bill-zip"></div></div>
-        <div class="dp-addr-row"><div class="dp-addr-label">Country</div><div class="dp-addr-val" id="dp-bill-ctry"></div></div>
+      <div class="dp-collapse-body" id="dp-cust-body">
+        <div class="dp-section">
+          <div class="dp-cust-name" id="dp-cust-name"></div>
+          <div class="dp-cust-email" id="dp-cust-email"></div>
+        </div>
       </div>
-      <div class="dp-section">
-        <div class="dp-addr-title">Shipping address</div>
-        <div class="dp-addr-row"><div class="dp-addr-label">Address</div><div class="dp-addr-val" id="dp-ship-addr"></div></div>
-        <div class="dp-addr-row"><div class="dp-addr-label">City</div><div class="dp-addr-val" id="dp-ship-city"></div></div>
-        <div class="dp-addr-row"><div class="dp-addr-label">Province / State</div><div class="dp-addr-val" id="dp-ship-state"></div></div>
-        <div class="dp-addr-row"><div class="dp-addr-label">Zip code</div><div class="dp-addr-val" id="dp-ship-zip"></div></div>
-        <div class="dp-addr-row"><div class="dp-addr-label">Country</div><div class="dp-addr-val" id="dp-ship-ctry"></div></div>
+
+      <!-- Collapsible: Address -->
+      <div class="dp-collapse-hd" onclick="toggleDpSection('dp-addr-body', this)" style="border-top:1px solid var(--border);">
+        <span class="dp-collapse-title">Address</span>
+        <svg class="dp-collapse-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
+      <div class="dp-collapse-body" id="dp-addr-body">
+        <div class="dp-section">
+          <div class="dp-addr-title">Billing address</div>
+          <div class="dp-addr-row"><div class="dp-addr-label">Address</div><div class="dp-addr-val" id="dp-bill-addr"></div></div>
+          <div class="dp-addr-row"><div class="dp-addr-label">City</div><div class="dp-addr-val" id="dp-bill-city"></div></div>
+          <div class="dp-addr-row"><div class="dp-addr-label">Province / State</div><div class="dp-addr-val" id="dp-bill-state"></div></div>
+          <div class="dp-addr-row"><div class="dp-addr-label">Zip code</div><div class="dp-addr-val" id="dp-bill-zip"></div></div>
+          <div class="dp-addr-row"><div class="dp-addr-label">Country</div><div class="dp-addr-val" id="dp-bill-ctry"></div></div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-addr-title">Shipping address</div>
+          <div class="dp-addr-row"><div class="dp-addr-label">Address</div><div class="dp-addr-val" id="dp-ship-addr"></div></div>
+          <div class="dp-addr-row"><div class="dp-addr-label">City</div><div class="dp-addr-val" id="dp-ship-city"></div></div>
+          <div class="dp-addr-row"><div class="dp-addr-label">Province / State</div><div class="dp-addr-val" id="dp-ship-state"></div></div>
+          <div class="dp-addr-row"><div class="dp-addr-label">Zip code</div><div class="dp-addr-val" id="dp-ship-zip"></div></div>
+          <div class="dp-addr-row"><div class="dp-addr-label">Country</div><div class="dp-addr-val" id="dp-ship-ctry"></div></div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ── Actions ── -->
