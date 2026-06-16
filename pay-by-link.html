@@ -1547,24 +1547,8 @@
 
         <!-- DEFAULT: populated table -->
         <div id="lv-default">
-          <!-- Field-selector search bar -->
-          <div class="search-bar-row">
-            <div class="sb-combo">
-              <div class="sb-field-wrap" id="sb-field-wrap">
-                <button class="sb-field-btn" id="sb-field-btn" onclick="toggleSbDropdown()">
-                  <span id="sb-field-label">Phone Number (Customer)</span>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                <div class="sb-dropdown" id="sb-dropdown">
-                  <div class="sb-option sb-selected" data-field="phone" onclick="selectSbField(this)">Phone Number (Customer)</div>
-                  <div class="sb-option" data-field="firstname" onclick="selectSbField(this)">First Name (Customer)</div>
-                  <div class="sb-option" data-field="lastname" onclick="selectSbField(this)">Last Name (Customer)</div>
-                </div>
-              </div>
-              <input class="sb-input" id="sb-input" type="text" placeholder="Search..." oninput="doTopSearch()">
-            </div>
-            <button class="sb-search-btn" onclick="doTopSearch()">Search</button>
-            <button style="background:none;border:none;font-size:12.5px;color:var(--text-4);cursor:pointer;font-family:inherit;padding:0 4px;" onclick="clearTopSearch()">Clear</button>
+          <!-- Filters toggle -->
+          <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
             <button class="filter-panel-btn" id="fp-toggle-btn" onclick="toggleFilterPanel()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
               Filters
@@ -2352,7 +2336,7 @@
   }
 
   /* ─── FILTER PANEL ─── */
-  let fpState = { statusSet: new Set(), phone: '', firstname: '', lastname: '' };
+  let fpState = { org: '', phone: '', firstname: '', lastname: '' };
 
   function toggleFilterPanel() {
     const panel = document.getElementById('filter-panel');
@@ -2370,18 +2354,17 @@
   }
 
   function fpClear() {
-    document.querySelectorAll('.fp-status-cb').forEach(cb => cb.checked = false);
+    document.getElementById('fp-org').value = '';
     document.getElementById('fp-phone').value = '';
     document.getElementById('fp-firstname').value = '';
     document.getElementById('fp-lastname').value = '';
-    fpState = { statusSet: new Set(), phone: '', firstname: '', lastname: '' };
+    fpState = { org: '', phone: '', firstname: '', lastname: '' };
     updateFpBadge();
     applyFilters();
   }
 
   function fpApply() {
-    const checked = Array.from(document.querySelectorAll('.fp-status-cb:checked')).map(cb => cb.value);
-    fpState.statusSet = new Set(checked);
+    fpState.org       = document.getElementById('fp-org').value.trim().toLowerCase();
     fpState.phone     = document.getElementById('fp-phone').value.trim().toLowerCase();
     fpState.firstname = document.getElementById('fp-firstname').value.trim().toLowerCase();
     fpState.lastname  = document.getElementById('fp-lastname').value.trim().toLowerCase();
@@ -2391,33 +2374,9 @@
   }
 
   function updateFpBadge() {
-    const n = fpState.statusSet.size + (fpState.phone ? 1 : 0) + (fpState.firstname ? 1 : 0) + (fpState.lastname ? 1 : 0);
+    const n = (fpState.org ? 1 : 0) + (fpState.phone ? 1 : 0) + (fpState.firstname ? 1 : 0) + (fpState.lastname ? 1 : 0);
     const badge = document.getElementById('fp-badge');
     if (badge) { badge.textContent = n; badge.classList.toggle('visible', n > 0); }
-  }
-
-  /* ─── SEARCH BAR ─── */
-  let sbField = 'phone';
-
-  function toggleSbDropdown() {
-    document.getElementById('sb-dropdown').classList.toggle('open');
-  }
-
-  function selectSbField(el) {
-    sbField = el.dataset.field;
-    document.getElementById('sb-field-label').textContent = el.textContent;
-    document.querySelectorAll('.sb-option').forEach(o => o.classList.remove('sb-selected'));
-    el.classList.add('sb-selected');
-    document.getElementById('sb-dropdown').classList.remove('open');
-    document.getElementById('sb-input').value = '';
-    applyFilters();
-  }
-
-  function doTopSearch() { applyFilters(); }
-
-  function clearTopSearch() {
-    document.getElementById('sb-input').value = '';
-    applyFilters();
   }
 
   /* ─── PER-COLUMN SEARCH ─── */
@@ -2435,22 +2394,11 @@
   document.addEventListener('DOMContentLoaded', initColSearch);
 
   function applyFilters() {
-    const q = (document.getElementById('sb-input')?.value || '').toLowerCase().trim();
     const colStatusQ = (document.getElementById('col-status-select')?.value || '').toLowerCase();
     const rows = document.querySelectorAll('#pbl-tbody tr');
     let visible = 0;
     rows.forEach(tr => {
       let match = true;
-      // top search bar
-      if (q) {
-        let val = '';
-        if (sbField === 'merchant-ref') val = (tr.querySelector('td:nth-child(5)')?.textContent || '').toLowerCase();
-        else if (sbField === 'email-customer') val = (tr.dataset.email || '').toLowerCase();
-        else if (sbField === 'phone') val = (tr.dataset.phone || '').toLowerCase();
-        else if (sbField === 'firstname') val = (tr.dataset.firstname || '').toLowerCase();
-        else if (sbField === 'lastname') val = (tr.dataset.lastname || '').toLowerCase();
-        match = val.includes(q);
-      }
       // per-column text filters
       if (match) match = colFilters.every((cq, i) => {
         if (!cq) return true;
@@ -2462,11 +2410,10 @@
         const pill = tr.querySelector('td:last-child .status-pill');
         match = (pill?.textContent || '').toLowerCase().includes(colStatusQ);
       }
-      // panel: status checkboxes
-      if (match && fpState.statusSet.size > 0 && fpState.statusSet.size < 4) {
-        const pill = tr.querySelector('td:last-child .status-pill');
-        const cls = pill ? pill.className : '';
-        match = Array.from(fpState.statusSet).some(v => cls.includes('status-pill-' + v));
+      // panel: org filter
+      if (match && fpState.org) {
+        const orgVal = (tr.querySelector('td:nth-child(5)')?.textContent || '').toLowerCase();
+        match = orgVal.includes(fpState.org);
       }
       // panel: customer filters
       if (match && fpState.phone)     match = (tr.dataset.phone     || '').toLowerCase().includes(fpState.phone);
@@ -2478,13 +2425,6 @@
     const tot = document.getElementById('lv-total');
     if (tot) tot.textContent = `Total: ${visible} Payment link${visible !== 1 ? 's' : ''}`;
   }
-
-  document.addEventListener('click', e => {
-    const sbWrap = document.getElementById('sb-field-wrap');
-    if (sbWrap && !sbWrap.contains(e.target)) {
-      document.getElementById('sb-dropdown')?.classList.remove('open');
-    }
-  });
 
   /* ─── DETAIL PANEL ─── */
   let _dpLinkUrl = '';
@@ -2698,14 +2638,12 @@ function dpCopyLink() {
   </div>
   <div class="fp-body">
 
-    <!-- Payment status -->
+    <!-- Organisation filter -->
     <div class="fp-section">
-      <div class="fp-section-label">Payment status</div>
-      <div class="fp-checkbox-list">
-        <label class="fp-checkbox"><input type="checkbox" class="fp-status-cb" value="expired"> Expired</label>
-        <label class="fp-checkbox"><input type="checkbox" class="fp-status-cb" value="failed"> Failed</label>
-        <label class="fp-checkbox"><input type="checkbox" class="fp-status-cb" value="notpaid"> Not paid</label>
-        <label class="fp-checkbox"><input type="checkbox" class="fp-status-cb" value="paid"> Paid</label>
+      <div class="fp-section-label">Organisation</div>
+      <div class="fp-field">
+        <label class="fp-field-label">Organisation</label>
+        <input class="fp-date-input" type="text" id="fp-org" placeholder="" style="width:100%;">
       </div>
     </div>
 
