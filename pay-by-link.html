@@ -1552,13 +1552,11 @@
             <div class="sb-combo">
               <div class="sb-field-wrap" id="sb-field-wrap">
                 <button class="sb-field-btn" id="sb-field-btn" onclick="toggleSbDropdown()">
-                  <span id="sb-field-label">Merchant Reference</span>
+                  <span id="sb-field-label">Phone Number (Customer)</span>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
                 <div class="sb-dropdown" id="sb-dropdown">
-                  <div class="sb-option sb-selected" data-field="merchant-ref" onclick="selectSbField(this)">Merchant Reference</div>
-                  <div class="sb-option" data-field="email-customer" onclick="selectSbField(this)">Email (Customer)</div>
-                  <div class="sb-option" data-field="phone" onclick="selectSbField(this)">Phone Number (Customer)</div>
+                  <div class="sb-option sb-selected" data-field="phone" onclick="selectSbField(this)">Phone Number (Customer)</div>
                   <div class="sb-option" data-field="firstname" onclick="selectSbField(this)">First Name (Customer)</div>
                   <div class="sb-option" data-field="lastname" onclick="selectSbField(this)">Last Name (Customer)</div>
                 </div>
@@ -2399,7 +2397,7 @@
   }
 
   /* ─── SEARCH BAR ─── */
-  let sbField = 'merchant-ref';
+  let sbField = 'phone';
 
   function toggleSbDropdown() {
     document.getElementById('sb-dropdown').classList.toggle('open');
