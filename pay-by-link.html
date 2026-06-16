@@ -1918,6 +1918,37 @@
                 <div class="cs-card-title">Options</div>
                 <div class="cs-options">
 
+                  <div class="cs-option-row" onclick="toggleOption(this,'opt-language')">
+                    <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="cs-opt-label">Preselected language</span>
+                    <span class="cs-opt-hint">set default checkout language</span>
+                  </div>
+                  <div class="cs-opt-fields" id="opt-language">
+                    <select class="form-select">
+                      <option value="">Default</option>
+                      <option>English (English)</option>
+                      <option>Français (French)</option>
+                      <option>Deutsch (German)</option>
+                      <option>Español (Spanish)</option>
+                      <option>Italiano (Italian)</option>
+                      <option>日本語 (Japanese)</option>
+                    </select>
+                  </div>
+
+                  <div class="cs-option-row" onclick="toggleOption(this,'opt-theme')">
+                    <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="cs-opt-label">Checkout theme</span>
+                    <span class="cs-opt-hint">customise the look and feel</span>
+                  </div>
+                  <div class="cs-opt-fields" id="opt-theme">
+                    <select class="form-select">
+                      <option value="">Default theme</option>
+                      <option>Light</option>
+                      <option>Dark</option>
+                      <option>High contrast</option>
+                    </select>
+                  </div>
+
                   <div class="cs-option-row" onclick="toggleOption(this,'opt-reference')">
                     <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                     <span class="cs-opt-label">Add reference</span>
