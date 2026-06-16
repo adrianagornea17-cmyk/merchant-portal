@@ -964,6 +964,64 @@
     }
     .return-link:hover { color: #1d4ed8; }
 
+    .success-bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .mobile-preview-card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .mobile-preview-hd {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-4);
+    }
+    .mobile-preview-body {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      min-height: 110px;
+    }
+    .qr-placeholder {
+      width: 80px; height: 80px;
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      gap: 2px;
+    }
+    .success-footer-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-top: 1.5px solid var(--border);
+      flex-shrink: 0;
+      background: #fff;
+      border-radius: 0 0 16px 16px;
+    }
+    .success-footer-bar.visible { display: flex; }
+    .sfb-left {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13.5px; font-weight: 500; color: var(--accent);
+      cursor: pointer; text-decoration: none;
+    }
+    .sfb-left:hover { color: #1d4ed8; }
+    .sfb-center {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12.5px; color: var(--text-4);
+    }
+    .sfb-right { display: flex; align-items: center; gap: 8px; }
+
     /* ─── LIST VIEW ─── */
     .list-view { display: none; }
     .list-view.active { display: block; }
@@ -2236,33 +2294,83 @@
               </div>
             </div>
 
-            <div class="link-details-card">
-              <div class="link-details-header">Link details</div>
-              <div class="link-detail-row">
-                <span class="link-detail-key">Transaction amount</span>
-                <span class="link-detail-val" id="success-amount">—</span>
+            <div class="success-bottom-grid">
+              <div class="mobile-preview-card">
+                <div class="mobile-preview-hd">Mobile preview</div>
+                <div class="mobile-preview-body">
+                  <svg width="90" height="90" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                    <!-- QR placeholder: finder patterns + data cells -->
+                    <rect width="90" height="90" fill="#fff"/>
+                    <!-- top-left finder -->
+                    <rect x="5" y="5" width="25" height="25" rx="3" fill="#1e293b"/>
+                    <rect x="9" y="9" width="17" height="17" rx="2" fill="#fff"/>
+                    <rect x="13" y="13" width="9" height="9" rx="1" fill="#1e293b"/>
+                    <!-- top-right finder -->
+                    <rect x="60" y="5" width="25" height="25" rx="3" fill="#1e293b"/>
+                    <rect x="64" y="9" width="17" height="17" rx="2" fill="#fff"/>
+                    <rect x="68" y="13" width="9" height="9" rx="1" fill="#1e293b"/>
+                    <!-- bottom-left finder -->
+                    <rect x="5" y="60" width="25" height="25" rx="3" fill="#1e293b"/>
+                    <rect x="9" y="64" width="17" height="17" rx="2" fill="#fff"/>
+                    <rect x="13" y="68" width="9" height="9" rx="1" fill="#1e293b"/>
+                    <!-- data cells (random-ish pattern) -->
+                    <rect x="35" y="5" width="5" height="5" fill="#1e293b"/><rect x="43" y="5" width="5" height="5" fill="#1e293b"/><rect x="51" y="5" width="5" height="5" fill="#1e293b"/>
+                    <rect x="35" y="13" width="5" height="5" fill="#1e293b"/><rect x="51" y="13" width="5" height="5" fill="#1e293b"/>
+                    <rect x="39" y="19" width="5" height="5" fill="#1e293b"/><rect x="47" y="19" width="5" height="5" fill="#1e293b"/>
+                    <rect x="5" y="35" width="5" height="5" fill="#1e293b"/><rect x="13" y="35" width="5" height="5" fill="#1e293b"/><rect x="21" y="35" width="5" height="5" fill="#1e293b"/>
+                    <rect x="35" y="35" width="5" height="5" fill="#1e293b"/><rect x="43" y="35" width="5" height="5" fill="#1e293b"/><rect x="55" y="35" width="5" height="5" fill="#1e293b"/><rect x="63" y="35" width="5" height="5" fill="#1e293b"/><rect x="71" y="35" width="5" height="5" fill="#1e293b"/>
+                    <rect x="5" y="43" width="5" height="5" fill="#1e293b"/><rect x="17" y="43" width="5" height="5" fill="#1e293b"/><rect x="27" y="43" width="5" height="5" fill="#1e293b"/>
+                    <rect x="39" y="43" width="5" height="5" fill="#1e293b"/><rect x="51" y="43" width="5" height="5" fill="#1e293b"/><rect x="63" y="43" width="5" height="5" fill="#1e293b"/>
+                    <rect x="5" y="51" width="5" height="5" fill="#1e293b"/><rect x="21" y="51" width="5" height="5" fill="#1e293b"/>
+                    <rect x="35" y="51" width="5" height="5" fill="#1e293b"/><rect x="47" y="51" width="5" height="5" fill="#1e293b"/><rect x="59" y="51" width="5" height="5" fill="#1e293b"/><rect x="71" y="51" width="5" height="5" fill="#1e293b"/>
+                    <rect x="35" y="63" width="5" height="5" fill="#1e293b"/><rect x="47" y="63" width="5" height="5" fill="#1e293b"/><rect x="59" y="63" width="5" height="5" fill="#1e293b"/>
+                    <rect x="39" y="71" width="5" height="5" fill="#1e293b"/><rect x="51" y="71" width="5" height="5" fill="#1e293b"/><rect x="63" y="71" width="5" height="5" fill="#1e293b"/><rect x="71" y="71" width="5" height="5" fill="#1e293b"/>
+                    <rect x="35" y="79" width="5" height="5" fill="#1e293b"/><rect x="55" y="79" width="5" height="5" fill="#1e293b"/><rect x="71" y="79" width="5" height="5" fill="#1e293b"/>
+                  </svg>
+                </div>
               </div>
-              <div class="link-detail-row">
-                <span class="link-detail-key">Description</span>
-                <span class="link-detail-val" id="success-desc" style="color:var(--text-4);">—</span>
-              </div>
-              <div class="link-detail-row">
-                <span class="link-detail-key">Payment methods</span>
-                <span class="link-detail-val" id="success-pm">Card</span>
+
+              <div class="link-details-card">
+                <div class="link-details-header">Link details</div>
+                <div class="link-detail-row">
+                  <span class="link-detail-key">Transaction amount</span>
+                  <span class="link-detail-val" id="success-amount">—</span>
+                </div>
+                <div class="link-detail-row">
+                  <span class="link-detail-key">Description</span>
+                  <span class="link-detail-val" id="success-desc" style="color:var(--text-4);">—</span>
+                </div>
+                <div class="link-detail-row">
+                  <span class="link-detail-key">Payment methods</span>
+                  <span class="link-detail-val" id="success-pm">Card</span>
+                </div>
               </div>
             </div>
 
-            <div class="return-row">
-              <a class="return-link" onclick="closeCreateModal()">
-                Return to payment links
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-              </a>
-            </div>
           </div>
         </div><!-- /create-success-view -->
 
 
           </div><!-- /create-modal-body -->
+
+          <!-- SUCCESS FOOTER BAR -->
+          <div class="success-footer-bar" id="success-footer-bar">
+            <a class="sfb-left" onclick="closeCreateModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Return to Payment Links
+            </a>
+            <div class="sfb-center">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              All links are SSL encrypted &amp; PCI DSS compliant
+            </div>
+            <div class="sfb-right">
+              <button class="btn btn-primary" style="height:36px;gap:6px;" onclick="closeCreateModal();setTimeout(openCreateModal,100)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Create another link
+              </button>
+            </div>
+          </div>
+
         </div><!-- /create-modal -->
       </div><!-- /create-flow -->
 
@@ -2405,15 +2513,18 @@
   function showCreateFlow() {
     document.getElementById('create-form-view').style.display = '';
     document.getElementById('create-success-view').style.display = 'none';
+    document.getElementById('success-footer-bar').classList.remove('visible');
     document.getElementById('create-flow').classList.add('active');
     document.body.style.overflow = 'hidden';
     updatePreview();
     renderPmChips();
     updatePmPreview();
   }
+  function openCreateModal() { showCreateFlow(); }
 
   function closeCreateModal() {
     document.getElementById('create-flow').classList.remove('active');
+    document.getElementById('success-footer-bar').classList.remove('visible');
     document.body.style.overflow = '';
   }
 
@@ -2514,6 +2625,7 @@
 
     document.getElementById('create-form-view').style.display = 'none';
     document.getElementById('create-success-view').style.display = 'block';
+    document.getElementById('success-footer-bar').classList.add('visible');
     document.querySelector('.create-modal-body').scrollTop = 0;
   }
 
