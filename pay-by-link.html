@@ -1837,6 +1837,44 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Manual product form (hidden until selected) -->
+                <div id="pn-manual-form" style="display:none;margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
+                  <div class="form-group" style="margin-bottom:14px;">
+                    <label class="form-label">Product Name <span style="color:#e11d48;">*</span></label>
+                    <input id="pn-manual-name" class="form-input" type="text" placeholder="Enter product name" oninput="updatePnTotal()">
+                    <div id="pn-manual-name-err" style="display:none;font-size:12px;color:#e11d48;margin-top:4px;">Please fill up the required field</div>
+                  </div>
+                  <div class="form-group" style="margin-bottom:14px;">
+                    <label class="form-label">Product Description <span class="optional">(Optional)</span></label>
+                    <textarea class="form-input" placeholder="Enter a description" style="height:96px;resize:vertical;padding-top:8px;line-height:1.5;"></textarea>
+                  </div>
+                  <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:14px;">
+                    <div style="flex:0 0 80px;">
+                      <label class="form-label">Quantity</label>
+                      <div class="pn-qty-wrap">
+                        <select id="pn-qty" class="form-select" style="padding-right:28px;" onchange="updatePnTotal()">
+                          <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>10</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div style="flex:1;">
+                      <label class="form-label">Price per Unit</label>
+                      <div style="display:flex;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;">
+                        <div id="pn-currency-badge" style="padding:0 12px;background:#f3f4f6;border-right:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--text-3);display:flex;align-items:center;flex-shrink:0;">GBP</div>
+                        <input id="pn-price" class="form-input" type="number" placeholder="0" min="0" step="0.01" style="border:none;border-radius:0;flex:1;" oninput="updatePnTotal()">
+                      </div>
+                    </div>
+                    <div style="flex:1;">
+                      <label class="form-label">Product ID/SKU <span class="optional">(Optional)</span></label>
+                      <input class="form-input" type="text" placeholder="">
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);">
+                    <span style="font-size:14px;font-weight:700;color:#0f172a;">Total Price</span>
+                    <span id="pn-total" style="font-size:15px;font-weight:700;color:#0f172a;">GBP 0.00</span>
+                  </div>
+                </div>
               </div>
 
               <!-- Payment methods -->
@@ -2402,6 +2440,29 @@
   function pnSelect(action) {
     document.getElementById('pn-box').classList.remove('open');
     document.getElementById('pn-dropdown').classList.remove('open');
+    const manualForm = document.getElementById('pn-manual-form');
+    if (action === 'manual') {
+      manualForm.style.display = 'block';
+      document.getElementById('pn-input').value = '';
+      // sync currency badge to selected currency
+      const cur = document.getElementById('cs-currency')?.value || 'GBP';
+      document.getElementById('pn-currency-badge').textContent = cur;
+      document.getElementById('pn-total').textContent = cur + ' 0.00';
+      document.getElementById('pn-manual-name')?.focus();
+    } else {
+      manualForm.style.display = 'none';
+    }
+  }
+
+  function updatePnTotal() {
+    const qty   = parseInt(document.getElementById('pn-qty')?.value || '1');
+    const price = parseFloat(document.getElementById('pn-price')?.value || '0');
+    const cur   = document.getElementById('cs-currency')?.value || 'GBP';
+    const total = (qty * (isNaN(price) ? 0 : price)).toFixed(2);
+    const el = document.getElementById('pn-total');
+    if (el) el.textContent = cur + ' ' + total;
+    const badge = document.getElementById('pn-currency-badge');
+    if (badge) badge.textContent = cur;
   }
 
   document.addEventListener('click', e => {
