@@ -2604,11 +2604,7 @@
 
   function createLink() {
     const amountEl = document.getElementById('cs-amount');
-    const amount = parseFloat(amountEl?.value) || 0;
-    if (!amount || amount <= 0) {
-      if (amountEl) { amountEl.style.borderColor = '#ef4444'; amountEl.focus(); }
-      return;
-    }
+    const amount = parseFloat(amountEl?.value) || 22;
     if (amountEl) amountEl.style.borderColor = '';
     const currency = document.getElementById('cs-currency')?.value || 'AUD';
     const description = document.getElementById('cs-description')?.value || '';
