@@ -1919,10 +1919,18 @@
 
               <!-- Customer details card -->
               <div class="cs-card">
-                <div class="cs-card-title">Customer details</div>
+                <div class="cs-options">
+                  <div class="cs-option-row" style="border-bottom:none;padding-bottom:0;" onclick="toggleCdOption(this)">
+                    <div class="cb-box" id="cd-cb"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <span class="cs-opt-label">Customer details</span>
+                    <span class="cs-opt-hint">pre-fill before sending</span>
+                  </div>
+                </div>
 
-                <!-- Full form -->
-                <div id="cd-form" style="padding-top:4px;">
+                <div id="cd-note" class="cd-note">Customer details will be added by the shopper at checkout</div>
+
+                <!-- Full form (hidden until checkbox checked) -->
+                <div id="cd-form" style="display:none;padding-top:12px;">
 
                   <div class="cd-inner">
                     <!-- Row 1: First Name / Last Name -->
@@ -2319,6 +2327,15 @@
     }
   }
 
+
+  function toggleCdOption(row) {
+    const cb = document.getElementById('cd-cb');
+    const note = document.getElementById('cd-note');
+    const form = document.getElementById('cd-form');
+    const isChecked = cb.classList.toggle('checked');
+    note.style.display = isChecked ? 'none' : '';
+    form.style.display = isChecked ? 'block' : 'none';
+  }
 
   function toggleOption(row, fieldId) {
     const box = row.querySelector('.cb-box');
