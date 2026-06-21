@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifone — Portal Prototypes</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f9fafb;
+      color: #111827;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px 80px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.4px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 1160px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card:hover {
+      border-color: #2563eb;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.10);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .card-link {
+      margin-top: auto;
+      padding-top: 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #2563eb;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-bottom: 2px;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 44px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 100;
+    }
+
+    .site-footer .footer-copy {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .cookie-settings-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      color: #5eead4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      padding: 0;
+    }
+
+    .cookie-settings-btn:hover { color: #99f6e4; }
+
+    /* ── Cookie Modal ── */
+    .cookie-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,5,15,0.55);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cookie-overlay.open { display: flex; }
+
+    .cookie-modal {
+      background: #fff;
+      border-radius: 14px;
+      width: 700px;
+      max-width: calc(100vw - 40px);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    .cm-header {
+      padding: 22px 28px 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cm-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .cm-header .cm-url {
+      font-size: 11.5px;
+      color: #94a3b8;
+    }
+
+    .cm-close {
+      position: absolute;
+      /* relative to modal */
+    }
+
+    .cm-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .cm-close-btn {
+      background: #f1f5f9;
+      border: none;
+      border-radius: 6px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #64748b;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cm-close-btn:hover { background: #e2e8f0; color: #334155; }
+
+    .cm-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .cm-desc {
+      padding: 16px 28px;
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.65;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cm-desc p + p { margin-top: 8px; }
+
+    .cm-desc a { color: #2563eb; }
+
+    .cm-left {
+      width: 210px;
+      flex-shrink: 0;
+      border-right: 1px solid #f1f5f9;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cm-category {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .cm-category.active {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .cm-category-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .cm-checkbox {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid #cbd5e1;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .cm-checkbox.checked {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .cm-checkbox.partial {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .cm-checkbox.locked {
+      background: #2563eb;
+      border-color: #2563eb;
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .cm-checkbox svg { display: none; }
+    .cm-checkbox.checked svg,
+    .cm-checkbox.partial svg,
+    .cm-checkbox.locked svg { display: block; }
+
+    .cm-cat-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .cm-cat-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .cm-right {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cm-panel {
+      display: none;
+      flex-direction: column;
+    }
+
+    .cm-panel.active { display: flex; }
+
+    .cm-panel-intro {
+      padding: 16px 20px 12px;
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.6;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cm-cookie-table {
+      width: 100%;
+    }
+
+    .cm-cookie-table-header {
+      display: grid;
+      grid-template-columns: 1fr 80px 100px 64px;
+      padding: 8px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .cm-cookie-table-header span {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .cm-cookie-row {
+      display: grid;
+      grid-template-columns: 1fr 80px 100px 64px;
+      padding: 10px 20px;
+      border-bottom: 1px solid #f8fafc;
+      align-items: start;
+    }
+
+    .cm-cookie-row:last-child { border-bottom: none; }
+
+    .cm-cookie-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #2563eb;
+    }
+
+    .cm-cookie-name-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .cm-cookie-meta {
+      font-size: 12px;
+      color: #475569;
+      padding-top: 1px;
+    }
+
+    .cm-allow-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .cm-row-checkbox {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid #cbd5e1;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .cm-row-checkbox.checked {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .cm-row-checkbox svg { display: none; }
+    .cm-row-checkbox.checked svg { display: block; }
+
+    .cm-optional {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    /* ── Footer actions ── */
+    .cm-footer {
+      padding: 14px 24px;
+      border-top: 1px solid #f1f5f9;
+      background: #f8fafc;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+
+    .btn-outline:hover { border-color: #9ca3af; background: #f9fafb; }
+
+    .btn-primary {
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .btn-primary:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+
+  <div class="logo-row">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="8" fill="#0f172a"/>
+      <circle cx="10" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="22" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="10" cy="22" r="3" fill="#60a5fa"/>
+      <circle cx="22" cy="22" r="3" fill="#60a5fa"/>
+    </svg>
+    <span class="logo-text">Verifone</span>
+  </div>
+  <p class="subtitle">Portal prototypes — pick a version to preview</p>
+
+  <div class="grid">
+
+    <!-- Partner Portal — Dashboard (interactive) -->
+    <a class="card" href="partner-portal.html">
+      <div class="card-icon" style="background:#eff6ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      </div>
+      <span class="tag" style="background:#eff6ff;color:#1d4ed8;">Partner</span>
+      <div class="card-title">Partner Portal — Dashboard</div>
+      <div class="card-desc">Interactive ISV/partner dashboard with estate KPIs and downstream landing pages — Payment Transactions, Commission and Merchant Devices — with a persistent estate filter, drill-downs, cross-page pivots and CSV export.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Partner Dashboard — KPI Widgets -->
+    <a class="card" href="partner-dashboard-kpi.html">
+      <div class="card-icon" style="background:#eff6ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>
+      </div>
+      <span class="tag" style="background:#eff6ff;color:#1d4ed8;">Partner</span>
+      <div class="card-title">Partner Dashboard — KPI Widgets</div>
+      <div class="card-desc">KPI-widget home for partners — Payment Transactions, Merchant Devices, Orders, Commission and Administration. Click any widget to open its listing, with date tracker, CSV export, commission invoice breakdowns, and an Administration page.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Page Shell / Nav Template -->
+    <a class="card" href="page-shell.html">
+      <div class="card-icon" style="background:#f5f3ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M9 9h12"/></svg>
+      </div>
+      <span class="tag" style="background:#f5f3ff;color:#6d28d9;">Template</span>
+      <div class="card-title">Page Shell — Nav Template</div>
+      <div class="card-desc">Figma-matched Nav Rail with collapse, expandable sections, Favorites (★) popover, page header, and data table. Copy-paste base for all new pages.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Original dark portal -->
+    <a class="card" href="merchant-portal.html">
+      <div class="card-icon" style="background:#0f172a;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V3M2 9h20"/></svg>
+      </div>
+      <span class="tag" style="background:#0f172a;color:#38bdf8;">Dark theme</span>
+      <div class="card-title">Merchant Portal</div>
+      <div class="card-desc">Original dark-themed portal with left sidebar navigation, tool cards, and stats dashboard.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- V1 Collapsible -->
+    <a class="card" href="index-v1-collapsible.html">
+      <div class="card-icon" style="background:#f0fdf4;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      </div>
+      <span class="tag" style="background:#f0fdf4;color:#166534;">Option 1</span>
+      <div class="card-title">Collapsible Filters</div>
+      <div class="card-desc">Search bar always visible. "Filters" button expands a section below with all filter options and active count badge.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- V2 Side panel -->
+    <a class="card" href="index-v2-sidepanel.html">
+      <div class="card-icon" style="background:#fdf4ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></svg>
+      </div>
+      <span class="tag" style="background:#fdf4ff;color:#7e22ce;">Option 2</span>
+      <div class="card-title">Filter Side Panel</div>
+      <div class="card-desc">Search bar always visible. "Filters" button slides in a panel from the right with grouped controls.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Administration + Hierarchy Panel -->
+    <a class="card" href="administration-organizations.html">
+      <div class="card-icon" style="background:#f0f9ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg>
+      </div>
+      <span class="tag" style="background:#f0f9ff;color:#0369a1;">Admin</span>
+      <div class="card-title">Administration · Organizations</div>
+      <div class="card-desc">Left sidebar nav, Organizations table. Click a row to slide in a hierarchy panel with collapsible tree, real-time search, and org details.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Organization Page Enhancement -->
+    <a class="card" href="NEW organization-page-ui.html">
+      <div class="card-icon" style="background:#fff7ed;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+      </div>
+      <span class="tag" style="background:#fff7ed;color:#c2410c;">Enhancement</span>
+      <div class="card-title">Organization Page Enhancement</div>
+      <div class="card-desc">Enhanced org detail page with role-based editing, feature flag management, linked records, and contacts.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Product Catalog empty state -->
+    <a class="card" href="product-catalog.html">
+      <div class="card-icon" style="background:#f0fdf4;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <span class="tag" style="background:#f0fdf4;color:#166534;">Commerce</span>
+      <div class="card-title">Product Catalog</div>
+      <div class="card-desc">Empty state for the Product Catalog — reusable products for Pay By Links and Virtual Terminal payments.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Customer Catalog empty state -->
+    <a class="card" href="customer-catalog.html">
+      <div class="card-icon" style="background:#eff6ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <span class="tag" style="background:#eff6ff;color:#1d4ed8;">Commerce</span>
+      <div class="card-title">Customer Catalog</div>
+      <div class="card-desc">Empty state for the Customer Catalog — reusable customer info for Pay By Links.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Pay by Link -->
+    <a class="card" href="pay-by-link.html">
+      <div class="card-icon" style="background:#eff6ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </div>
+      <span class="tag" style="background:#eff6ff;color:#1d4ed8;">Commerce</span>
+      <div class="card-title">Pay by Link</div>
+      <div class="card-desc">3-step flow to create a payment link — payment settings, link settings, and success confirmation.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Report Template Builder -->
+    <a class="card" href="VC Template_builder.html">
+      <div class="card-icon" style="background:#f0fdf4;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <span class="tag" style="background:#f0fdf4;color:#166534;">Commerce</span>
+      <div class="card-title">Report Template Builder</div>
+      <div class="card-desc">Build custom transaction report templates with grouped, collapsible field categories and info tooltips.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Payment Provider Contracts — list + add + edit -->
+    <a class="card" href="administration-ppc.html">
+      <div class="card-icon" style="background:#f0f9ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/><line x1="5" y1="15" x2="9" y2="15"/><line x1="13" y1="15" x2="17" y2="15"/></svg>
+      </div>
+      <span class="tag" style="background:#f0f9ff;color:#0369a1;">Admin</span>
+      <div class="card-title">Payment Provider Contracts</div>
+      <div class="card-desc">List view with search, sortable table (Name, Organization, Merchant ID, Processor, Payment type, Status), Add modal, and Edit side panel.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- POI Detail — 2-column edit form -->
+    <a class="card" href="administration-poi-detail.html">
+      <div class="card-icon" style="background:#f0f9ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+      </div>
+      <span class="tag" style="background:#f0f9ff;color:#0369a1;">Admin</span>
+      <div class="card-title">POI Detail — Edit Form</div>
+      <div class="card-desc">2-column edit form for a Point of Interaction — General info left, Device info right, associated Payment Provider Contracts below.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- POI Settlements -->
+    <a class="card" href="poi-settlements.html">
+      <div class="card-icon" style="background:#f0fdf4;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/><line x1="14" y1="15" x2="18" y2="15"/></svg>
+      </div>
+      <span class="tag" style="background:#f0fdf4;color:#166534;">Commerce</span>
+      <div class="card-title">POI Settlements</div>
+      <div class="card-desc">Searchable settlement batch list with batch number, processor, organisation, transactions, amount, and status columns.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Administration API Keys -->
+    <a class="card" href="administration-api-keys.html">
+      <div class="card-icon" style="background:#0f172a;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      </div>
+      <span class="tag" style="background:#0f172a;color:#38bdf8;">Admin</span>
+      <div class="card-title">Administration · API Keys</div>
+      <div class="card-desc">Top-nav layout with hero banner — Administration section showing API key management with create flow.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Audit Log -->
+    <a class="card" href="audit-log.html">
+      <div class="card-icon" style="background:#eff6ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <span class="tag" style="background:#eff6ff;color:#1d4ed8;">Commerce</span>
+      <div class="card-title">Audit Log</div>
+      <div class="card-desc">Searchable, filterable record of all user and system events — date range, organisation, user, and event type filters with pagination.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Payments Dashboard -->
+    <a class="card" href="payments-dashboard.html">
+      <div class="card-icon" style="background:#eff6ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <span class="tag" style="background:#eff6ff;color:#1d4ed8;">Commerce</span>
+      <div class="card-title">Payments Dashboard</div>
+      <div class="card-desc">KPI summary cards, authorization rate line chart, and peak times / payment methods / sales by country charts.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Support page -->
+    <a class="card" href="support.html">
+      <div class="card-icon" style="background:#f0fdf4;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <span class="tag" style="background:#f0fdf4;color:#166534;">Support</span>
+      <div class="card-title">Support</div>
+      <div class="card-desc">Regional support contacts by country and a link to the Verifone Developer Documentation Portal.</div>
+      <div class="card-link">Open →</div>
+    </a>
+
+    <!-- Home Page mockup -->
+    <a class="card" href="home-page.html">
+      <div class="card-icon" style="background:#eff6ff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="tag" style="background:#eff6ff;color:#1d4ed8;">Home</span>
+      <div class="card-title">Home Page</div>
+      <div class="card-desc">Verifone Central home view — tool cards for Reporting, Payment tools, Boarding, Device Manager, Premier Portal and Administration.</div>
+      <div class="card-link">Open →</div>
+    </a>
+  </div>
+
+  <!-- ── Persistent footer ── -->
+  <footer class="site-footer">
+    <span class="footer-copy">© 2026 VeriFone &nbsp;·&nbsp; Privacy and Compliance Policies &nbsp;·&nbsp; Terms and conditions</span>
+    <button class="cookie-settings-btn" onclick="openCookieModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="7" r="1" fill="currentColor"/><circle cx="16" cy="14" r="1" fill="currentColor"/><circle cx="10" cy="16" r="1" fill="currentColor"/></svg>
+      Cookie settings
+    </button>
+  </footer>
+
+  <!-- ── Cookie Preferences Modal ── -->
+  <div class="cookie-overlay" id="cookieOverlay" onclick="overlayClick(event)">
+    <div class="cookie-modal" role="dialog" aria-modal="true" aria-label="Cookies Management Center">
+
+      <!-- Header -->
+      <div class="cm-header">
+        <div class="cm-header-row">
+          <div>
+            <h2>Cookies Management Center</h2>
+            <div class="cm-url">Customize the cookies we use at https://adrianagornea17-cmyk.github.io/merchant-portal/</div>
+          </div>
+          <button class="cm-close-btn" onclick="closeCookieModal()" aria-label="Close">✕</button>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="cm-desc">
+        <p>We use cookies and tracking technologies on our websites to enable us to analyze use of our online services, to improve your experience of our services, and to allow you to use certain features of the online services, such as sharing content via social networks or other communications channels.</p>
+        <p>We never sell your information; we use cookies data to enhance your experience with our website.</p>
+        <p>To find out more please read our <a href="#">Cookies Policy</a>.</p>
+      </div>
+
+      <!-- Body: left categories + right detail -->
+      <div class="cm-body">
+
+        <!-- Left: category list -->
+        <div class="cm-left">
+
+          <div class="cm-category active" onclick="selectCategory('essential', this)">
+            <div class="cm-category-header">
+              <div class="cm-checkbox locked" title="Always active">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="cm-cat-name">Essential</span>
+            </div>
+            <div class="cm-cat-desc">Strictly necessary for the website to function. Cannot be disabled.</div>
+          </div>
+
+          <div class="cm-category" onclick="selectCategory('preferences', this)">
+            <div class="cm-category-header">
+              <div class="cm-checkbox checked" id="chk-preferences">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="cm-cat-name">Preferences</span>
+            </div>
+            <div class="cm-cat-desc">Remembers your settings and preferences.</div>
+          </div>
+
+          <div class="cm-category" onclick="selectCategory('statistics', this)">
+            <div class="cm-category-header">
+              <div class="cm-checkbox partial" id="chk-statistics">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2.5 5h5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <span class="cm-cat-name">Statistics</span>
+            </div>
+            <div class="cm-cat-desc">Track usage and improve our services.</div>
+          </div>
+
+          <div class="cm-category" onclick="selectCategory('marketing', this)">
+            <div class="cm-category-header">
+              <div class="cm-checkbox" id="chk-marketing">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="cm-cat-name">Marketing</span>
+            </div>
+            <div class="cm-cat-desc">Used to track visitors across websites for ad targeting.</div>
+          </div>
+
+        </div>
+
+        <!-- Right: detail panels -->
+        <div class="cm-right">
+
+          <!-- Essential -->
+          <div class="cm-panel active" id="panel-essential">
+            <div class="cm-panel-intro">Essential cookies are strictly necessary to provide you with services available through our website and to use some of its features, such as access to secure areas. Because these cookies are strictly necessary to deliver the website, you cannot refuse them.</div>
+            <div class="cm-cookie-table">
+              <div class="cm-cookie-table-header">
+                <span>Name</span><span>Expires</span><span>Provider</span><span>Allow</span>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">__cf_bm</div><div class="cm-cookie-name-desc">Cloudflare bot management</div></div>
+                <div class="cm-cookie-meta">30 min</div>
+                <div class="cm-cookie-meta">Cloudflare</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" style="cursor:not-allowed;opacity:0.7;">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Always on</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">JSESSIONID</div><div class="cm-cookie-name-desc">Session management cookie</div></div>
+                <div class="cm-cookie-meta">Session</div>
+                <div class="cm-cookie-meta">Verifone</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" style="cursor:not-allowed;opacity:0.7;">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Always on</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences -->
+          <div class="cm-panel" id="panel-preferences">
+            <div class="cm-panel-intro">Preference cookies enable a website to remember information that changes the way the website behaves or looks, like your preferred language or the region that you are in.</div>
+            <div class="cm-cookie-table">
+              <div class="cm-cookie-table-header">
+                <span>Name</span><span>Expires</span><span>Provider</span><span>Allow</span>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">lang</div><div class="cm-cookie-name-desc">Stores preferred language</div></div>
+                <div class="cm-cookie-meta">1 year</div>
+                <div class="cm-cookie-meta">Verifone</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" onclick="toggleRowCookie(this, 'preferences')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">timezone</div><div class="cm-cookie-name-desc">Stores user timezone setting</div></div>
+                <div class="cm-cookie-meta">1 year</div>
+                <div class="cm-cookie-meta">Verifone</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" onclick="toggleRowCookie(this, 'preferences')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statistics -->
+          <div class="cm-panel" id="panel-statistics">
+            <div class="cm-panel-intro">Statistics cookies help us understand how visitors interact with websites by collecting and reporting information anonymously.</div>
+            <div class="cm-cookie-table">
+              <div class="cm-cookie-table-header">
+                <span>Name</span><span>Expires</span><span>Provider</span><span>Allow</span>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_hjid</div><div class="cm-cookie-name-desc">Hotjar user identifier</div></div>
+                <div class="cm-cookie-meta">1 year</div>
+                <div class="cm-cookie-meta">Hotjar</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox" onclick="toggleRowCookie(this, 'statistics')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_hjIncludedInSample</div><div class="cm-cookie-name-desc">Hotjar sample inclusion flag</div></div>
+                <div class="cm-cookie-meta">Session</div>
+                <div class="cm-cookie-meta">Hotjar</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" onclick="toggleRowCookie(this, 'statistics')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">PHPSESID</div><div class="cm-cookie-name-desc">InnerTrends usage statistics</div></div>
+                <div class="cm-cookie-meta">Session</div>
+                <div class="cm-cookie-meta">InnerTrends</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox checked" onclick="toggleRowCookie(this, 'statistics')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_ga</div><div class="cm-cookie-name-desc">Google Analytics visitor ID</div></div>
+                <div class="cm-cookie-meta">2 years</div>
+                <div class="cm-cookie-meta">Google</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox" onclick="toggleRowCookie(this, 'statistics')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marketing -->
+          <div class="cm-panel" id="panel-marketing">
+            <div class="cm-panel-intro">Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.</div>
+            <div class="cm-cookie-table">
+              <div class="cm-cookie-table-header">
+                <span>Name</span><span>Expires</span><span>Provider</span><span>Allow</span>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_fbp</div><div class="cm-cookie-name-desc">Facebook pixel tracking</div></div>
+                <div class="cm-cookie-meta">3 months</div>
+                <div class="cm-cookie-meta">Facebook</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox" onclick="toggleRowCookie(this, 'marketing')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+              <div class="cm-cookie-row">
+                <div><div class="cm-cookie-name">_gcl_au</div><div class="cm-cookie-name-desc">Google Ads conversion</div></div>
+                <div class="cm-cookie-meta">3 months</div>
+                <div class="cm-cookie-meta">Google</div>
+                <div class="cm-allow-col">
+                  <div class="cm-row-checkbox" onclick="toggleRowCookie(this, 'marketing')">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <span class="cm-optional">Optional</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div class="cm-footer">
+        <button class="btn-outline" onclick="savePreferences()">Save preferences</button>
+        <button class="btn-primary" onclick="allowAll()">Allow all</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function openCookieModal() {
+      document.getElementById('cookieOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCookieModal() {
+      document.getElementById('cookieOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function overlayClick(e) {
+      if (e.target === document.getElementById('cookieOverlay')) closeCookieModal();
+    }
+
+    function selectCategory(id, el) {
+      document.querySelectorAll('.cm-category').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.cm-panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('panel-' + id).classList.add('active');
+    }
+
+    function toggleRowCookie(el, categoryId) {
+      el.classList.toggle('checked');
+      updateCategoryCheckbox(categoryId);
+    }
+
+    function updateCategoryCheckbox(categoryId) {
+      const panel = document.getElementById('panel-' + categoryId);
+      if (!panel) return;
+      const rows = panel.querySelectorAll('.cm-row-checkbox[onclick]');
+      const checked = [...rows].filter(r => r.classList.contains('checked')).length;
+      const box = document.getElementById('chk-' + categoryId);
+      if (!box) return;
+      box.classList.remove('checked', 'partial');
+      if (checked === rows.length && rows.length > 0) {
+        box.classList.add('checked');
+        box.querySelector('path').setAttribute('d', 'M2 5l2.5 2.5L8 3');
+      } else if (checked > 0) {
+        box.classList.add('partial');
+        box.querySelector('path').setAttribute('d', 'M2.5 5h5');
+      }
+    }
+
+    function allowAll() {
+      ['preferences','statistics','marketing'].forEach(id => {
+        const panel = document.getElementById('panel-' + id);
+        if (panel) panel.querySelectorAll('.cm-row-checkbox[onclick]').forEach(r => r.classList.add('checked'));
+        const box = document.getElementById('chk-' + id);
+        if (box) {
+          box.classList.remove('partial');
+          box.classList.add('checked');
+          box.querySelector('path').setAttribute('d', 'M2 5l2.5 2.5L8 3');
+        }
+      });
+      setTimeout(closeCookieModal, 300);
+    }
+
+    function savePreferences() {
+      closeCookieModal();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeCookieModal();
+    });
+  </script>
+
+
+
+
+
+</body>
+</html>
