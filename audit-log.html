@@ -203,44 +203,6 @@
     }
     .page-desc strong { color: var(--text-2); font-weight: 500; }
 
-    /* Search bar */
-    .search-row {
-      display: flex; gap: 0; margin-bottom: 14px;
-    }
-    .search-bar {
-      flex: 1; height: 42px;
-      border: 1.5px solid var(--border); border-right: none;
-      border-radius: 9px 0 0 9px;
-      padding: 0 16px; font-size: 13.5px; color: var(--text);
-      background: #fff; outline: none; font-family: inherit;
-      transition: border-color 0.15s;
-    }
-    .search-bar:focus { border-color: var(--accent); }
-    .search-bar::placeholder { color: var(--text-4); }
-    .search-btn {
-      height: 42px; padding: 0 22px;
-      background: var(--accent); color: #fff;
-      border: 1.5px solid var(--accent); border-radius: 0 9px 9px 0;
-      font-size: 13.5px; font-weight: 600; cursor: pointer;
-      font-family: inherit; transition: background 0.12s;
-      white-space: nowrap;
-    }
-    .search-btn:hover { background: #1d4ed8; border-color: #1d4ed8; }
-
-    /* Filter chips */
-    .filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-
-    .filter-chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      height: 34px; padding: 0 14px;
-      border: 1.5px solid var(--border); border-radius: 20px;
-      background: #fff; font-size: 13px; color: var(--text-2);
-      cursor: pointer; white-space: nowrap; font-family: inherit;
-      transition: border-color 0.12s, background 0.12s;
-    }
-    .filter-chip:hover { border-color: #9ca3af; background: var(--hover-bg); }
-    .filter-chip.active { border-color: #93c5fd; background: #eff6ff; color: var(--accent); }
-
     /* Table card */
     .table-card {
       background: #fff; border: 1.5px solid var(--border); border-radius: 12px;
@@ -252,15 +214,30 @@
     .audit-table thead tr { background: #f8fafc; border-bottom: 1.5px solid var(--border); }
 
     .audit-table th {
-      padding: 12px 16px; text-align: left;
+      padding: 10px 12px 8px; text-align: left;
       font-size: 12px; font-weight: 600; color: var(--text-3);
-      white-space: nowrap; cursor: pointer; user-select: none;
+      cursor: pointer; user-select: none; vertical-align: top;
     }
     .audit-table th:hover { color: var(--text-2); }
-    .th-sort { display: inline-flex; align-items: center; gap: 4px; }
+    .th-sort { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 6px; }
     .sort-arrows { display: inline-flex; flex-direction: column; gap: 1px; opacity: 0.5; }
     .sort-arrows svg { display: block; }
     th.sorted .sort-arrows { opacity: 1; color: var(--accent); }
+
+    .th-search {
+      display: block; width: 100%;
+      height: 26px; padding: 0 8px;
+      border: 1.5px solid var(--border); border-radius: 6px;
+      background: #fff; font-size: 11.5px; color: var(--text-2);
+      font-family: inherit; outline: none; font-weight: 400;
+      cursor: text; transition: border-color 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
+    }
+    .th-search::placeholder { color: var(--text-4); }
+    .th-search:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37,99,235,0.08); }
+
+    .th-date-range { display: flex; gap: 4px; }
+    .th-date-range .th-search { min-width: 0; flex: 1; }
 
     .audit-table td {
       padding: 14px 16px; font-size: 13.5px; color: var(--text-2);
@@ -457,32 +434,6 @@
 
       <h2 class="page-title">Audit Log</h2>
 
-      <!-- Search -->
-      <div class="search-row">
-        <input class="search-bar" type="text" placeholder="Search by Item ID">
-        <button class="search-btn">Search</button>
-      </div>
-
-      <!-- Filters -->
-      <div class="filter-row">
-        <button class="filter-chip active">
-          Created: 6/1/2026 — 6/8/2026
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <button class="filter-chip">
-          Organizations
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <button class="filter-chip">
-          User
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <button class="filter-chip">
-          Event type
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-      </div>
-
       <!-- Table -->
       <div class="table-card">
         <table class="audit-table">
@@ -496,12 +447,31 @@
                     <svg width="8" height="5" viewBox="0 0 8 5"><path d="M4 5L0 0H8z" fill="currentColor"/></svg>
                   </span>
                 </span>
+                <div class="th-date-range" onclick="event.stopPropagation()">
+                  <input class="th-search" type="date" title="From">
+                  <input class="th-search" type="date" title="To">
+                </div>
               </th>
-              <th>Event type</th>
-              <th>Organization</th>
-              <th>User</th>
-              <th>User email address</th>
-              <th>User status</th>
+              <th>
+                <span class="th-sort">Event type</span>
+                <input class="th-search" type="text" placeholder="Search…" onclick="event.stopPropagation()">
+              </th>
+              <th>
+                <span class="th-sort">Organization</span>
+                <input class="th-search" type="text" placeholder="Search…" onclick="event.stopPropagation()">
+              </th>
+              <th>
+                <span class="th-sort">User</span>
+                <input class="th-search" type="text" placeholder="Search…" onclick="event.stopPropagation()">
+              </th>
+              <th>
+                <span class="th-sort">User email address</span>
+                <input class="th-search" type="text" placeholder="Search…" onclick="event.stopPropagation()">
+              </th>
+              <th>
+                <span class="th-sort">User status</span>
+                <input class="th-search" type="text" placeholder="Search…" onclick="event.stopPropagation()">
+              </th>
             </tr>
           </thead>
           <tbody>
