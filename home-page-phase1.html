@@ -664,9 +664,54 @@
       <input type="text" placeholder="Search tools and portals…">
     </div>
 
-    <!-- Stats panel (shown when a card's Details is clicked) -->
-    <div class="stats-panel" id="statsPanel">
-      <div id="statsPanelInner"></div>
+    <!-- Transactions KPI panel (always visible) -->
+    <div class="stats-panel open">
+      <div class="sph-wrap flat">
+        <div class="sph-left">
+          <div class="sph-icon" style="background:#e0e7ff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4338ca" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div>
+            <div class="sph-title">Transactions &amp; Reporting</div>
+            <div class="sph-sub">Native transaction data and financial reporting tools</div>
+          </div>
+        </div>
+        <div class="sph-right">
+          <div class="period-toggle">
+            <button class="pt-btn active" data-period="1d" onclick="switchPeriod('1d')">Today</button>
+            <button class="pt-btn" data-period="1w" onclick="switchPeriod('1w')">This week</button>
+          </div>
+        </div>
+      </div>
+      <div id="statsCardsContainer">
+        <div class="stats-grid stats-grid-5">
+          <div class="stat-card" style="border-left-color:#4338ca">
+            <div class="stat-label">Transactions today</div>
+            <div class="stat-value">1,284</div>
+            <div class="stat-note positive">+3.2% vs yesterday</div>
+          </div>
+          <div class="stat-card" style="border-left-color:#f59e0b">
+            <div class="stat-label">Refunds</div>
+            <div class="stat-value">23</div>
+            <div class="stat-note">1.8% of transactions</div>
+          </div>
+          <div class="stat-card" style="border-left-color:#dc2626">
+            <div class="stat-label">Failed transactions</div>
+            <div class="stat-value">34</div>
+            <div class="stat-note alert"><span>Needs review</span></div>
+          </div>
+          <div class="stat-card" style="border-left-color:#0284c7">
+            <div class="stat-label">Avg. transaction value</div>
+            <div class="stat-value">$34</div>
+            <div class="stat-note">Unchanged</div>
+          </div>
+          <div class="stat-card" style="border-left-color:#16a34a">
+            <div class="stat-label">Reports generated</div>
+            <div class="stat-value">47</div>
+            <div class="stat-note positive">+5 this week</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Native Tools -->
@@ -687,7 +732,6 @@
         <div class="tc-actions">
           <a class="tc-btn" href="verifone-transactions.html">Search Transactions</a>
         </div>
-        <button class="tc-details" onclick="showStats('transactions')">Details</button>
       </div>
 
       <!-- Payment Tools -->
@@ -701,7 +745,6 @@
           <a class="tc-btn" href="pay-by-link.html">Pay by link</a>
           <button class="tc-btn">Virtual Terminal</button>
         </div>
-        <button class="tc-details" onclick="showStats('payments')">Details</button>
       </div>
 
       <!-- Boarding & Compliance -->
@@ -714,7 +757,6 @@
         <div class="tc-actions">
           <button class="tc-btn">New Application</button>
         </div>
-        <button class="tc-details" onclick="showStats('boarding')">Details</button>
       </div>
 
       <!-- Administration -->
@@ -727,7 +769,6 @@
         <div class="tc-actions">
           <a class="tc-btn" href="administration-organizations.html">Manage Users</a>
         </div>
-        <button class="tc-details" onclick="showStats('admin')">Details</button>
       </div>
 
     </div>
@@ -753,7 +794,6 @@
             Open Portal
           </button>
         </div>
-        <button class="tc-details" onclick="showStats('premier')">Details</button>
       </div>
 
       <!-- VHQ 2.0 -->
@@ -769,7 +809,6 @@
             Open Device Manager
           </button>
         </div>
-        <button class="tc-details" onclick="showStats('vhq')">Details</button>
       </div>
 
     </div>
@@ -778,218 +817,37 @@
 </div><!-- /main -->
 
 <script>
-  const STATS = {
-    admin: {
-      type: 'simple',
-      icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
-      iconBg: '#ede9fe',
-      title: 'Administration',
-      subtitle: 'Users, roles, organizations and platform settings',
-      cols: 5,
-      items: [
-        { color: '#2563eb', label: 'Total users',     value: '142',  note: '+6 this month',                    cls: 'positive' },
-        { color: '#f59e0b', label: 'Active users',    value: '128',  note: '+9 this month',                    cls: 'positive' },
-        { color: '#16a34a', label: 'Active roles',    value: '7',    note: 'Unchanged',                        cls: '' },
-        { color: '#dc2626', label: 'Locked accounts', value: '2',    note: '<span class="alert">Needs review</span> immediately', cls: '' },
-        { color: '#7c3aed', label: 'Logins today',    value: '38',   note: '+12% in the selected time period', cls: 'positive' },
-      ]
-    },
-    transactions: {
-      type: 'simple',
-      icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4338ca" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
-      iconBg: '#e0e7ff',
-      title: 'Transactions & Reporting',
-      subtitle: 'Native transaction data and financial reporting tools',
-      cols: 5,
-      items: [
-        { color: '#4338ca', label: 'Transactions today',     value: '1,284',  note: '+3.2% vs yesterday',       cls: 'positive' },
-        { color: '#f59e0b', label: 'Refunds',                value: '23',     note: '1.8% of transactions',     cls: '' },
-        { color: '#dc2626', label: 'Failed transactions',    value: '34',     note: '<span class="alert">Needs review</span>', cls: '' },
-        { color: '#0284c7', label: 'Avg. transaction value', value: '$34',    note: 'Unchanged',                cls: '' },
-        { color: '#16a34a', label: 'Reports generated',      value: '47',     note: '+5 this week',             cls: 'positive' },
-      ],
-      week: [
-        { color: '#4338ca', label: 'Transactions this week', value: '8,940',  note: '+4.1% vs last week',       cls: 'positive' },
-        { color: '#f59e0b', label: 'Refunds',                value: '148',    note: '1.6% of transactions',     cls: 'positive' },
-        { color: '#dc2626', label: 'Failed transactions',    value: '198',    note: '<span class="alert">Needs review</span>', cls: '' },
-        { color: '#0284c7', label: 'Avg. transaction value', value: '$36',    note: '+5.9% vs last week',       cls: 'positive' },
-        { color: '#16a34a', label: 'Reports generated',      value: '47',     note: 'This week',                cls: '' },
-      ]
-    },
-    payments: {
-      type: 'simple',
-      icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
-      iconBg: '#dbeafe',
-      title: 'Payment Tools',
-      subtitle: 'Payment links and virtual terminal for your organisation',
-      cols: 4,
-      items: [
-        { color: '#2563eb', label: 'Total links', value: '1,284', note: '+48 this month',           cls: 'positive' },
-        { color: '#16a34a', label: 'Active',      value: '347',   note: 'Awaiting payment',         cls: '' },
-        { color: '#f59e0b', label: 'Paid',        value: '891',   note: '$214,320 total collected', cls: 'positive' },
-        { color: '#dc2626', label: 'Expired',     value: '46',    note: '<span class="alert">3 expired today</span>', cls: '' },
-      ],
-      week: [
-        { color: '#2563eb', label: 'Links created', value: '312',   note: '+22 vs last week',              cls: 'positive' },
-        { color: '#16a34a', label: 'Active',         value: '1,842', note: 'Weekly total created',          cls: '' },
-        { color: '#f59e0b', label: 'Paid',           value: '6,210', note: '$1.49M total collected',        cls: 'positive' },
-        { color: '#dc2626', label: 'Expired',        value: '287',   note: '<span class="alert">21 expired this week</span>', cls: '' },
-      ]
-    },
-    boarding: {
-      type: 'simple',
-      icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
-      iconBg: '#d1fae5',
-      title: 'Boarding & Compliance',
-      subtitle: 'Merchant onboarding and AML/KYC compliance management',
-      cols: 5,
-      items: [
-        { color: '#059669', label: 'Pending applications', value: '12',   note: 'Awaiting review',    cls: '' },
-        { color: '#16a34a', label: 'Approved this month',  value: '34',   note: '+6 vs last month',   cls: 'positive' },
-        { color: '#dc2626', label: 'Rejected',             value: '3',    note: '<span class="alert">This month</span>', cls: '' },
-        { color: '#f59e0b', label: 'AML/KYC checks',       value: '18',   note: 'In progress',        cls: '' },
-        { color: '#0284c7', label: 'Avg. boarding time',   value: '4.2d', note: 'Unchanged',          cls: '' },
-      ],
-      week: [
-        { color: '#059669', label: 'Pending applications', value: '12',   note: 'Awaiting review',           cls: '' },
-        { color: '#16a34a', label: 'Approved this week',   value: '9',    note: '+2 vs last week',           cls: 'positive' },
-        { color: '#dc2626', label: 'Rejected',             value: '1',    note: '<span class="alert">This week</span>', cls: '' },
-        { color: '#f59e0b', label: 'AML/KYC checks',       value: '18',   note: 'In progress',               cls: '' },
-        { color: '#0284c7', label: 'Avg. boarding time',   value: '4.2d', note: 'Unchanged',                 cls: '' },
-      ]
-    },
-    premier: {
-      type: 'simple',
-      label: 'Premier Portal — overview',
-      cols: 4,
-      items: [
-        { color: '#c2410c', label: 'Active merchants',    value: '3,142', note: '+28 this month',           cls: 'positive' },
-        { color: '#0284c7', label: 'SSO sessions today',  value: '214',   note: '+11% vs yesterday',        cls: 'positive' },
-        { color: '#7c3aed', label: 'Open support cases',  value: '17',    note: '<span class="alert">4 high priority</span>', cls: '' },
-        { color: '#16a34a', label: 'Avg. session time',   value: '8m 42s',note: 'Unchanged',               cls: '' },
-      ],
-      week: [
-        { color: '#c2410c', label: 'Active merchants',       value: '3,142',  note: '+28 this month',        cls: 'positive' },
-        { color: '#0284c7', label: 'SSO sessions this week', value: '1,320',  note: '+9% vs last week',      cls: 'positive' },
-        { color: '#7c3aed', label: 'Open support cases',     value: '17',     note: '<span class="alert">4 high priority</span>', cls: '' },
-        { color: '#16a34a', label: 'Avg. session time',      value: '9m 15s', note: '+33s vs last week',     cls: 'positive' },
-      ]
-    },
-    vhq: {
-      type: 'simple',
-      title: 'Device Manager 2.0',
-      subtitle: 'Terminal management and remote software updates',
-      cols: 4,
-      items: [
-        { color: '#be185d', label: 'Managed terminals',   value: '12,580', note: '+65 this month',          cls: 'positive' },
-        { color: '#f59e0b', label: 'Pending updates',     value: '342',    note: '<span class="alert">Action required</span>', cls: '' },
-        { color: '#16a34a', label: 'Updates completed',   value: '1,204',  note: 'Last 30 days',            cls: 'positive' },
-        { color: '#0284c7', label: 'Offline terminals',   value: '23',     note: 'Being investigated',      cls: '' },
-      ],
-      week: [
-        { color: '#be185d', label: 'Managed terminals',        value: '12,580', note: '+65 this month',          cls: 'positive' },
-        { color: '#f59e0b', label: 'Pending updates',          value: '342',    note: '<span class="alert">Action required</span>', cls: '' },
-        { color: '#16a34a', label: 'Updates completed',        value: '8,420',  note: 'Last 7 days',             cls: 'positive' },
-        { color: '#0284c7', label: 'Offline terminals',        value: '23',     note: 'Being investigated',      cls: '' },
-      ]
-    }
+  const TRANSACTIONS = {
+    '1d': [
+      { color: '#4338ca', label: 'Transactions today',     value: '1,284', note: '+3.2% vs yesterday',                       cls: 'positive' },
+      { color: '#f59e0b', label: 'Refunds',                value: '23',    note: '1.8% of transactions',                     cls: '' },
+      { color: '#dc2626', label: 'Failed transactions',    value: '34',    note: '<span>Needs review</span>',                 cls: 'alert' },
+      { color: '#0284c7', label: 'Avg. transaction value', value: '$34',   note: 'Unchanged',                                cls: '' },
+      { color: '#16a34a', label: 'Reports generated',      value: '47',    note: '+5 this week',                             cls: 'positive' },
+    ],
+    '1w': [
+      { color: '#4338ca', label: 'Transactions this week', value: '8,940', note: '+4.1% vs last week',                       cls: 'positive' },
+      { color: '#f59e0b', label: 'Refunds',                value: '148',   note: '1.6% of transactions',                     cls: 'positive' },
+      { color: '#dc2626', label: 'Failed transactions',    value: '198',   note: '<span>Needs review</span>',                 cls: 'alert' },
+      { color: '#0284c7', label: 'Avg. transaction value', value: '$36',   note: '+5.9% vs last week',                       cls: 'positive' },
+      { color: '#16a34a', label: 'Reports generated',      value: '47',    note: 'This week',                                cls: '' },
+    ]
   };
 
-  let activeStats = null;
-  let activePeriod = '1d';
-
-  function statsCardsHTML(items, cols) {
-    return `<div class="stats-grid stats-grid-${cols}">` +
+  function switchPeriod(p) {
+    document.querySelectorAll('.pt-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.period === p)
+    );
+    const items = TRANSACTIONS[p];
+    document.getElementById('statsCardsContainer').innerHTML =
+      '<div class="stats-grid stats-grid-5">' +
       items.map(s => `
         <div class="stat-card" style="border-left-color:${s.color}">
           <div class="stat-label">${s.label}</div>
           <div class="stat-value">${s.value}</div>
           <div class="stat-note ${s.cls}">${s.note}</div>
         </div>`).join('') +
-      `</div>`;
-  }
-
-  function showStats(key) {
-    const data  = STATS[key];
-    const panel = document.getElementById('statsPanel');
-    const inner = document.getElementById('statsPanelInner');
-
-    if (activeStats === key) { closeStats(); return; }
-
-    // clear any previously highlighted card
-    document.querySelectorAll('.tool-card.details-open').forEach(c => c.classList.remove('details-open'));
-    // highlight the clicked card
-    const card = document.querySelector(`.tool-card[data-stats-key="${key}"]`);
-    if (card) card.classList.add('details-open');
-
-    activeStats = key;
-    activePeriod = '1d';
-
-    const toggleHTML = `
-        <div class="period-toggle">
-          <button class="pt-btn active" data-period="1d" onclick="switchPeriod('1d')">Today</button>
-          <button class="pt-btn" data-period="1w" onclick="switchPeriod('1w')">This week</button>
-        </div>`;
-
-    if (data.type === 'section') {
-      const btns = data.actions.map(a =>
-        a.style === 'primary'
-          ? `<button class="sph-btn-primary">${a.label}</button>`
-          : `<button class="sph-btn-outline">${a.label}</button>`
-      ).join('');
-
-      inner.innerHTML = `
-        <div class="sph-wrap">
-          <div class="sph-left">
-            <div class="sph-icon">${data.icon}</div>
-            <div>
-              <div class="sph-title">${data.title}</div>
-              <div class="sph-sub">${data.subtitle}</div>
-            </div>
-          </div>
-          <div class="sph-right">
-            ${btns}
-            ${toggleHTML}
-            <button class="sph-close" onclick="closeStats()" title="Close">✕</button>
-          </div>
-        </div>
-        <div id="statsCardsContainer">${statsCardsHTML(data.items, data.cols)}</div>`;
-    } else {
-      inner.innerHTML = `
-        <div class="sph-wrap flat">
-          <div class="sph-left">
-            <div class="sph-icon" style="background:${data.iconBg || ''}">${data.icon || ''}</div>
-            <div>
-              <div class="sph-title">${data.title || data.label || ''}</div>
-              <div class="sph-sub">${data.subtitle || ''}</div>
-            </div>
-          </div>
-          <div class="sph-right">
-            ${toggleHTML}
-            <button class="sph-close" onclick="closeStats()" title="Close">✕</button>
-          </div>
-        </div>
-        <div id="statsCardsContainer">${statsCardsHTML(data.items, data.cols)}</div>`;
-    }
-
-    panel.classList.add('open');
-    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  function switchPeriod(p) {
-    activePeriod = p;
-    document.querySelectorAll('.pt-btn').forEach(b =>
-      b.classList.toggle('active', b.dataset.period === p)
-    );
-    const data = STATS[activeStats];
-    const items = p === '1w' && data.week ? data.week : data.items;
-    document.getElementById('statsCardsContainer').innerHTML = statsCardsHTML(items, data.cols);
-  }
-
-  function closeStats() {
-    document.getElementById('statsPanel').classList.remove('open');
-    document.querySelectorAll('.tool-card.details-open').forEach(c => c.classList.remove('details-open'));
-    activeStats = null;
+      '</div>';
   }
 </script>
 </body>
