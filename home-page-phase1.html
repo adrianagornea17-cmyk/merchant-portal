@@ -678,8 +678,9 @@
         </div>
         <div class="sph-right">
           <div class="period-toggle">
-            <button class="pt-btn active" data-period="1d" onclick="switchPeriod('1d')">Today</button>
-            <button class="pt-btn" data-period="1w" onclick="switchPeriod('1w')">This week</button>
+            <button class="pt-btn active" data-period="24h" onclick="switchPeriod('24h')">Last 24 hours</button>
+            <button class="pt-btn" data-period="7d" onclick="switchPeriod('7d')">Last 7 days</button>
+            <button class="pt-btn" data-period="30d" onclick="switchPeriod('30d')">Last 30 days</button>
           </div>
         </div>
       </div>
@@ -818,19 +819,26 @@
 
 <script>
   const TRANSACTIONS = {
-    '1d': [
-      { color: '#4338ca', label: 'Active Sites',             value: '62.5k', note: '+2.1% vs yesterday',  cls: 'positive' },
-      { color: '#2563eb', label: 'Total Sale Trans.',         value: '4.0k',  note: 'Last 24 hours',       cls: '' },
-      { color: '#16a34a', label: 'Total Authorized Trans.',   value: '2.7k',  note: 'Last 24 hours',       cls: 'positive' },
-      { color: '#dc2626', label: 'Total Failed Trans.',       value: '502',   note: '<span>Needs review</span>', cls: 'alert' },
-      { color: '#f59e0b', label: 'Total Refund Trans.',       value: '232',   note: 'Last 24 hours',       cls: '' },
+    '24h': [
+      { color: '#4338ca', label: 'Active Sites',           value: '62.5k', note: 'Last 24 hours',            cls: '' },
+      { color: '#2563eb', label: 'Total Sale Trans.',       value: '4.0k',  note: 'Last 24 hours',            cls: '' },
+      { color: '#16a34a', label: 'Total Authorized Trans.', value: '2.7k',  note: 'Last 24 hours',            cls: 'positive' },
+      { color: '#dc2626', label: 'Total Failed Trans.',     value: '502',   note: '<span>Needs review</span>', cls: 'alert' },
+      { color: '#f59e0b', label: 'Total Refund Trans.',     value: '232',   note: 'Last 24 hours',            cls: '' },
     ],
-    '1w': [
-      { color: '#4338ca', label: 'Active Sites',             value: '62.5k', note: '+3.8% vs last week',  cls: 'positive' },
-      { color: '#2563eb', label: 'Total Sale Trans.',         value: '28k',   note: 'Last 7 days',         cls: '' },
-      { color: '#16a34a', label: 'Total Authorized Trans.',   value: '18.9k', note: 'Last 7 days',         cls: 'positive' },
-      { color: '#dc2626', label: 'Total Failed Trans.',       value: '3.5k',  note: '<span>Needs review</span>', cls: 'alert' },
-      { color: '#f59e0b', label: 'Total Refund Trans.',       value: '1.6k',  note: 'Last 7 days',         cls: '' },
+    '7d': [
+      { color: '#4338ca', label: 'Active Sites',           value: '62.5k', note: 'Last 7 days',              cls: '' },
+      { color: '#2563eb', label: 'Total Sale Trans.',       value: '13.4k', note: 'Last 7 days',              cls: '' },
+      { color: '#16a34a', label: 'Total Authorized Trans.', value: '9.9k',  note: 'Last 7 days',              cls: 'positive' },
+      { color: '#dc2626', label: 'Total Failed Trans.',     value: '1.4k',  note: '<span>Needs review</span>', cls: 'alert' },
+      { color: '#f59e0b', label: 'Total Refund Trans.',     value: '2.3k',  note: 'Last 7 days',              cls: '' },
+    ],
+    '30d': [
+      { color: '#4338ca', label: 'Active Sites',           value: '62.5k', note: 'Last 30 days',             cls: '' },
+      { color: '#2563eb', label: 'Total Sale Trans.',       value: '58.8k', note: 'Last 30 days',             cls: '' },
+      { color: '#16a34a', label: 'Total Authorized Trans.', value: '43.8k', note: 'Last 30 days',             cls: 'positive' },
+      { color: '#dc2626', label: 'Total Failed Trans.',     value: '6.2k',  note: '<span>Needs review</span>', cls: 'alert' },
+      { color: '#f59e0b', label: 'Total Refund Trans.',     value: '4.2k',  note: 'Last 30 days',             cls: '' },
     ]
   };
 
