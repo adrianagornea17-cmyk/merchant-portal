@@ -686,29 +686,29 @@
       <div id="statsCardsContainer">
         <div class="stats-grid stats-grid-5">
           <div class="stat-card" style="border-left-color:#4338ca">
-            <div class="stat-label">Transactions today</div>
-            <div class="stat-value">1,284</div>
-            <div class="stat-note positive">+3.2% vs yesterday</div>
+            <div class="stat-label">Active Sites</div>
+            <div class="stat-value">62.5k</div>
+            <div class="stat-note positive">+2.1% vs yesterday</div>
           </div>
-          <div class="stat-card" style="border-left-color:#f59e0b">
-            <div class="stat-label">Refunds</div>
-            <div class="stat-value">23</div>
-            <div class="stat-note">1.8% of transactions</div>
-          </div>
-          <div class="stat-card" style="border-left-color:#dc2626">
-            <div class="stat-label">Failed transactions</div>
-            <div class="stat-value">34</div>
-            <div class="stat-note alert"><span>Needs review</span></div>
-          </div>
-          <div class="stat-card" style="border-left-color:#0284c7">
-            <div class="stat-label">Avg. transaction value</div>
-            <div class="stat-value">$34</div>
-            <div class="stat-note">Unchanged</div>
+          <div class="stat-card" style="border-left-color:#2563eb">
+            <div class="stat-label">Total Sale Trans.</div>
+            <div class="stat-value">4.0k</div>
+            <div class="stat-note positive">Last 24 hours</div>
           </div>
           <div class="stat-card" style="border-left-color:#16a34a">
-            <div class="stat-label">Reports generated</div>
-            <div class="stat-value">47</div>
-            <div class="stat-note positive">+5 this week</div>
+            <div class="stat-label">Total Authorized Trans.</div>
+            <div class="stat-value">2.7k</div>
+            <div class="stat-note positive">Last 24 hours</div>
+          </div>
+          <div class="stat-card" style="border-left-color:#dc2626">
+            <div class="stat-label">Total Failed Trans.</div>
+            <div class="stat-value">502</div>
+            <div class="stat-note alert"><span>Needs review</span></div>
+          </div>
+          <div class="stat-card" style="border-left-color:#f59e0b">
+            <div class="stat-label">Total Refund Trans.</div>
+            <div class="stat-value">232</div>
+            <div class="stat-note">Last 24 hours</div>
           </div>
         </div>
       </div>
@@ -819,18 +819,18 @@
 <script>
   const TRANSACTIONS = {
     '1d': [
-      { color: '#4338ca', label: 'Transactions today',     value: '1,284', note: '+3.2% vs yesterday',                       cls: 'positive' },
-      { color: '#f59e0b', label: 'Refunds',                value: '23',    note: '1.8% of transactions',                     cls: '' },
-      { color: '#dc2626', label: 'Failed transactions',    value: '34',    note: '<span>Needs review</span>',                 cls: 'alert' },
-      { color: '#0284c7', label: 'Avg. transaction value', value: '$34',   note: 'Unchanged',                                cls: '' },
-      { color: '#16a34a', label: 'Reports generated',      value: '47',    note: '+5 this week',                             cls: 'positive' },
+      { color: '#4338ca', label: 'Active Sites',             value: '62.5k', note: '+2.1% vs yesterday',  cls: 'positive' },
+      { color: '#2563eb', label: 'Total Sale Trans.',         value: '4.0k',  note: 'Last 24 hours',       cls: '' },
+      { color: '#16a34a', label: 'Total Authorized Trans.',   value: '2.7k',  note: 'Last 24 hours',       cls: 'positive' },
+      { color: '#dc2626', label: 'Total Failed Trans.',       value: '502',   note: '<span>Needs review</span>', cls: 'alert' },
+      { color: '#f59e0b', label: 'Total Refund Trans.',       value: '232',   note: 'Last 24 hours',       cls: '' },
     ],
     '1w': [
-      { color: '#4338ca', label: 'Transactions this week', value: '8,940', note: '+4.1% vs last week',                       cls: 'positive' },
-      { color: '#f59e0b', label: 'Refunds',                value: '148',   note: '1.6% of transactions',                     cls: 'positive' },
-      { color: '#dc2626', label: 'Failed transactions',    value: '198',   note: '<span>Needs review</span>',                 cls: 'alert' },
-      { color: '#0284c7', label: 'Avg. transaction value', value: '$36',   note: '+5.9% vs last week',                       cls: 'positive' },
-      { color: '#16a34a', label: 'Reports generated',      value: '47',    note: 'This week',                                cls: '' },
+      { color: '#4338ca', label: 'Active Sites',             value: '62.5k', note: '+3.8% vs last week',  cls: 'positive' },
+      { color: '#2563eb', label: 'Total Sale Trans.',         value: '28k',   note: 'Last 7 days',         cls: '' },
+      { color: '#16a34a', label: 'Total Authorized Trans.',   value: '18.9k', note: 'Last 7 days',         cls: 'positive' },
+      { color: '#dc2626', label: 'Total Failed Trans.',       value: '3.5k',  note: '<span>Needs review</span>', cls: 'alert' },
+      { color: '#f59e0b', label: 'Total Refund Trans.',       value: '1.6k',  note: 'Last 7 days',         cls: '' },
     ]
   };
 
