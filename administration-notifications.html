@@ -555,6 +555,15 @@
     }
     .sp-info-row:last-child .sp-info-label,
     .sp-info-row:last-child .sp-info-val { border-bottom: none; }
+    .sp-org-line { line-height: 1.7; }
+    .sp-event-chips { display: flex; flex-direction: column; gap: 6px; }
+    .sp-event-chip {
+      display: inline-flex; align-items: center;
+      background: #dbeafe; color: #1e40af;
+      border-radius: 999px; padding: 4px 12px;
+      font-size: 13px; font-weight: 500;
+      width: fit-content;
+    }
 
     /* failures table */
     .sp-fail-table {
@@ -1291,42 +1300,52 @@
   const notifData = [
     { orgs: 'Test WF GBX, Verifone Payments BV, Verifone Denmark DTM Estate Owner',
       event: 'Other events',
+      events: ['Chargeback created', 'Chargeback updated', 'Dispute resolved'],
       delivery: 'Email (jasonb7@verifone.com, admin@testwfgbx.com, ops@verifone.com)',
       status: 'Enabled', errors: false },
     { orgs: 'Verifone Payments BV, Verifone Denmark DTM Estate Owner, Maverick, Maverick Full GBX only, Verifone Payments BV MoR, Verifone Payments BV (Estate Owner), Verifone Finland DTM',
       event: 'Other events',
+      events: ['Preauth increment approved', 'Preauth increment declined', 'Authorization approved'],
       delivery: 'Url (http://10.32.66.197:8080/internal/api/v1/notify/events)',
       status: 'Enabled / Errors', errors: true },
     { orgs: 'Bludan SmallMerchant',
       event: 'Other events',
+      events: ['Settlement approved', 'Settlement failed'],
       delivery: 'Url (https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479)',
       status: 'Enabled', errors: false },
     { orgs: '713130 CST Organisation, Verifone Payments BV',
       event: 'Other events',
+      events: ['Authorization approved', 'Authorization declined', 'Authorization reversed'],
       delivery: 'Email (jasonb7@verifone.com, support@713130cst.com)',
       status: 'Enabled', errors: false },
     { orgs: 'Cezar_test_1',
       event: 'Other events',
+      events: ['Refund approved', 'Refund declined'],
       delivery: 'Email (jasonb7@verifone.com)',
       status: 'Enabled', errors: false },
     { orgs: 'Bargteheide - Location 2, Verifone Payments BV MoR',
       event: 'Other events',
+      events: ['Preauth increment approved', 'Preauth increment declined', 'Settlement approved'],
       delivery: 'Url (http://10.32.66.197:8080/internal/api/v1/notify/events)',
       status: 'Enabled / Errors', errors: true },
     { orgs: 'APMAWS1015.3',
       event: 'Other events',
+      events: ['Authorization approved', 'Authorization declined'],
       delivery: 'Url (https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479)',
       status: 'Enabled', errors: false },
     { orgs: 'Test WF GBX',
       event: 'Other events',
+      events: ['Chargeback created', 'Chargeback updated'],
       delivery: 'Url (https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479)',
       status: 'Enabled', errors: false },
     { orgs: 'Bludan SmallMerchant, Maverick Full GBX only',
       event: 'Other events',
+      events: ['Refund approved', 'Refund declined', 'Settlement failed'],
       delivery: 'Email (jasonb7@verifone.com, bludan@merchant.com)',
       status: 'Enabled', errors: false },
     { orgs: 'Verifone Demo MID',
       event: 'Other events',
+      events: ['Authorization approved', 'Authorization declined', 'Authorization reversed', 'Preauth increment approved'],
       delivery: 'Email (jasonb7@verifone.com)',
       status: 'Enabled', errors: false },
   ];
@@ -1335,8 +1354,11 @@
     const d = notifData[idx];
     document.getElementById('spTitle').textContent = d.orgs.split(',')[0].trim();
     document.getElementById('spSubtitle').textContent = 'Notification · View';
-    document.getElementById('spOrgs').textContent = d.orgs;
-    document.getElementById('spEvents').textContent = d.event;
+    document.getElementById('spOrgs').innerHTML = d.orgs.split(',').map(o =>
+      `<div class="sp-org-line">${o.trim()}</div>`).join('');
+    document.getElementById('spEvents').innerHTML =
+      `<div class="sp-event-chips">${(d.events || [d.event]).map(e =>
+        `<span class="sp-event-chip">${e}</span>`).join('')}</div>`;
     document.getElementById('spDelivery').textContent = d.delivery;
 
     const statusEl = document.getElementById('spStatus');
