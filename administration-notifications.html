@@ -203,40 +203,7 @@
     /* ─── PAGE CONTENT ─── */
     .page-content { flex: 1; padding: 0 40px 40px; }
 
-    /* ─── SEARCH BAR ─── */
-    .notif-search-row {
-      display: flex; align-items: center; gap: 0; margin-bottom: 12px;
-    }
-    .notif-search-type {
-      height: 40px;
-      border: 1.5px solid var(--border); border-right: none;
-      border-radius: 10px 0 0 10px;
-      padding: 0 28px 0 14px; font-size: 13.5px; color: var(--text);
-      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center;
-      appearance: none; outline: none; cursor: pointer;
-      font-family: inherit; min-width: 110px; transition: border-color 0.15s;
-    }
-    .notif-search-type:focus { border-color: var(--accent); }
-    .notif-search-input {
-      flex: 1; height: 40px;
-      border: 1.5px solid var(--border); border-right: none;
-      padding: 0 14px; font-size: 13.5px; color: var(--text);
-      background: #fff; outline: none; font-family: inherit;
-      transition: border-color 0.15s;
-    }
-    .notif-search-input:focus { border-color: var(--accent); }
-    .notif-search-input::placeholder { color: var(--text-4); }
-    .notif-search-btn {
-      height: 40px; padding: 0 22px;
-      background: var(--accent); border: 1.5px solid var(--accent);
-      border-radius: 0 10px 10px 0;
-      color: #fff; font-size: 13.5px; font-weight: 500;
-      cursor: pointer; font-family: inherit;
-      transition: background 0.12s;
-    }
-    .notif-search-btn:hover { background: #1d4ed8; }
-
-    /* ─── TABLE COLUMN FILTERS (same as PPC) ─── */
+/* ─── TABLE COLUMN FILTERS (same as PPC) ─── */
     .th-inner {
       display: flex; align-items: center; gap: 5px;
       font-size: 12px; font-weight: 600; color: var(--text-2);
@@ -560,14 +527,70 @@
     }
     .btn-link-danger:hover { color: #b91c1c; }
 
-    /* detail rows in side panel */
-    .sp-detail-row {
-      display: flex; flex-direction: column; gap: 3px;
+    /* ─── SIDE PANEL DETAIL LAYOUT ─── */
+    .side-panel { width: 660px; }
+
+    .sp-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 12px; overflow: hidden; margin-bottom: 20px;
     }
-    .sp-detail-label { font-size: 11.5px; font-weight: 500; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.4px; }
-    .sp-detail-val { font-size: 13.5px; color: var(--text-2); word-break: break-all; }
-    .sp-detail-val a { color: var(--accent); text-decoration: none; }
-    .sp-detail-val a:hover { text-decoration: underline; }
+    .sp-card-title {
+      font-size: 15px; font-weight: 700; color: #0f172a;
+      padding: 16px 20px 14px; border-bottom: 1px solid var(--border);
+    }
+    .sp-info-grid {
+      display: grid; grid-template-columns: 160px 1fr;
+      padding: 4px 0;
+    }
+    .sp-info-row {
+      display: contents;
+    }
+    .sp-info-label {
+      padding: 12px 20px; font-size: 13.5px; color: var(--text-3);
+      border-bottom: 1px solid #f8fafc;
+    }
+    .sp-info-val {
+      padding: 12px 20px; font-size: 13.5px; color: var(--text);
+      border-bottom: 1px solid #f8fafc; word-break: break-word;
+    }
+    .sp-info-row:last-child .sp-info-label,
+    .sp-info-row:last-child .sp-info-val { border-bottom: none; }
+
+    /* failures table */
+    .sp-fail-table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+    }
+    .sp-fail-table thead tr { background: #f8fafc; border-bottom: 1.5px solid var(--border); }
+    .sp-fail-table th {
+      padding: 10px 16px; text-align: left;
+      font-size: 12px; font-weight: 600; color: var(--text-2);
+      border-right: 1px solid var(--border);
+    }
+    .sp-fail-table th:last-child { border-right: none; }
+    .sp-fail-table td {
+      padding: 12px 16px; color: var(--text-2);
+      border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9;
+    }
+    .sp-fail-table td:last-child { border-right: none; }
+    .sp-fail-empty {
+      padding: 28px 20px; text-align: center;
+      font-size: 13.5px; color: var(--text-4);
+    }
+    .sp-fail-pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-top: 1.5px solid var(--border);
+    }
+    .sp-fail-pagination-left { font-size: 13px; color: var(--text-3); display: flex; align-items: center; gap: 7px; }
+    .sp-fail-rpp {
+      display: flex; align-items: center; gap: 5px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 2px 9px; font-size: 13px; color: var(--text-2);
+      cursor: pointer; background: #fff;
+    }
+    .sp-fail-pagination-right { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-3); }
+
+    .sp-status-compound { display: flex; align-items: center; gap: 4px; }
+    .sp-status-sep { font-size: 12px; color: #d1d5db; }
   </style>
 </head>
 <body>
@@ -724,18 +747,6 @@
 
     <!-- Page Content -->
     <div class="page-content">
-
-      <!-- Search bar -->
-      <div class="notif-search-row">
-        <select class="notif-search-type" id="searchTypeSelect" onchange="updateSearchPlaceholder()">
-          <option value="email">Email</option>
-          <option value="url">URL</option>
-          <option value="name">Name</option>
-          <option value="org">Organisation</option>
-        </select>
-        <input class="notif-search-input" type="text" id="searchInput" placeholder="Search by Email" oninput="applyFilters()">
-        <button class="notif-search-btn" onclick="runSearch()">Search</button>
-      </div>
 
       <div class="list-meta" id="listMeta">1 - 10 of 1264 notifications</div>
 
@@ -1085,7 +1096,7 @@
     <div class="side-panel-header">
       <div>
         <div class="side-panel-title" id="spTitle">Notification</div>
-        <div class="side-panel-subtitle">Notification · Edit</div>
+        <div class="side-panel-subtitle" id="spSubtitle">Notification · View</div>
       </div>
       <button class="side-panel-close" onclick="closeSidePanel()" aria-label="Close">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1094,51 +1105,66 @@
 
     <div class="side-panel-body">
 
-      <div class="side-panel-section">Details</div>
-
-      <div class="field">
-        <label class="field-label">Name <span class="opt">(Optional)</span></label>
-        <input class="field-input" type="text" id="spName" placeholder="—">
+      <!-- General Information card -->
+      <div class="sp-card">
+        <div class="sp-card-title">General Information</div>
+        <div class="sp-info-grid">
+          <div class="sp-info-row">
+            <div class="sp-info-label">Organizations</div>
+            <div class="sp-info-val" id="spOrgs">—</div>
+          </div>
+          <div class="sp-info-row">
+            <div class="sp-info-label">Events</div>
+            <div class="sp-info-val" id="spEvents">—</div>
+          </div>
+          <div class="sp-info-row">
+            <div class="sp-info-label">Delivery Method</div>
+            <div class="sp-info-val" id="spDelivery">—</div>
+          </div>
+          <div class="sp-info-row">
+            <div class="sp-info-label">Status</div>
+            <div class="sp-info-val" id="spStatus">—</div>
+          </div>
+        </div>
       </div>
 
-      <div class="field">
-        <label class="field-label">Organisation</label>
-        <select class="field-select" id="spOrg">
-          <option>713130 CST Organisation</option>
-          <option>APMAWS1015.1</option>
-          <option>APMAWS1015.3</option>
-          <option>Bargteheide - Location 2</option>
-          <option>Bludan SmallMerchant</option>
-          <option>Cezar_test_1</option>
-          <option>Test WF GBX</option>
-          <option>Verifone Demo MID</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Event types</label>
-        <select class="field-select" id="spEventType">
-          <option>Other events</option>
-          <option>Payment events</option>
-          <option>Refund events</option>
-          <option>Settlement events</option>
-        </select>
-      </div>
-
-      <div class="side-panel-section" style="margin-top:4px;">Delivery</div>
-
-      <div class="sp-detail-row" id="spDeliveryRow">
-        <div class="field-label">Delivery method</div>
-        <div class="sp-detail-val" id="spDelivery">—</div>
-      </div>
-
-      <div class="field">
-        <div class="toggle-row">
-          <label class="toggle">
-            <input type="checkbox" id="spEnabledToggle" checked>
-            <div class="toggle-track"><div class="toggle-thumb"></div></div>
-          </label>
-          <span class="toggle-label-text">Notification enabled</span>
+      <!-- Notification Failures card -->
+      <div class="sp-card">
+        <div class="sp-card-title">Notification Failures</div>
+        <table class="sp-fail-table">
+          <thead>
+            <tr>
+              <th style="width:22%">Created</th>
+              <th style="width:20%">Event</th>
+              <th style="width:32%">Transaction/Checkout Id</th>
+              <th style="width:26%">Error</th>
+            </tr>
+          </thead>
+          <tbody id="spFailTbody">
+            <tr>
+              <td colspan="4" style="padding:0;border:none;">
+                <div class="sp-fail-empty">Items not found</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="sp-fail-pagination">
+          <div class="sp-fail-pagination-left">
+            Results per page
+            <div class="sp-fail-rpp">
+              10
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="sp-fail-pagination-right">
+            Page 1 of 1
+            <button class="page-btn" disabled>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="page-btn" disabled>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1147,8 +1173,7 @@
     <div class="side-panel-footer">
       <button class="btn-link-danger">Delete notification</button>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-ghost" onclick="closeSidePanel()">Discard changes</button>
-        <button class="btn btn-primary" onclick="saveSidePanel(this)">Save changes</button>
+        <button class="btn btn-ghost" onclick="closeSidePanel()">Close</button>
       </div>
     </div>
 
@@ -1187,26 +1212,6 @@
     el.classList.add('active');
   }
 
-  /* ─── SEARCH BAR → syncs with Name column filter ─── */
-  const placeholders = {
-    email: 'Search by Email',
-    url: 'Search by URL',
-    name: 'Search by Name',
-    org: 'Search by Organisation'
-  };
-  function updateSearchPlaceholder() {
-    const type = document.getElementById('searchTypeSelect').value;
-    document.getElementById('searchInput').placeholder = placeholders[type] || 'Search…';
-  }
-  function runSearch() {
-    const type = document.getElementById('searchTypeSelect').value;
-    const val  = document.getElementById('searchInput').value;
-    const colMap = { email: 3, url: 3, name: 0, org: 1 };
-    const colIdx = colMap[type] ?? 3;
-    const filters = document.querySelectorAll('#notifTable thead .col-filter, #notifTable thead .col-filter-select');
-    filters.forEach((f, i) => { if (i === colIdx && f.tagName === 'INPUT') f.value = val; });
-    filterTable();
-  }
 
   /* ─── COLUMN FILTERS ─── */
   function filterTable() {
@@ -1284,28 +1289,68 @@
 
   /* ─── SIDE PANEL ─── */
   const notifData = [
-    { org: 'Test WF GBX',             event: 'Other events', delivery: 'jasonb7@verifone.com (+2 more)',       enabled: true  },
-    { org: 'APMAWS1015.1',             event: 'Other events', delivery: 'http://10.32.66.197:8080/internal/api/v1/notify/events', enabled: true, errors: true },
-    { org: 'Bludan SmallMerchant',     event: 'Other events', delivery: 'https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479', enabled: true },
-    { org: '713130 CST Organisation',  event: 'Other events', delivery: 'jasonb7@verifone.com (+1 more)',       enabled: true  },
-    { org: 'Cezar_test_1',             event: 'Other events', delivery: 'jasonb7@verifone.com',                 enabled: true  },
-    { org: 'Bargteheide - Location 2', event: 'Other events', delivery: 'http://10.32.66.197:8080/internal/api/v1/notify/events', enabled: true, errors: true },
-    { org: 'APMAWS1015.3',             event: 'Other events', delivery: 'https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479', enabled: true },
-    { org: 'Test WF GBX',             event: 'Other events', delivery: 'https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479', enabled: true },
-    { org: 'Bludan SmallMerchant',     event: 'Other events', delivery: 'jasonb7@verifone.com (+1 more)',       enabled: true  },
-    { org: 'Verifone Demo MID',        event: 'Other events', delivery: 'jasonb7@verifone.com',                 enabled: true  },
+    { orgs: 'Test WF GBX, Verifone Payments BV, Verifone Denmark DTM Estate Owner',
+      event: 'Other events',
+      delivery: 'Email (jasonb7@verifone.com, admin@testwfgbx.com, ops@verifone.com)',
+      status: 'Enabled', errors: false },
+    { orgs: 'Verifone Payments BV, Verifone Denmark DTM Estate Owner, Maverick, Maverick Full GBX only, Verifone Payments BV MoR, Verifone Payments BV (Estate Owner), Verifone Finland DTM',
+      event: 'Other events',
+      delivery: 'Url (http://10.32.66.197:8080/internal/api/v1/notify/events)',
+      status: 'Enabled / Errors', errors: true },
+    { orgs: 'Bludan SmallMerchant',
+      event: 'Other events',
+      delivery: 'Url (https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479)',
+      status: 'Enabled', errors: false },
+    { orgs: '713130 CST Organisation, Verifone Payments BV',
+      event: 'Other events',
+      delivery: 'Email (jasonb7@verifone.com, support@713130cst.com)',
+      status: 'Enabled', errors: false },
+    { orgs: 'Cezar_test_1',
+      event: 'Other events',
+      delivery: 'Email (jasonb7@verifone.com)',
+      status: 'Enabled', errors: false },
+    { orgs: 'Bargteheide - Location 2, Verifone Payments BV MoR',
+      event: 'Other events',
+      delivery: 'Url (http://10.32.66.197:8080/internal/api/v1/notify/events)',
+      status: 'Enabled / Errors', errors: true },
+    { orgs: 'APMAWS1015.3',
+      event: 'Other events',
+      delivery: 'Url (https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479)',
+      status: 'Enabled', errors: false },
+    { orgs: 'Test WF GBX',
+      event: 'Other events',
+      delivery: 'Url (https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479)',
+      status: 'Enabled', errors: false },
+    { orgs: 'Bludan SmallMerchant, Maverick Full GBX only',
+      event: 'Other events',
+      delivery: 'Email (jasonb7@verifone.com, bludan@merchant.com)',
+      status: 'Enabled', errors: false },
+    { orgs: 'Verifone Demo MID',
+      event: 'Other events',
+      delivery: 'Email (jasonb7@verifone.com)',
+      status: 'Enabled', errors: false },
   ];
 
   function openSidePanel(idx) {
     const d = notifData[idx];
-    document.getElementById('spTitle').textContent = d.org + ' — ' + d.event;
-    document.getElementById('spName').value = '';
-    const orgSel = document.getElementById('spOrg');
-    Array.from(orgSel.options).forEach(o => { o.selected = o.value === d.org || o.text === d.org; });
-    const evSel = document.getElementById('spEventType');
-    Array.from(evSel.options).forEach(o => { o.selected = o.text === d.event; });
+    document.getElementById('spTitle').textContent = d.orgs.split(',')[0].trim();
+    document.getElementById('spSubtitle').textContent = 'Notification · View';
+    document.getElementById('spOrgs').textContent = d.orgs;
+    document.getElementById('spEvents').textContent = d.event;
     document.getElementById('spDelivery').textContent = d.delivery;
-    document.getElementById('spEnabledToggle').checked = d.enabled;
+
+    const statusEl = document.getElementById('spStatus');
+    if (d.errors) {
+      statusEl.innerHTML =
+        '<div class="sp-status-compound">' +
+        '<span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span>' +
+        '<span class="sp-status-sep">/</span>' +
+        '<span class="status-badge status-errors"><span class="status-dot"></span>Errors</span>' +
+        '</div>';
+    } else {
+      statusEl.innerHTML = '<span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span>';
+    }
+
     document.getElementById('sideBackdrop').classList.add('open');
   }
   function closeSidePanel() {
@@ -1313,11 +1358,6 @@
   }
   function handleSideBackdropClick(e) {
     if (e.target === e.currentTarget) closeSidePanel();
-  }
-  function saveSidePanel(btn) {
-    btn.textContent = 'Saving…';
-    btn.disabled = true;
-    setTimeout(() => { closeSidePanel(); btn.textContent = 'Save changes'; btn.disabled = false; }, 800);
   }
 
 </script>
