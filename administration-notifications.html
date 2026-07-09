@@ -236,43 +236,37 @@
     }
     .notif-search-btn:hover { background: #1d4ed8; }
 
-    /* ─── FILTER PILLS ROW ─── */
-    .filter-pills-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-    .filter-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      height: 32px; padding: 0 14px;
-      border: 1.5px solid var(--border); border-radius: 8px;
-      background: #fff; font-size: 13px; font-weight: 500; color: var(--text-2);
-      cursor: pointer; font-family: inherit;
-      transition: border-color 0.12s, background 0.12s, color 0.12s;
-      white-space: nowrap;
+    /* ─── TABLE COLUMN FILTERS (same as PPC) ─── */
+    .th-inner {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: var(--text-2);
+      text-transform: uppercase; letter-spacing: 0.4px;
+      white-space: nowrap; user-select: none;
+      margin-bottom: 8px;
     }
-    .filter-pill:hover { border-color: #9ca3af; background: var(--hover-bg); }
-    .filter-pill.active { border-color: var(--accent); background: #eff6ff; color: var(--accent); }
-    .filter-pill svg { flex-shrink: 0; }
+    .th-sort { color: var(--text-4); display: flex; align-items: center; cursor: pointer; }
+    .th-sort:hover { color: var(--text-2); }
 
-    /* pill dropdown */
-    .pill-wrap { position: relative; display: inline-block; }
-    .pill-dropdown {
-      position: absolute; top: calc(100% + 6px); left: 0; z-index: 200;
-      background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 210px; padding: 6px 0;
-      display: none;
+    .col-filter {
+      width: 100%; height: 30px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0 10px; font-size: 12.5px; color: var(--text);
+      background: #fff; outline: none; font-family: inherit;
+      transition: border-color 0.15s;
     }
-    .pill-dropdown.open { display: block; }
-    .pill-dd-item {
-      padding: 8px 16px; font-size: 13.5px; color: var(--text-2);
-      cursor: pointer; display: flex; align-items: center; gap: 9px;
-      transition: background 0.1s;
+    .col-filter:focus { border-color: var(--accent); }
+    .col-filter::placeholder { color: var(--text-4); }
+
+    .col-filter-select {
+      width: 100%; height: 30px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0 28px 0 10px;
+      font-size: 12.5px; color: var(--text);
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;
+      appearance: none; outline: none; cursor: pointer;
+      font-family: inherit; transition: border-color 0.15s;
     }
-    .pill-dd-item:hover { background: var(--hover-bg); }
-    .pill-dd-item.sel { color: var(--accent); font-weight: 500; }
-    .pill-dd-check {
-      width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0;
-      border: 1.5px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .pill-dd-item.sel .pill-dd-check { background: var(--accent); border-color: var(--accent); }
+    .col-filter-select:focus { border-color: var(--accent); }
 
     /* ─── LIST META ─── */
     .list-meta { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
@@ -298,12 +292,10 @@
     }
 
     .notif-table th {
-      padding: 11px 16px;
+      padding: 10px 16px;
       text-align: left;
-      font-size: 12px; font-weight: 600; color: var(--text-2);
-      text-transform: uppercase; letter-spacing: 0.4px;
+      vertical-align: top;
       border-right: 1px solid var(--border);
-      white-space: nowrap;
     }
     .notif-table th:last-child { border-right: none; }
     .th-sort-btn {
@@ -742,87 +734,7 @@
           <option value="org">Organisation</option>
         </select>
         <input class="notif-search-input" type="text" id="searchInput" placeholder="Search by Email" oninput="applyFilters()">
-        <button class="notif-search-btn" onclick="applyFilters()">Search</button>
-      </div>
-
-      <!-- Filter pills -->
-      <div class="filter-pills-row" id="filterPillsRow">
-
-        <!-- Organisations pill -->
-        <div class="pill-wrap">
-          <button class="filter-pill" id="pillOrg" onclick="togglePillDropdown('ddOrg','pillOrg')">
-            <span id="pillOrgLabel">Organisations</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="pill-dropdown" id="ddOrg">
-            <div class="pill-dd-item" onclick="togglePillFilter('org','713130 CST Organisation',this)">
-              <div class="pill-dd-check"></div>713130 CST Organisation
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('org','APMAWS1015.1',this)">
-              <div class="pill-dd-check"></div>APMAWS1015.1
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('org','APMAWS1015.3',this)">
-              <div class="pill-dd-check"></div>APMAWS1015.3
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('org','Bargteheide - Location 2',this)">
-              <div class="pill-dd-check"></div>Bargteheide - Location 2
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('org','Bludan SmallMerchant',this)">
-              <div class="pill-dd-check"></div>Bludan SmallMerchant
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('org','Cezar_test_1',this)">
-              <div class="pill-dd-check"></div>Cezar_test_1
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('org','Test WF GBX',this)">
-              <div class="pill-dd-check"></div>Test WF GBX
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('org','Verifone Demo MID',this)">
-              <div class="pill-dd-check"></div>Verifone Demo MID
-            </div>
-          </div>
-        </div>
-
-        <!-- Event types pill -->
-        <div class="pill-wrap">
-          <button class="filter-pill" id="pillEvent" onclick="togglePillDropdown('ddEvent','pillEvent')">
-            <span id="pillEventLabel">Event types</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="pill-dropdown" id="ddEvent">
-            <div class="pill-dd-item" onclick="togglePillFilter('event','Other events',this)">
-              <div class="pill-dd-check"></div>Other events
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('event','Payment events',this)">
-              <div class="pill-dd-check"></div>Payment events
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('event','Refund events',this)">
-              <div class="pill-dd-check"></div>Refund events
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('event','Settlement events',this)">
-              <div class="pill-dd-check"></div>Settlement events
-            </div>
-          </div>
-        </div>
-
-        <!-- Status pill -->
-        <div class="pill-wrap">
-          <button class="filter-pill" id="pillStatus" onclick="togglePillDropdown('ddStatus','pillStatus')">
-            <span id="pillStatusLabel">Status</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="pill-dropdown" id="ddStatus">
-            <div class="pill-dd-item" onclick="togglePillFilter('status','Enabled',this)">
-              <div class="pill-dd-check"></div>Enabled
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('status','Errors',this)">
-              <div class="pill-dd-check"></div>Errors
-            </div>
-            <div class="pill-dd-item" onclick="togglePillFilter('status','Disabled',this)">
-              <div class="pill-dd-check"></div>Disabled
-            </div>
-          </div>
-        </div>
-
+        <button class="notif-search-btn" onclick="runSearch()">Search</button>
       </div>
 
       <div class="list-meta" id="listMeta">1 - 10 of 1264 notifications</div>
@@ -832,15 +744,51 @@
           <thead>
             <tr>
               <th style="width:14%">
-                <span class="th-sort-btn" onclick="sortTable(0)">
+                <div class="th-inner">
                   Name
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
-                </span>
+                  <span class="th-sort" onclick="sortTable(0)" title="Sort">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+                  </span>
+                </div>
+                <input class="col-filter" type="text" placeholder="Search…" oninput="filterTable()">
               </th>
-              <th style="width:18%">Organisation</th>
-              <th style="width:14%">Event types</th>
-              <th style="width:38%">Delivery method</th>
-              <th style="width:16%">Status</th>
+              <th style="width:18%">
+                <div class="th-inner">Organisation</div>
+                <select class="col-filter-select" onchange="filterTable()">
+                  <option value="">All</option>
+                  <option>713130 CST Organisation</option>
+                  <option>APMAWS1015.1</option>
+                  <option>APMAWS1015.3</option>
+                  <option>Bargteheide - Location 2</option>
+                  <option>Bludan SmallMerchant</option>
+                  <option>Cezar_test_1</option>
+                  <option>Test WF GBX</option>
+                  <option>Verifone Demo MID</option>
+                </select>
+              </th>
+              <th style="width:14%">
+                <div class="th-inner">Event types</div>
+                <select class="col-filter-select" onchange="filterTable()">
+                  <option value="">All</option>
+                  <option>Other events</option>
+                  <option>Payment events</option>
+                  <option>Refund events</option>
+                  <option>Settlement events</option>
+                </select>
+              </th>
+              <th style="width:38%">
+                <div class="th-inner">Delivery method</div>
+                <input class="col-filter" type="text" placeholder="Search email or URL…" oninput="filterTable()">
+              </th>
+              <th style="width:16%">
+                <div class="th-inner">Status</div>
+                <select class="col-filter-select" onchange="filterTable()">
+                  <option value="">All</option>
+                  <option>Enabled</option>
+                  <option>Errors</option>
+                  <option>Disabled</option>
+                </select>
+              </th>
             </tr>
           </thead>
           <tbody id="notifTbody">
@@ -1239,7 +1187,7 @@
     el.classList.add('active');
   }
 
-  /* ─── SEARCH ─── */
+  /* ─── SEARCH BAR → syncs with Name column filter ─── */
   const placeholders = {
     email: 'Search by Email',
     url: 'Search by URL',
@@ -1249,85 +1197,38 @@
   function updateSearchPlaceholder() {
     const type = document.getElementById('searchTypeSelect').value;
     document.getElementById('searchInput').placeholder = placeholders[type] || 'Search…';
-    applyFilters();
   }
-
-  /* ─── PILL FILTERS ─── */
-  const pillFilters = { org: [], event: [], status: [] };
-
-  function togglePillDropdown(ddId, pillId) {
-    const dd = document.getElementById(ddId);
-    const isOpen = dd.classList.contains('open');
-    closeAllPillDropdowns();
-    if (!isOpen) dd.classList.add('open');
-  }
-  function closeAllPillDropdowns() {
-    document.querySelectorAll('.pill-dropdown').forEach(d => d.classList.remove('open'));
-  }
-
-  function togglePillFilter(type, value, el) {
-    const arr = pillFilters[type];
-    const idx = arr.indexOf(value);
-    if (idx === -1) { arr.push(value); el.classList.add('sel'); el.querySelector('.pill-dd-check').innerHTML = '<svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
-    else { arr.splice(idx, 1); el.classList.remove('sel'); el.querySelector('.pill-dd-check').innerHTML = ''; }
-    updatePillLabels();
-    applyFilters();
-  }
-  function updatePillLabels() {
-    const map = { org: ['pillOrgLabel','Organisations'], event: ['pillEventLabel','Event types'], status: ['pillStatusLabel','Status'] };
-    Object.entries(map).forEach(([key, [labelId, base]]) => {
-      const cnt = pillFilters[key].length;
-      document.getElementById(labelId).textContent = cnt > 0 ? base + ' (' + cnt + ')' : base;
-      document.getElementById(labelId.replace('Label','').replace('pill','pill')).closest
-      ? null : null;
-      const pill = document.getElementById(labelId).closest('.filter-pill');
-      if (pill) pill.classList.toggle('active', cnt > 0);
-    });
-  }
-
-  /* ─── TABLE FILTERING ─── */
-  function applyFilters() {
-    const searchType = document.getElementById('searchTypeSelect').value;
-    const searchVal  = document.getElementById('searchInput').value.toLowerCase().trim();
-
+  function runSearch() {
+    const type = document.getElementById('searchTypeSelect').value;
+    const val  = document.getElementById('searchInput').value;
     const colMap = { email: 3, url: 3, name: 0, org: 1 };
-    const searchCol = colMap[searchType] ?? 3;
+    const colIdx = colMap[type] ?? 3;
+    const filters = document.querySelectorAll('#notifTable thead .col-filter, #notifTable thead .col-filter-select');
+    filters.forEach((f, i) => { if (i === colIdx && f.tagName === 'INPUT') f.value = val; });
+    filterTable();
+  }
 
+  /* ─── COLUMN FILTERS ─── */
+  function filterTable() {
+    const filters = document.querySelectorAll('#notifTable thead .col-filter, #notifTable thead .col-filter-select');
     const rows = Array.from(document.querySelectorAll('#notifTbody tr')).filter(r => r.id !== 'noResultsRow');
     let visible = 0;
-
     rows.forEach(row => {
       const cells = row.querySelectorAll('td');
       let show = true;
-
-      if (searchVal) {
-        const cellText = cells[searchCol] ? cells[searchCol].textContent.toLowerCase() : '';
-        if (!cellText.includes(searchVal)) show = false;
-      }
-
-      if (show && pillFilters.org.length > 0) {
-        const orgText = cells[1] ? cells[1].textContent.trim() : '';
-        if (!pillFilters.org.includes(orgText)) show = false;
-      }
-
-      if (show && pillFilters.event.length > 0) {
-        const evText = cells[2] ? cells[2].textContent.trim() : '';
-        if (!pillFilters.event.some(e => evText.includes(e))) show = false;
-      }
-
-      if (show && pillFilters.status.length > 0) {
-        const stText = cells[4] ? cells[4].textContent.trim() : '';
-        if (!pillFilters.status.some(s => stText.includes(s))) show = false;
-      }
-
+      filters.forEach((f, i) => {
+        const val = f.value.toLowerCase().trim();
+        if (!val) return;
+        const cell = cells[i] ? cells[i].textContent.toLowerCase() : '';
+        if (!cell.includes(val)) show = false;
+      });
       row.style.display = show ? '' : 'none';
       if (show) visible++;
     });
-
     const noRow = document.getElementById('noResultsRow');
     const paginationBar = document.getElementById('paginationBar');
     noRow.style.display = visible === 0 ? '' : 'none';
-    paginationBar.style.display = visible === 0 ? 'none' : '';
+    if (paginationBar) paginationBar.style.display = visible === 0 ? 'none' : '';
     document.getElementById('listMeta').textContent =
       visible === 0 ? '' :
       visible < 10  ? visible + ' notification' + (visible !== 1 ? 's' : '') + ' shown'
@@ -1336,10 +1237,9 @@
 
   function clearFilters() {
     document.getElementById('searchInput').value = '';
-    pillFilters.org = []; pillFilters.event = []; pillFilters.status = [];
-    document.querySelectorAll('.pill-dd-item').forEach(i => { i.classList.remove('sel'); i.querySelector('.pill-dd-check').innerHTML = ''; });
-    updatePillLabels();
-    applyFilters();
+    document.querySelectorAll('#notifTable thead .col-filter').forEach(f => f.value = '');
+    document.querySelectorAll('#notifTable thead .col-filter-select').forEach(f => f.selectedIndex = 0);
+    filterTable();
   }
 
   /* ─── SORT ─── */
@@ -1420,10 +1320,6 @@
     setTimeout(() => { closeSidePanel(); btn.textContent = 'Save changes'; btn.disabled = false; }, 800);
   }
 
-  /* ─── close pill dropdowns on outside click ─── */
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.filter-pills-row')) closeAllPillDropdowns();
-  });
 </script>
 
 </body>
