@@ -203,15 +203,15 @@
     /* ─── PAGE CONTENT ─── */
     .page-content { flex: 1; padding: 0 40px 40px; }
 
-    /* ─── SEARCH BAR (notifications style) ─── */
+    /* ─── SEARCH BAR ─── */
     .notif-search-row {
-      display: flex; align-items: center; gap: 0; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 0; margin-bottom: 12px;
     }
     .notif-search-type {
       height: 40px;
       border: 1.5px solid var(--border); border-right: none;
       border-radius: 10px 0 0 10px;
-      padding: 0 10px 0 14px; font-size: 13.5px; color: var(--text);
+      padding: 0 28px 0 14px; font-size: 13.5px; color: var(--text);
       background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center;
       appearance: none; outline: none; cursor: pointer;
       font-family: inherit; min-width: 110px; transition: border-color 0.15s;
@@ -237,24 +237,26 @@
     .notif-search-btn:hover { background: #1d4ed8; }
 
     /* ─── FILTER PILLS ROW ─── */
-    .filter-pills-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; position: relative; }
+    .filter-pills-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
     .filter-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 0 13px; height: 32px; border-radius: 20px;
-      border: 1.5px solid var(--border); background: #fff;
-      font-size: 13px; font-weight: 500; color: var(--text-2);
-      cursor: pointer; transition: border-color 0.12s, background 0.12s;
-      white-space: nowrap; position: relative;
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 32px; padding: 0 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: #fff; font-size: 13px; font-weight: 500; color: var(--text-2);
+      cursor: pointer; font-family: inherit;
+      transition: border-color 0.12s, background 0.12s, color 0.12s;
+      white-space: nowrap;
     }
     .filter-pill:hover { border-color: #9ca3af; background: var(--hover-bg); }
     .filter-pill.active { border-color: var(--accent); background: #eff6ff; color: var(--accent); }
     .filter-pill svg { flex-shrink: 0; }
 
     /* pill dropdown */
+    .pill-wrap { position: relative; display: inline-block; }
     .pill-dropdown {
-      position: absolute; top: calc(100% + 6px); left: 0; z-index: 100;
+      position: absolute; top: calc(100% + 6px); left: 0; z-index: 200;
       background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1); min-width: 200px; padding: 6px 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 210px; padding: 6px 0;
       display: none;
     }
     .pill-dropdown.open { display: block; }
@@ -266,8 +268,8 @@
     .pill-dd-item:hover { background: var(--hover-bg); }
     .pill-dd-item.sel { color: var(--accent); font-weight: 500; }
     .pill-dd-check {
-      width: 14px; height: 14px; border-radius: 3px;
-      border: 1.5px solid var(--border); flex-shrink: 0;
+      width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0;
+      border: 1.5px solid var(--border);
       display: flex; align-items: center; justify-content: center;
     }
     .pill-dd-item.sel .pill-dd-check { background: var(--accent); border-color: var(--accent); }
@@ -747,7 +749,7 @@
       <div class="filter-pills-row" id="filterPillsRow">
 
         <!-- Organisations pill -->
-        <div style="position:relative;">
+        <div class="pill-wrap">
           <button class="filter-pill" id="pillOrg" onclick="togglePillDropdown('ddOrg','pillOrg')">
             <span id="pillOrgLabel">Organisations</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -781,7 +783,7 @@
         </div>
 
         <!-- Event types pill -->
-        <div style="position:relative;">
+        <div class="pill-wrap">
           <button class="filter-pill" id="pillEvent" onclick="togglePillDropdown('ddEvent','pillEvent')">
             <span id="pillEventLabel">Event types</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -803,7 +805,7 @@
         </div>
 
         <!-- Status pill -->
-        <div style="position:relative;">
+        <div class="pill-wrap">
           <button class="filter-pill" id="pillStatus" onclick="togglePillDropdown('ddStatus','pillStatus')">
             <span id="pillStatusLabel">Status</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
