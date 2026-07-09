@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifone Central — Notifications</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --nav-w: 208px;
+      --nav-collapsed-w: 64px;
+      --nav-bg: #ffffff;
+      --border: #e5e7eb;
+      --bg: #f9fafb;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --active-bg: #2563eb;
+      --active-text: #ffffff;
+      --hover-bg: #f3f4f6;
+      --accent: #2563eb;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ─── NAV RAIL ─── */
+    #nav-rail {
+      width: var(--nav-w);
+      min-width: var(--nav-w);
+      background: var(--nav-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      transition: width 0.22s ease, min-width 0.22s ease;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 20;
+    }
+    #nav-rail.collapsed { width: var(--nav-collapsed-w); min-width: var(--nav-collapsed-w); }
+
+    .nav-logo {
+      padding: 16px 14px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 9px;
+      flex-shrink: 0; overflow: hidden; white-space: nowrap;
+    }
+    .nav-logo-icon { flex-shrink: 0; }
+    .nav-logo-text { font-size: 16px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; transition: opacity 0.15s; }
+    #nav-rail.collapsed .nav-logo-text { opacity: 0; pointer-events: none; }
+
+    .nav-collapse-btn {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px; border-radius: 7px;
+      color: var(--text-3); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; background: none; border: none;
+      margin: 8px 8px 2px; text-align: left;
+      transition: background 0.1s, color 0.1s;
+      overflow: hidden; white-space: nowrap; width: calc(100% - 16px);
+    }
+    .nav-collapse-btn:hover { background: var(--hover-bg); color: var(--text); }
+    .nav-collapse-btn .nc-icon { flex-shrink: 0; transition: transform 0.22s; }
+    #nav-rail.collapsed .nav-collapse-btn .nc-icon { transform: scaleX(-1); }
+    .nav-collapse-btn .nc-label { transition: opacity 0.15s; }
+    #nav-rail.collapsed .nav-collapse-btn .nc-label { opacity: 0; pointer-events: none; }
+
+    .nav-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 4px 8px; }
+    .nav-scroll::-webkit-scrollbar { width: 3px; }
+    .nav-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 7px;
+      color: var(--text-2); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; background: none; border: none;
+      width: 100%; text-align: left; transition: background 0.1s, color 0.1s;
+      text-decoration: none; overflow: hidden; white-space: nowrap; position: relative;
+    }
+    .nav-item:hover { background: var(--hover-bg); color: var(--text); }
+    .nav-item.active { background: var(--active-bg); color: var(--active-text); font-weight: 600; }
+    .nav-item .ni-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .nav-item .ni-label { flex: 1; transition: opacity 0.15s; }
+    #nav-rail.collapsed .nav-item .ni-label { opacity: 0; }
+    .nav-item .ni-arrow { flex-shrink: 0; transition: transform 0.22s, opacity 0.15s; display: flex; align-items: center; }
+    .nav-item.open .ni-arrow { transform: rotate(90deg); }
+    #nav-rail.collapsed .nav-item .ni-arrow { opacity: 0; }
+    #nav-rail.collapsed .nav-item::after {
+      content: attr(data-tooltip);
+      position: absolute; left: calc(var(--nav-collapsed-w) + 8px); top: 50%; transform: translateY(-50%);
+      background: #1e293b; color: #fff; font-size: 12px; font-weight: 500;
+      padding: 5px 10px; border-radius: 6px; white-space: nowrap;
+      pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 100;
+    }
+    #nav-rail.collapsed .nav-item:hover::after { opacity: 1; }
+
+    .nav-sub { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
+    .nav-sub.open { max-height: 600px; }
+    #nav-rail.collapsed .nav-sub { display: none; }
+    .nav-sub-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px 6px 34px; border-radius: 7px;
+      color: var(--text-3); font-size: 13px; font-weight: 400;
+      cursor: pointer; background: none; border: none;
+      width: 100%; text-align: left; transition: background 0.1s, color 0.1s;
+      text-decoration: none; white-space: nowrap; overflow: hidden;
+    }
+    .nav-sub-item:hover { background: var(--hover-bg); color: var(--text-2); }
+    .nav-sub-item.active { color: var(--accent); font-weight: 500; }
+    .nav-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; }
+    .nav-sub-item.active .nav-sub-dot { background: var(--accent); }
+
+    .nav-divider { margin: 6px 8px; border: none; border-top: 1px solid var(--border); }
+
+    .nav-bottom { padding: 8px 8px 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .nav-copyright { font-size: 10px; color: var(--text-4); padding: 4px 12px 0; white-space: nowrap; transition: opacity 0.15s; }
+    #nav-rail.collapsed .nav-copyright { opacity: 0; }
+
+    .portal-home-link {
+      display: flex; align-items: center; gap: 5px;
+      padding: 9px 12px; border-radius: 7px;
+      font-size: 12px; font-weight: 500; color: var(--text-4);
+      text-decoration: none; border: none; background: none;
+      cursor: pointer; width: 100%; text-align: left;
+      transition: background 0.1s, color 0.1s; white-space: nowrap; overflow: hidden;
+    }
+    .portal-home-link:hover { background: var(--hover-bg); color: var(--text-3); }
+    .portal-home-link .phi { flex-shrink: 0; }
+    .portal-home-link .phl { transition: opacity 0.15s; }
+    #nav-rail.collapsed .portal-home-link .phl { opacity: 0; }
+
+    /* ─── MAIN ─── */
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+    .topbar {
+      background: #fff; border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 52px;
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 6px; font-size: 13.5px; }
+    .topbar-bc-root { color: var(--text-3); }
+    .topbar-bc-sep  { color: var(--text-4); }
+    .topbar-bc-cur  { color: var(--text); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 8px; }
+    .topbar-icon-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: none; border: none; color: var(--text-3); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s, color 0.1s;
+    }
+    .topbar-icon-btn:hover { background: var(--hover-bg); color: var(--text); }
+    .topbar-search {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 0 12px; height: 34px; width: 200px; transition: border-color 0.15s, width 0.2s;
+    }
+    .topbar-search:focus-within { border-color: var(--accent); width: 240px; }
+    .topbar-search input { border: none; background: none; font-size: 13px; color: var(--text); outline: none; width: 100%; }
+    .topbar-search input::placeholder { color: var(--text-4); }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #1d4ed8; color: #fff; font-size: 11.5px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    }
+
+    .page-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+    .page-scroll::-webkit-scrollbar { width: 4px; }
+    .page-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 40px 16px; flex-shrink: 0;
+    }
+    .page-header-leading { display: flex; align-items: center; gap: 10px; }
+    .page-title { font-size: 22px; font-weight: 700; color: #0f172a; letter-spacing: -0.4px; }
+    .page-header-trailing { display: flex; align-items: center; gap: 8px; }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 16px; height: 34px; border-radius: 8px;
+      font-size: 13.5px; font-weight: 500; cursor: pointer;
+      border: 1.5px solid transparent; transition: background 0.12s, border-color 0.12s, color 0.12s;
+      white-space: nowrap; text-decoration: none; font-family: inherit;
+    }
+    .btn-ghost { background: none; border-color: var(--border); color: var(--text-2); }
+    .btn-ghost:hover { border-color: #9ca3af; background: var(--hover-bg); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+    .btn-danger { background: none; border-color: #fecdd3; color: #dc2626; }
+    .btn-danger:hover { background: #fef2f2; border-color: #fca5a5; }
+
+    /* ─── PAGE CONTENT ─── */
+    .page-content { flex: 1; padding: 0 40px 40px; }
+
+    /* ─── SEARCH BAR (notifications style) ─── */
+    .notif-search-row {
+      display: flex; align-items: center; gap: 0; margin-bottom: 14px;
+    }
+    .notif-search-type {
+      height: 40px;
+      border: 1.5px solid var(--border); border-right: none;
+      border-radius: 10px 0 0 10px;
+      padding: 0 10px 0 14px; font-size: 13.5px; color: var(--text);
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center;
+      appearance: none; outline: none; cursor: pointer;
+      font-family: inherit; min-width: 110px; transition: border-color 0.15s;
+    }
+    .notif-search-type:focus { border-color: var(--accent); }
+    .notif-search-input {
+      flex: 1; height: 40px;
+      border: 1.5px solid var(--border); border-right: none;
+      padding: 0 14px; font-size: 13.5px; color: var(--text);
+      background: #fff; outline: none; font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    .notif-search-input:focus { border-color: var(--accent); }
+    .notif-search-input::placeholder { color: var(--text-4); }
+    .notif-search-btn {
+      height: 40px; padding: 0 22px;
+      background: var(--accent); border: 1.5px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      color: #fff; font-size: 13.5px; font-weight: 500;
+      cursor: pointer; font-family: inherit;
+      transition: background 0.12s;
+    }
+    .notif-search-btn:hover { background: #1d4ed8; }
+
+    /* ─── FILTER PILLS ROW ─── */
+    .filter-pills-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; position: relative; }
+    .filter-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 13px; height: 32px; border-radius: 20px;
+      border: 1.5px solid var(--border); background: #fff;
+      font-size: 13px; font-weight: 500; color: var(--text-2);
+      cursor: pointer; transition: border-color 0.12s, background 0.12s;
+      white-space: nowrap; position: relative;
+    }
+    .filter-pill:hover { border-color: #9ca3af; background: var(--hover-bg); }
+    .filter-pill.active { border-color: var(--accent); background: #eff6ff; color: var(--accent); }
+    .filter-pill svg { flex-shrink: 0; }
+
+    /* pill dropdown */
+    .pill-dropdown {
+      position: absolute; top: calc(100% + 6px); left: 0; z-index: 100;
+      background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1); min-width: 200px; padding: 6px 0;
+      display: none;
+    }
+    .pill-dropdown.open { display: block; }
+    .pill-dd-item {
+      padding: 8px 16px; font-size: 13.5px; color: var(--text-2);
+      cursor: pointer; display: flex; align-items: center; gap: 9px;
+      transition: background 0.1s;
+    }
+    .pill-dd-item:hover { background: var(--hover-bg); }
+    .pill-dd-item.sel { color: var(--accent); font-weight: 500; }
+    .pill-dd-check {
+      width: 14px; height: 14px; border-radius: 3px;
+      border: 1.5px solid var(--border); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pill-dd-item.sel .pill-dd-check { background: var(--accent); border-color: var(--accent); }
+
+    /* ─── LIST META ─── */
+    .list-meta { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
+
+    /* ─── TABLE ─── */
+    .table-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .notif-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      table-layout: fixed;
+    }
+
+    .notif-table thead tr {
+      background: #f8fafc;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .notif-table th {
+      padding: 11px 16px;
+      text-align: left;
+      font-size: 12px; font-weight: 600; color: var(--text-2);
+      text-transform: uppercase; letter-spacing: 0.4px;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .notif-table th:last-child { border-right: none; }
+    .th-sort-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      cursor: pointer; color: inherit;
+    }
+    .th-sort-btn:hover { color: var(--accent); }
+
+    .notif-table tbody tr {
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.08s;
+      cursor: pointer;
+    }
+    .notif-table tbody tr:last-child { border-bottom: none; }
+    .notif-table tbody tr:hover { background: #f8fafc; }
+
+    .notif-table td {
+      padding: 13px 16px;
+      color: var(--text-2);
+      border-right: 1px solid #f1f5f9;
+      vertical-align: middle;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .notif-table td:last-child { border-right: none; }
+    .td-name-dash { color: var(--text-4); font-size: 15px; }
+
+    /* event type chip */
+    .event-chip {
+      display: inline-block;
+      background: #f0f9ff; color: #0369a1;
+      border-radius: 5px; font-size: 12px; font-weight: 500;
+      padding: 2px 8px; white-space: nowrap;
+    }
+
+    /* delivery method */
+    .delivery-cell { display: flex; align-items: center; gap: 6px; overflow: hidden; }
+    .delivery-icon { flex-shrink: 0; color: var(--text-4); display: flex; align-items: center; }
+    .delivery-icon.email-icon { color: #0369a1; }
+    .delivery-icon.url-icon   { color: #7c3aed; }
+    .delivery-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-2); font-size: 13px; }
+    .delivery-more {
+      flex-shrink: 0; font-size: 12px; font-weight: 500;
+      background: #f3f4f6; color: var(--text-3);
+      border-radius: 4px; padding: 1px 6px;
+    }
+
+    /* status badges */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 12px; font-weight: 500;
+    }
+    .status-enabled  { background: #f0fdf4; color: #16a34a; }
+    .status-disabled { background: #fef2f2; color: #dc2626; }
+    .status-errors   { background: #fef2f2; color: #dc2626; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .status-compound { display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; }
+    .status-sep { font-size: 12px; color: #d1d5db; font-weight: 400; }
+
+    /* ─── NO RESULTS ─── */
+    .no-results-content {
+      display: flex; flex-direction: column; align-items: center; padding: 56px 24px;
+    }
+    .no-results-icon {
+      width: 56px; height: 56px; background: #fef3c7; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .no-results-icon svg { width: 26px; height: 26px; stroke: #d97706; stroke-width: 2; fill: none; }
+    .no-results-title { font-size: 17px; font-weight: 700; color: #111827; margin-bottom: 8px; }
+    .no-results-sub {
+      font-size: 13.5px; color: #6b7280; text-align: center;
+      max-width: 380px; line-height: 1.65; margin-bottom: 24px;
+    }
+    .no-results-sub strong { color: #374151; }
+    .no-results-actions { display: flex; gap: 10px; }
+
+    /* ─── PAGINATION ─── */
+    .pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1.5px solid var(--border);
+      background: #fff;
+      border-radius: 0 0 12px 12px;
+    }
+    .pagination-left { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-3); }
+    .pagination-rpp {
+      display: flex; align-items: center; gap: 6px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 3px 10px; font-size: 13px; color: var(--text-2);
+      cursor: pointer; background: #fff;
+    }
+    .pagination-right { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-3); }
+    .pagination-go-input {
+      width: 50px; height: 30px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 0 8px; font-size: 13px; color: var(--text);
+      text-align: center; outline: none; font-family: inherit;
+    }
+    .pagination-go-input:focus { border-color: var(--accent); }
+    .page-btn {
+      min-width: 32px; height: 32px; border-radius: 7px;
+      border: 1.5px solid var(--border); background: #fff;
+      font-size: 13px; font-weight: 500; color: var(--text-2);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      padding: 0 8px; transition: background 0.1s, border-color 0.1s, color 0.1s;
+    }
+    .page-btn:hover { background: var(--hover-bg); border-color: #9ca3af; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ─── MODAL ─── */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.45);
+      backdrop-filter: blur(2px); z-index: 300;
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #fff; border-radius: 14px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08);
+      width: 100%; max-width: 640px;
+      max-height: calc(100vh - 48px);
+      display: flex; flex-direction: column;
+      transform: translateY(16px); transition: transform 0.2s;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+    .modal-header {
+      padding: 20px 28px 16px; border-bottom: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .modal-title { font-size: 18px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; }
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1.5px solid var(--border); background: #fff;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); transition: background 0.1s, color 0.1s;
+    }
+    .modal-close:hover { background: var(--hover-bg); color: var(--text); }
+    .modal-body {
+      flex: 1; overflow-y: auto; padding: 24px 28px;
+      display: flex; flex-direction: column; gap: 18px;
+    }
+    .modal-body::-webkit-scrollbar { width: 4px; }
+    .modal-body::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+    .modal-footer {
+      padding: 16px 28px; border-top: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0;
+    }
+
+    /* ─── FORM FIELDS ─── */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field-label {
+      font-size: 12.5px; font-weight: 500; color: var(--text-2);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .field-label .opt { font-weight: 400; color: var(--text-4); }
+    .field-input {
+      height: 40px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 0 14px;
+      font-size: 13.5px; color: var(--text);
+      background: #fff; outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .field-input:focus { border-color: var(--accent); }
+    .field-input::placeholder { color: var(--text-4); }
+    .field-select {
+      height: 40px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 0 36px 0 14px;
+      font-size: 13.5px; color: var(--text);
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center;
+      appearance: none; outline: none; cursor: pointer;
+      font-family: inherit; width: 100%;
+      transition: border-color 0.15s;
+    }
+    .field-select:focus { border-color: var(--accent); }
+    .field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field-hint { font-size: 12px; color: var(--text-4); margin-top: -2px; }
+
+    /* delivery type segmented */
+    .seg-ctrl {
+      display: flex; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden;
+    }
+    .seg-btn {
+      flex: 1; padding: 0 16px; height: 40px;
+      border: none; background: #fff; font-size: 13.5px; font-weight: 500;
+      color: var(--text-2); cursor: pointer; font-family: inherit;
+      transition: background 0.12s, color 0.12s;
+    }
+    .seg-btn + .seg-btn { border-left: 1.5px solid var(--border); }
+    .seg-btn.active { background: var(--accent); color: #fff; }
+
+    /* toggle */
+    .toggle-row { display: flex; align-items: center; gap: 10px; }
+    .toggle { position: relative; flex-shrink: 0; width: 36px; height: 20px; cursor: pointer; }
+    .toggle input { display: none; }
+    .toggle-track {
+      position: absolute; inset: 0; border-radius: 10px;
+      background: #d1d5db; transition: background 0.2s;
+    }
+    .toggle input:checked ~ .toggle-track { background: var(--accent); }
+    .toggle-thumb {
+      position: absolute; left: 2px; top: 2px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #fff; transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+    }
+    .toggle input:checked ~ .toggle-track .toggle-thumb { transform: translateX(16px); }
+    .toggle-label-text { font-size: 13.5px; color: var(--text-2); }
+
+    /* ─── SIDE PANEL ─── */
+    .side-backdrop {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.35);
+      backdrop-filter: blur(1px); z-index: 200;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .side-backdrop.open { opacity: 1; pointer-events: all; }
+    .side-panel {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 540px;
+      background: #fff; box-shadow: -8px 0 40px rgba(0,0,0,0.12);
+      z-index: 201; display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+    .side-backdrop.open .side-panel { transform: translateX(0); }
+    .side-panel-header {
+      padding: 18px 24px 14px; border-bottom: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .side-panel-title { font-size: 16px; font-weight: 700; color: #0f172a; }
+    .side-panel-subtitle { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+    .side-panel-close {
+      width: 30px; height: 30px; border-radius: 7px;
+      border: 1.5px solid var(--border); background: #fff;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); transition: background 0.1s, color 0.1s; flex-shrink: 0;
+    }
+    .side-panel-close:hover { background: var(--hover-bg); color: var(--text); }
+    .side-panel-body {
+      flex: 1; overflow-y: auto; padding: 20px 24px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .side-panel-body::-webkit-scrollbar { width: 4px; }
+    .side-panel-body::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+    .side-panel-section {
+      font-size: 11.5px; font-weight: 600; color: var(--text-3);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      padding-bottom: 4px; border-bottom: 1px solid var(--border);
+      margin-bottom: -4px;
+    }
+    .side-panel-footer {
+      padding: 14px 24px; border-top: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .btn-link-danger {
+      background: none; border: none; cursor: pointer;
+      font-size: 13.5px; font-weight: 500; color: #dc2626;
+      padding: 0; font-family: inherit; transition: color 0.1s;
+    }
+    .btn-link-danger:hover { color: #b91c1c; }
+
+    /* detail rows in side panel */
+    .sp-detail-row {
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .sp-detail-label { font-size: 11.5px; font-weight: 500; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.4px; }
+    .sp-detail-val { font-size: 13.5px; color: var(--text-2); word-break: break-all; }
+    .sp-detail-val a { color: var(--accent); text-decoration: none; }
+    .sp-detail-val a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV RAIL ─── -->
+<nav id="nav-rail" aria-label="Main navigation">
+
+  <div class="nav-logo">
+    <svg class="nav-logo-icon" width="28" height="28" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="#0f172a"/>
+      <circle cx="10" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="22" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="10" cy="22" r="3" fill="#60a5fa"/>
+      <circle cx="22" cy="22" r="3" fill="#60a5fa"/>
+    </svg>
+    <span class="nav-logo-text">Verifone</span>
+  </div>
+
+  <button class="nav-collapse-btn" onclick="toggleCollapse()" title="Collapse sidebar">
+    <svg class="nc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>
+    </svg>
+    <span class="nc-label">Collapse</span>
+  </button>
+
+  <div class="nav-scroll">
+
+    <button class="nav-item" data-tooltip="Home" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="ni-label">Home</span>
+    </button>
+
+    <button class="nav-item" data-tooltip="Reporting tools" onclick="toggleSection(this,'sub-reporting')">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+      <span class="ni-label">Reporting tools</span>
+      <span class="ni-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </button>
+    <div class="nav-sub" id="sub-reporting">
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Payments Dashboard</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Orders / Transactions</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>3D Secure Authentications</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Settlements</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Report Scheduler</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Audit Log</button>
+    </div>
+
+    <button class="nav-item" data-tooltip="Payment tools" onclick="toggleSection(this,'sub-payment')">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+      <span class="ni-label">Payment tools</span>
+      <span class="ni-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </button>
+    <div class="nav-sub" id="sub-payment">
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Virtual Terminal</button>
+      <a class="nav-sub-item" href="pay-by-link.html"><span class="nav-sub-dot"></span>Pay by Link</a>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Customer Catalog</button>
+    </div>
+
+    <button class="nav-item" data-tooltip="Devices" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg></span>
+      <span class="ni-label">Devices</span>
+    </button>
+
+    <button class="nav-item open active" data-tooltip="Admin" onclick="toggleSection(this,'sub-admin')">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+      <span class="ni-label">Admin</span>
+      <span class="ni-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </button>
+    <div class="nav-sub open" id="sub-admin">
+      <a class="nav-sub-item" href="administration-organizations.html"><span class="nav-sub-dot"></span>Organizations</a>
+      <a class="nav-sub-item" href="administration-ppc.html"><span class="nav-sub-dot"></span>Payment Provider Contracts</a>
+      <a class="nav-sub-item" href="administration-poi-detail.html"><span class="nav-sub-dot"></span>Point of Interaction</a>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Users</button>
+      <button class="nav-sub-item active" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Notifications</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Merchant Country Configuration</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Merchant Configuration</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>3DS Contracts</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Fraud Prevention Services</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Price Lists</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Wallets</button>
+    </div>
+
+    <button class="nav-item" data-tooltip="Boarding" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg></span>
+      <span class="ni-label">Boarding</span>
+    </button>
+
+    <hr class="nav-divider">
+
+    <button class="nav-item" data-tooltip="Org. filter" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+      <span class="ni-label">Org. filter</span>
+    </button>
+
+    <button class="nav-item" data-tooltip="Favorites" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+      <span class="ni-label">Favorites</span>
+    </button>
+
+  </div>
+
+  <div class="nav-bottom">
+    <a href="index.html" class="portal-home-link">
+      <svg class="phi" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <span class="phl">Portal Home</span>
+    </a>
+    <button class="nav-item" data-tooltip="Logout" onclick="setActive(this)" style="color:#6b7280;">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+      <span class="ni-label">Logout</span>
+    </button>
+    <div class="nav-copyright">© 2026 Verifone</div>
+  </div>
+
+</nav>
+
+
+<!-- ─── MAIN ─── -->
+<div id="main">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-bc-root">Admin</span>
+      <span class="topbar-bc-sep">/</span>
+      <span class="topbar-bc-cur">Notifications</span>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search…">
+      </div>
+      <button class="topbar-icon-btn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </button>
+      <button class="topbar-icon-btn" title="Help">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </button>
+      <div class="avatar" title="Adriana Gornea">AG</div>
+    </div>
+  </header>
+
+  <div class="page-scroll">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-leading">
+        <h1 class="page-title">Notifications</h1>
+      </div>
+      <div class="page-header-trailing">
+        <button class="btn btn-primary" onclick="openModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create new notification
+        </button>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="page-content">
+
+      <!-- Search bar -->
+      <div class="notif-search-row">
+        <select class="notif-search-type" id="searchTypeSelect" onchange="updateSearchPlaceholder()">
+          <option value="email">Email</option>
+          <option value="url">URL</option>
+          <option value="name">Name</option>
+          <option value="org">Organisation</option>
+        </select>
+        <input class="notif-search-input" type="text" id="searchInput" placeholder="Search by Email" oninput="applyFilters()">
+        <button class="notif-search-btn" onclick="applyFilters()">Search</button>
+      </div>
+
+      <!-- Filter pills -->
+      <div class="filter-pills-row" id="filterPillsRow">
+
+        <!-- Organisations pill -->
+        <div style="position:relative;">
+          <button class="filter-pill" id="pillOrg" onclick="togglePillDropdown('ddOrg','pillOrg')">
+            <span id="pillOrgLabel">Organisations</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="pill-dropdown" id="ddOrg">
+            <div class="pill-dd-item" onclick="togglePillFilter('org','713130 CST Organisation',this)">
+              <div class="pill-dd-check"></div>713130 CST Organisation
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('org','APMAWS1015.1',this)">
+              <div class="pill-dd-check"></div>APMAWS1015.1
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('org','APMAWS1015.3',this)">
+              <div class="pill-dd-check"></div>APMAWS1015.3
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('org','Bargteheide - Location 2',this)">
+              <div class="pill-dd-check"></div>Bargteheide - Location 2
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('org','Bludan SmallMerchant',this)">
+              <div class="pill-dd-check"></div>Bludan SmallMerchant
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('org','Cezar_test_1',this)">
+              <div class="pill-dd-check"></div>Cezar_test_1
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('org','Test WF GBX',this)">
+              <div class="pill-dd-check"></div>Test WF GBX
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('org','Verifone Demo MID',this)">
+              <div class="pill-dd-check"></div>Verifone Demo MID
+            </div>
+          </div>
+        </div>
+
+        <!-- Event types pill -->
+        <div style="position:relative;">
+          <button class="filter-pill" id="pillEvent" onclick="togglePillDropdown('ddEvent','pillEvent')">
+            <span id="pillEventLabel">Event types</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="pill-dropdown" id="ddEvent">
+            <div class="pill-dd-item" onclick="togglePillFilter('event','Other events',this)">
+              <div class="pill-dd-check"></div>Other events
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('event','Payment events',this)">
+              <div class="pill-dd-check"></div>Payment events
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('event','Refund events',this)">
+              <div class="pill-dd-check"></div>Refund events
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('event','Settlement events',this)">
+              <div class="pill-dd-check"></div>Settlement events
+            </div>
+          </div>
+        </div>
+
+        <!-- Status pill -->
+        <div style="position:relative;">
+          <button class="filter-pill" id="pillStatus" onclick="togglePillDropdown('ddStatus','pillStatus')">
+            <span id="pillStatusLabel">Status</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="pill-dropdown" id="ddStatus">
+            <div class="pill-dd-item" onclick="togglePillFilter('status','Enabled',this)">
+              <div class="pill-dd-check"></div>Enabled
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('status','Errors',this)">
+              <div class="pill-dd-check"></div>Errors
+            </div>
+            <div class="pill-dd-item" onclick="togglePillFilter('status','Disabled',this)">
+              <div class="pill-dd-check"></div>Disabled
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="list-meta" id="listMeta">1 - 10 of 1264 notifications</div>
+
+      <div class="table-card">
+        <table class="notif-table" id="notifTable">
+          <thead>
+            <tr>
+              <th style="width:14%">
+                <span class="th-sort-btn" onclick="sortTable(0)">
+                  Name
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+                </span>
+              </th>
+              <th style="width:18%">Organisation</th>
+              <th style="width:14%">Event types</th>
+              <th style="width:38%">Delivery method</th>
+              <th style="width:16%">Status</th>
+            </tr>
+          </thead>
+          <tbody id="notifTbody">
+
+            <tr onclick="openSidePanel(0)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>Test WF GBX</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon email-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <span class="delivery-text">jasonb7@verifone.com</span>
+                  <span class="delivery-more">+2</span>
+                </div>
+              </td>
+              <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
+            </tr>
+
+            <tr onclick="openSidePanel(1)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>APMAWS1015.1</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon url-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span>
+                  <span class="delivery-text">http://10.32.66.197:8080/internal/api/v1/notify/events</span>
+                </div>
+              </td>
+              <td>
+                <div class="status-compound">
+                  <span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span>
+                  <span class="status-sep">/</span>
+                  <span class="status-badge status-errors"><span class="status-dot"></span>Errors</span>
+                </div>
+              </td>
+            </tr>
+
+            <tr onclick="openSidePanel(2)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>Bludan SmallMerchant</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon url-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span>
+                  <span class="delivery-text">https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479</span>
+                </div>
+              </td>
+              <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
+            </tr>
+
+            <tr onclick="openSidePanel(3)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>713130 CST Organisation</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon email-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <span class="delivery-text">jasonb7@verifone.com</span>
+                  <span class="delivery-more">+1</span>
+                </div>
+              </td>
+              <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
+            </tr>
+
+            <tr onclick="openSidePanel(4)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>Cezar_test_1</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon email-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <span class="delivery-text">jasonb7@verifone.com</span>
+                </div>
+              </td>
+              <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
+            </tr>
+
+            <tr onclick="openSidePanel(5)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>Bargteheide - Location 2</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon url-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span>
+                  <span class="delivery-text">http://10.32.66.197:8080/internal/api/v1/notify/events</span>
+                </div>
+              </td>
+              <td>
+                <div class="status-compound">
+                  <span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span>
+                  <span class="status-sep">/</span>
+                  <span class="status-badge status-errors"><span class="status-dot"></span>Errors</span>
+                </div>
+              </td>
+            </tr>
+
+            <tr onclick="openSidePanel(6)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>APMAWS1015.3</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon url-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span>
+                  <span class="delivery-text">https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479</span>
+                </div>
+              </td>
+              <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
+            </tr>
+
+            <tr onclick="openSidePanel(7)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>Test WF GBX</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon url-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span>
+                  <span class="delivery-text">https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479</span>
+                </div>
+              </td>
+              <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
+            </tr>
+
+            <tr onclick="openSidePanel(8)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>Bludan SmallMerchant</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon email-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <span class="delivery-text">jasonb7@verifone.com</span>
+                  <span class="delivery-more">+1</span>
+                </div>
+              </td>
+              <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
+            </tr>
+
+            <tr onclick="openSidePanel(9)">
+              <td><span class="td-name-dash">—</span></td>
+              <td>Verifone Demo MID</td>
+              <td><span class="event-chip">Other events</span></td>
+              <td>
+                <div class="delivery-cell">
+                  <span class="delivery-icon email-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <span class="delivery-text">jasonb7@verifone.com</span>
+                </div>
+              </td>
+              <td><span class="status-badge status-enabled"><span class="status-dot"></span>Enabled</span></td>
+            </tr>
+
+            <tr id="noResultsRow" style="display:none;">
+              <td colspan="5" style="padding:0; border:none;">
+                <div class="no-results-content">
+                  <div class="no-results-icon">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="8"/>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+                      <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+                      <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <p class="no-results-title">No notifications found</p>
+                  <p class="no-results-sub">
+                    No notifications match your current filters.<br>
+                    Try different values or <strong>clear the filters</strong> to see all notifications.
+                  </p>
+                  <div class="no-results-actions">
+                    <button class="btn btn-ghost" onclick="clearFilters()">Clear filters</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination" id="paginationBar">
+          <div class="pagination-left">
+            Results per page
+            <div class="pagination-rpp">
+              10
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="pagination-right">
+            Go to page
+            <input class="pagination-go-input" type="number" min="1" value="">
+            Page 1 of 127
+            <button class="page-btn" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="page-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /page-scroll -->
+
+</div><!-- /main -->
+
+
+<!-- ─── MODAL: Create new notification ─── -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">New Notification</h2>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="field">
+        <label class="field-label">Name <span class="opt">(Optional)</span></label>
+        <input class="field-input" type="text" placeholder="Enter a descriptive name">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Organisation</label>
+        <select class="field-select">
+          <option value="">Select organisation…</option>
+          <option>713130 CST Organisation</option>
+          <option>APMAWS1015.1</option>
+          <option>APMAWS1015.3</option>
+          <option>Bargteheide - Location 2</option>
+          <option>Bludan SmallMerchant</option>
+          <option>Cezar_test_1</option>
+          <option>Test WF GBX</option>
+          <option>Verifone Demo MID</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Event types</label>
+        <select class="field-select">
+          <option value="">Select event type…</option>
+          <option>Other events</option>
+          <option>Payment events</option>
+          <option>Refund events</option>
+          <option>Settlement events</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Delivery method type</label>
+        <div class="seg-ctrl">
+          <button class="seg-btn active" onclick="switchDeliveryType('email',this)">Email</button>
+          <button class="seg-btn" onclick="switchDeliveryType('url',this)">Webhook URL</button>
+        </div>
+      </div>
+
+      <div class="field" id="deliveryEmailField">
+        <label class="field-label">Email addresses</label>
+        <input class="field-input" type="email" placeholder="Enter email address (e.g. alerts@company.com)">
+        <span class="field-hint">Separate multiple addresses with a comma.</span>
+      </div>
+
+      <div class="field" id="deliveryUrlField" style="display:none;">
+        <label class="field-label">Webhook URL</label>
+        <input class="field-input" type="url" placeholder="https://your-endpoint.com/notify">
+        <span class="field-hint">Must be a valid HTTPS endpoint that accepts POST requests.</span>
+      </div>
+
+      <div class="field">
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </label>
+          <span class="toggle-label-text">Enable notification</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveModal(this)">Create notification</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ─── SIDE PANEL: Notification detail ─── -->
+<div class="side-backdrop" id="sideBackdrop" onclick="handleSideBackdropClick(event)">
+  <div class="side-panel" role="dialog" aria-modal="true">
+
+    <div class="side-panel-header">
+      <div>
+        <div class="side-panel-title" id="spTitle">Notification</div>
+        <div class="side-panel-subtitle">Notification · Edit</div>
+      </div>
+      <button class="side-panel-close" onclick="closeSidePanel()" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="side-panel-body">
+
+      <div class="side-panel-section">Details</div>
+
+      <div class="field">
+        <label class="field-label">Name <span class="opt">(Optional)</span></label>
+        <input class="field-input" type="text" id="spName" placeholder="—">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Organisation</label>
+        <select class="field-select" id="spOrg">
+          <option>713130 CST Organisation</option>
+          <option>APMAWS1015.1</option>
+          <option>APMAWS1015.3</option>
+          <option>Bargteheide - Location 2</option>
+          <option>Bludan SmallMerchant</option>
+          <option>Cezar_test_1</option>
+          <option>Test WF GBX</option>
+          <option>Verifone Demo MID</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Event types</label>
+        <select class="field-select" id="spEventType">
+          <option>Other events</option>
+          <option>Payment events</option>
+          <option>Refund events</option>
+          <option>Settlement events</option>
+        </select>
+      </div>
+
+      <div class="side-panel-section" style="margin-top:4px;">Delivery</div>
+
+      <div class="sp-detail-row" id="spDeliveryRow">
+        <div class="field-label">Delivery method</div>
+        <div class="sp-detail-val" id="spDelivery">—</div>
+      </div>
+
+      <div class="field">
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" id="spEnabledToggle" checked>
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </label>
+          <span class="toggle-label-text">Notification enabled</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="side-panel-footer">
+      <button class="btn-link-danger">Delete notification</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost" onclick="closeSidePanel()">Discard changes</button>
+        <button class="btn btn-primary" onclick="saveSidePanel(this)">Save changes</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+  /* ─── NAV ─── */
+  const nav = document.getElementById('nav-rail');
+
+  function toggleCollapse() {
+    nav.classList.toggle('collapsed');
+    localStorage.setItem('navCollapsed', nav.classList.contains('collapsed'));
+  }
+  (function() {
+    if (localStorage.getItem('navCollapsed') === 'true') nav.classList.add('collapsed');
+  })();
+
+  function setActive(el) {
+    document.querySelectorAll('#nav-rail .nav-item').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function toggleSection(btn, subId) {
+    const sub = document.getElementById(subId);
+    if (!sub) return;
+    const isOpen = sub.classList.contains('open');
+    sub.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+    document.querySelectorAll('#nav-rail .nav-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function setSubActive(el) {
+    const parent = el.closest('.nav-sub');
+    if (parent) parent.querySelectorAll('.nav-sub-item').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ─── SEARCH ─── */
+  const placeholders = {
+    email: 'Search by Email',
+    url: 'Search by URL',
+    name: 'Search by Name',
+    org: 'Search by Organisation'
+  };
+  function updateSearchPlaceholder() {
+    const type = document.getElementById('searchTypeSelect').value;
+    document.getElementById('searchInput').placeholder = placeholders[type] || 'Search…';
+    applyFilters();
+  }
+
+  /* ─── PILL FILTERS ─── */
+  const pillFilters = { org: [], event: [], status: [] };
+
+  function togglePillDropdown(ddId, pillId) {
+    const dd = document.getElementById(ddId);
+    const isOpen = dd.classList.contains('open');
+    closeAllPillDropdowns();
+    if (!isOpen) dd.classList.add('open');
+  }
+  function closeAllPillDropdowns() {
+    document.querySelectorAll('.pill-dropdown').forEach(d => d.classList.remove('open'));
+  }
+
+  function togglePillFilter(type, value, el) {
+    const arr = pillFilters[type];
+    const idx = arr.indexOf(value);
+    if (idx === -1) { arr.push(value); el.classList.add('sel'); el.querySelector('.pill-dd-check').innerHTML = '<svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+    else { arr.splice(idx, 1); el.classList.remove('sel'); el.querySelector('.pill-dd-check').innerHTML = ''; }
+    updatePillLabels();
+    applyFilters();
+  }
+  function updatePillLabels() {
+    const map = { org: ['pillOrgLabel','Organisations'], event: ['pillEventLabel','Event types'], status: ['pillStatusLabel','Status'] };
+    Object.entries(map).forEach(([key, [labelId, base]]) => {
+      const cnt = pillFilters[key].length;
+      document.getElementById(labelId).textContent = cnt > 0 ? base + ' (' + cnt + ')' : base;
+      document.getElementById(labelId.replace('Label','').replace('pill','pill')).closest
+      ? null : null;
+      const pill = document.getElementById(labelId).closest('.filter-pill');
+      if (pill) pill.classList.toggle('active', cnt > 0);
+    });
+  }
+
+  /* ─── TABLE FILTERING ─── */
+  function applyFilters() {
+    const searchType = document.getElementById('searchTypeSelect').value;
+    const searchVal  = document.getElementById('searchInput').value.toLowerCase().trim();
+
+    const colMap = { email: 3, url: 3, name: 0, org: 1 };
+    const searchCol = colMap[searchType] ?? 3;
+
+    const rows = Array.from(document.querySelectorAll('#notifTbody tr')).filter(r => r.id !== 'noResultsRow');
+    let visible = 0;
+
+    rows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+      let show = true;
+
+      if (searchVal) {
+        const cellText = cells[searchCol] ? cells[searchCol].textContent.toLowerCase() : '';
+        if (!cellText.includes(searchVal)) show = false;
+      }
+
+      if (show && pillFilters.org.length > 0) {
+        const orgText = cells[1] ? cells[1].textContent.trim() : '';
+        if (!pillFilters.org.includes(orgText)) show = false;
+      }
+
+      if (show && pillFilters.event.length > 0) {
+        const evText = cells[2] ? cells[2].textContent.trim() : '';
+        if (!pillFilters.event.some(e => evText.includes(e))) show = false;
+      }
+
+      if (show && pillFilters.status.length > 0) {
+        const stText = cells[4] ? cells[4].textContent.trim() : '';
+        if (!pillFilters.status.some(s => stText.includes(s))) show = false;
+      }
+
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    const noRow = document.getElementById('noResultsRow');
+    const paginationBar = document.getElementById('paginationBar');
+    noRow.style.display = visible === 0 ? '' : 'none';
+    paginationBar.style.display = visible === 0 ? 'none' : '';
+    document.getElementById('listMeta').textContent =
+      visible === 0 ? '' :
+      visible < 10  ? visible + ' notification' + (visible !== 1 ? 's' : '') + ' shown'
+                    : '1 - 10 of 1264 notifications';
+  }
+
+  function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    pillFilters.org = []; pillFilters.event = []; pillFilters.status = [];
+    document.querySelectorAll('.pill-dd-item').forEach(i => { i.classList.remove('sel'); i.querySelector('.pill-dd-check').innerHTML = ''; });
+    updatePillLabels();
+    applyFilters();
+  }
+
+  /* ─── SORT ─── */
+  let sortDir = {};
+  function sortTable(colIdx) {
+    sortDir[colIdx] = !sortDir[colIdx];
+    const tbody = document.getElementById('notifTbody');
+    const rows = Array.from(tbody.querySelectorAll('tr')).filter(r => r.id !== 'noResultsRow');
+    rows.sort((a, b) => {
+      const aT = a.querySelectorAll('td')[colIdx]?.textContent.trim() || '';
+      const bT = b.querySelectorAll('td')[colIdx]?.textContent.trim() || '';
+      return sortDir[colIdx]
+        ? aT.localeCompare(bT, undefined, {numeric: true})
+        : bT.localeCompare(aT, undefined, {numeric: true});
+    });
+    rows.forEach(r => tbody.appendChild(r));
+    const noRow = document.getElementById('noResultsRow');
+    tbody.appendChild(noRow);
+  }
+
+  /* ─── MODAL ─── */
+  function openModal() {
+    document.getElementById('modalBackdrop').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('modalBackdrop').classList.remove('open');
+  }
+  function handleBackdropClick(e) {
+    if (e.target === e.currentTarget) closeModal();
+  }
+  function saveModal(btn) {
+    btn.textContent = 'Creating…';
+    btn.disabled = true;
+    setTimeout(() => { closeModal(); btn.textContent = 'Create notification'; btn.disabled = false; }, 900);
+  }
+  function switchDeliveryType(type, btn) {
+    document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('deliveryEmailField').style.display = type === 'email' ? '' : 'none';
+    document.getElementById('deliveryUrlField').style.display  = type === 'url'   ? '' : 'none';
+  }
+
+  /* ─── SIDE PANEL ─── */
+  const notifData = [
+    { org: 'Test WF GBX',             event: 'Other events', delivery: 'jasonb7@verifone.com (+2 more)',       enabled: true  },
+    { org: 'APMAWS1015.1',             event: 'Other events', delivery: 'http://10.32.66.197:8080/internal/api/v1/notify/events', enabled: true, errors: true },
+    { org: 'Bludan SmallMerchant',     event: 'Other events', delivery: 'https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479', enabled: true },
+    { org: '713130 CST Organisation',  event: 'Other events', delivery: 'jasonb7@verifone.com (+1 more)',       enabled: true  },
+    { org: 'Cezar_test_1',             event: 'Other events', delivery: 'jasonb7@verifone.com',                 enabled: true  },
+    { org: 'Bargteheide - Location 2', event: 'Other events', delivery: 'http://10.32.66.197:8080/internal/api/v1/notify/events', enabled: true, errors: true },
+    { org: 'APMAWS1015.3',             event: 'Other events', delivery: 'https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479', enabled: true },
+    { org: 'Test WF GBX',             event: 'Other events', delivery: 'https://webhook.site/d7e31a76-a328-44aa-a621-7778be7ec479', enabled: true },
+    { org: 'Bludan SmallMerchant',     event: 'Other events', delivery: 'jasonb7@verifone.com (+1 more)',       enabled: true  },
+    { org: 'Verifone Demo MID',        event: 'Other events', delivery: 'jasonb7@verifone.com',                 enabled: true  },
+  ];
+
+  function openSidePanel(idx) {
+    const d = notifData[idx];
+    document.getElementById('spTitle').textContent = d.org + ' — ' + d.event;
+    document.getElementById('spName').value = '';
+    const orgSel = document.getElementById('spOrg');
+    Array.from(orgSel.options).forEach(o => { o.selected = o.value === d.org || o.text === d.org; });
+    const evSel = document.getElementById('spEventType');
+    Array.from(evSel.options).forEach(o => { o.selected = o.text === d.event; });
+    document.getElementById('spDelivery').textContent = d.delivery;
+    document.getElementById('spEnabledToggle').checked = d.enabled;
+    document.getElementById('sideBackdrop').classList.add('open');
+  }
+  function closeSidePanel() {
+    document.getElementById('sideBackdrop').classList.remove('open');
+  }
+  function handleSideBackdropClick(e) {
+    if (e.target === e.currentTarget) closeSidePanel();
+  }
+  function saveSidePanel(btn) {
+    btn.textContent = 'Saving…';
+    btn.disabled = true;
+    setTimeout(() => { closeSidePanel(); btn.textContent = 'Save changes'; btn.disabled = false; }, 800);
+  }
+
+  /* ─── close pill dropdowns on outside click ─── */
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.filter-pills-row')) closeAllPillDropdowns();
+  });
+</script>
+
+</body>
+</html>
