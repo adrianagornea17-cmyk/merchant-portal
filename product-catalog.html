@@ -411,8 +411,6 @@
     .mini-table tbody td.muted { color: #9ca3af; }
     .mini-row-faded  { opacity: 0.35; }
     .mini-row-faded2 { opacity: 0.12; }
-    .mini-action-btn { display: inline-flex; align-items: center; justify-content: center; color: #ef4444; }
-    .mini-action-btn svg { width: 13px; height: 13px; stroke: #ef4444; stroke-width: 2; fill: none; }
 
     /* ─── FEATURE TEXT ─── */
     .feature-headline { font-size: 24px; font-weight: 800; color: #111827; text-align: center; letter-spacing: -0.4px; margin-bottom: 12px; }
@@ -762,19 +760,6 @@
       vertical-align: middle;
     }
     .prod-table td:last-child { border-right: none; }
-    .td-delete {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #ef4444;
-      padding: 4px;
-      border-radius: 6px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.1s;
-    }
-    .td-delete:hover { background: #fee2e2; }
 
     .list-pagination {
       display: flex;
@@ -1260,7 +1245,6 @@
                   <th>Amount/Price</th>
                   <th>Currency</th>
                   <th>Organization</th>
-                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -1270,7 +1254,6 @@
                   <td>99.00</td>
                   <td class="muted">USD</td>
                   <td class="muted">APAC Test</td>
-                  <td><span class="mini-action-btn"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></span></td>
                 </tr>
                 <tr class="mini-row-faded">
                   <td>Basic Plan</td>
@@ -1278,7 +1261,6 @@
                   <td>29.00</td>
                   <td class="muted">EUR</td>
                   <td class="muted">EU Merchants</td>
-                  <td><span class="mini-action-btn"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></span></td>
                 </tr>
                 <tr class="mini-row-faded2">
                   <td>One-time Setup</td>
@@ -1286,7 +1268,6 @@
                   <td>150.00</td>
                   <td class="muted">USD</td>
                   <td class="muted">APAC Test</td>
-                  <td><span class="mini-action-btn"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></span></td>
                 </tr>
               </tbody>
             </table>
@@ -1309,8 +1290,7 @@
               <col style="width:14%">
               <col style="width:14%">
               <col style="width:10%">
-              <col style="width:30%">
-              <col style="width:10%">
+              <col style="width:40%">
             </colgroup>
             <thead>
               <tr>
@@ -1337,12 +1317,11 @@
                     <option>Site 933 QAT</option>
                   </select>
                 </th>
-                <th><div class="th-inner">Action</div></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td colspan="6" style="padding:0;border:none;">
+                <td colspan="5" style="padding:0;border:none;">
                   <div class="no-results-content">
                     <div class="no-results-icon">
                       <svg viewBox="0 0 24 24">
@@ -1402,8 +1381,7 @@
               <col style="width:14%">
               <col style="width:14%">
               <col style="width:10%">
-              <col style="width:30%">
-              <col style="width:10%">
+              <col style="width:40%">
             </colgroup>
             <thead>
               <tr>
@@ -1430,20 +1408,19 @@
                     <option>Site 933 QAT</option>
                   </select>
                 </th>
-                <th><div class="th-inner">Action</div></th>
               </tr>
             </thead>
             <tbody>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="Product 1" data-sku="12356" data-price="23.34" data-currency="GBP" data-org="Parent"><td>Product 1</td><td>12356</td><td>23.34</td><td>GBP</td><td>Parent</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="Test" data-sku="test" data-price="1.34" data-currency="AUD" data-org="MCDONALDS DARA201"><td>Test</td><td>test</td><td>1.34</td><td>AUD</td><td>MCDONALDS DARA201</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="pr1" data-sku="101911" data-price="1.00" data-currency="AUD" data-org="Site 287 QAT_b12a"><td>pr1</td><td>101911</td><td>1.00</td><td>AUD</td><td>Site 287 QAT_b12a</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row row-selected" onclick="openEditPanel(this)" data-name="a1" data-sku="00120" data-price="11.00" data-currency="AUD" data-org="Site 538 QAT"><td>a1</td><td>00120</td><td>11.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLAccUBUL" data-sku="ACC-JEWJ" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLAccUBUL</td><td>ACC-JEWJ</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLAccUUX1" data-sku="ACC-5GW2" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLAccUUX1</td><td>ACC-5GW2</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="aaa" data-sku="0001" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>aaa</td><td>0001</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLQU5JV" data-sku="PBLQU5JV" data-price="1111.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLQU5JV</td><td>PBLQU5JV</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLPCACT" data-sku="PBLPCACT" data-price="1111.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLPCACT</td><td>PBLPCACT</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
-              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PROD 111" data-sku="0012" data-price="1.00" data-currency="AUD" data-org="Site 933 QAT"><td>PROD 111</td><td>0012</td><td>1.00</td><td>AUD</td><td>Site 933 QAT</td><td><button class="td-delete" title="Delete" onclick="event.stopPropagation()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="Product 1" data-sku="12356" data-price="23.34" data-currency="GBP" data-org="Parent"><td>Product 1</td><td>12356</td><td>23.34</td><td>GBP</td><td>Parent</td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="Test" data-sku="test" data-price="1.34" data-currency="AUD" data-org="MCDONALDS DARA201"><td>Test</td><td>test</td><td>1.34</td><td>AUD</td><td>MCDONALDS DARA201</td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="pr1" data-sku="101911" data-price="1.00" data-currency="AUD" data-org="Site 287 QAT_b12a"><td>pr1</td><td>101911</td><td>1.00</td><td>AUD</td><td>Site 287 QAT_b12a</td></tr>
+              <tr class="prod-row row-selected" onclick="openEditPanel(this)" data-name="a1" data-sku="00120" data-price="11.00" data-currency="AUD" data-org="Site 538 QAT"><td>a1</td><td>00120</td><td>11.00</td><td>AUD</td><td>Site 538 QAT</td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLAccUBUL" data-sku="ACC-JEWJ" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLAccUBUL</td><td>ACC-JEWJ</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLAccUUX1" data-sku="ACC-5GW2" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLAccUUX1</td><td>ACC-5GW2</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="aaa" data-sku="0001" data-price="1.00" data-currency="AUD" data-org="Site 538 QAT"><td>aaa</td><td>0001</td><td>1.00</td><td>AUD</td><td>Site 538 QAT</td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLQU5JV" data-sku="PBLQU5JV" data-price="1111.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLQU5JV</td><td>PBLQU5JV</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PBLPCACT" data-sku="PBLPCACT" data-price="1111.00" data-currency="AUD" data-org="Site 538 QAT"><td>PBLPCACT</td><td>PBLPCACT</td><td>1111.00</td><td>AUD</td><td>Site 538 QAT</td></tr>
+              <tr class="prod-row" onclick="openEditPanel(this)" data-name="PROD 111" data-sku="0012" data-price="1.00" data-currency="AUD" data-org="Site 933 QAT"><td>PROD 111</td><td>0012</td><td>1.00</td><td>AUD</td><td>Site 933 QAT</td></tr>
             </tbody>
           </table>
           <!-- Pagination -->
