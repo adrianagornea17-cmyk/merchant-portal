@@ -193,10 +193,9 @@ table.dt td a:hover{text-decoration:underline}
 /* ── Manage merchant country tab ── */
 .mc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px}
 .mc-title{font-size:18px;font-weight:700;color:#0f1923}
-.mc-search-row{display:flex;margin-bottom:14px;border:1.5px solid #d4d8de;border-radius:8px;overflow:hidden;background:#fff}
-.mc-search-row:focus-within{border-color:#185FA5}
-.mc-search-row input{flex:1;border:none;padding:9px 14px;font-size:13px;font-family:inherit;outline:none}
-.mc-search-row button{border:none;background:#185FA5;color:#fff;padding:9px 22px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.mc-search-row{display:flex;border-bottom:1.5px solid #dde1e8;background:#fff}
+.mc-search-row input{flex:1;border:none;padding:11px 16px;font-size:13px;font-family:inherit;outline:none}
+.mc-search-row button{border:none;background:#185FA5;color:#fff;padding:11px 26px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
 .mc-search-row button:hover{background:#104d8a}
 table.mc-tbl th{cursor:pointer;user-select:none;white-space:nowrap}
 table.mc-tbl th:hover{color:#777}
@@ -847,12 +846,11 @@ table.fee-tbl td input{width:100%;max-width:110px}
       <button class="btn btn-primary vf-only" onclick="openCountryCreateModal()">Create new</button>
     </div>
 
-    <div class="mc-search-row">
-      <input type="text" id="mcSearchInput" placeholder="Search by Merchant country" onkeydown="if(event.key==='Enter')searchCountries()">
-      <button onclick="searchCountries()">Search</button>
-    </div>
-
     <div class="tbl-wrap">
+      <div class="mc-search-row">
+        <input type="text" id="mcSearchInput" placeholder="Search by Merchant country" onkeydown="if(event.key==='Enter')searchCountries()">
+        <button onclick="searchCountries()">Search</button>
+      </div>
       <table class="dt mc-tbl">
         <thead>
           <tr>
