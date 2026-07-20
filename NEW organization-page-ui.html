@@ -189,6 +189,69 @@ table.dt td a:hover{text-decoration:underline}
 .feature-ro-flags{display:flex;flex-wrap:wrap;gap:6px}
 .feature-ro-flag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:4px 10px;background:#e4f5ec;color:#1a7a47;border-radius:20px;border:1px solid #b8e6cc}
 .feature-ro-flag svg{width:11px;height:11px;stroke:#1a7a47;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+/* ── Manage merchant country tab ── */
+.mc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px}
+.mc-title{font-size:18px;font-weight:700;color:#0f1923}
+.mc-search-row{display:flex;margin-bottom:14px;border:1.5px solid #d4d8de;border-radius:8px;overflow:hidden;background:#fff}
+.mc-search-row:focus-within{border-color:#185FA5}
+.mc-search-row input{flex:1;border:none;padding:9px 14px;font-size:13px;font-family:inherit;outline:none}
+.mc-search-row button{border:none;background:#185FA5;color:#fff;padding:9px 22px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.mc-search-row button:hover{background:#104d8a}
+table.mc-tbl th{cursor:pointer;user-select:none;white-space:nowrap}
+table.mc-tbl th:hover{color:#777}
+.mc-sort{font-size:9px;margin-left:3px;color:#ccc}
+table.mc-tbl tbody tr{cursor:pointer}
+.mc-foot{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1.5px solid #dde1e8;background:#f8f9fb;font-size:12px;color:#666;flex-wrap:wrap;gap:10px}
+.mc-foot-left,.mc-foot-right{display:flex;align-items:center;gap:8px}
+.rpp-sel{border:1.5px solid #d4d8de;border-radius:7px;padding:4px 10px;font-size:12px;font-family:inherit;background:#fff;cursor:pointer}
+.goto-input{width:44px;border:1.5px solid #d4d8de;border-radius:7px;padding:4px 8px;font-size:12px;text-align:center;font-family:inherit}
+.pg-arrow{width:26px;height:26px;border-radius:50%;border:1.5px solid #d4d8de;background:#fff;color:#555;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:14px;line-height:1}
+.pg-arrow:hover:not(:disabled){background:#f5f6f8}
+.pg-arrow.active{background:#185FA5;border-color:#185FA5;color:#fff}
+.pg-arrow:disabled{opacity:.4;cursor:not-allowed}
+
+/* combo control: select + clear + chevron, matches existing acc-sel-wrap/color-row pattern */
+.combo{display:flex;align-items:center;gap:6px;border:1.5px solid #d4d8de;border-radius:8px;padding:0 10px;background:#fff}
+.combo:focus-within{border-color:#185FA5}
+.combo select{flex:1;border:none;outline:none;padding:8px 0;font-size:13px;font-family:inherit;background:transparent;color:#111;cursor:pointer;appearance:none;-webkit-appearance:none}
+.combo .combo-x{background:none;border:none;cursor:pointer;color:#bbb;font-size:12px;padding:0;flex-shrink:0}
+.combo svg{width:11px;height:11px;stroke:#888;stroke-width:2.5;flex-shrink:0}
+
+/* slide-in side panel: view/edit for a single merchant country */
+#countryPanelBackdrop{display:none;position:fixed;inset:0;background:rgba(15,23,32,.35);z-index:200}
+#countryPanel{position:fixed;top:0;right:0;width:660px;max-width:94vw;height:100vh;background:#f0f2f5;box-shadow:-8px 0 32px rgba(0,0,0,.15);z-index:201;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+#countryPanel.open{transform:translateX(0)}
+.cp-header{flex-shrink:0;background:#fff;border-bottom:1.5px solid #dde1e8;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cp-back{background:none;border:none;cursor:pointer;color:#1a1a2e;display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;font-family:inherit}
+.cp-back svg{width:18px;height:18px;stroke:#1a1a2e;stroke-width:2.2;flex-shrink:0}
+.cp-header-right{display:flex;align-items:center;gap:12px}
+.cp-timestamp{font-size:11.5px;color:#999;font-family:monospace}
+.cp-body{flex:1;overflow-y:auto;padding:20px}
+.cp-footer{flex-shrink:0;background:#fff;border-top:1.5px solid #dde1e8;padding:12px 20px;display:flex;justify-content:flex-end;gap:8px}
+
+/* per-currency fee tables, shared by the panel and the create modal */
+.fee-block{border:1.5px solid #dde1e8;border-radius:8px;overflow:hidden;margin-top:10px}
+.fee-block-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:#f6f7f9;border-bottom:1.5px solid #dde1e8;font-size:12px;font-weight:700;color:#1a1a2e}
+.fee-block-hdr .collapse-link{font-size:12px;color:#185FA5;font-weight:500;cursor:pointer;background:none;border:none;font-family:inherit}
+table.fee-tbl{width:100%;border-collapse:collapse;font-size:13px}
+table.fee-tbl th{text-align:left;padding:8px 14px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em;background:#eef0f4;border-bottom:1px solid #dde1e8}
+table.fee-tbl td{padding:8px 14px;border-bottom:1px solid #f0f2f5;background:#f8f9fb}
+table.fee-tbl tr:last-child td{border-bottom:none}
+table.fee-tbl td input{width:100%;max-width:110px}
+
+/* full-page create modal */
+#countryCreateOverlay{display:none;position:fixed;inset:0;z-index:300;background:#f0f2f5;flex-direction:column}
+.cc-topbar{flex-shrink:0;padding:16px 28px}
+.cc-topbar button{background:none;border:none;cursor:pointer;color:#1a1a2e;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;font-family:inherit}
+.cc-topbar svg{width:18px;height:18px;stroke:#1a1a2e;stroke-width:2.2}
+.cc-body{flex:1;overflow-y:auto;padding:0 28px 28px}
+.cc-inner{max-width:900px;margin:0 auto}
+.cc-card{background:#fff;border:1.5px solid #dde1e8;border-radius:12px;overflow:hidden}
+.cc-section{padding:20px 24px;border-bottom:1.5px solid #eef0f4}
+.cc-section:last-child{border-bottom:none}
+.cc-section-title{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:14px}
+.cc-footer{display:flex;justify-content:flex-end;gap:8px;padding:16px 24px}
 </style>
 </head>
 <body>
@@ -361,6 +424,7 @@ table.dt td a:hover{text-decoration:underline}
     <div class="primary-tab" onclick="switchTab('contacts',this)">Contacts &amp; Addresses</div>
     <div class="primary-tab" onclick="switchTab('linked',this)">Linked Records</div>
     <div class="primary-tab" onclick="switchTab('custom',this)">Custom Configuration</div>
+    <div class="primary-tab" onclick="switchTab('country',this)">Manage Merchant Country</div>
   </div>
 
   <!-- ═══ TAB 1: ORGANIZATION DETAILS ═══ -->
@@ -775,6 +839,53 @@ table.dt td a:hover{text-decoration:underline}
     </div>
   </div>
 
+  <!-- ═══ TAB 6: MANAGE MERCHANT COUNTRY ═══ -->
+  <div id="tab-country" style="display:none">
+
+    <div class="mc-header">
+      <div class="mc-title">Manage merchant country</div>
+      <button class="btn btn-primary vf-only" onclick="openCountryCreateModal()">Create new</button>
+    </div>
+
+    <div class="mc-search-row">
+      <input type="text" id="mcSearchInput" placeholder="Search by Merchant country" onkeydown="if(event.key==='Enter')searchCountries()">
+      <button onclick="searchCountries()">Search</button>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="dt mc-tbl">
+        <thead>
+          <tr>
+            <th onclick="sortCountries('country')">Country<span class="mc-sort">▾</span></th>
+            <th onclick="sortCountries('code')">Country Code<span class="mc-sort">▾</span></th>
+            <th onclick="sortCountries('start')">Start Date<span class="mc-sort">▾</span></th>
+            <th onclick="sortCountries('end')">End Date<span class="mc-sort">▾</span></th>
+            <th onclick="sortCountries('editedBy')">Edited by<span class="mc-sort">▾</span></th>
+            <th onclick="sortCountries('lastEdited')">Last edited<span class="mc-sort">▾</span></th>
+          </tr>
+        </thead>
+        <tbody id="mcTableBody"></tbody>
+      </table>
+      <div class="mc-foot">
+        <div class="mc-foot-left">
+          <span>Results per page</span>
+          <select class="rpp-sel" id="mcPageSize" onchange="onPageSizeChange()">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div class="mc-foot-right">
+          <span>Go to page</span>
+          <input type="text" class="goto-input" id="mcGotoInput" onkeydown="if(event.key==='Enter')gotoPageInput()">
+          <span id="mcPageLabel">Page 1 of 1</span>
+          <button class="pg-arrow" id="mcPrevBtn" onclick="changePage(-1)">‹</button>
+          <button class="pg-arrow" id="mcNextBtn" onclick="changePage(1)">›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /inner -->
 </div><!-- /main -->
 
@@ -1045,6 +1156,186 @@ table.dt td a:hover{text-decoration:underline}
 .acc-sel{border:none;outline:none;font-size:13px;font-family:inherit;color:#333;flex:1;background:transparent;cursor:pointer;-webkit-appearance:none;appearance:none}
 </style>
 
+<!-- ═══ MERCHANT COUNTRY — VIEW/EDIT SIDE PANEL ═══ -->
+<div id="countryPanelBackdrop" onclick="closeCountryPanel()"></div>
+<div id="countryPanel">
+  <div class="cp-header">
+    <button class="cp-back" onclick="closeCountryPanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span id="cpCountryName">Country</span>
+    </button>
+    <div class="cp-header-right">
+      <span class="cp-timestamp" id="cpTimestamp"></span>
+      <button class="btn btn-secondary btn-sm vf-only" id="cpEditBtn" onclick="togglePanelEdit(true)">Edit configuration</button>
+    </div>
+  </div>
+  <div class="cp-body">
+    <div class="card">
+      <div class="card-title">Merchant country configuration</div>
+      <div class="card-body">
+
+        <div class="fields" style="gap:12px">
+          <div class="f"><div class="f-label">Country code *</div><input class="f-edit ro" id="cpCode" disabled></div>
+          <div class="f"><div class="f-label">Country</div><input class="f-edit ro" id="cpCountry" disabled></div>
+        </div>
+
+        <div class="sep"></div>
+        <div class="section-label">Payout cycle</div>
+        <div class="fields triple" style="gap:12px">
+          <div class="f"><div class="f-label">Number of days *</div><input class="f-edit ro" id="cpDays" disabled></div>
+          <div class="f"><div class="f-label">Float delay days *</div><input class="f-edit ro" id="cpFloat" disabled></div>
+          <div class="f"><div class="f-label">Payout frequency</div><input class="f-edit ro" id="cpFreq" disabled></div>
+        </div>
+
+        <div class="sep"></div>
+        <div class="section-label">Portfolio risk details</div>
+        <div class="fields" style="gap:12px">
+          <div class="f"><div class="f-label">Rolling Reserve (%) *</div><input class="f-edit ro" id="cpReserve" disabled></div>
+          <div class="f"><div class="f-label">Rolling reserve withholding period (days) *</div><input class="f-edit ro" id="cpReserveDays" disabled></div>
+        </div>
+
+        <div class="sep"></div>
+        <div class="f"><div class="f-label">Net vs gross settlement preference</div>
+          <select class="f-edit ro" id="cpNetGross" disabled><option>Net Settlement</option><option>Gross Settlement</option></select>
+        </div>
+
+        <div class="sep"></div>
+        <div class="f"><div class="f-label">Service level details</div>
+          <select class="f-edit ro" id="cpServiceLevel" disabled><option>Pre-Financing</option><option>Post-Financing</option></select>
+        </div>
+
+        <div class="sep"></div>
+        <div class="f-label" style="margin-bottom:6px">Add / manage pricing plan (per currency) *</div>
+        <div style="font-size:12px;color:#888;margin-bottom:6px">Select the currency to view the fee structure</div>
+        <select class="f-edit ro" id="cpPricingCurrency" style="max-width:200px" disabled></select>
+        <div class="fee-block" id="cpPricingBlock"></div>
+
+        <div class="sep"></div>
+        <div class="f-label" style="margin-bottom:6px">Additional fees (per currency) *</div>
+        <div style="font-size:12px;color:#888;margin-bottom:6px">Select the currency to view the fee structure</div>
+        <select class="f-edit ro" id="cpFeesCurrency" style="max-width:200px" disabled></select>
+        <div class="fee-block" id="cpFeesBlock"></div>
+
+        <div class="sep"></div>
+        <div class="section-label">Partner Commission</div>
+        <div class="fields" style="gap:12px">
+          <div class="f"><div class="f-label">Commission (%) *</div><input class="f-edit ro" id="cpCommission" disabled></div>
+          <div class="f"><div class="f-label">Report Interval *</div>
+            <select class="f-edit ro" id="cpReportInterval" disabled><option>Quarterly</option><option>Monthly</option><option>Annually</option></select>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="cp-footer">
+    <button class="btn btn-secondary" id="cpCancelBtn" style="display:none" onclick="togglePanelEdit(false)">Cancel</button>
+    <button class="btn btn-primary" id="cpSaveBtn" style="display:none" onclick="savePanelEdit()">Save changes</button>
+  </div>
+</div>
+
+<!-- ═══ MERCHANT COUNTRY — CREATE (FULL PAGE) ═══ -->
+<div id="countryCreateOverlay">
+  <div class="cc-topbar">
+    <button onclick="closeCountryCreateModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back
+    </button>
+  </div>
+  <div class="cc-body">
+    <div class="cc-inner">
+      <div class="cc-card">
+
+        <div class="cc-section">
+          <div class="cc-section-title">Merchant country configuration</div>
+          <div class="fields" style="gap:16px">
+            <div class="f">
+              <div class="f-label">Country code *</div>
+              <div class="combo">
+                <select id="ccCode" onchange="onCreateCountryCodeChange()"></select>
+                <button class="combo-x" onclick="document.getElementById('ccCode').value='';onCreateCountryCodeChange()">✕</button>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="f"><div class="f-label">Country</div><input class="f-edit ro" id="ccCountry" disabled></div>
+          </div>
+        </div>
+
+        <div class="cc-section">
+          <div class="cc-section-title">Payout cycle</div>
+          <div class="fields triple" style="gap:16px">
+            <div class="f"><div class="f-label">Number of days *</div><input class="f-edit" id="ccDays" value="1"></div>
+            <div class="f"><div class="f-label">Float delay days *</div><input class="f-edit" id="ccFloat" value="0"></div>
+            <div class="f"><div class="f-label">Payout frequency</div><input class="f-edit ro" id="ccFreq" value="1" disabled></div>
+          </div>
+        </div>
+
+        <div class="cc-section">
+          <div class="cc-section-title">Portfolio risk details</div>
+          <div class="fields" style="gap:16px">
+            <div class="f"><div class="f-label">Rolling Reserve (%) *</div><input class="f-edit" id="ccReserve" value="5"></div>
+            <div class="f"><div class="f-label">Rolling reserve withholding period (days) *</div><input class="f-edit" id="ccReserveDays" value="90"></div>
+          </div>
+        </div>
+
+        <div class="cc-section">
+          <div class="f-label" style="margin-bottom:8px">Net vs gross settlement preference</div>
+          <div class="combo" style="max-width:280px">
+            <select id="ccNetGross"><option selected>Net Settlement</option><option>Gross Settlement</option></select>
+            <button class="combo-x">✕</button>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        <div class="cc-section">
+          <div class="f-label" style="margin-bottom:8px">Service level details</div>
+          <select class="f-edit" id="ccServiceLevel" style="max-width:280px"><option>Pre-Financing</option><option>Post-Financing</option></select>
+        </div>
+
+        <div class="cc-section">
+          <div class="f-label" style="margin-bottom:4px">Add / manage pricing plan (per currency) *</div>
+          <div style="font-size:12px;color:#888;margin-bottom:8px">Select the currency to view the fee structure</div>
+          <select class="f-edit" id="ccPricingCurrency" style="max-width:280px" onchange="onCreateCurrencySelect('pricing')">
+            <option value="">— Select at least one currency —</option>
+            <option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option><option value="NOK">NOK</option><option value="SEK">SEK</option><option value="PLN">PLN</option><option value="DKK">DKK</option>
+          </select>
+          <div class="fee-block" id="ccPricingBlock"></div>
+        </div>
+
+        <div class="cc-section">
+          <div class="f-label" style="margin-bottom:4px">Additional fees (per currency) *</div>
+          <div style="font-size:12px;color:#888;margin-bottom:8px">Select the currency to view the fee structure</div>
+          <select class="f-edit" id="ccFeesCurrency" style="max-width:280px" onchange="onCreateCurrencySelect('fees')">
+            <option value="">— Select at least one currency —</option>
+            <option value="EUR">EUR</option><option value="USD">USD</option><option value="GBP">GBP</option><option value="NOK">NOK</option><option value="SEK">SEK</option><option value="PLN">PLN</option><option value="DKK">DKK</option>
+          </select>
+          <div class="fee-block" id="ccFeesBlock"></div>
+        </div>
+
+        <div class="cc-section">
+          <div class="f-label" style="margin-bottom:8px">Partner Commission *</div>
+          <div class="fields" style="gap:16px">
+            <div class="f"><div class="f-label">Commission (%) *</div><input class="f-edit" id="ccCommission" value="0"></div>
+            <div class="f"><div class="f-label">Report Interval *</div>
+              <div class="combo">
+                <select id="ccReportInterval"><option selected>Quarterly</option><option>Monthly</option><option>Annually</option></select>
+                <button class="combo-x">✕</button>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cc-footer">
+          <button class="btn btn-secondary" onclick="closeCountryCreateModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="createCountrySubmit()">Create</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <script>
 // ── FLAG DATA ──
@@ -1203,7 +1494,7 @@ function switchFlagPill(key,el){curPill=key;['commerce','devices','appmarket','p
 renderFlagGroups('commerce',null);
 
 // ── Tab navigation ──
-const TABS={org:'tab-org',feature:'tab-feature',contacts:'tab-contacts',linked:'tab-linked',custom:'tab-custom'};
+const TABS={org:'tab-org',feature:'tab-feature',contacts:'tab-contacts',linked:'tab-linked',custom:'tab-custom',country:'tab-country'};
 function switchTab(key,el){Object.values(TABS).forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});const t=document.getElementById(TABS[key]);if(t)t.style.display='';document.querySelectorAll('.primary-tab').forEach(e=>e.classList.remove('active'));if(el)el.classList.add('active');}
 
 // ── Role-based editing ──
@@ -1364,6 +1655,253 @@ function applyStyleChanges(){
   btn.style.background='#1a7a47';
   setTimeout(()=>{btn.textContent=orig;btn.style.background='#185FA5';},2000);
 }
+
+// ── MANAGE MERCHANT COUNTRY ──
+const COUNTRY_NAMES={
+  AT:'Austria',DK:'Denmark',EE:'Estonia',FI:'Finland',GB:'United Kingdom of Great Britain and Northern Ireland',
+  GR:'Greece',IT:'Italy',LT:'Lithuania',LV:'Latvia',NO:'Norway',PL:'Poland',PT:'Portugal',SE:'Sweden',
+  DE:'Germany',FR:'France',ES:'Spain',NL:'Netherlands',IE:'Ireland',BE:'Belgium',CH:'Switzerland',
+};
+
+function feeTemplate(currency){
+  return {
+    currency,
+    pricing:[
+      {mode:'CreditcardMCA',pct:0.6,fixed:0.04,min:0},
+      {mode:'DebitcardMCA',pct:0.6,fixed:0.04,min:0},
+      {mode:'NonEEAcardMCA',pct:1.2,fixed:0,min:0},
+      {mode:'CommercialcardsMCA',pct:0.8,fixed:0,min:0},
+      {mode:'Manual key entry',pct:0.2,fixed:0,min:0},
+      {mode:'Non-EMV',pct:0.35,fixed:0,min:0},
+    ],
+    fees:[{mode:'Chargeback fee',pct:0,fixed:0,min:30}],
+  };
+}
+
+const MERCHANT_COUNTRIES=[
+  {code:'AT',country:'Austria',start:'December 6, 2022',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'December 6, 2022, 15:11',ts:'2022-12-06 15:11',
+    cfg:{days:1,float:0,freq:1,reserve:5,reserveDays:90,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('EUR')}},
+  {code:'DK',country:'Denmark',start:'October 9, 2022',end:'',editedBy:'Mihaela.Radu@VERIFONE.com',lastEdited:'October 8, 2022, 19:11',ts:'2022-10-08 19:11',
+    cfg:{days:1,float:0,freq:1,reserve:3,reserveDays:60,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('DKK')}},
+  {code:'EE',country:'Estonia',start:'February 1, 2026',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'January 30, 2026, 14:38',ts:'2026-01-30 14:38',
+    cfg:{days:2,float:0,freq:1,reserve:5,reserveDays:90,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('EUR')}},
+  {code:'FI',country:'Finland',start:'December 16, 2022',end:'',editedBy:'Mihaela.Radu@VERIFONE.com',lastEdited:'December 15, 2022, 9:46',ts:'2022-12-15 09:46',
+    cfg:{days:2,float:0,freq:1,reserve:0,reserveDays:90,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('EUR')}},
+  {code:'GB',country:'United Kingdom of Great Britain and Northern Ireland',start:'April 1, 2024',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'March 18, 2024, 10:55',ts:'2024-03-18 10:55',
+    cfg:{days:2,float:1,freq:1,reserve:5,reserveDays:90,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('GBP')}},
+  {code:'GR',country:'Greece',start:'May 1, 2024',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'April 30, 2024, 17:59',ts:'2024-04-30 17:59',
+    cfg:{days:2,float:0,freq:1,reserve:8,reserveDays:120,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('EUR')}},
+  {code:'IT',country:'Italy',start:'May 1, 2024',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'April 30, 2024, 17:59',ts:'2024-04-30 17:59',
+    cfg:{days:2,float:0,freq:1,reserve:8,reserveDays:120,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('EUR')}},
+  {code:'LT',country:'Lithuania',start:'February 1, 2026',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'January 30, 2026, 14:38',ts:'2026-01-30 14:38',
+    cfg:{days:2,float:0,freq:1,reserve:5,reserveDays:90,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('EUR')}},
+  {code:'LV',country:'Latvia',start:'February 1, 2026',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'January 30, 2026, 14:39',ts:'2026-01-30 14:39',
+    cfg:{days:2,float:0,freq:1,reserve:5,reserveDays:90,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('EUR')}},
+  {code:'NO',country:'Norway',start:'October 9, 2022',end:'',editedBy:'Mihaela.Radu@VERIFONE.com',lastEdited:'October 8, 2022, 19:11',ts:'2022-10-08 19:11',
+    cfg:{days:1,float:0,freq:1,reserve:3,reserveDays:60,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('NOK')}},
+  {code:'PL',country:'Poland',start:'June 1, 2024',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'May 28, 2024, 11:20',ts:'2024-05-28 11:20',
+    cfg:{days:2,float:0,freq:1,reserve:5,reserveDays:90,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('PLN')}},
+  {code:'PT',country:'Portugal',start:'June 1, 2024',end:'',editedBy:'irina.pop@verifone.com',lastEdited:'May 28, 2024, 11:25',ts:'2024-05-28 11:25',
+    cfg:{days:2,float:0,freq:1,reserve:5,reserveDays:90,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('EUR')}},
+  {code:'SE',country:'Sweden',start:'June 1, 2024',end:'',editedBy:'Mihaela.Radu@VERIFONE.com',lastEdited:'May 28, 2024, 11:30',ts:'2024-05-28 11:30',
+    cfg:{days:1,float:0,freq:1,reserve:3,reserveDays:60,netGross:'Net Settlement',serviceLevel:'Pre-Financing',commission:0,reportInterval:'Quarterly',...feeTemplate('SEK')}},
+];
+
+let mcFiltered=MERCHANT_COUNTRIES.slice();
+let mcPage=1,mcPageSize=10;
+let mcSortField=null,mcSortDir=1;
+
+function renderCountryTable(){
+  const start=(mcPage-1)*mcPageSize;
+  const rows=mcFiltered.slice(start,start+mcPageSize);
+  document.getElementById('mcTableBody').innerHTML=rows.map(r=>{
+    const idx=MERCHANT_COUNTRIES.indexOf(r);
+    return `<tr onclick="openCountryPanel(${idx})">
+      <td>${r.country}</td><td>${r.code}</td><td>${r.start}</td><td>${r.end||''}</td><td>${r.editedBy}</td><td>${r.lastEdited}</td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px">No results found.</td></tr>';
+  const totalPages=Math.max(1,Math.ceil(mcFiltered.length/mcPageSize));
+  if(mcPage>totalPages)mcPage=totalPages;
+  document.getElementById('mcPageLabel').textContent=`Page ${mcPage} of ${totalPages}`;
+  document.getElementById('mcPrevBtn').disabled=mcPage<=1;
+  document.getElementById('mcNextBtn').disabled=mcPage>=totalPages;
+  document.getElementById('mcPrevBtn').classList.toggle('active',mcPage>1);
+  document.getElementById('mcNextBtn').classList.toggle('active',mcPage<totalPages);
+}
+
+function searchCountries(){
+  const q=document.getElementById('mcSearchInput').value.toLowerCase().trim();
+  mcFiltered=MERCHANT_COUNTRIES.filter(r=>r.country.toLowerCase().includes(q)||r.code.toLowerCase().includes(q));
+  mcPage=1;
+  renderCountryTable();
+}
+
+function sortCountries(field){
+  mcSortDir=(mcSortField===field)?-mcSortDir:1;
+  mcSortField=field;
+  mcFiltered.sort((a,b)=>String(a[field]||'').localeCompare(String(b[field]||''))*mcSortDir);
+  mcPage=1;
+  renderCountryTable();
+}
+
+function onPageSizeChange(){
+  mcPageSize=parseInt(document.getElementById('mcPageSize').value,10);
+  mcPage=1;
+  renderCountryTable();
+}
+
+function changePage(delta){
+  const totalPages=Math.max(1,Math.ceil(mcFiltered.length/mcPageSize));
+  mcPage=Math.min(totalPages,Math.max(1,mcPage+delta));
+  renderCountryTable();
+}
+
+function gotoPageInput(){
+  const totalPages=Math.max(1,Math.ceil(mcFiltered.length/mcPageSize));
+  const v=parseInt(document.getElementById('mcGotoInput').value,10);
+  if(v>=1&&v<=totalPages){mcPage=v;renderCountryTable();}
+}
+
+function feeRowsHtml(rows,disabled){
+  return `<table class="fee-tbl"><thead><tr><th>Payment mode</th><th>Percentage *</th><th>Fixed (amount) *</th><th>Minimum (amount) *</th></tr></thead><tbody>${
+    rows.map(r=>`<tr><td>${r.mode}</td><td><input class="f-edit${disabled?' ro':''}" value="${r.pct}"${disabled?' disabled':''}></td><td><input class="f-edit${disabled?' ro':''}" value="${r.fixed}"${disabled?' disabled':''}></td><td><input class="f-edit${disabled?' ro':''}" value="${r.min}"${disabled?' disabled':''}></td></tr>`).join('')
+  }</tbody></table>`;
+}
+
+function renderFeeBlock(elId,currency,rows,disabled){
+  const el=document.getElementById(elId);
+  if(!currency){el.innerHTML='';el.style.display='none';return;}
+  el.style.display='block';
+  el.innerHTML=`<div class="fee-block-hdr"><span>${currency}</span><button class="collapse-link" onclick="toggleFeeBlock('${elId}')">Collapse</button></div><div class="fee-block-rows">${feeRowsHtml(rows,disabled)}</div>`;
+}
+
+function toggleFeeBlock(elId){
+  const rowsEl=document.querySelector(`#${elId} .fee-block-rows`);
+  const link=document.querySelector(`#${elId} .collapse-link`);
+  if(!rowsEl)return;
+  const collapsed=rowsEl.style.display==='none';
+  rowsEl.style.display=collapsed?'':'none';
+  link.textContent=collapsed?'Collapse':'Expand';
+}
+
+function openCountryPanel(idx){
+  const r=MERCHANT_COUNTRIES[idx];
+  document.getElementById('cpCountryName').textContent=r.country;
+  document.getElementById('cpTimestamp').textContent=r.ts;
+  document.getElementById('cpCode').value=r.code;
+  document.getElementById('cpCountry').value=r.country;
+  document.getElementById('cpDays').value=r.cfg.days;
+  document.getElementById('cpFloat').value=r.cfg.float;
+  document.getElementById('cpFreq').value=r.cfg.freq;
+  document.getElementById('cpReserve').value=r.cfg.reserve;
+  document.getElementById('cpReserveDays').value=r.cfg.reserveDays;
+  document.getElementById('cpNetGross').value=r.cfg.netGross;
+  document.getElementById('cpServiceLevel').value=r.cfg.serviceLevel;
+  document.getElementById('cpCommission').value=r.cfg.commission;
+  document.getElementById('cpReportInterval').value=r.cfg.reportInterval;
+
+  document.getElementById('cpPricingCurrency').innerHTML=`<option>${r.cfg.currency}</option>`;
+  renderFeeBlock('cpPricingBlock',r.cfg.currency,r.cfg.pricing,true);
+
+  document.getElementById('cpFeesCurrency').innerHTML=`<option>${r.cfg.currency}</option>`;
+  renderFeeBlock('cpFeesBlock',r.cfg.currency,r.cfg.fees,true);
+
+  togglePanelEdit(false);
+  document.getElementById('countryPanelBackdrop').style.display='block';
+  document.getElementById('countryPanel').classList.add('open');
+}
+
+function closeCountryPanel(){
+  document.getElementById('countryPanelBackdrop').style.display='none';
+  document.getElementById('countryPanel').classList.remove('open');
+}
+
+function togglePanelEdit(editing){
+  document.querySelectorAll('#countryPanel .f-edit').forEach(inp=>{
+    if(editing){inp.classList.remove('ro');inp.removeAttribute('disabled');}
+    else{inp.classList.add('ro');inp.setAttribute('disabled','');}
+  });
+  // Country code / country / payout frequency stay read-only even in edit mode
+  ['cpCode','cpCountry','cpFreq'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.classList.add('ro');el.setAttribute('disabled','');
+  });
+  document.getElementById('cpEditBtn').style.display=editing?'none':'inline-flex';
+  document.getElementById('cpCancelBtn').style.display=editing?'inline-flex':'none';
+  document.getElementById('cpSaveBtn').style.display=editing?'inline-flex':'none';
+}
+
+function savePanelEdit(){
+  togglePanelEdit(false);
+}
+
+// ── CREATE (FULL PAGE) ──
+function openCountryCreateModal(){
+  const sel=document.getElementById('ccCode');
+  sel.innerHTML='<option value="">— Select —</option>'+Object.keys(COUNTRY_NAMES).map(c=>`<option value="${c}">${c} — ${COUNTRY_NAMES[c]}</option>`).join('');
+  sel.value='';
+  document.getElementById('ccCountry').value='';
+  document.getElementById('ccDays').value='1';
+  document.getElementById('ccFloat').value='0';
+  document.getElementById('ccFreq').value='1';
+  document.getElementById('ccReserve').value='5';
+  document.getElementById('ccReserveDays').value='90';
+  document.getElementById('ccNetGross').value='Net Settlement';
+  document.getElementById('ccServiceLevel').value='Pre-Financing';
+  document.getElementById('ccPricingCurrency').value='';
+  document.getElementById('ccFeesCurrency').value='';
+  document.getElementById('ccPricingBlock').innerHTML='';
+  document.getElementById('ccFeesBlock').innerHTML='';
+  document.getElementById('ccCommission').value='0';
+  document.getElementById('ccReportInterval').value='Quarterly';
+  document.getElementById('countryCreateOverlay').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function closeCountryCreateModal(){
+  document.getElementById('countryCreateOverlay').style.display='none';
+  document.body.style.overflow='';
+}
+
+function onCreateCountryCodeChange(){
+  const code=document.getElementById('ccCode').value;
+  document.getElementById('ccCountry').value=code?COUNTRY_NAMES[code]:'';
+}
+
+function onCreateCurrencySelect(which){
+  const sel=document.getElementById(which==='pricing'?'ccPricingCurrency':'ccFeesCurrency');
+  const currency=sel.value;
+  const tpl=feeTemplate(currency||'EUR');
+  const rows=which==='pricing'?tpl.pricing:tpl.fees;
+  renderFeeBlock(which==='pricing'?'ccPricingBlock':'ccFeesBlock',currency,rows,false);
+}
+
+function createCountrySubmit(){
+  const code=document.getElementById('ccCode').value;
+  if(!code){alert('Please select a country code.');return;}
+  const country=COUNTRY_NAMES[code];
+  MERCHANT_COUNTRIES.push({
+    code,country,start:'—',end:'',editedBy:'you@verifone.com',lastEdited:'Just now',ts:'—',
+    cfg:{
+      days:parseFloat(document.getElementById('ccDays').value)||1,
+      float:parseFloat(document.getElementById('ccFloat').value)||0,
+      freq:1,
+      reserve:parseFloat(document.getElementById('ccReserve').value)||0,
+      reserveDays:parseFloat(document.getElementById('ccReserveDays').value)||0,
+      netGross:document.getElementById('ccNetGross').value,
+      serviceLevel:document.getElementById('ccServiceLevel').value,
+      commission:parseFloat(document.getElementById('ccCommission').value)||0,
+      reportInterval:document.getElementById('ccReportInterval').value,
+      ...feeTemplate(document.getElementById('ccPricingCurrency').value||'EUR'),
+    },
+  });
+  mcFiltered=MERCHANT_COUNTRIES.slice();
+  mcPage=Math.ceil(mcFiltered.length/mcPageSize);
+  renderCountryTable();
+  closeCountryCreateModal();
+}
+
+renderCountryTable();
 </script>
 
 
