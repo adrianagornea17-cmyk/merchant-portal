@@ -190,11 +190,13 @@ table.dt td a:hover{text-decoration:underline}
 .feature-ro-flag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:4px 10px;background:#e4f5ec;color:#1a7a47;border-radius:20px;border:1px solid #b8e6cc}
 .feature-ro-flag svg{width:11px;height:11px;stroke:#1a7a47;fill:none;stroke-width:2.5;stroke-linecap:round}
 
-/* ── Table header search ── */
-.tbl-search{display:flex;align-items:center;gap:6px;border:1.5px solid #d4d8de;border-radius:8px;padding:6px 10px;background:#fff;min-width:230px}
-.tbl-search:focus-within{border-color:#185FA5}
-.tbl-search svg{width:14px;height:14px;stroke:#aaa;fill:none;flex-shrink:0}
-.tbl-search input{border:none;outline:none;background:transparent;font-size:13px;color:#111;flex:1;font-family:inherit}
+/* ── Column-header search (commission configs list) ── */
+.th-label{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;white-space:nowrap}
+.th-sort{color:#c7cbd1;display:flex;align-items:center;cursor:pointer}
+.th-sort:hover{color:#777}
+.col-filter{width:100%;height:30px;border:1.5px solid #d4d8de;border-radius:7px;padding:0 10px;font-size:12.5px;font-weight:400;text-transform:none;letter-spacing:normal;color:#111;background:#fff;outline:none;font-family:inherit;transition:border-color .15s}
+.col-filter:focus{border-color:#185FA5}
+.col-filter::placeholder{color:#bbb}
 
 /* ── Commission config side panel ── */
 .cp-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.32);z-index:900;display:none}
@@ -816,16 +818,23 @@ table.dt td a:hover{text-decoration:underline}
         <div class="tbl-hdr">
           <div class="tbl-hdr-title">Commission configurations</div>
           <div class="tbl-actions">
-            <div class="tbl-search">
-              <svg viewBox="0 0 20 20" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
-              <input type="text" id="commSearch" placeholder="Search by currency…" oninput="filterCommissions(this.value)">
-            </div>
             <button class="btn btn-primary btn-sm vf-only" onclick="openCommissionModal('add')">+ Add configuration</button>
           </div>
         </div>
         <div class="tbl-wrap">
           <table class="dt">
-            <thead><tr><th>Currency</th><th>Payment modes</th><th>Additional fees</th><th>Status</th><th>Last updated</th></tr></thead>
+            <thead>
+              <tr>
+                <th style="vertical-align:top">
+                  <div class="th-label">Currency<span class="th-sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span></div>
+                  <input class="col-filter" type="text" id="commSearch" placeholder="Search…" oninput="filterCommissions(this.value)">
+                </th>
+                <th>Payment modes</th>
+                <th>Additional fees</th>
+                <th>Status</th>
+                <th>Last updated</th>
+              </tr>
+            </thead>
             <tbody id="commTableBody"></tbody>
           </table>
           <div class="tbl-foot"><span id="commCount"></span><div class="pager"><button class="pg">‹</button><button class="pg active">1</button><button class="pg">›</button></div></div>
