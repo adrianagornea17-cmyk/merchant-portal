@@ -206,22 +206,24 @@ body {
 .btn-secondary:hover { border-color: #9ca3af; background: var(--hover-bg); }
 .btn-sm { height: 30px; padding: 0 14px; font-size: 12.5px; }
 
-/* ─── TABLE / SEARCH CARD ─── */
+/* ─── TABLE / SEARCH-IN-HEADER CARD ─── */
 .tbl-wrap { border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff; }
-.mc-search-tr th { padding: 0; background: #fff; cursor: default; }
-.mc-search-row { display: flex; background: #fff; }
-.mc-search-row input { flex: 1; border: none; padding: 12px 16px; font-size: 13px; font-weight: 400; text-transform: none; letter-spacing: normal; font-family: inherit; outline: none; }
-.mc-search-row button { border: none; background: var(--accent); color: #fff; padding: 12px 26px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
-.mc-search-row button:hover { background: #1d4ed8; }
 
 table.dt { width: 100%; border-collapse: collapse; font-size: 13px; }
-table.dt th { text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 700; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.05em; background: var(--bg); border-bottom: 1.5px solid var(--border); cursor: pointer; user-select: none; white-space: nowrap; }
-table.dt th:hover { color: var(--text-3); }
+table.dt th { text-align: left; padding: 10px 16px 12px; vertical-align: top; background: #f8fafc; border-bottom: 1.5px solid var(--border); border-right: 1px solid var(--border); user-select: none; }
+table.dt th:last-child { border-right: none; }
 table.dt td { padding: 11px 16px; border-bottom: 1px solid #f1f3f5; color: var(--text); vertical-align: middle; }
 table.dt tr:last-child td { border-bottom: none; }
 table.dt tbody tr { cursor: pointer; }
 table.dt tbody tr:hover td { background: var(--bg); }
-.mc-sort { font-size: 9px; margin-left: 3px; color: #c7cbd1; }
+
+.th-label { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; white-space: nowrap; }
+.th-sort { color: var(--text-4); display: flex; align-items: center; cursor: pointer; }
+.th-sort:hover { color: var(--text-3); }
+.th-sort svg { width: 12px; height: 12px; }
+.col-filter { width: 100%; height: 30px; border: 1.5px solid var(--border); border-radius: 7px; padding: 0 10px; font-size: 12.5px; font-weight: 400; text-transform: none; letter-spacing: normal; color: var(--text); background: #fff; outline: none; font-family: inherit; transition: border-color 0.15s; }
+.col-filter:focus { border-color: var(--accent); }
+.col-filter::placeholder { color: var(--text-4); }
 
 .mc-foot { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-top: 1.5px solid var(--border); background: var(--bg); font-size: 12px; color: var(--text-3); flex-wrap: wrap; gap: 10px; }
 .mc-foot-left, .mc-foot-right { display: flex; align-items: center; gap: 8px; }
@@ -458,21 +460,16 @@ table.fee-tbl td input { width: 100%; max-width: 110px; }
         <div class="tbl-wrap">
           <table class="dt mc-tbl">
             <thead>
-              <tr class="mc-search-tr">
-                <th colspan="6">
-                  <div class="mc-search-row">
-                    <input type="text" id="mcSearchInput" placeholder="Search by Merchant country" onkeydown="if(event.key==='Enter')searchCountries()">
-                    <button onclick="searchCountries()">Search</button>
-                  </div>
-                </th>
-              </tr>
               <tr>
-                <th onclick="sortCountries('country')">Country<span class="mc-sort">▾</span></th>
-                <th onclick="sortCountries('code')">Country Code<span class="mc-sort">▾</span></th>
-                <th onclick="sortCountries('start')">Start Date<span class="mc-sort">▾</span></th>
-                <th onclick="sortCountries('end')">End Date<span class="mc-sort">▾</span></th>
-                <th onclick="sortCountries('editedBy')">Edited by<span class="mc-sort">▾</span></th>
-                <th onclick="sortCountries('lastEdited')">Last edited<span class="mc-sort">▾</span></th>
+                <th>
+                  <div class="th-label">Country<span class="th-sort" onclick="sortCountries('country')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span></div>
+                  <input class="col-filter" type="text" id="mcSearchInput" placeholder="Search…" oninput="searchCountries()">
+                </th>
+                <th><div class="th-label">Country Code<span class="th-sort" onclick="sortCountries('code')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span></div></th>
+                <th><div class="th-label">Start Date<span class="th-sort" onclick="sortCountries('start')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span></div></th>
+                <th><div class="th-label">End Date<span class="th-sort" onclick="sortCountries('end')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span></div></th>
+                <th><div class="th-label">Edited by<span class="th-sort" onclick="sortCountries('editedBy')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span></div></th>
+                <th><div class="th-label">Last edited<span class="th-sort" onclick="sortCountries('lastEdited')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span></div></th>
               </tr>
             </thead>
             <tbody id="mcTableBody"></tbody>
