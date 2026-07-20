@@ -552,15 +552,6 @@
       margin-bottom: 6px;
     }
     .stat-value.not-ok { color: #dc2626; }
-    .stat-not-ok-flag {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #dc2626;
-      margin-bottom: 6px;
-    }
     .stat-note {
       font-size: 12px;
       color: var(--text-3);
@@ -741,10 +732,6 @@
             <div class="stat-link-arrow alert">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
             </div>
-            <div class="stat-not-ok-flag">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              Needs attention
-            </div>
             <div class="stat-label">Total Failed Transactions</div>
             <div class="stat-value not-ok">502</div>
             <div class="stat-note"></div>
@@ -899,10 +886,6 @@
         <div class="stat-card ${s.link ? 'clickable' : ''}" style="border-left-color:${s.color}" ${s.link ? `title="View ${s.label.toLowerCase()} details"` : ''}>
           ${s.link ? `<div class="stat-link-arrow ${s.notOk ? 'alert' : ''}">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </div>` : ''}
-          ${s.notOk ? `<div class="stat-not-ok-flag">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Needs attention
           </div>` : ''}
           <div class="stat-label">${s.label}</div>
           <div class="stat-value ${s.notOk ? 'not-ok' : ''}">${s.value}</div>
