@@ -63,6 +63,7 @@ GitHub Pages picks up the change automatically (usually within 1–2 min).
 | `index-v2-sidepanel.html` | Filter Side Panel | Option 2 |
 | `administration-organizations.html` | Administration · Organizations | Admin |
 | `NEW organization-page-ui.html` | Organization Page Enhancement | Admin |
+| `administration-merchant-country.html` | Administration · Merchant Country | Admin |
 | `VC Template_builder.html` | Report Template Builder | Commerce |
 
 ## Files in the repo NOT yet on the index
