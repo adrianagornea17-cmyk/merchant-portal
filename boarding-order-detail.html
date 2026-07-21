@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boarding · Order Detail — Verifone Central</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --border: #e5e7eb;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --accent: #2563eb;
+      --hover-bg: #f3f4f6;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #fff;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ─── TOP BANNER ─── */
+    .top-banner { position: relative; overflow: hidden; background: linear-gradient(135deg, #051d17 0%, #0b3a2e 32%, #0f6b53 62%, #17b993 100%); flex-shrink: 0; }
+    .banner-glow { position: absolute; top: -140px; right: -120px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(56,224,180,0.55) 0%, rgba(20,150,120,0.18) 55%, transparent 75%); pointer-events: none; }
+    .top-nav { position: relative; z-index: 1; height: 56px; display: flex; align-items: center; padding: 0 32px; }
+    .top-nav-logo { display: flex; align-items: center; gap: 9px; color: #fff; font-size: 15px; font-weight: 700; letter-spacing: -0.2px; margin-right: 36px; text-decoration: none; flex-shrink: 0; }
+    .top-nav-links { display: flex; align-items: center; gap: 2px; flex: 1; }
+    .top-nav-link { padding: 7px 16px; border-radius: 6px; color: rgba(255,255,255,0.72); font-size: 14px; font-weight: 500; cursor: pointer; background: none; border: none; text-decoration: none; transition: color 0.15s, background 0.15s; }
+    .top-nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .top-nav-link.active { color: #fff; font-weight: 600; background: rgba(255,255,255,0.14); }
+    .top-nav-right { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; background: #0f0f14; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.18); flex-shrink: 0; }
+    .banner-title-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; padding: 26px 48px 40px; }
+    .banner-icon { flex-shrink: 0; opacity: 0.92; }
+    .banner-title { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -0.6px; }
+
+    /* ─── CONTENT ─── */
+    .content { flex: 1; padding: 28px 56px 56px; max-width: 1280px; width: 100%; margin: 0 auto; }
+
+    .breadcrumb-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13.5px; color: var(--text-3); text-decoration: none;
+      margin-bottom: 16px; font-weight: 500; transition: color 0.12s;
+    }
+    .breadcrumb-back:hover { color: var(--accent); }
+
+    .order-head-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; }
+    .order-id-label { font-size: 22px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; margin-bottom: 6px; }
+    .order-id-val { font-weight: 400; color: var(--text-3); font-size: 15px; }
+    .copy-btn { background: none; border: none; cursor: pointer; color: var(--text-4); vertical-align: middle; margin-left: 6px; padding: 2px; transition: color 0.12s; }
+    .copy-btn:hover { color: var(--accent); }
+    .order-status-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-3); }
+
+    .status-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fde68a; color: #713f12; white-space: nowrap; }
+    .status-badge.draft { background: #10b981; color: #fff; }
+
+    .more-btn { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-3); }
+    .more-btn:hover { background: var(--hover-bg); }
+
+    /* Lifecycle card */
+    .lifecycle-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 24px 28px 20px; margin-bottom: 24px; }
+    .lifecycle-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 22px; }
+    .lifecycle-steps { display: flex; align-items: flex-start; margin-bottom: 18px; }
+    .lc-step { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 0 0 auto; width: 90px; }
+    .lc-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #e5e7eb; color: #9ca3af; }
+    .lc-circle.done { background: var(--accent); color: #fff; }
+    .lc-circle.current { background: var(--accent); color: #fff; box-shadow: 0 0 0 4px #dbeafe; }
+    .lc-label { font-size: 12.5px; font-weight: 600; color: var(--text-2); }
+    .lc-connector { flex: 1; height: 3px; background: #e5e7eb; margin-top: 17px; }
+    .lc-connector.done { background: var(--accent); }
+    .lifecycle-divider { border: none; border-top: 1px solid #f1f5f9; margin: 4px 0 16px; }
+
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 18px; height: 38px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: background 0.12s, border-color 0.12s, color 0.12s; white-space: nowrap; text-decoration: none; font-family: inherit; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+    .btn-ghost { background: none; border-color: var(--border); color: var(--text-2); }
+    .btn-ghost:hover { border-color: #9ca3af; background: var(--hover-bg); }
+
+    /* Detail layout */
+    .detail-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: flex-start; }
+
+    .expand-all-link { text-align: right; margin-bottom: 10px; }
+    .expand-all-link a { font-size: 13px; color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+    .expand-all-link a:hover { text-decoration: underline; }
+
+    .acc-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .acc-header { flex: 1; background: #f1f5f9; border-radius: 10px; padding: 13px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; font-size: 14px; color: #111827; user-select: none; transition: background 0.1s; }
+    .acc-header:hover { background: #e9edf2; }
+    .acc-chevron { flex-shrink: 0; transition: transform 0.2s; color: #6b7280; }
+    .acc-header.open .acc-chevron { transform: rotate(180deg); }
+    .acc-check { width: 22px; height: 22px; border-radius: 50%; background: #22c55e; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .acc-body { display: none; padding: 18px 4px 6px 8px; }
+    .acc-body.open { display: block; }
+    .acc-subhead { font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+    .acc-subhead:not(:first-child) { margin-top: 22px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 28px; margin-bottom: 4px; }
+    .detail-field { display: flex; flex-direction: column; gap: 4px; }
+    .detail-field.full { grid-column: 1 / -1; }
+    .detail-label { font-size: 12px; color: var(--text-3); }
+    .detail-value { font-size: 13.5px; color: var(--accent); border-bottom: 1.5px dashed #93c5fd; padding-bottom: 1px; width: fit-content; }
+    .detail-value.plain { color: var(--text-2); border-bottom: none; font-weight: 500; }
+    .detail-note { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+    /* Cost summary */
+    .cost-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 22px 24px 24px; position: sticky; top: 24px; }
+    .cost-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+    .cost-sub { font-size: 13.5px; font-weight: 700; color: var(--text-2); margin: 16px 0 8px; }
+    .cost-sub:first-of-type { margin-top: 0; }
+    .cost-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .cost-table thead th { text-align: left; font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.3px; padding: 6px 0; border-bottom: 1.5px solid var(--border); }
+    .cost-table thead th:not(:first-child) { text-align: right; padding-left: 12px; }
+    .cost-table td { padding: 9px 0; color: var(--text-2); border-bottom: 1px solid #f1f5f9; }
+    .cost-table td:not(:first-child) { text-align: right; padding-left: 12px; }
+    .cost-table tr.total td { font-weight: 700; color: #0f172a; border-bottom: none; }
+
+    /* Tracking report slide panel */
+    .tr-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
+    .tr-backdrop.open { opacity: 1; pointer-events: all; }
+    .tr-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 440px; background: #fff; z-index: 401; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.28s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 48px rgba(0,0,0,0.18); }
+    .tr-backdrop.open .tr-panel { transform: translateX(0); }
+    .tr-header { background: #0f0f14; color: #fff; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .tr-header-title { font-size: 18px; font-weight: 700; }
+    .tr-close { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
+    .tr-close:hover { opacity: 1; }
+    .tr-body { flex: 1; overflow-y: auto; padding: 28px 24px 40px; }
+    .tr-item { display: flex; gap: 14px; }
+    .tr-item-rail { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .tr-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tr-line { width: 2px; flex: 1; background: var(--accent); min-height: 34px; }
+    .tr-item:last-child .tr-line { display: none; }
+    .tr-card { flex: 1; background: var(--accent); color: #fff; border-radius: 12px; padding: 12px 16px; margin-bottom: 18px; }
+    .tr-card.outline { background: #fff; border: 1.5px solid var(--border); color: var(--text); }
+    .tr-card-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+    .tr-card-title { font-size: 14px; font-weight: 700; }
+    .tr-card-date { font-size: 12px; opacity: 0.85; }
+    .tr-card-meta { font-size: 12px; opacity: 0.85; display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+    .tr-card-meta button { background: none; border: none; color: inherit; opacity: 0.8; cursor: pointer; display: flex; align-items: center; }
+    .tr-card-desc { font-size: 12.5px; opacity: 0.9; margin-top: 4px; line-height: 1.5; }
+
+    /* Footer */
+    footer { background: #0f0f0f; padding: 24px 48px 16px; flex-shrink: 0; }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .footer-logo { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,0.85); font-size: 15px; font-weight: 700; text-decoration: none; }
+    .footer-links { display: flex; align-items: center; gap: 28px; }
+    .footer-link { font-size: 13.5px; color: rgba(255,255,255,0.55); text-decoration: none; cursor: pointer; background: none; border: none; font-family: inherit; transition: color 0.12s; }
+    .footer-link:hover { color: rgba(255,255,255,0.85); }
+    .footer-bottom { padding-top: 14px; display: flex; align-items: center; gap: 24px; }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+    .footer-policy { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; cursor: pointer; background: none; border: none; font-family: inherit; transition: color 0.12s; }
+    .footer-policy:hover { color: rgba(255,255,255,0.6); }
+
+    .chat-bubble { position: fixed; bottom: 22px; left: 22px; width: 44px; height: 44px; border-radius: 50%; background: #0f172a; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,0.25); cursor: pointer; z-index: 50; }
+  </style>
+</head>
+<body>
+
+<!-- ─── TOP BANNER ─── -->
+<div class="top-banner">
+  <div class="banner-glow"></div>
+  <nav class="top-nav">
+    <a class="top-nav-logo" href="index.html">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+        <circle cx="8" cy="8" r="3.5" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="16" cy="8" r="3.5" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="8" cy="16" r="3.5" fill="rgba(255,255,255,0.55)"/>
+        <circle cx="16" cy="16" r="3.5" fill="rgba(255,255,255,0.55)"/>
+      </svg>
+      verifone
+    </a>
+    <div class="top-nav-links">
+      <a class="top-nav-link" href="#">Commerce</a>
+      <a class="top-nav-link" href="#">Devices</a>
+      <a class="top-nav-link" href="#">Administration</a>
+      <a class="top-nav-link active" href="boarding-orders.html">Boarding</a>
+      <a class="top-nav-link" href="#">App Marketplace</a>
+    </div>
+    <div class="top-nav-right"><div class="avatar">AG</div></div>
+  </nav>
+  <div class="banner-title-row">
+    <svg class="banner-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="6" cy="7" r="2"/><path d="M6 9v6"/>
+      <circle cx="12" cy="7" r="2"/><path d="M12 9v6"/>
+      <circle cx="18" cy="17" r="2.4"/><path d="M16.5 15.9l1.5 1.5 2.2-2.6"/>
+    </svg>
+    <h1 class="banner-title">Boarding</h1>
+  </div>
+</div>
+
+<!-- ─── CONTENT ─── -->
+<div class="content">
+
+  <a class="breadcrumb-back" href="boarding-orders.html">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Orders
+  </a>
+
+  <div class="order-head-row">
+    <div>
+      <div class="order-id-label">Order ID: <span class="order-id-val" id="orderIdVal">fee9b37a-0133-4284-859d-8cb65ce2b7f8</span>
+        <button class="copy-btn" onclick="copyOrderId()" title="Copy order ID">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+      </div>
+      <div class="order-status-row">Order status: <span class="status-badge" id="orderStatusBadge">Completed</span></div>
+    </div>
+    <button class="more-btn" title="More actions">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+    </button>
+  </div>
+
+  <!-- Lifecycle -->
+  <div class="lifecycle-card">
+    <div class="lifecycle-title">Order Lifecycle</div>
+    <div class="lifecycle-steps" id="lifecycleSteps"></div>
+    <hr class="lifecycle-divider">
+    <button class="btn btn-primary" onclick="openTracking()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Full Tracking Report
+    </button>
+  </div>
+
+  <div class="detail-layout">
+
+    <!-- LEFT: accordion sections -->
+    <div>
+      <div class="expand-all-link"><a onclick="toggleExpandAll()" id="expandAllLink">Expand All Details</a></div>
+
+      <!-- Company and contact details -->
+      <div class="acc-row">
+        <div class="acc-header open" onclick="toggleAcc(this,'acc-company')">
+          <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          Company and contact details
+        </div>
+        <div class="acc-check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="acc-body open" id="acc-company">
+        <div class="acc-subhead">Company details</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">Company name</span><span class="detail-value">MPOC VTap Test</span></div>
+          <div class="detail-field"><span class="detail-label">Registration number</span><span class="detail-value plain">—</span></div>
+        </div>
+        <div class="acc-subhead">Contact details</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">First name</span><span class="detail-value">MPOC</span></div>
+          <div class="detail-field"><span class="detail-label">Last Name</span><span class="detail-value">VTap Test</span></div>
+          <div class="detail-field"><span class="detail-label">Email address</span><span class="detail-value">mpoc_vtap@gr.ia</span></div>
+          <div class="detail-field"><span class="detail-label">Phone number</span><span class="detail-value">+351987654321</span></div>
+        </div>
+      </div>
+
+      <!-- Service plan, payment methods and devices -->
+      <div class="acc-row">
+        <div class="acc-header open" onclick="toggleAcc(this,'acc-service')">
+          <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          Service plan, payment methods and devices
+        </div>
+        <div class="acc-check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="acc-body open" id="acc-service">
+        <div class="acc-subhead">Service plan</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">Portfolio</span><span class="detail-value">Verifone Only</span></div>
+          <div class="detail-field"><span class="detail-label">Service package</span><span class="detail-value">Basic</span></div>
+          <div class="detail-field"><span class="detail-label">Contract duration</span><span class="detail-value">12 months contract</span></div>
+        </div>
+        <div class="acc-subhead">Payment Terminal Information</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">Acquirer Contract</span><span class="detail-value">Verifone acquiring</span></div>
+          <div class="detail-field"><span class="detail-label">Merchant ID</span><span class="detail-value">810836</span></div>
+          <div class="detail-field full"><span class="detail-label">Payment Methods</span><span class="detail-value">Visa &amp; MasterCard, Maestro, Vpay, Electron — 0.7% 0.5% per transaction</span></div>
+        </div>
+        <div class="acc-subhead">Payment Terminals</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">Terminal #1</span><span class="detail-value">Android Tap <span class="detail-note">(Rent) · 2 Units</span></span></div>
+        </div>
+      </div>
+
+      <!-- Addresses and Shipping -->
+      <div class="acc-row">
+        <div class="acc-header open" onclick="toggleAcc(this,'acc-address')">
+          <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          Addresses and Shipping
+        </div>
+        <div class="acc-check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="acc-body open" id="acc-address">
+        <div class="acc-subhead">Company address</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">Address Line 1</span><span class="detail-value">R. de Alexandre Herculano 123</span></div>
+          <div class="detail-field"><span class="detail-label">Postal Code</span><span class="detail-value">4000-054</span></div>
+          <div class="detail-field"><span class="detail-label">City</span><span class="detail-value">Porto</span></div>
+          <div class="detail-field"><span class="detail-label">Country</span><span class="detail-value">Portugal</span></div>
+          <div class="detail-field"><span class="detail-label">Shipping Address</span><span class="detail-value">Same as Company address</span></div>
+          <div class="detail-field"><span class="detail-label">Billing Address</span><span class="detail-value">Same as Company address</span></div>
+          <div class="detail-field"><span class="detail-label">Installation Address</span><span class="detail-value">Same as Company address</span></div>
+          <div class="detail-field"><span class="detail-label">Shipping method</span><span class="detail-value">Field installation, Free</span></div>
+        </div>
+      </div>
+
+      <!-- Company structure and business information -->
+      <div class="acc-row">
+        <div class="acc-header open" onclick="toggleAcc(this,'acc-structure')">
+          <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          Company structure and business information
+        </div>
+        <div class="acc-check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="acc-body open" id="acc-structure">
+        <div class="acc-subhead">Company structure</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">Legal form</span><span class="detail-value">Professional Liberal (Sole proprietorship)</span></div>
+          <div class="detail-field"><span class="detail-label">Ownership structure</span><span class="detail-value plain">Proprietor acts on own behalf</span></div>
+          <div class="detail-field full">
+            <span class="detail-label">Owner #1</span>
+            <span class="detail-value">MPOC VTap Test</span>
+            <span class="detail-note">ID required, Signature required · Acts as: Legal representative, Authorised representative</span>
+          </div>
+        </div>
+        <div class="acc-subhead">Business information</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">DBA name</span><span class="detail-value">MPOC VTap Test</span></div>
+          <div class="detail-field"><span class="detail-label">Goods or services offered</span><span class="detail-value">Bikes</span></div>
+          <div class="detail-field"><span class="detail-label">Turnover per annual</span><span class="detail-value">178499004</span></div>
+          <div class="detail-field"><span class="detail-label">Turnover per transaction</span><span class="detail-value">367</span></div>
+        </div>
+        <div class="acc-subhead">Settlement account</div>
+        <div class="detail-grid">
+          <div class="detail-field"><span class="detail-label">Account Name</span><span class="detail-value">MPOC VTap Test</span></div>
+          <div class="detail-field"><span class="detail-label">IBAN/SOT</span><span class="detail-value">GB29NWBK60161331926819</span></div>
+          <div class="detail-field"><span class="detail-label">BIC/SWIFT</span><span class="detail-value">NWBKGB2L</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: cost summary -->
+    <div class="cost-card">
+      <div class="cost-title">Cost summary</div>
+      <div class="cost-sub">Recurring monthly costs</div>
+      <table class="cost-table">
+        <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td>Basic</td><td>p/m</td><td>1</td><td>p/m</td></tr>
+          <tr><td>Android Tap (rent)</td><td>€0.00 p/m</td><td>2</td><td>€0.00 p/m</td></tr>
+          <tr class="total"><td colspan="3">Total per month</td><td>€0.00 p/m</td></tr>
+        </tbody>
+      </table>
+      <div class="cost-sub">One-time costs</div>
+      <table class="cost-table">
+        <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td>Field installation</td><td>€0.00</td><td>1</td><td>€0.00</td></tr>
+          <tr class="total"><td colspan="3">Total one-time cost</td><td>€0.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─── TRACKING REPORT SLIDE PANEL ─── -->
+<div class="tr-backdrop" id="trBackdrop" onclick="handleTrBackdrop(event)">
+  <div class="tr-panel" role="dialog" aria-modal="true" aria-label="Tracking Report">
+    <div class="tr-header">
+      <span class="tr-header-title">Tracking Report</span>
+      <button class="tr-close" onclick="closeTracking()" aria-label="Close">✕</button>
+    </div>
+    <div class="tr-body" id="trBody"></div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <a class="footer-logo" href="index.html">
+      <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+        <circle cx="8" cy="8" r="3.5" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="16" cy="8" r="3.5" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="8" cy="16" r="3.5" fill="rgba(255,255,255,0.45)"/>
+        <circle cx="16" cy="16" r="3.5" fill="rgba(255,255,255,0.45)"/>
+      </svg>
+      verifone
+    </a>
+    <div class="footer-links">
+      <a class="footer-link" href="https://developer.verifone.com" target="_blank" rel="noopener">Documentation</a>
+      <a class="footer-link" href="https://developer.verifone.com" target="_blank" rel="noopener">API Reference</a>
+      <a class="footer-link" href="support.html">Support</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 VeriFone</span>
+    <button class="footer-policy">Privacy and Compliance Policies</button>
+    <button class="footer-policy">Terms and conditions</button>
+  </div>
+</footer>
+
+<div class="chat-bubble" title="Support chat">CO</div>
+
+<script>
+  /* ─── STEP DEFINITIONS ─── */
+  const STEPS = [
+    { key: 'draft', label: 'Draft', icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>' },
+    { key: 'submitted', label: 'Submitted', icon: '<path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/>' },
+    { key: 'signature', label: 'Signature', icon: '<path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/>' },
+    { key: 'review', label: 'Review', icon: '<circle cx="10" cy="10" r="6"/><line x1="21" y1="21" x2="15" y2="15"/>' },
+    { key: 'completed', label: 'Completed', icon: '<polyline points="20 6 9 17 4 12"/>' }
+  ];
+  const CHECK = '<polyline points="20 6 9 17 4 12"/>';
+
+  const STATUS_STAGE = {
+    'Draft': 0,
+    'Submitted': 1,
+    'Pending Signature': 2,
+    'In Progress': 3,
+    'On Hold': 3,
+    'Completed': 4
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get('id') || 'fee9b37a-0133-4284-859d-8cb65ce2b7f8';
+  const status = params.get('status') || 'Completed';
+  const org = params.get('org') || 'MPOC VTap Test';
+
+  document.getElementById('orderIdVal').textContent = orderId;
+  const badge = document.getElementById('orderStatusBadge');
+  badge.textContent = status;
+  badge.classList.toggle('draft', status === 'Draft');
+  document.title = 'Boarding · Order ' + org + ' — Verifone Central';
+
+  const currentStage = STATUS_STAGE.hasOwnProperty(status) ? STATUS_STAGE[status] : 4;
+  const allDone = status === 'Completed';
+
+  function renderLifecycle() {
+    const wrap = document.getElementById('lifecycleSteps');
+    wrap.innerHTML = '';
+    STEPS.forEach((step, i) => {
+      const done = allDone || i < currentStage;
+      const isCurrent = !allDone && i === currentStage;
+      const circleClass = done ? 'done' : (isCurrent ? 'current' : '');
+      const iconSvg = done ? CHECK : step.icon;
+      const stepEl = document.createElement('div');
+      stepEl.className = 'lc-step';
+      stepEl.innerHTML = `
+        <div class="lc-circle ${circleClass}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>
+        </div>
+        <div class="lc-label">${step.label}</div>`;
+      wrap.appendChild(stepEl);
+      if (i < STEPS.length - 1) {
+        const conn = document.createElement('div');
+        conn.className = 'lc-connector' + (done ? ' done' : '');
+        wrap.appendChild(conn);
+      }
+    });
+  }
+  renderLifecycle();
+
+  /* ─── TRACKING PANEL ─── */
+  function renderTracking() {
+    const body = document.getElementById('trBody');
+    const items = [
+      { title: 'Draft', date: '7/21/2026, 20:05:42', outline: true, extra: `O-ID: ${orderId.slice(0,20)}… <button onclick="copyOrderId()" title="Copy"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><br>Created By: Softpos User` },
+      { title: 'Submitted', date: '7/21/2026, 19:47:12' },
+      { title: 'Signature', extra: `By: ${org}` },
+      { title: 'Review', desc: 'The order is now picked by the warehouse and ready to be shipped' },
+      { title: 'Completed' }
+    ];
+    body.innerHTML = '';
+    items.forEach((item, i) => {
+      const step = STEPS[i];
+      const row = document.createElement('div');
+      row.className = 'tr-item';
+      row.innerHTML = `
+        <div class="tr-item-rail">
+          <div class="tr-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${step.icon}</svg></div>
+          <div class="tr-line"></div>
+        </div>
+        <div class="tr-card ${item.outline ? 'outline' : ''}">
+          <div class="tr-card-title-row">
+            <span class="tr-card-title">${item.title}</span>
+            ${item.date ? `<span class="tr-card-date">${item.date}</span>` : ''}
+          </div>
+          ${item.extra ? `<div class="tr-card-meta">${item.extra}</div>` : ''}
+          ${item.desc ? `<div class="tr-card-desc">${item.desc}</div>` : ''}
+        </div>`;
+      body.appendChild(row);
+    });
+  }
+  renderTracking();
+
+  function openTracking() {
+    document.getElementById('trBackdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeTracking() {
+    document.getElementById('trBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleTrBackdrop(e) {
+    if (e.target === document.getElementById('trBackdrop')) closeTracking();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTracking(); });
+
+  /* ─── ACCORDIONS ─── */
+  function toggleAcc(headerEl, bodyId) {
+    const body = document.getElementById(bodyId);
+    const open = body.classList.toggle('open');
+    headerEl.classList.toggle('open', open);
+    updateExpandAllLabel();
+  }
+  function toggleExpandAll() {
+    const bodies = document.querySelectorAll('.acc-body');
+    const headers = document.querySelectorAll('.acc-header');
+    const anyClosed = [...bodies].some(b => !b.classList.contains('open'));
+    bodies.forEach(b => b.classList.toggle('open', anyClosed));
+    headers.forEach(h => h.classList.toggle('open', anyClosed));
+    updateExpandAllLabel();
+  }
+  function updateExpandAllLabel() {
+    const bodies = document.querySelectorAll('.acc-body');
+    const anyClosed = [...bodies].some(b => !b.classList.contains('open'));
+    document.getElementById('expandAllLink').textContent = anyClosed ? 'Expand All Details' : 'Collapse All Details';
+  }
+
+  function copyOrderId() {
+    navigator.clipboard && navigator.clipboard.writeText(orderId).catch(()=>{});
+  }
+</script>
+
+</body>
+</html>

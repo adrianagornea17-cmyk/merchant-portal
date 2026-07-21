@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boarding · Orders — Verifone Central</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --border: #e5e7eb;
+      --bg: #f9fafb;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --accent: #2563eb;
+      --hover-bg: #f3f4f6;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #fff;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ─── TOP BANNER (nav + hero) ─── */
+    .top-banner {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #051d17 0%, #0b3a2e 32%, #0f6b53 62%, #17b993 100%);
+      flex-shrink: 0;
+    }
+    .banner-glow {
+      position: absolute;
+      top: -140px; right: -120px;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,224,180,0.55) 0%, rgba(20,150,120,0.18) 55%, transparent 75%);
+      pointer-events: none;
+    }
+
+    .top-nav {
+      position: relative; z-index: 1;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+    }
+    .top-nav-logo {
+      display: flex; align-items: center; gap: 9px;
+      color: #fff; font-size: 15px; font-weight: 700; letter-spacing: -0.2px;
+      margin-right: 36px; text-decoration: none; flex-shrink: 0;
+    }
+    .top-nav-links { display: flex; align-items: center; gap: 2px; flex: 1; }
+    .top-nav-link {
+      padding: 7px 16px; border-radius: 6px;
+      color: rgba(255,255,255,0.72); font-size: 14px; font-weight: 500;
+      cursor: pointer; background: none; border: none; text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+    }
+    .top-nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .top-nav-link.active { color: #fff; font-weight: 600; background: rgba(255,255,255,0.14); }
+    .top-nav-right { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #0f0f14; color: #fff;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border: 1.5px solid rgba(255,255,255,0.18);
+      flex-shrink: 0;
+    }
+
+    .banner-title-row {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 16px;
+      padding: 26px 48px 40px;
+    }
+    .banner-icon { flex-shrink: 0; opacity: 0.92; }
+    .banner-title { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -0.6px; }
+
+    /* ─── CONTENT ─── */
+    .content { flex: 1; padding: 32px 56px 56px; }
+
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .page-title { font-size: 24px; font-weight: 700; color: #0f172a; letter-spacing: -0.4px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 18px; height: 38px;
+      border-radius: 999px; font-size: 13.5px; font-weight: 600;
+      cursor: pointer; border: 1.5px solid transparent;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+      white-space: nowrap; text-decoration: none; font-family: inherit;
+    }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+    .btn-ghost { background: none; border-color: var(--border); color: var(--text-2); }
+    .btn-ghost:hover { border-color: #9ca3af; background: var(--hover-bg); }
+
+    /* Search row */
+    .search-row { display: flex; align-items: stretch; gap: 10px; margin-bottom: 14px; }
+    .search-field-select {
+      display: flex; align-items: center; gap: 8px;
+      border: 1.5px solid var(--border); border-radius: 999px;
+      padding: 0 16px; height: 42px; font-size: 13.5px; font-weight: 500;
+      color: var(--text-2); background: #fff; cursor: pointer; flex-shrink: 0;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 32px;
+      min-width: 130px;
+    }
+    .search-input-wrap {
+      flex: 1;
+      display: flex; align-items: center;
+      border: 1.5px solid var(--border); border-radius: 999px;
+      background: #fff; height: 42px; overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .search-input-wrap:focus-within { border-color: var(--accent); }
+    .search-input-wrap input {
+      flex: 1; border: none; outline: none; padding: 0 18px;
+      font-size: 13.5px; color: var(--text); font-family: inherit; background: transparent;
+    }
+    .search-input-wrap input::placeholder { color: var(--text-4); }
+    .search-btn {
+      background: var(--accent); border: none; color: #fff;
+      height: 100%; padding: 0 26px; font-size: 13.5px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: background 0.12s;
+    }
+    .search-btn:hover { background: #1d4ed8; }
+
+    /* Filter row */
+    .filter-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    }
+    .filter-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px;
+      font-size: 13px; font-weight: 500; color: var(--text-2); background: #fff;
+      cursor: pointer; transition: border-color 0.12s, background 0.12s;
+    }
+    .filter-pill:hover { border-color: #9ca3af; background: var(--hover-bg); }
+    .filter-spacer { flex: 1; }
+    .legend-pill {
+      display: inline-flex; align-items: center; gap: 0;
+      padding: 5px 14px; border-radius: 20px;
+      font-size: 12.5px; font-weight: 700; color: #713f12;
+      background: #fde68a;
+    }
+    .legend-pill.green { background: #bbf7d0; color: #065f46; }
+
+    /* Table */
+    .table-card { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .ord-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .ord-table thead tr { background: #f8fafc; border-bottom: 1.5px solid var(--border); }
+    .ord-table th {
+      padding: 12px 20px; text-align: left; font-size: 12px; font-weight: 700;
+      color: var(--text-2); text-transform: uppercase; letter-spacing: 0.4px;
+      white-space: nowrap; user-select: none;
+    }
+    .th-sort-inner { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+    .th-sort-inner:hover { color: var(--text); }
+    .ord-table tbody tr { border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.08s; }
+    .ord-table tbody tr:last-child { border-bottom: none; }
+    .ord-table tbody tr:hover { background: #f8fafc; }
+    .ord-table td { padding: 14px 20px; color: var(--text-2); vertical-align: middle; }
+
+    .status-badge {
+      display: inline-flex; align-items: center;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 700;
+      background: #fde68a; color: #713f12;
+      white-space: nowrap;
+    }
+    .status-badge.draft { background: #10b981; color: #fff; }
+
+    /* No results */
+    .no-results-content { display: flex; flex-direction: column; align-items: center; padding: 64px 24px; }
+    .no-results-icon {
+      width: 56px; height: 56px; background: #fef3c7; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .no-results-icon svg { width: 26px; height: 26px; stroke: #d97706; stroke-width: 2; fill: none; }
+    .no-results-title { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 8px; }
+    .no-results-sub { font-size: 14px; color: #6b7280; text-align: center; max-width: 380px; line-height: 1.65; margin-bottom: 24px; }
+    .no-results-sub strong { color: #374151; }
+
+    /* Pagination */
+    .list-pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 22px; border-top: 1.5px solid var(--border); background: #fff;
+    }
+    .pag-left { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-3); }
+    .pag-per-page {
+      display: inline-flex; align-items: center; gap: 4px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      padding: 4px 10px; font-size: 13px; font-weight: 500; color: var(--text-2);
+      background: #fff; cursor: pointer;
+    }
+    .pag-right { display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--text-3); }
+    .pag-nav { display: flex; align-items: center; gap: 4px; }
+    .pag-nav-btn {
+      width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border);
+      background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--text-2); transition: background 0.1s, border-color 0.1s;
+    }
+    .pag-nav-btn:hover { background: var(--hover-bg); border-color: #9ca3af; }
+    .pag-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Footer */
+    footer { background: #0f0f0f; padding: 24px 48px 16px; flex-shrink: 0; }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .footer-logo { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,0.85); font-size: 15px; font-weight: 700; text-decoration: none; }
+    .footer-links { display: flex; align-items: center; gap: 28px; }
+    .footer-link { font-size: 13.5px; color: rgba(255,255,255,0.55); text-decoration: none; cursor: pointer; background: none; border: none; font-family: inherit; transition: color 0.12s; }
+    .footer-link:hover { color: rgba(255,255,255,0.85); }
+    .footer-bottom { padding-top: 14px; display: flex; align-items: center; gap: 24px; }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+    .footer-policy { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; cursor: pointer; background: none; border: none; font-family: inherit; transition: color 0.12s; }
+    .footer-policy:hover { color: rgba(255,255,255,0.6); }
+
+    /* Chat bubble */
+    .chat-bubble {
+      position: fixed; bottom: 22px; left: 22px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #0f172a; color: #fff; font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25); cursor: pointer; z-index: 50;
+    }
+
+    /* Demo switcher */
+    .demo-switcher {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #1e1e2e; border-radius: 12px; padding: 14px 18px;
+      display: flex; flex-direction: column; gap: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22); z-index: 100;
+    }
+    .switcher-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6b7280; }
+    .switcher-btns { display: flex; gap: 6px; }
+    .sw-btn { padding: 6px 12px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; background: #2d2d3d; color: #9ca3af; transition: background 0.15s, color 0.15s; }
+    .sw-btn.active { background: #2563eb; color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- ─── TOP BANNER ─── -->
+<div class="top-banner">
+  <div class="banner-glow"></div>
+  <nav class="top-nav">
+    <a class="top-nav-logo" href="index.html">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+        <circle cx="8"  cy="8"  r="3.5" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="16" cy="8"  r="3.5" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="8"  cy="16" r="3.5" fill="rgba(255,255,255,0.55)"/>
+        <circle cx="16" cy="16" r="3.5" fill="rgba(255,255,255,0.55)"/>
+      </svg>
+      verifone
+    </a>
+    <div class="top-nav-links">
+      <a class="top-nav-link" href="#">Commerce</a>
+      <a class="top-nav-link" href="#">Devices</a>
+      <a class="top-nav-link" href="#">Administration</a>
+      <a class="top-nav-link active" href="boarding-orders.html">Boarding</a>
+      <a class="top-nav-link" href="#">App Marketplace</a>
+    </div>
+    <div class="top-nav-right">
+      <div class="avatar">AG</div>
+    </div>
+  </nav>
+  <div class="banner-title-row">
+    <svg class="banner-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="6" cy="7" r="2"/><path d="M6 9v6"/>
+      <circle cx="12" cy="7" r="2"/><path d="M12 9v6"/>
+      <circle cx="18" cy="17" r="2.4"/><path d="M16.5 15.9l1.5 1.5 2.2-2.6"/>
+    </svg>
+    <h1 class="banner-title">Boarding</h1>
+  </div>
+</div>
+
+<!-- ─── CONTENT ─── -->
+<div class="content">
+
+  <div class="page-header">
+    <h2 class="page-title">Orders</h2>
+    <a class="btn btn-primary" href="boarding-create-order.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Create order
+    </a>
+  </div>
+
+  <div class="search-row">
+    <select class="search-field-select" id="searchField">
+      <option>Name</option>
+      <option>Organization</option>
+      <option>User</option>
+      <option>Order ID</option>
+    </select>
+    <div class="search-input-wrap">
+      <input type="text" id="searchInput" placeholder="Search by Name">
+    </div>
+    <button class="search-btn" onclick="runSearch()">Search</button>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-pill">Date
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="filter-pill">Status
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="filter-pill">User
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="filter-pill">Portfolios
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="filter-pill">Organizations
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="filter-spacer"></div>
+    <span class="legend-pill green">Editable</span>
+    <span class="legend-pill">Not Editable</span>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div id="viewList">
+    <div class="table-card">
+      <table class="ord-table">
+        <thead>
+          <tr>
+            <th><div class="th-sort-inner">Date Created
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+            </div></th>
+            <th><div class="th-sort-inner">Organization
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+            </div></th>
+            <th><div class="th-sort-inner">User
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+            </div></th>
+            <th><div class="th-sort-inner">Status
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+            </div></th>
+            <th><div class="th-sort-inner">Last edited
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+            </div></th>
+          </tr>
+        </thead>
+        <tbody id="ordTableBody">
+          <tr onclick="openOrder('fee9b37a-0133-4284-859d-8cb65ce2b7f8','Completed','MPOC VTap Test','Softpos User')">
+            <td>21-07-2026 19:47:12</td><td>MPOC VTap Test</td><td>Softpos User</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 20:05:42</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0001-4284-859d-8cb65ce2b001','Pending Signature','Kayleigh Coffee Shop','Kayleigh Anne Cheesley')">
+            <td>21-07-2026 18:38:43</td><td>Kayleigh Coffee Shop</td><td>Kayleigh Anne Cheesley</td><td><span class="status-badge">Pending Signature</span></td><td>21-07-2026 18:40:00</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0002-4284-859d-8cb65ce2b002','In Progress','TEST XN NEW PURCHASE','Florin Dobre')">
+            <td>21-07-2026 18:31:16</td><td>TEST XN NEW PURCHASE</td><td>Florin Dobre</td><td><span class="status-badge">In Progress</span></td><td>21-07-2026 18:33:35</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0003-4284-859d-8cb65ce2b003','In Progress','TEST XN NEW RENTAL','Florin Dobre')">
+            <td>21-07-2026 18:23:04</td><td>TEST XN NEW RENTAL</td><td>Florin Dobre</td><td><span class="status-badge">In Progress</span></td><td>21-07-2026 18:26:20</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0004-4284-859d-8cb65ce2b004','Completed','Your Trade OS','Mathew Stevens')">
+            <td>21-07-2026 18:01:55</td><td>Your Trade OS</td><td>Mathew Stevens</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 18:05:09</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0005-4284-859d-8cb65ce2b005','On Hold','TEST XN NEW','Florin Dobre')">
+            <td>21-07-2026 17:43:38</td><td>TEST XN NEW</td><td>Florin Dobre</td><td><span class="status-badge">On Hold</span></td><td>21-07-2026 17:51:39</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0006-4284-859d-8cb65ce2b006','Completed','Verifone UK Enterprise Sales INST..','Michael Staples')">
+            <td>21-07-2026 17:29:47</td><td>Verifone UK Enterprise Sales INST…</td><td>Michael Staples</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 17:33:58</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0007-4284-859d-8cb65ce2b007','Completed','Verifone UK Enterprise Sales INST..','Martyn Kendrick-Bott')">
+            <td>21-07-2026 17:24:49</td><td>Verifone UK Enterprise Sales INST…</td><td>Martyn Kendrick-Bott</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 17:34:59</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0008-4284-859d-8cb65ce2b008','Draft','test','Florin Dobre')">
+            <td>21-07-2026 17:15:52</td><td>test</td><td>Florin Dobre</td><td><span class="status-badge draft">Draft</span></td><td>21-07-2026 17:36:18</td>
+          </tr>
+          <tr onclick="openOrder('a1b2c3d4-0009-4284-859d-8cb65ce2b009','Completed','Devozar','Mathew Stevens')">
+            <td>21-07-2026 17:13:39</td><td>Devozar</td><td>Mathew Stevens</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 17:17:23</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="list-pagination">
+        <div class="pag-left">
+          <span>Results per page</span>
+          <div class="pag-per-page">10
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <span>out of 403789</span>
+        </div>
+        <div class="pag-right">
+          <span>Page 1 of 40379</span>
+          <div class="pag-nav">
+            <button class="pag-nav-btn" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="pag-nav-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /viewList -->
+
+  <!-- NO RESULTS -->
+  <div id="viewNoResults" style="display:none;">
+    <div class="table-card">
+      <div class="no-results-content">
+        <div class="no-results-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+            <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+            <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="no-results-title">Orders not found</p>
+        <p class="no-results-sub">
+          No orders match your current search or filters.
+          Try a different name or <strong>clear the filter</strong> to see all orders.
+        </p>
+        <button class="btn btn-ghost" onclick="showState('list')">Clear filters</button>
+      </div>
+      <div class="list-pagination">
+        <div class="pag-left">
+          <span>Results per page</span>
+          <div class="pag-per-page">10
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="pag-right">
+          <span>Page 0 of 0</span>
+          <div class="pag-nav">
+            <button class="pag-nav-btn" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="pag-nav-btn" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /viewNoResults -->
+
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <a class="footer-logo" href="index.html">
+      <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+        <circle cx="8"  cy="8"  r="3.5" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="16" cy="8"  r="3.5" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="8"  cy="16" r="3.5" fill="rgba(255,255,255,0.45)"/>
+        <circle cx="16" cy="16" r="3.5" fill="rgba(255,255,255,0.45)"/>
+      </svg>
+      verifone
+    </a>
+    <div class="footer-links">
+      <a class="footer-link" href="https://developer.verifone.com" target="_blank" rel="noopener">Documentation</a>
+      <a class="footer-link" href="https://developer.verifone.com" target="_blank" rel="noopener">API Reference</a>
+      <a class="footer-link" href="support.html">Support</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 VeriFone</span>
+    <button class="footer-policy">Privacy and Compliance Policies</button>
+    <button class="footer-policy">Terms and conditions</button>
+  </div>
+</footer>
+
+<div class="chat-bubble" title="Support chat">CO</div>
+
+<!-- DEMO SWITCHER -->
+<div class="demo-switcher">
+  <div class="switcher-label">View</div>
+  <div class="switcher-btns">
+    <button class="sw-btn active" id="sw1" onclick="showState('list')">List</button>
+    <button class="sw-btn" id="sw2" onclick="showState('noResults')">No results</button>
+  </div>
+</div>
+
+<script>
+  function openOrder(id, status, org, user) {
+    const params = new URLSearchParams({ id, status, org, user });
+    window.location.href = 'boarding-order-detail.html?' + params.toString();
+  }
+
+  function runSearch() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (q.length > 0) showState('noResults');
+    else showState('list');
+  }
+  document.getElementById('searchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') runSearch();
+  });
+
+  function showState(state) {
+    const list = document.getElementById('viewList');
+    const noRes = document.getElementById('viewNoResults');
+    list.style.display = 'none';
+    noRes.style.display = 'none';
+    document.getElementById('sw1').classList.remove('active');
+    document.getElementById('sw2').classList.remove('active');
+    if (state === 'list') {
+      list.style.display = 'block';
+      document.getElementById('sw1').classList.add('active');
+    } else {
+      noRes.style.display = 'block';
+      document.getElementById('sw2').classList.add('active');
+    }
+  }
+</script>
+
+</body>
+</html>
