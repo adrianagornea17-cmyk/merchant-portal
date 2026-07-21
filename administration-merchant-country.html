@@ -508,7 +508,6 @@ table.fee-tbl td input { width: 100%; max-width: 110px; }
     </button>
     <div class="cp-header-right">
       <span class="cp-timestamp" id="cpTimestamp"></span>
-      <button class="btn btn-secondary btn-sm" id="cpEditBtn" onclick="togglePanelEdit(true)">Edit configuration</button>
     </div>
   </div>
   <div class="cp-body">
@@ -524,26 +523,26 @@ table.fee-tbl td input { width: 100%; max-width: 110px; }
         <div class="sep"></div>
         <div class="section-label">Payout cycle</div>
         <div class="fields triple" style="gap:12px">
-          <div class="f"><div class="f-label">Number of days *</div><input class="f-edit ro" id="cpDays" disabled></div>
-          <div class="f"><div class="f-label">Float delay days *</div><input class="f-edit ro" id="cpFloat" disabled></div>
+          <div class="f"><div class="f-label">Number of days *</div><input class="f-edit" id="cpDays"></div>
+          <div class="f"><div class="f-label">Float delay days *</div><input class="f-edit" id="cpFloat"></div>
           <div class="f"><div class="f-label">Payout frequency</div><input class="f-edit ro" id="cpFreq" disabled></div>
         </div>
 
         <div class="sep"></div>
         <div class="section-label">Portfolio risk details</div>
         <div class="fields" style="gap:12px">
-          <div class="f"><div class="f-label">Rolling Reserve (%) *</div><input class="f-edit ro" id="cpReserve" disabled></div>
-          <div class="f"><div class="f-label">Rolling reserve withholding period (days) *</div><input class="f-edit ro" id="cpReserveDays" disabled></div>
+          <div class="f"><div class="f-label">Rolling Reserve (%) *</div><input class="f-edit" id="cpReserve"></div>
+          <div class="f"><div class="f-label">Rolling reserve withholding period (days) *</div><input class="f-edit" id="cpReserveDays"></div>
         </div>
 
         <div class="sep"></div>
         <div class="f"><div class="f-label">Net vs gross settlement preference</div>
-          <select class="f-edit ro" id="cpNetGross" disabled><option>Net Settlement</option><option>Gross Settlement</option></select>
+          <select class="f-edit" id="cpNetGross"><option>Net Settlement</option><option>Gross Settlement</option></select>
         </div>
 
         <div class="sep"></div>
         <div class="f"><div class="f-label">Service level details</div>
-          <select class="f-edit ro" id="cpServiceLevel" disabled><option>Pre-Financing</option><option>Post-Financing</option></select>
+          <select class="f-edit" id="cpServiceLevel"><option>Pre-Financing</option><option>Post-Financing</option></select>
         </div>
 
         <div class="sep"></div>
@@ -561,9 +560,9 @@ table.fee-tbl td input { width: 100%; max-width: 110px; }
         <div class="sep"></div>
         <div class="section-label">Partner Commission</div>
         <div class="fields" style="gap:12px">
-          <div class="f"><div class="f-label">Commission (%) *</div><input class="f-edit ro" id="cpCommission" disabled></div>
+          <div class="f"><div class="f-label">Commission (%) *</div><input class="f-edit" id="cpCommission"></div>
           <div class="f"><div class="f-label">Report Interval *</div>
-            <select class="f-edit ro" id="cpReportInterval" disabled><option>Quarterly</option><option>Monthly</option><option>Annually</option></select>
+            <select class="f-edit" id="cpReportInterval"><option>Quarterly</option><option>Monthly</option><option>Annually</option></select>
           </div>
         </div>
 
@@ -571,8 +570,8 @@ table.fee-tbl td input { width: 100%; max-width: 110px; }
     </div>
   </div>
   <div class="cp-footer">
-    <button class="btn btn-secondary" id="cpCancelBtn" style="display:none" onclick="togglePanelEdit(false)">Cancel</button>
-    <button class="btn btn-primary" id="cpSaveBtn" style="display:none" onclick="savePanelEdit()">Save changes</button>
+    <button class="btn btn-secondary" onclick="closeCountryPanel()">Discard</button>
+    <button class="btn btn-primary" onclick="saveCountryPanel(this)">Save changes</button>
   </div>
 </div>
 
@@ -858,12 +857,11 @@ function openCountryPanel(idx){
   document.getElementById('cpReportInterval').value=r.cfg.reportInterval;
 
   document.getElementById('cpPricingCurrency').innerHTML=`<option>${r.cfg.currency}</option>`;
-  renderFeeBlock('cpPricingBlock',r.cfg.currency,r.cfg.pricing,true);
+  renderFeeBlock('cpPricingBlock',r.cfg.currency,r.cfg.pricing,false);
 
   document.getElementById('cpFeesCurrency').innerHTML=`<option>${r.cfg.currency}</option>`;
-  renderFeeBlock('cpFeesBlock',r.cfg.currency,r.cfg.fees,true);
+  renderFeeBlock('cpFeesBlock',r.cfg.currency,r.cfg.fees,false);
 
-  togglePanelEdit(false);
   document.getElementById('countryPanelBackdrop').style.display='block';
   document.getElementById('countryPanel').classList.add('open');
 }
@@ -873,22 +871,14 @@ function closeCountryPanel(){
   document.getElementById('countryPanel').classList.remove('open');
 }
 
-function togglePanelEdit(editing){
-  document.querySelectorAll('#countryPanel .f-edit').forEach(inp=>{
-    if(editing){inp.classList.remove('ro');inp.removeAttribute('disabled');}
-    else{inp.classList.add('ro');inp.setAttribute('disabled','');}
-  });
-  ['cpCode','cpCountry','cpFreq'].forEach(id=>{
-    const el=document.getElementById(id);
-    el.classList.add('ro');el.setAttribute('disabled','');
-  });
-  document.getElementById('cpEditBtn').style.display=editing?'none':'inline-flex';
-  document.getElementById('cpCancelBtn').style.display=editing?'inline-flex':'none';
-  document.getElementById('cpSaveBtn').style.display=editing?'inline-flex':'none';
-}
-
-function savePanelEdit(){
-  togglePanelEdit(false);
+function saveCountryPanel(btn){
+  const orig=btn.textContent;
+  btn.textContent='Saved ✓';
+  btn.style.background='#16a34a';btn.style.borderColor='#16a34a';
+  setTimeout(()=>{
+    btn.textContent=orig;btn.style.background='';btn.style.borderColor='';
+    closeCountryPanel();
+  },1400);
 }
 
 // ── CREATE (FULL PAGE) ──
