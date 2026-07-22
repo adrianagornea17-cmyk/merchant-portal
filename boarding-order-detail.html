@@ -70,19 +70,40 @@
     .order-status-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-3); }
     .status-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #374151; border: 1px solid #e2e8f0; white-space: nowrap; }
 
+    .order-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .more-wrap { position: relative; }
+    .more-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-3); transition: border-color 0.12s, color 0.12s; }
+    .more-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .more-btn.open { border-color: var(--accent); color: var(--accent); }
+    .more-popover { position: absolute; top: calc(100% + 8px); right: 0; background: #fff; border: 1.5px solid var(--border); border-radius: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); padding: 6px; display: none; flex-direction: column; min-width: 150px; z-index: 20; }
+    .more-popover.open { display: flex; }
+    .more-popover-item { background: none; border: none; text-align: left; padding: 9px 12px; border-radius: 7px; font-size: 13.5px; font-weight: 500; color: var(--text-2); cursor: pointer; font-family: inherit; }
+    .more-popover-item:hover { background: var(--hover-bg); }
+    .more-popover-item.delete { color: #ef4444; }
+    .more-popover-item.delete:hover { background: #fef2f2; }
+
     .lifecycle-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 24px 28px 24px; margin-bottom: 24px; }
     .lifecycle-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 22px; }
     .lifecycle-steps { display: flex; align-items: flex-start; }
-    .lc-step { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; min-width: 130px; max-width: 200px; }
-    .lc-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #e5e7eb; color: #9ca3af; }
+    .lc-step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; min-width: 90px; }
+    .lc-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #e5e7eb; color: #9ca3af; cursor: default; }
     .lc-circle.done { background: var(--accent); color: #fff; }
     .lc-circle.current { background: var(--accent); color: #fff; box-shadow: 0 0 0 4px #dbeafe; }
     .lc-label { font-size: 12.5px; font-weight: 600; color: var(--text-2); }
-    .lc-connector { flex: 0 0 32px; height: 3px; background: #e5e7eb; margin-top: 17px; }
+    .lc-connector { flex: 0 0 24px; height: 3px; background: #e5e7eb; margin-top: 17px; }
     .lc-connector.done { background: var(--accent); }
-    .lc-detail { font-size: 11.5px; color: var(--text-3); text-align: center; line-height: 1.5; padding: 0 4px; }
-    .lc-detail .lc-detail-copy { background: none; border: none; color: inherit; cursor: pointer; display: inline-flex; vertical-align: middle; margin-left: 3px; opacity: 0.7; }
-    .lc-detail .lc-detail-copy:hover { opacity: 1; }
+    .lc-tooltip {
+      position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%);
+      background: #1e293b; color: #fff; padding: 10px 14px; border-radius: 10px;
+      font-size: 12px; line-height: 1.5; width: 220px; text-align: left;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 20;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .lc-tooltip strong { display: block; font-size: 12.5px; margin-bottom: 2px; }
+    .lc-tooltip .lc-tooltip-copy { background: none; border: none; color: inherit; cursor: pointer; display: inline-flex; vertical-align: middle; margin-left: 4px; opacity: 0.75; }
+    .lc-tooltip .lc-tooltip-copy:hover { opacity: 1; }
+    .lc-step.has-detail:hover .lc-tooltip, .lc-step.has-detail:focus-within .lc-tooltip { opacity: 1; }
+    .lc-step.has-detail .lc-circle { cursor: pointer; }
     .lifecycle-divider { border: none; border-top: 1px solid #f1f5f9; margin: 4px 0 16px; }
 
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 18px; height: 38px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: background 0.12s, border-color 0.12s, color 0.12s; white-space: nowrap; text-decoration: none; font-family: inherit; }
@@ -99,6 +120,7 @@
     .acc-chevron { flex-shrink: 0; transition: transform 0.2s; color: #6b7280; }
     .acc-header.open .acc-chevron { transform: rotate(180deg); }
     .acc-check { width: 22px; height: 22px; border-radius: 50%; background: #22c55e; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .acc-check.not-done { background: #ef4444; }
     .acc-body { display: none; padding: 18px 4px 6px 8px; }
     .acc-body.open { display: block; }
     .acc-subhead { font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
@@ -147,6 +169,17 @@
             </div>
             <div class="order-status-row">Order status: <span class="status-badge" id="orderStatusBadge">Completed</span></div>
           </div>
+          <div class="order-actions">
+            <button class="btn btn-primary" id="completeOrderBtn" style="display:none;" onclick="completeOrder()">Complete order</button>
+            <div class="more-wrap">
+              <button class="more-btn" id="moreBtn" onclick="toggleMorePopover()" title="More actions">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+              </button>
+              <div class="more-popover" id="morePopover">
+                <button class="more-popover-item delete" onclick="deleteOrder()">Delete order</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="lifecycle-card">
@@ -164,7 +197,7 @@
                 <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 Company and contact details
               </div>
-              <div class="acc-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="acc-check" id="acc-check-company"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
             </div>
             <div class="acc-body" id="acc-company">
               <div class="acc-subhead">Company details</div>
@@ -186,7 +219,7 @@
                 <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 Service plan, payment methods and devices
               </div>
-              <div class="acc-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="acc-check" id="acc-check-service"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
             </div>
             <div class="acc-body" id="acc-service">
               <div class="acc-subhead">Service plan</div>
@@ -212,7 +245,7 @@
                 <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 Addresses and Shipping
               </div>
-              <div class="acc-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="acc-check" id="acc-check-address"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
             </div>
             <div class="acc-body" id="acc-address">
               <div class="acc-subhead">Company address</div>
@@ -233,7 +266,7 @@
                 <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 Company structure and business information
               </div>
-              <div class="acc-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="acc-check" id="acc-check-structure"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
             </div>
             <div class="acc-body" id="acc-structure">
               <div class="acc-subhead">Company structure</div>
@@ -300,29 +333,35 @@
     { key: 'submitted', label: 'Submitted', icon: '<path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/>' },
     { key: 'signature', label: 'Signature', icon: '<path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/>' },
     { key: 'review', label: 'Review', icon: '<circle cx="10" cy="10" r="6"/><line x1="21" y1="21" x2="15" y2="15"/>' },
+    { key: 'booked', label: 'Booked', icon: '<path d="M4 4h16v16H4z"/><path d="M4 10h16"/><path d="M9 4v6"/>' },
+    { key: 'picked', label: 'Picked', icon: '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>' },
     { key: 'completed', label: 'Completed', icon: '<polyline points="20 6 9 17 4 12"/>' }
   ];
   const CHECK = '<polyline points="20 6 9 17 4 12"/>';
-  const STATUS_STAGE = { 'Draft': 0, 'Submitted': 1, 'Pending Signature': 2, 'In Progress': 3, 'On Hold': 3, 'Completed': 4 };
+  const STATUS_STAGE = { 'Draft': 0, 'Submitted': 1, 'Pending Signature': 2, 'In Progress': 3, 'On Hold': 3, 'Completed': STEPS.length - 1 };
 
   const params = new URLSearchParams(window.location.search);
   const orderId = params.get('id') || 'fee9b37a-0133-4284-859d-8cb65ce2b7f8';
   const status = params.get('status') || 'Completed';
   const org = params.get('org') || 'MPOC VTap Test';
+  const isDraft = status === 'Draft';
 
   document.getElementById('orderIdVal').textContent = orderId;
   const badge = document.getElementById('orderStatusBadge');
   badge.textContent = status;
   document.title = 'Boarding · Order ' + org + ' — Verifone Central';
+  document.getElementById('completeOrderBtn').style.display = isDraft ? 'inline-flex' : 'none';
 
-  const currentStage = STATUS_STAGE.hasOwnProperty(status) ? STATUS_STAGE[status] : 4;
-  const allDone = status === 'Completed';
+  let currentStage = STATUS_STAGE.hasOwnProperty(status) ? STATUS_STAGE[status] : STEPS.length - 1;
+  let allDone = status === 'Completed';
 
   const STEP_DETAILS = [
-    { date: '7/21/2026, 20:05:42', extra: `O-ID: ${orderId.slice(0,8)}… <button class="lc-detail-copy" onclick="copyOrderId()" title="Copy order ID"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><br>Created by Softpos User` },
+    { date: '7/21/2026, 20:05:42', extra: `O-ID: ${orderId.slice(0,8)}… <button class="lc-tooltip-copy" onclick="copyOrderId()" title="Copy order ID"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><br>Created by Softpos User` },
     { date: '7/21/2026, 19:47:12' },
     { extra: `By: ${org}` },
-    { extra: 'Picked by the warehouse, ready to be shipped' },
+    { extra: 'Order details reviewed and approved' },
+    { extra: 'The order is booked and awaiting to be picked' },
+    { extra: 'The order has been picked and is ready to ship' },
     { }
   ];
 
@@ -336,17 +375,19 @@
       const circleClass = done ? 'done' : (isCurrent ? 'current' : '');
       const iconSvg = done ? CHECK : step.icon;
       const detail = STEP_DETAILS[i];
-      const detailHtml = reached
-        ? `<div class="lc-detail">${detail.date ? detail.date + '<br>' : ''}${detail.extra || ''}</div>`
+      const hasDetail = reached && (detail.date || detail.extra);
+      const tooltipHtml = hasDetail
+        ? `<div class="lc-tooltip"><strong>${step.label}</strong>${detail.date ? detail.date + '<br>' : ''}${detail.extra || ''}</div>`
         : '';
       const stepEl = document.createElement('div');
-      stepEl.className = 'lc-step';
+      stepEl.className = 'lc-step' + (hasDetail ? ' has-detail' : '');
+      stepEl.tabIndex = hasDetail ? 0 : -1;
       stepEl.innerHTML = `
         <div class="lc-circle ${circleClass}">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>
         </div>
         <div class="lc-label">${step.label}</div>
-        ${detailHtml}`;
+        ${tooltipHtml}`;
       wrap.appendChild(stepEl);
       if (i < STEPS.length - 1) {
         const conn = document.createElement('div');
@@ -356,6 +397,48 @@
     });
   }
   renderLifecycle();
+
+  /* ─── SECTION COMPLETENESS ─── */
+  function setSectionState(id, done) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('not-done', !done);
+    el.innerHTML = done
+      ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+      : '<svg width="3" height="10" viewBox="0 0 4 14" fill="none"><line x1="2" y1="1" x2="2" y2="9" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="2" cy="12.4" r="1.3" fill="#fff"/></svg>';
+  }
+  if (isDraft) {
+    setSectionState('acc-check-company', true);
+    setSectionState('acc-check-service', false);
+    setSectionState('acc-check-address', false);
+    setSectionState('acc-check-structure', false);
+  }
+
+  /* ─── ORDER ACTIONS ─── */
+  function toggleMorePopover() {
+    document.getElementById('morePopover').classList.toggle('open');
+    document.getElementById('moreBtn').classList.toggle('open');
+  }
+  function closeMorePopover() {
+    document.getElementById('morePopover').classList.remove('open');
+    document.getElementById('moreBtn').classList.remove('open');
+  }
+  document.addEventListener('click', e => {
+    if (!document.querySelector('.more-wrap').contains(e.target)) closeMorePopover();
+  });
+  function completeOrder() {
+    badge.textContent = 'Completed';
+    allDone = true;
+    document.getElementById('completeOrderBtn').style.display = 'none';
+    setSectionState('acc-check-service', true);
+    setSectionState('acc-check-address', true);
+    setSectionState('acc-check-structure', true);
+    renderLifecycle();
+  }
+  function deleteOrder() {
+    closeMorePopover();
+    window.location.href = 'boarding-orders.html';
+  }
 
   /* ─── ACCORDIONS (collapsed by default) ─── */
   function toggleAcc(headerEl, bodyId) {
