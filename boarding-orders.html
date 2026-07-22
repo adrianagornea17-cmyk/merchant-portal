@@ -179,8 +179,8 @@
     .ord-table td { padding: 13px 16px; color: var(--text-2); border-right: 1px solid #f1f5f9; vertical-align: middle; }
     .ord-table td:last-child { border-right: none; }
 
-    .status-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fde68a; color: #713f12; white-space: nowrap; }
-    .status-badge.draft { background: #10b981; color: #fff; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #374151; border: 1px solid #e2e8f0; white-space: nowrap; }
+    .status-badge .edit-icon { display: inline-flex; color: var(--text-3); flex-shrink: 0; }
 
     .no-results-content { display: flex; flex-direction: column; align-items: center; padding: 60px 24px; }
     .no-results-icon { width: 56px; height: 56px; background: #fef3c7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
@@ -446,40 +446,39 @@
                 <div class="th-inner">Last edited
                   <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
                 </div>
-                <input class="col-filter" type="text" placeholder="Search…" oninput="applyFilters()" id="filterLastEdited">
               </th>
             </tr>
           </thead>
           <tbody id="ordTableBody">
             <tr class="ord-row" onclick="openOrder(this)" data-id="fee9b37a-0133-4284-859d-8cb65ce2b7f8" data-date="21-07-2026 19:47:12" data-org="MPOC VTap Test" data-user="Softpos User" data-status="Completed" data-portfolio="Verifone Only" data-lastedited="21-07-2026 20:05:42">
-              <td title="fee9b37a-0133-4284-859d-8cb65ce2b7f8">fee9b37a…</td><td>21-07-2026 19:47:12</td><td>MPOC VTap Test</td><td>Softpos User</td><td><span class="status-badge">Completed</span></td><td>Verifone Only</td><td>21-07-2026 20:05:42</td>
+              <td title="fee9b37a-0133-4284-859d-8cb65ce2b7f8">fee9b37a…</td><td>21-07-2026 19:47:12</td><td>MPOC VTap Test</td><td>Softpos User</td><td><span class="status-badge">Completed<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>Verifone Only</td><td>21-07-2026 20:05:42</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0001-4284-859d-8cb65ce2b001" data-date="21-07-2026 18:38:43" data-org="Kayleigh Coffee Shop" data-user="Kayleigh Anne Cheesley" data-status="Pending Signature" data-portfolio="EU Merchants" data-lastedited="21-07-2026 18:40:00">
-              <td title="a1b2c3d4-0001-4284-859d-8cb65ce2b001">a1b2c3d4…</td><td>21-07-2026 18:38:43</td><td>Kayleigh Coffee Shop</td><td>Kayleigh Anne Cheesley</td><td><span class="status-badge">Pending Signature</span></td><td>EU Merchants</td><td>21-07-2026 18:40:00</td>
+              <td title="a1b2c3d4-0001-4284-859d-8cb65ce2b001">a1b2c3d4…</td><td>21-07-2026 18:38:43</td><td>Kayleigh Coffee Shop</td><td>Kayleigh Anne Cheesley</td><td><span class="status-badge">Pending Signature<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>EU Merchants</td><td>21-07-2026 18:40:00</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0002-4284-859d-8cb65ce2b002" data-date="21-07-2026 18:31:16" data-org="TEST XN NEW PURCHASE" data-user="Florin Dobre" data-status="In Progress" data-portfolio="APAC Test" data-lastedited="21-07-2026 18:33:35">
-              <td title="a1b2c3d4-0002-4284-859d-8cb65ce2b002">a1b2c3d4…</td><td>21-07-2026 18:31:16</td><td>TEST XN NEW PURCHASE</td><td>Florin Dobre</td><td><span class="status-badge">In Progress</span></td><td>APAC Test</td><td>21-07-2026 18:33:35</td>
+              <td title="a1b2c3d4-0002-4284-859d-8cb65ce2b002">a1b2c3d4…</td><td>21-07-2026 18:31:16</td><td>TEST XN NEW PURCHASE</td><td>Florin Dobre</td><td><span class="status-badge">In Progress<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>APAC Test</td><td>21-07-2026 18:33:35</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0003-4284-859d-8cb65ce2b003" data-date="21-07-2026 18:23:04" data-org="TEST XN NEW RENTAL" data-user="Florin Dobre" data-status="In Progress" data-portfolio="APAC Test" data-lastedited="21-07-2026 18:26:20">
-              <td title="a1b2c3d4-0003-4284-859d-8cb65ce2b003">a1b2c3d4…</td><td>21-07-2026 18:23:04</td><td>TEST XN NEW RENTAL</td><td>Florin Dobre</td><td><span class="status-badge">In Progress</span></td><td>APAC Test</td><td>21-07-2026 18:26:20</td>
+              <td title="a1b2c3d4-0003-4284-859d-8cb65ce2b003">a1b2c3d4…</td><td>21-07-2026 18:23:04</td><td>TEST XN NEW RENTAL</td><td>Florin Dobre</td><td><span class="status-badge">In Progress<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>APAC Test</td><td>21-07-2026 18:26:20</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0004-4284-859d-8cb65ce2b004" data-date="21-07-2026 18:01:55" data-org="Your Trade OS" data-user="Mathew Stevens" data-status="Completed" data-portfolio="US Operations" data-lastedited="21-07-2026 18:05:09">
-              <td title="a1b2c3d4-0004-4284-859d-8cb65ce2b004">a1b2c3d4…</td><td>21-07-2026 18:01:55</td><td>Your Trade OS</td><td>Mathew Stevens</td><td><span class="status-badge">Completed</span></td><td>US Operations</td><td>21-07-2026 18:05:09</td>
+              <td title="a1b2c3d4-0004-4284-859d-8cb65ce2b004">a1b2c3d4…</td><td>21-07-2026 18:01:55</td><td>Your Trade OS</td><td>Mathew Stevens</td><td><span class="status-badge">Completed<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>US Operations</td><td>21-07-2026 18:05:09</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0005-4284-859d-8cb65ce2b005" data-date="21-07-2026 17:43:38" data-org="TEST XN NEW" data-user="Florin Dobre" data-status="On Hold" data-portfolio="APAC Test" data-lastedited="21-07-2026 17:51:39">
-              <td title="a1b2c3d4-0005-4284-859d-8cb65ce2b005">a1b2c3d4…</td><td>21-07-2026 17:43:38</td><td>TEST XN NEW</td><td>Florin Dobre</td><td><span class="status-badge">On Hold</span></td><td>APAC Test</td><td>21-07-2026 17:51:39</td>
+              <td title="a1b2c3d4-0005-4284-859d-8cb65ce2b005">a1b2c3d4…</td><td>21-07-2026 17:43:38</td><td>TEST XN NEW</td><td>Florin Dobre</td><td><span class="status-badge">On Hold<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>APAC Test</td><td>21-07-2026 17:51:39</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0006-4284-859d-8cb65ce2b006" data-date="21-07-2026 17:29:47" data-org="Verifone UK Enterprise Sales INST…" data-user="Michael Staples" data-status="Completed" data-portfolio="UK Enterprise" data-lastedited="21-07-2026 17:33:58">
-              <td title="a1b2c3d4-0006-4284-859d-8cb65ce2b006">a1b2c3d4…</td><td>21-07-2026 17:29:47</td><td>Verifone UK Enterprise Sales INST…</td><td>Michael Staples</td><td><span class="status-badge">Completed</span></td><td>UK Enterprise</td><td>21-07-2026 17:33:58</td>
+              <td title="a1b2c3d4-0006-4284-859d-8cb65ce2b006">a1b2c3d4…</td><td>21-07-2026 17:29:47</td><td>Verifone UK Enterprise Sales INST…</td><td>Michael Staples</td><td><span class="status-badge">Completed<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>UK Enterprise</td><td>21-07-2026 17:33:58</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0007-4284-859d-8cb65ce2b007" data-date="21-07-2026 17:24:49" data-org="Verifone UK Enterprise Sales INST…" data-user="Martyn Kendrick-Bott" data-status="Completed" data-portfolio="UK Enterprise" data-lastedited="21-07-2026 17:34:59">
-              <td title="a1b2c3d4-0007-4284-859d-8cb65ce2b007">a1b2c3d4…</td><td>21-07-2026 17:24:49</td><td>Verifone UK Enterprise Sales INST…</td><td>Martyn Kendrick-Bott</td><td><span class="status-badge">Completed</span></td><td>UK Enterprise</td><td>21-07-2026 17:34:59</td>
+              <td title="a1b2c3d4-0007-4284-859d-8cb65ce2b007">a1b2c3d4…</td><td>21-07-2026 17:24:49</td><td>Verifone UK Enterprise Sales INST…</td><td>Martyn Kendrick-Bott</td><td><span class="status-badge">Completed<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>UK Enterprise</td><td>21-07-2026 17:34:59</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0008-4284-859d-8cb65ce2b008" data-date="21-07-2026 17:15:52" data-org="test" data-user="Florin Dobre" data-status="Draft" data-portfolio="Verifone Only" data-lastedited="21-07-2026 17:36:18">
-              <td title="a1b2c3d4-0008-4284-859d-8cb65ce2b008">a1b2c3d4…</td><td>21-07-2026 17:15:52</td><td>test</td><td>Florin Dobre</td><td><span class="status-badge draft">Draft</span></td><td>Verifone Only</td><td>21-07-2026 17:36:18</td>
+              <td title="a1b2c3d4-0008-4284-859d-8cb65ce2b008">a1b2c3d4…</td><td>21-07-2026 17:15:52</td><td>test</td><td>Florin Dobre</td><td><span class="status-badge">Draft<span class="edit-icon" title="Editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></span></td><td>Verifone Only</td><td>21-07-2026 17:36:18</td>
             </tr>
             <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0009-4284-859d-8cb65ce2b009" data-date="21-07-2026 17:13:39" data-org="Devozar" data-user="Mathew Stevens" data-status="Completed" data-portfolio="US Operations" data-lastedited="21-07-2026 17:17:23">
-              <td title="a1b2c3d4-0009-4284-859d-8cb65ce2b009">a1b2c3d4…</td><td>21-07-2026 17:13:39</td><td>Devozar</td><td>Mathew Stevens</td><td><span class="status-badge">Completed</span></td><td>US Operations</td><td>21-07-2026 17:17:23</td>
+              <td title="a1b2c3d4-0009-4284-859d-8cb65ce2b009">a1b2c3d4…</td><td>21-07-2026 17:13:39</td><td>Devozar</td><td>Mathew Stevens</td><td><span class="status-badge">Completed<span class="edit-icon" title="Not editable"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span></span></td><td>US Operations</td><td>21-07-2026 17:17:23</td>
             </tr>
             <tr id="noResultsRow" style="display:none;">
               <td colspan="7" style="padding:0;border:none;">
@@ -638,7 +637,6 @@
     const user = document.getElementById('filterUser').value.toLowerCase();
     const status = document.getElementById('filterStatus').value;
     const portfolio = document.getElementById('filterPortfolio').value;
-    const lastEdited = document.getElementById('filterLastEdited').value.toLowerCase();
     const rows = document.querySelectorAll('#ordTableBody .ord-row');
     let visible = 0;
     rows.forEach(r => {
@@ -648,8 +646,7 @@
         && d.org.toLowerCase().includes(org)
         && d.user.toLowerCase().includes(user)
         && (!status || d.status === status)
-        && (!portfolio || d.portfolio === portfolio)
-        && d.lastedited.toLowerCase().includes(lastEdited);
+        && (!portfolio || d.portfolio === portfolio);
       r.style.display = match ? '' : 'none';
       if (match) visible++;
     });
@@ -662,7 +659,6 @@
     document.getElementById('filterUser').value = '';
     document.getElementById('filterStatus').value = '';
     document.getElementById('filterPortfolio').value = '';
-    document.getElementById('filterLastEdited').value = '';
     document.querySelectorAll('#ordTableBody .ord-row').forEach(r => r.style.display = '');
     updateResultsState(document.querySelectorAll('#ordTableBody .ord-row').length);
   }
