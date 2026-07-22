@@ -159,9 +159,6 @@
 
     .list-meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .list-meta { font-size: 13px; color: var(--text-3); }
-    .legend-group { display: flex; align-items: center; gap: 8px; }
-    .legend-pill { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fde68a; color: #713f12; }
-    .legend-pill.green { background: #bbf7d0; color: #065f46; }
 
     .table-card { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
     .ord-table { width: 100%; border-collapse: collapse; font-size: 13.5px; table-layout: fixed; }
@@ -196,9 +193,6 @@
     .pag-left { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-3); }
     .pag-per-page { display: inline-flex; align-items: center; gap: 4px; border: 1.5px solid var(--border); border-radius: 7px; padding: 4px 10px; font-size: 13px; font-weight: 500; color: var(--text-2); background: #fff; cursor: pointer; }
     .pag-right { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-3); }
-    .pag-goto { display: flex; align-items: center; gap: 7px; }
-    .pag-goto-input { width: 44px; height: 32px; border: 1.5px solid var(--border); border-radius: 7px; padding: 0 8px; font-size: 13px; color: var(--text); text-align: center; outline: none; font-family: inherit; transition: border-color 0.15s; }
-    .pag-goto-input:focus { border-color: var(--accent); }
     .pag-nav { display: flex; align-items: center; gap: 4px; }
     .pag-nav-btn { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-2); transition: background 0.1s, border-color 0.1s; }
     .pag-nav-btn:hover { background: var(--hover-bg); border-color: #9ca3af; }
@@ -387,156 +381,148 @@
 
     <div class="page-content">
 
-      <div class="list-meta-row">
-        <div class="list-meta">1 – 10 of 403789 orders</div>
-        <div class="legend-group">
-          <span class="legend-pill green">Editable</span>
-          <span class="legend-pill">Not Editable</span>
-        </div>
+      <div class="list-meta-row" id="listMetaRow">
+        <div class="list-meta" id="listMeta">1 – 10 of 403789 orders</div>
       </div>
 
-      <!-- VIEW LIST STATE -->
-      <div id="viewList">
-        <div class="table-card">
-          <table class="ord-table">
-            <colgroup>
-              <col style="width:18%"><col style="width:24%"><col style="width:20%"><col style="width:19%"><col style="width:19%">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>
-                  <div class="th-inner">Date Created
-                    <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
+      <div class="table-card">
+        <table class="ord-table">
+          <colgroup>
+            <col style="width:13%"><col style="width:13%"><col style="width:17%"><col style="width:14%"><col style="width:13%"><col style="width:13%"><col style="width:17%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>
+                <div class="th-inner">Order ID
+                  <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
+                </div>
+                <input class="col-filter" type="text" placeholder="Search…" oninput="applyFilters()" id="filterOrderId">
+              </th>
+              <th>
+                <div class="th-inner">Date Created
+                  <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
+                </div>
+                <input class="col-filter" type="text" placeholder="Search…" oninput="applyFilters()" id="filterDate">
+              </th>
+              <th>
+                <div class="th-inner">Organization
+                  <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
+                </div>
+                <input class="col-filter" type="text" placeholder="Search…" oninput="applyFilters()" id="filterOrg">
+              </th>
+              <th>
+                <div class="th-inner">User
+                  <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
+                </div>
+                <input class="col-filter" type="text" placeholder="Search…" oninput="applyFilters()" id="filterUser">
+              </th>
+              <th>
+                <div class="th-inner">Status
+                  <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
+                </div>
+                <select class="col-filter-select" id="filterStatus" onchange="applyFilters()">
+                  <option value="">All</option>
+                  <option>Completed</option>
+                  <option>Pending Signature</option>
+                  <option>In Progress</option>
+                  <option>On Hold</option>
+                  <option>Draft</option>
+                </select>
+              </th>
+              <th>
+                <div class="th-inner">Portfolio
+                  <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
+                </div>
+                <select class="col-filter-select" id="filterPortfolio" onchange="applyFilters()">
+                  <option value="">All</option>
+                  <option>Verifone Only</option>
+                  <option>EU Merchants</option>
+                  <option>APAC Test</option>
+                  <option>US Operations</option>
+                  <option>UK Enterprise</option>
+                </select>
+              </th>
+              <th>
+                <div class="th-inner">Last edited
+                  <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
+                </div>
+                <input class="col-filter" type="text" placeholder="Search…" oninput="applyFilters()" id="filterLastEdited">
+              </th>
+            </tr>
+          </thead>
+          <tbody id="ordTableBody">
+            <tr class="ord-row" onclick="openOrder(this)" data-id="fee9b37a-0133-4284-859d-8cb65ce2b7f8" data-date="21-07-2026 19:47:12" data-org="MPOC VTap Test" data-user="Softpos User" data-status="Completed" data-portfolio="Verifone Only" data-lastedited="21-07-2026 20:05:42">
+              <td title="fee9b37a-0133-4284-859d-8cb65ce2b7f8">fee9b37a…</td><td>21-07-2026 19:47:12</td><td>MPOC VTap Test</td><td>Softpos User</td><td><span class="status-badge">Completed</span></td><td>Verifone Only</td><td>21-07-2026 20:05:42</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0001-4284-859d-8cb65ce2b001" data-date="21-07-2026 18:38:43" data-org="Kayleigh Coffee Shop" data-user="Kayleigh Anne Cheesley" data-status="Pending Signature" data-portfolio="EU Merchants" data-lastedited="21-07-2026 18:40:00">
+              <td title="a1b2c3d4-0001-4284-859d-8cb65ce2b001">a1b2c3d4…</td><td>21-07-2026 18:38:43</td><td>Kayleigh Coffee Shop</td><td>Kayleigh Anne Cheesley</td><td><span class="status-badge">Pending Signature</span></td><td>EU Merchants</td><td>21-07-2026 18:40:00</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0002-4284-859d-8cb65ce2b002" data-date="21-07-2026 18:31:16" data-org="TEST XN NEW PURCHASE" data-user="Florin Dobre" data-status="In Progress" data-portfolio="APAC Test" data-lastedited="21-07-2026 18:33:35">
+              <td title="a1b2c3d4-0002-4284-859d-8cb65ce2b002">a1b2c3d4…</td><td>21-07-2026 18:31:16</td><td>TEST XN NEW PURCHASE</td><td>Florin Dobre</td><td><span class="status-badge">In Progress</span></td><td>APAC Test</td><td>21-07-2026 18:33:35</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0003-4284-859d-8cb65ce2b003" data-date="21-07-2026 18:23:04" data-org="TEST XN NEW RENTAL" data-user="Florin Dobre" data-status="In Progress" data-portfolio="APAC Test" data-lastedited="21-07-2026 18:26:20">
+              <td title="a1b2c3d4-0003-4284-859d-8cb65ce2b003">a1b2c3d4…</td><td>21-07-2026 18:23:04</td><td>TEST XN NEW RENTAL</td><td>Florin Dobre</td><td><span class="status-badge">In Progress</span></td><td>APAC Test</td><td>21-07-2026 18:26:20</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0004-4284-859d-8cb65ce2b004" data-date="21-07-2026 18:01:55" data-org="Your Trade OS" data-user="Mathew Stevens" data-status="Completed" data-portfolio="US Operations" data-lastedited="21-07-2026 18:05:09">
+              <td title="a1b2c3d4-0004-4284-859d-8cb65ce2b004">a1b2c3d4…</td><td>21-07-2026 18:01:55</td><td>Your Trade OS</td><td>Mathew Stevens</td><td><span class="status-badge">Completed</span></td><td>US Operations</td><td>21-07-2026 18:05:09</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0005-4284-859d-8cb65ce2b005" data-date="21-07-2026 17:43:38" data-org="TEST XN NEW" data-user="Florin Dobre" data-status="On Hold" data-portfolio="APAC Test" data-lastedited="21-07-2026 17:51:39">
+              <td title="a1b2c3d4-0005-4284-859d-8cb65ce2b005">a1b2c3d4…</td><td>21-07-2026 17:43:38</td><td>TEST XN NEW</td><td>Florin Dobre</td><td><span class="status-badge">On Hold</span></td><td>APAC Test</td><td>21-07-2026 17:51:39</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0006-4284-859d-8cb65ce2b006" data-date="21-07-2026 17:29:47" data-org="Verifone UK Enterprise Sales INST…" data-user="Michael Staples" data-status="Completed" data-portfolio="UK Enterprise" data-lastedited="21-07-2026 17:33:58">
+              <td title="a1b2c3d4-0006-4284-859d-8cb65ce2b006">a1b2c3d4…</td><td>21-07-2026 17:29:47</td><td>Verifone UK Enterprise Sales INST…</td><td>Michael Staples</td><td><span class="status-badge">Completed</span></td><td>UK Enterprise</td><td>21-07-2026 17:33:58</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0007-4284-859d-8cb65ce2b007" data-date="21-07-2026 17:24:49" data-org="Verifone UK Enterprise Sales INST…" data-user="Martyn Kendrick-Bott" data-status="Completed" data-portfolio="UK Enterprise" data-lastedited="21-07-2026 17:34:59">
+              <td title="a1b2c3d4-0007-4284-859d-8cb65ce2b007">a1b2c3d4…</td><td>21-07-2026 17:24:49</td><td>Verifone UK Enterprise Sales INST…</td><td>Martyn Kendrick-Bott</td><td><span class="status-badge">Completed</span></td><td>UK Enterprise</td><td>21-07-2026 17:34:59</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0008-4284-859d-8cb65ce2b008" data-date="21-07-2026 17:15:52" data-org="test" data-user="Florin Dobre" data-status="Draft" data-portfolio="Verifone Only" data-lastedited="21-07-2026 17:36:18">
+              <td title="a1b2c3d4-0008-4284-859d-8cb65ce2b008">a1b2c3d4…</td><td>21-07-2026 17:15:52</td><td>test</td><td>Florin Dobre</td><td><span class="status-badge draft">Draft</span></td><td>Verifone Only</td><td>21-07-2026 17:36:18</td>
+            </tr>
+            <tr class="ord-row" onclick="openOrder(this)" data-id="a1b2c3d4-0009-4284-859d-8cb65ce2b009" data-date="21-07-2026 17:13:39" data-org="Devozar" data-user="Mathew Stevens" data-status="Completed" data-portfolio="US Operations" data-lastedited="21-07-2026 17:17:23">
+              <td title="a1b2c3d4-0009-4284-859d-8cb65ce2b009">a1b2c3d4…</td><td>21-07-2026 17:13:39</td><td>Devozar</td><td>Mathew Stevens</td><td><span class="status-badge">Completed</span></td><td>US Operations</td><td>21-07-2026 17:17:23</td>
+            </tr>
+            <tr id="noResultsRow" style="display:none;">
+              <td colspan="7" style="padding:0;border:none;">
+                <div class="no-results-content">
+                  <div class="no-results-icon">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="8"/>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+                      <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+                      <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+                    </svg>
                   </div>
-                </th>
-                <th>
-                  <div class="th-inner">Organization
-                    <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
-                  </div>
-                  <input class="col-filter" type="text" placeholder="Search…" oninput="applyFilters()" id="filterOrg">
-                </th>
-                <th>
-                  <div class="th-inner">User
-                    <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
-                  </div>
-                  <input class="col-filter" type="text" placeholder="Search…" oninput="applyFilters()" id="filterUser">
-                </th>
-                <th>
-                  <div class="th-inner">Status
-                    <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
-                  </div>
-                  <select class="col-filter-select" id="filterStatus" onchange="applyFilters()">
-                    <option value="">All</option>
-                    <option>Completed</option>
-                    <option>Pending Signature</option>
-                    <option>In Progress</option>
-                    <option>On Hold</option>
-                    <option>Draft</option>
-                  </select>
-                </th>
-                <th>
-                  <div class="th-inner">Last edited
-                    <span class="th-sort" title="Sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></span>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody id="ordTableBody">
-              <tr class="ord-row" onclick="openOrder(this)" data-org="MPOC VTap Test" data-user="Softpos User" data-status="Completed">
-                <td>21-07-2026 19:47:12</td><td>MPOC VTap Test</td><td>Softpos User</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 20:05:42</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="Kayleigh Coffee Shop" data-user="Kayleigh Anne Cheesley" data-status="Pending Signature">
-                <td>21-07-2026 18:38:43</td><td>Kayleigh Coffee Shop</td><td>Kayleigh Anne Cheesley</td><td><span class="status-badge">Pending Signature</span></td><td>21-07-2026 18:40:00</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="TEST XN NEW PURCHASE" data-user="Florin Dobre" data-status="In Progress">
-                <td>21-07-2026 18:31:16</td><td>TEST XN NEW PURCHASE</td><td>Florin Dobre</td><td><span class="status-badge">In Progress</span></td><td>21-07-2026 18:33:35</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="TEST XN NEW RENTAL" data-user="Florin Dobre" data-status="In Progress">
-                <td>21-07-2026 18:23:04</td><td>TEST XN NEW RENTAL</td><td>Florin Dobre</td><td><span class="status-badge">In Progress</span></td><td>21-07-2026 18:26:20</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="Your Trade OS" data-user="Mathew Stevens" data-status="Completed">
-                <td>21-07-2026 18:01:55</td><td>Your Trade OS</td><td>Mathew Stevens</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 18:05:09</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="TEST XN NEW" data-user="Florin Dobre" data-status="On Hold">
-                <td>21-07-2026 17:43:38</td><td>TEST XN NEW</td><td>Florin Dobre</td><td><span class="status-badge">On Hold</span></td><td>21-07-2026 17:51:39</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="Verifone UK Enterprise Sales INST…" data-user="Michael Staples" data-status="Completed">
-                <td>21-07-2026 17:29:47</td><td>Verifone UK Enterprise Sales INST…</td><td>Michael Staples</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 17:33:58</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="Verifone UK Enterprise Sales INST…" data-user="Martyn Kendrick-Bott" data-status="Completed">
-                <td>21-07-2026 17:24:49</td><td>Verifone UK Enterprise Sales INST…</td><td>Martyn Kendrick-Bott</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 17:34:59</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="test" data-user="Florin Dobre" data-status="Draft">
-                <td>21-07-2026 17:15:52</td><td>test</td><td>Florin Dobre</td><td><span class="status-badge draft">Draft</span></td><td>21-07-2026 17:36:18</td>
-              </tr>
-              <tr class="ord-row" onclick="openOrder(this)" data-org="Devozar" data-user="Mathew Stevens" data-status="Completed">
-                <td>21-07-2026 17:13:39</td><td>Devozar</td><td>Mathew Stevens</td><td><span class="status-badge">Completed</span></td><td>21-07-2026 17:17:23</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="list-pagination">
-            <div class="pag-left">
-              <span>Results per page</span>
-              <div class="pag-per-page">10
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
+                  <p class="no-results-title">Orders not found</p>
+                  <p class="no-results-sub">
+                    No orders match your current search or filters.
+                    Try a different value or <strong>clear the filter</strong> to see all orders.
+                  </p>
+                  <button class="btn btn-ghost" onclick="clearFilters()">Clear filters</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="list-pagination">
+          <div class="pag-left">
+            <span>Results per page</span>
+            <div class="pag-per-page">10
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
-            <div class="pag-right">
-              <div class="pag-goto">
-                <span>Go to page</span>
-                <input class="pag-goto-input" type="number" value="1">
-              </div>
-              <span>Page 1 of 40379</span>
-              <div class="pag-nav">
-                <button class="pag-nav-btn" disabled>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                </button>
-                <button class="pag-nav-btn">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
-              </div>
+          </div>
+          <div class="pag-right">
+            <span id="pagPageText">Page 1 of 40379</span>
+            <div class="pag-nav">
+              <button class="pag-nav-btn" id="pagPrevBtn" disabled>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="pag-nav-btn" id="pagNextBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
             </div>
           </div>
         </div>
-      </div><!-- /viewList -->
-
-      <!-- NO RESULTS -->
-      <div id="viewNoResults" style="display:none;">
-        <div class="table-card">
-          <div class="no-results-content">
-            <div class="no-results-icon">
-              <svg viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"/>
-                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
-                <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
-                <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <p class="no-results-title">Orders not found</p>
-            <p class="no-results-sub">
-              No orders match your current search or filters.
-              Try a different value or <strong>clear the filter</strong> to see all orders.
-            </p>
-            <button class="btn btn-ghost" onclick="clearFilters()">Clear filters</button>
-          </div>
-          <div class="list-pagination">
-            <div class="pag-left">
-              <span>Results per page</span>
-              <div class="pag-per-page">10
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-            </div>
-            <div class="pag-right">
-              <div class="pag-goto"><span>Go to page</span><input class="pag-goto-input" type="number" disabled></div>
-              <span>Page 0 of 0</span>
-              <div class="pag-nav">
-                <button class="pag-nav-btn" disabled><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-                <button class="pag-nav-btn" disabled><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div><!-- /viewNoResults -->
+      </div>
 
     </div>
   </div>
@@ -641,41 +627,64 @@
   /* ─── ORDERS TABLE ─── */
   function openOrder(row) {
     const d = row.dataset;
-    const idMap = { 'MPOC VTap Test': 'fee9b37a-0133-4284-859d-8cb65ce2b7f8' };
-    const id = idMap[d.org] || ('a1b2c3d4-' + Math.random().toString(16).slice(2,6) + '-4284-859d-8cb65ce2b001');
-    const params = new URLSearchParams({ id, status: d.status, org: d.org, user: d.user });
+    const params = new URLSearchParams({ id: d.id, status: d.status, org: d.org, user: d.user });
     window.location.href = 'boarding-order-detail.html?' + params.toString();
   }
 
   function applyFilters() {
+    const orderId = document.getElementById('filterOrderId').value.toLowerCase();
+    const date = document.getElementById('filterDate').value.toLowerCase();
     const org = document.getElementById('filterOrg').value.toLowerCase();
     const user = document.getElementById('filterUser').value.toLowerCase();
     const status = document.getElementById('filterStatus').value;
+    const portfolio = document.getElementById('filterPortfolio').value;
+    const lastEdited = document.getElementById('filterLastEdited').value.toLowerCase();
     const rows = document.querySelectorAll('#ordTableBody .ord-row');
     let visible = 0;
     rows.forEach(r => {
       const d = r.dataset;
-      const match = d.org.toLowerCase().includes(org) && d.user.toLowerCase().includes(user) && (!status || d.status === status);
+      const match = d.id.toLowerCase().includes(orderId)
+        && d.date.toLowerCase().includes(date)
+        && d.org.toLowerCase().includes(org)
+        && d.user.toLowerCase().includes(user)
+        && (!status || d.status === status)
+        && (!portfolio || d.portfolio === portfolio)
+        && d.lastedited.toLowerCase().includes(lastEdited);
       r.style.display = match ? '' : 'none';
       if (match) visible++;
     });
-    showState(visible > 0 ? 'list' : 'noResults');
+    updateResultsState(visible);
   }
   function clearFilters() {
+    document.getElementById('filterOrderId').value = '';
+    document.getElementById('filterDate').value = '';
     document.getElementById('filterOrg').value = '';
     document.getElementById('filterUser').value = '';
     document.getElementById('filterStatus').value = '';
+    document.getElementById('filterPortfolio').value = '';
+    document.getElementById('filterLastEdited').value = '';
     document.querySelectorAll('#ordTableBody .ord-row').forEach(r => r.style.display = '');
-    showState('list');
+    updateResultsState(document.querySelectorAll('#ordTableBody .ord-row').length);
   }
 
+  function updateResultsState(visibleCount) {
+    document.getElementById('noResultsRow').style.display = visibleCount > 0 ? 'none' : '';
+    document.getElementById('listMetaRow').style.display = visibleCount > 0 ? 'flex' : 'none';
+    document.getElementById('listMeta').textContent = `1 – ${visibleCount} of ${visibleCount === 10 ? '403789' : visibleCount} orders`;
+    document.getElementById('pagPageText').textContent = visibleCount > 0 ? 'Page 1 of 40379' : 'Page 0 of 0';
+    document.getElementById('pagNextBtn').disabled = visibleCount === 0;
+    document.getElementById('sw1').classList.toggle('active', visibleCount > 0);
+    document.getElementById('sw2').classList.toggle('active', visibleCount === 0);
+  }
+
+  /* Demo switcher: forces the empty state by filtering on a value nothing matches */
   function showState(state) {
-    const list = document.getElementById('viewList');
-    const noRes = document.getElementById('viewNoResults');
-    list.style.display = state === 'list' ? 'block' : 'none';
-    noRes.style.display = state === 'noResults' ? 'block' : 'none';
-    document.getElementById('sw1').classList.toggle('active', state === 'list');
-    document.getElementById('sw2').classList.toggle('active', state === 'noResults');
+    if (state === 'noResults') {
+      document.getElementById('filterOrg').value = 'zzz_no_match_zzz';
+      applyFilters();
+    } else {
+      clearFilters();
+    }
   }
 </script>
 
