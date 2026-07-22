@@ -70,16 +70,19 @@
     .order-status-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-3); }
     .status-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #374151; border: 1px solid #e2e8f0; white-space: nowrap; }
 
-    .lifecycle-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 24px 28px 20px; margin-bottom: 24px; }
+    .lifecycle-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 24px 28px 24px; margin-bottom: 24px; }
     .lifecycle-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 22px; }
-    .lifecycle-steps { display: flex; align-items: flex-start; margin-bottom: 18px; }
-    .lc-step { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 0 0 auto; width: 90px; }
+    .lifecycle-steps { display: flex; align-items: flex-start; }
+    .lc-step { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; min-width: 130px; max-width: 200px; }
     .lc-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #e5e7eb; color: #9ca3af; }
     .lc-circle.done { background: var(--accent); color: #fff; }
     .lc-circle.current { background: var(--accent); color: #fff; box-shadow: 0 0 0 4px #dbeafe; }
     .lc-label { font-size: 12.5px; font-weight: 600; color: var(--text-2); }
-    .lc-connector { flex: 1; height: 3px; background: #e5e7eb; margin-top: 17px; }
+    .lc-connector { flex: 0 0 32px; height: 3px; background: #e5e7eb; margin-top: 17px; }
     .lc-connector.done { background: var(--accent); }
+    .lc-detail { font-size: 11.5px; color: var(--text-3); text-align: center; line-height: 1.5; padding: 0 4px; }
+    .lc-detail .lc-detail-copy { background: none; border: none; color: inherit; cursor: pointer; display: inline-flex; vertical-align: middle; margin-left: 3px; opacity: 0.7; }
+    .lc-detail .lc-detail-copy:hover { opacity: 1; }
     .lifecycle-divider { border: none; border-top: 1px solid #f1f5f9; margin: 4px 0 16px; }
 
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 18px; height: 38px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: background 0.12s, border-color 0.12s, color 0.12s; white-space: nowrap; text-decoration: none; font-family: inherit; }
@@ -118,30 +121,6 @@
     .cost-table td { padding: 9px 0; color: var(--text-2); border-bottom: 1px solid #f1f5f9; }
     .cost-table td:not(:first-child) { text-align: right; padding-left: 12px; }
     .cost-table tr.total td { font-weight: 700; color: #0f172a; border-bottom: none; }
-
-    /* Tracking report slide panel (sits above the modal) */
-    .tr-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
-    .tr-backdrop.open { opacity: 1; pointer-events: all; }
-    .tr-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 440px; background: #fff; z-index: 401; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.28s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 48px rgba(0,0,0,0.18); }
-    .tr-backdrop.open .tr-panel { transform: translateX(0); }
-    .tr-header { background: #0f0f14; color: #fff; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .tr-header-title { font-size: 18px; font-weight: 700; }
-    .tr-close { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
-    .tr-close:hover { opacity: 1; }
-    .tr-body { flex: 1; overflow-y: auto; padding: 28px 24px 40px; }
-    .tr-item { display: flex; gap: 14px; }
-    .tr-item-rail { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-    .tr-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .tr-line { width: 2px; flex: 1; background: var(--accent); min-height: 34px; }
-    .tr-item:last-child .tr-line { display: none; }
-    .tr-card { flex: 1; background: var(--accent); color: #fff; border-radius: 12px; padding: 12px 16px; margin-bottom: 18px; }
-    .tr-card.outline { background: #fff; border: 1.5px solid var(--border); color: var(--text); }
-    .tr-card-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
-    .tr-card-title { font-size: 14px; font-weight: 700; }
-    .tr-card-date { font-size: 12px; opacity: 0.85; }
-    .tr-card-meta { font-size: 12px; opacity: 0.85; display: flex; align-items: center; gap: 6px; margin-top: 2px; }
-    .tr-card-meta button { background: none; border: none; color: inherit; opacity: 0.8; cursor: pointer; display: flex; align-items: center; }
-    .tr-card-desc { font-size: 12.5px; opacity: 0.9; margin-top: 4px; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -173,11 +152,6 @@
         <div class="lifecycle-card">
           <div class="lifecycle-title">Order Lifecycle</div>
           <div class="lifecycle-steps" id="lifecycleSteps"></div>
-          <hr class="lifecycle-divider">
-          <button class="btn btn-primary" onclick="openTracking()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            Full Tracking Report
-          </button>
         </div>
 
         <div class="detail-layout">
@@ -315,21 +289,10 @@
   </div>
 </div>
 
-<!-- ─── TRACKING REPORT SLIDE PANEL ─── -->
-<div class="tr-backdrop" id="trBackdrop" onclick="handleTrBackdrop(event)">
-  <div class="tr-panel" role="dialog" aria-modal="true" aria-label="Tracking Report">
-    <div class="tr-header">
-      <span class="tr-header-title">Tracking Report</span>
-      <button class="tr-close" onclick="closeTracking()" aria-label="Close">✕</button>
-    </div>
-    <div class="tr-body" id="trBody"></div>
-  </div>
-</div>
-
 <script>
   function closeModal() { window.location.href = 'boarding-orders.html'; }
   function handleBackdropClick(e) { if (e.target === document.getElementById('modalBackdrop')) closeModal(); }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (document.getElementById('trBackdrop').classList.contains('open')) closeTracking(); else closeModal(); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   /* ─── STEP DEFINITIONS ─── */
   const STEPS = [
@@ -355,21 +318,35 @@
   const currentStage = STATUS_STAGE.hasOwnProperty(status) ? STATUS_STAGE[status] : 4;
   const allDone = status === 'Completed';
 
+  const STEP_DETAILS = [
+    { date: '7/21/2026, 20:05:42', extra: `O-ID: ${orderId.slice(0,8)}… <button class="lc-detail-copy" onclick="copyOrderId()" title="Copy order ID"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><br>Created by Softpos User` },
+    { date: '7/21/2026, 19:47:12' },
+    { extra: `By: ${org}` },
+    { extra: 'Picked by the warehouse, ready to be shipped' },
+    { }
+  ];
+
   function renderLifecycle() {
     const wrap = document.getElementById('lifecycleSteps');
     wrap.innerHTML = '';
     STEPS.forEach((step, i) => {
       const done = allDone || i < currentStage;
       const isCurrent = !allDone && i === currentStage;
+      const reached = done || isCurrent;
       const circleClass = done ? 'done' : (isCurrent ? 'current' : '');
       const iconSvg = done ? CHECK : step.icon;
+      const detail = STEP_DETAILS[i];
+      const detailHtml = reached
+        ? `<div class="lc-detail">${detail.date ? detail.date + '<br>' : ''}${detail.extra || ''}</div>`
+        : '';
       const stepEl = document.createElement('div');
       stepEl.className = 'lc-step';
       stepEl.innerHTML = `
         <div class="lc-circle ${circleClass}">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>
         </div>
-        <div class="lc-label">${step.label}</div>`;
+        <div class="lc-label">${step.label}</div>
+        ${detailHtml}`;
       wrap.appendChild(stepEl);
       if (i < STEPS.length - 1) {
         const conn = document.createElement('div');
@@ -379,42 +356,6 @@
     });
   }
   renderLifecycle();
-
-  function renderTracking() {
-    const body = document.getElementById('trBody');
-    const items = [
-      { title: 'Draft', date: '7/21/2026, 20:05:42', outline: true, extra: `O-ID: ${orderId.slice(0,20)}… <button onclick="copyOrderId()" title="Copy"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><br>Created By: Softpos User` },
-      { title: 'Submitted', date: '7/21/2026, 19:47:12' },
-      { title: 'Signature', extra: `By: ${org}` },
-      { title: 'Review', desc: 'The order is now picked by the warehouse and ready to be shipped' },
-      { title: 'Completed' }
-    ];
-    body.innerHTML = '';
-    items.forEach((item, i) => {
-      const step = STEPS[i];
-      const row = document.createElement('div');
-      row.className = 'tr-item';
-      row.innerHTML = `
-        <div class="tr-item-rail">
-          <div class="tr-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${step.icon}</svg></div>
-          <div class="tr-line"></div>
-        </div>
-        <div class="tr-card ${item.outline ? 'outline' : ''}">
-          <div class="tr-card-title-row">
-            <span class="tr-card-title">${item.title}</span>
-            ${item.date ? `<span class="tr-card-date">${item.date}</span>` : ''}
-          </div>
-          ${item.extra ? `<div class="tr-card-meta">${item.extra}</div>` : ''}
-          ${item.desc ? `<div class="tr-card-desc">${item.desc}</div>` : ''}
-        </div>`;
-      body.appendChild(row);
-    });
-  }
-  renderTracking();
-
-  function openTracking() { document.getElementById('trBackdrop').classList.add('open'); }
-  function closeTracking() { document.getElementById('trBackdrop').classList.remove('open'); }
-  function handleTrBackdrop(e) { if (e.target === document.getElementById('trBackdrop')) closeTracking(); }
 
   /* ─── ACCORDIONS (collapsed by default) ─── */
   function toggleAcc(headerEl, bodyId) {
