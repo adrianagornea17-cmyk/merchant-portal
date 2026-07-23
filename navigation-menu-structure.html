@@ -206,6 +206,265 @@
       font-size: 11.5px;
       color: #9ca3af;
     }
+
+    /* ── See menu button ── */
+    .see-menu-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      height: 38px;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background 0.12s;
+    }
+
+    .see-menu-btn:hover { background: #1e293b; }
+
+    /* ── Interactive menu drawer ── */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      z-index: 400;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .menu-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 580px;
+      max-width: 92vw;
+      background: #fff;
+      box-shadow: 4px 0 30px rgba(0,0,0,0.15);
+      z-index: 401;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-drawer.open { transform: translateX(0); }
+
+    .menu-header {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .menu-header-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .menu-close-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: none;
+      background: #f1f5f9;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .menu-close-btn:hover { background: #e2e8f0; color: #334155; }
+
+    /* ── L1 / L2 split body ── */
+    .menu-body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .menu-l1 {
+      width: 220px;
+      flex-shrink: 0;
+      border-right: 1px solid #e5e7eb;
+      overflow-y: auto;
+      padding: 8px;
+      background: #fafbfc;
+    }
+
+    .menu-l1::-webkit-scrollbar { width: 4px; }
+    .menu-l1::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+    .l1-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 8px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      font-family: inherit;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .l1-item:hover { background: #f3f4f6; }
+
+    .l1-item.active {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .l1-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .l1-label { flex: 1; }
+
+    .l1-chevron {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      color: #cbd5e1;
+    }
+
+    .l1-item.active .l1-chevron { color: #93c5fd; }
+
+    .l1-divider {
+      margin: 8px 6px;
+      border: none;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .menu-l2 {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 22px;
+    }
+
+    .menu-l2::-webkit-scrollbar { width: 4px; }
+    .menu-l2::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+    .l2-panel { display: none; }
+    .l2-panel.active { display: block; }
+
+    .l2-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .l2-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .l2-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .m-sub-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin: 14px 0 4px;
+    }
+
+    .m-sub-label:first-child { margin-top: 0; }
+
+    .m-item {
+      display: block;
+      padding: 6px 8px;
+      margin: 0 -8px;
+      border-radius: 7px;
+      font-size: 13px;
+      color: #374151;
+    }
+
+    .m-item:hover { background: #f8fafc; }
+
+    .m-item.note {
+      font-style: italic;
+      color: #9ca3af;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* ── SSO launch card ── */
+    .sso-card {
+      background: #f8fafc;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+
+    .sso-app-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .sso-desc {
+      font-size: 12.5px;
+      color: #6b7280;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .sso-launch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 18px;
+      height: 38px;
+      border-radius: 8px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background 0.12s;
+    }
+
+    .sso-launch-btn:hover { background: #1d4ed8; }
   </style>
 </head>
 <body>
@@ -214,6 +473,10 @@
     <a class="back-link" href="index.html">← Back to all mockups</a>
     <h1>Navigation Menu Structure</h1>
     <p class="page-subtitle">Reference map of the current portal navigation — top-level menus, sub-items, SSO tiles, and pending clean-up notes.</p>
+    <button class="see-menu-btn" onclick="openMenu()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      See menu
+    </button>
   </div>
 
   <div class="layout">
@@ -386,6 +649,284 @@
   </div>
 
   <footer class="page-footer">© 2026 Verifone</footer>
+
+  <!-- ── Interactive menu drawer ── -->
+  <div class="menu-overlay" id="menuOverlay" onclick="menuOverlayClick(event)"></div>
+  <nav class="menu-drawer" id="menuDrawer" aria-label="Portal navigation preview">
+
+    <div class="menu-header">
+      <span class="menu-header-title">Portal Navigation</span>
+      <button class="menu-close-btn" onclick="closeMenu()" aria-label="Close menu">✕</button>
+    </div>
+
+    <div class="menu-body">
+
+      <!-- L1 rail -->
+      <div class="menu-l1">
+        <button class="l1-item" data-l2="p-tr" onclick="selectL1(this)">
+          <div class="l1-icon" style="background:#eff6ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>
+          </div>
+          <span class="l1-label">Transactions &amp; Reports</span>
+          <span class="l1-chevron"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <button class="l1-item" data-l2="p-pt" onclick="selectL1(this)">
+          <div class="l1-icon" style="background:#f0fdf4;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h3.5l2 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <span class="l1-label">Payment Tools</span>
+          <span class="l1-chevron"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <button class="l1-item" data-l2="p-admin" onclick="selectL1(this)">
+          <div class="l1-icon" style="background:#fdf4ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg>
+          </div>
+          <span class="l1-label">Administration</span>
+          <span class="l1-chevron"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <button class="l1-item" data-l2="p-fav" onclick="selectL1(this)">
+          <div class="l1-icon" style="background:#fff1f2;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+          </div>
+          <span class="l1-label">Favorites</span>
+          <span class="l1-chevron"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <hr class="l1-divider">
+
+        <button class="l1-item" data-l2="p-boarding" onclick="selectL1(this)">
+          <div class="l1-icon" style="background:#f0f9ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2"/><path d="M6 9v6"/><circle cx="12" cy="7" r="2"/><path d="M12 9v6"/><circle cx="18" cy="17" r="2.4"/><path d="M16.5 15.9l1.5 1.5 2.2-2.6"/></svg>
+          </div>
+          <span class="l1-label">Boarding</span>
+          <span class="l1-chevron"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <button class="l1-item" data-l2="p-premier" onclick="selectL1(this)">
+          <div class="l1-icon" style="background:#f0f9ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14L21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          </div>
+          <span class="l1-label">Premier Portal — SSO</span>
+          <span class="l1-chevron"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <button class="l1-item" data-l2="p-devices" onclick="selectL1(this)">
+          <div class="l1-icon" style="background:#f0f9ff;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <span class="l1-label">Devices — SSO</span>
+          <span class="l1-chevron"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+
+        <hr class="l1-divider">
+
+        <button class="l1-item" data-l2="p-acct" onclick="selectL1(this)">
+          <div class="l1-icon" style="background:#f1f5f9;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.5 19a5.5 5.5 0 0 1 11 0"/></svg>
+          </div>
+          <span class="l1-label">MyAccount / Settings</span>
+          <span class="l1-chevron"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </button>
+      </div>
+
+      <!-- L2 panel -->
+      <div class="menu-l2">
+
+        <!-- Transactions & Reports -->
+        <div class="l2-panel" id="p-tr">
+          <div class="l2-header">
+            <div class="l2-icon" style="background:#eff6ff;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>
+            </div>
+            <span class="l2-title">Transactions &amp; Reports</span>
+          </div>
+          <div class="m-item">Payments Dashboard</div>
+          <div class="m-item">Orders/Transactions</div>
+          <div class="m-item">3DS Authentications</div>
+          <div class="m-item">Audit Log</div>
+          <div class="m-item">Generated Reports</div>
+          <div class="m-item">Report Scheduler</div>
+          <div class="m-item">Settlements</div>
+          <div class="m-item note">Splitting into:</div>
+          <div class="m-item">POI Settlements</div>
+          <div class="m-item">Processor Settlements</div>
+          <div class="m-item note">Or for our acquiring:</div>
+          <div class="m-item">Merchant Settlement</div>
+          <div class="m-item">Payout (ACH) — only US Woodforest</div>
+        </div>
+
+        <!-- Payment Tools -->
+        <div class="l2-panel" id="p-pt">
+          <div class="l2-header">
+            <div class="l2-icon" style="background:#f0fdf4;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h3.5l2 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            </div>
+            <span class="l2-title">Payment Tools</span>
+          </div>
+          <div class="m-item">Pay by link</div>
+          <div class="m-item">Virtual Terminal</div>
+          <div class="m-sub-label">Catalogs</div>
+          <div class="m-item">Customer Catalog</div>
+          <div class="m-item">Product Catalog</div>
+        </div>
+
+        <!-- Administration -->
+        <div class="l2-panel" id="p-admin">
+          <div class="l2-header">
+            <div class="l2-icon" style="background:#fdf4ff;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 19v2M12 3V5"/></svg>
+            </div>
+            <span class="l2-title">Administration</span>
+          </div>
+          <div class="m-item">Organizations</div>
+          <div class="m-item">Payment Provider Contracts</div>
+          <div class="m-item">Point of Interactions</div>
+          <div class="m-item">Users</div>
+          <div class="m-sub-label">Advanced Settings</div>
+          <div class="m-item">3DS Contracts</div>
+          <div class="m-item">Wallets</div>
+          <div class="m-item">Blocking Rulesets</div>
+          <div class="m-item">Notifications</div>
+          <div class="m-item">Manage templates</div>
+          <div class="m-item">Checkout Themes</div>
+          <div class="m-item">Fraud Prevention Services</div>
+          <div class="m-item">Price Lists</div>
+          <div class="m-item">Country Configuration (Acquiring)</div>
+        </div>
+
+        <!-- Favorites -->
+        <div class="l2-panel" id="p-fav">
+          <div class="l2-header">
+            <div class="l2-icon" style="background:#fff1f2;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+            </div>
+            <span class="l2-title">Favorites</span>
+          </div>
+          <div class="m-sub-label">Transactions &amp; Reports</div>
+          <div class="m-item">Dashboard</div>
+          <div class="m-item">Orders/Transactions</div>
+          <div class="m-item">Report Scheduler</div>
+          <div class="m-item">Audit Log</div>
+          <div class="m-sub-label">Payment Tools</div>
+          <div class="m-item">Pay by link</div>
+          <div class="m-item">Virtual Terminal</div>
+          <div class="m-sub-label">Administration</div>
+          <div class="m-item">Organizations</div>
+          <div class="m-item">Point of Interactions</div>
+        </div>
+
+        <!-- Boarding — SSO -->
+        <div class="l2-panel" id="p-boarding">
+          <div class="l2-header">
+            <div class="l2-icon" style="background:#f0f9ff;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2"/><path d="M6 9v6"/><circle cx="12" cy="7" r="2"/><path d="M12 9v6"/><circle cx="18" cy="17" r="2.4"/><path d="M16.5 15.9l1.5 1.5 2.2-2.6"/></svg>
+            </div>
+            <span class="l2-title">Boarding</span>
+          </div>
+          <div class="sso-card">
+            <div class="sso-app-name">Merchant Boarding</div>
+            <p class="sso-desc">Merchant onboarding workflows live in the Boarding app. Your session is already authenticated and will launch instantly via SSO.</p>
+            <button class="sso-launch-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Launch Boarding
+            </button>
+          </div>
+        </div>
+
+        <!-- Premier Portal — SSO -->
+        <div class="l2-panel" id="p-premier">
+          <div class="l2-header">
+            <div class="l2-icon" style="background:#f0f9ff;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14L21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+            </div>
+            <span class="l2-title">Premier Portal — SSO</span>
+          </div>
+          <div class="sso-card">
+            <div class="sso-app-name">Premier Portal</div>
+            <p class="sso-desc">Premier Portal lives in its own application. Your session is already authenticated and will launch instantly via SSO.</p>
+            <button class="sso-launch-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Launch Premier Portal
+            </button>
+          </div>
+        </div>
+
+        <!-- Devices — SSO -->
+        <div class="l2-panel" id="p-devices">
+          <div class="l2-header">
+            <div class="l2-icon" style="background:#f0f9ff;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <span class="l2-title">Devices</span>
+          </div>
+          <div class="sso-card">
+            <div class="sso-app-name">Verifone HQ</div>
+            <p class="sso-desc">Device management lives in VHQ 2.0. Your session is already authenticated and will launch instantly via SSO.</p>
+            <button class="sso-launch-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Launch VHQ 2.0
+            </button>
+          </div>
+        </div>
+
+        <!-- MyAccount / Settings -->
+        <div class="l2-panel" id="p-acct">
+          <div class="l2-header">
+            <div class="l2-icon" style="background:#f1f5f9;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.5 19a5.5 5.5 0 0 1 11 0"/></svg>
+            </div>
+            <span class="l2-title">MyAccount / Settings</span>
+          </div>
+          <div class="m-item">My Account</div>
+          <div class="m-item">API Keys</div>
+          <div class="m-item">Settings</div>
+          <div class="m-sub-label">Documents</div>
+          <div class="m-item">Compliance</div>
+          <div class="m-item">Privacy</div>
+          <div class="m-item">Terms &amp; Conditions</div>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    function openMenu() {
+      document.getElementById('menuOverlay').classList.add('open');
+      document.getElementById('menuDrawer').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      document.getElementById('menuOverlay').classList.remove('open');
+      document.getElementById('menuDrawer').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function menuOverlayClick(e) {
+      if (e.target === document.getElementById('menuOverlay')) closeMenu();
+    }
+
+    function selectL1(btn) {
+      document.querySelectorAll('.l1-item').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.l2-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.l2).classList.add('active');
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // Select Transactions & Reports by default so the drawer isn't empty on first view
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.querySelector('.l1-item');
+      if (btn) selectL1(btn);
+    });
+  </script>
 
 </body>
 </html>
