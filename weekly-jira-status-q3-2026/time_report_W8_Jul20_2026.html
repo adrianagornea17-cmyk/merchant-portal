@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Time Report W8 — Jul 20–Jul 26, 2026 | ET Q3 2026</title>
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+       background: #f2f2f2; color: #222; padding: 40px; }
+.page { max-width: 980px; margin: 0 auto; }
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 19px; font-weight: 700; }
+.page-header p  { font-size: 12px; color: #888; margin-top: 3px; }
+.back-link { font-size: 12px; color: #1a73e8; text-decoration: none; display: inline-block; margin-bottom: 16px; }
+.back-link:hover { text-decoration: underline; }
+.card { background: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 24px; margin-bottom: 22px; }
+.card-title { font-size: 10.5px; font-weight: 800; letter-spacing: .1em;
+              text-transform: uppercase; color: #111; margin-bottom: 18px; }
+.summary-grid { display:grid; grid-template-columns:repeat(7,1fr);
+                border:1px solid #e0e0e0; border-radius:4px; overflow:hidden; margin-bottom:22px; }
+.sum-cell { padding:16px 14px 14px; border-right:1px solid #e0e0e0; text-align:center; }
+.sum-cell:last-child { border-right:none; }
+.sum-name  { font-size:11px; color:#666; margin-bottom:8px;
+              white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sum-hours { font-size:28px; font-weight:700; line-height:1; color:#111; }
+.sum-hours.zero { color:#ccc; }
+.sum-sub   { font-size:10px; color:#aaa; margin-top:5px; }
+.bar-section { margin-bottom:6px; }
+.bar-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.bar-person { font-size:12px; font-weight:600; color:#333; width:160px; flex-shrink:0; }
+.bar-track-wrap { flex:1; background:#f0f0f0; border-radius:3px; height:22px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:3px; }
+.bar-val { font-size:12px; font-weight:700; color:#333; width:40px; text-align:right; flex-shrink:0; }
+.person-card { border:1px solid #e4e4e4; border-radius:4px; overflow:hidden; margin-bottom:14px; }
+.person-header { display:flex; align-items:center; justify-content:space-between;
+                  padding:14px 18px; border-bottom:1px solid #f0f0f0; }
+.person-left { display:flex; align-items:center; gap:12px; }
+.person-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center;
+                  justify-content:center; font-size:13px; font-weight:700; color:#fff; flex-shrink:0; }
+.person-name  { font-size:14px; font-weight:700; color:#111; }
+.person-role  { font-size:11px; color:#888; margin-top:2px; }
+.person-total { font-size:26px; font-weight:700; color:#111;
+                 display:flex; align-items:baseline; gap:4px; }
+.person-total span { font-size:12px; font-weight:400; color:#999; }
+.person-total.zero { color:#ccc; }
+.log-table { width:100%; border-collapse:collapse; font-size:12px; }
+.log-table th { text-align:left; padding:8px 18px; background:#fafafa;
+                 border-bottom:1px solid #efefef; color:#888; font-weight:600; font-size:11px; }
+.log-table td { padding:9px 18px; border-bottom:1px solid #f5f5f5; color:#333; }
+.log-table tr:last-child td { border-bottom:none; }
+.log-table tr:hover td { background:#fafbff; }
+.ticket-key { font-weight:700; color:#1a73e8; font-size:11px; }
+.day-chip { display:inline-block; padding:2px 8px; border-radius:8px;
+             font-size:10px; font-weight:600; background:#f0f0f0; color:#555; }
+.day-mon { background:#e8f0fe; color:#1a73e8; }
+.day-tue { background:#e6f4ea; color:#188038; }
+.day-wed { background:#fef7e0; color:#b06000; }
+.day-thu { background:#fce8e6; color:#c5221f; }
+.day-fri { background:#f3e8fd; color:#7627bb; }
+.hours-cell { font-weight:700; color:#333; text-align:right; }
+.no-logs { padding:20px 18px; color:#bbb; font-size:12px; font-style:italic; }
+.total-row td { background:#f7f7f7; font-weight:700;
+                 border-top:2px solid #e0e0e0 !important; border-bottom:none !important; }
+.partial-flag { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase;
+                letter-spacing:.05em; background:#fff3e0; color:#e65100; border:1px solid #ffe0b2;
+                border-radius:10px; padding:2px 9px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="index.html">← Weekly Reports Home</a>
+  <div class="page-header">
+    <h1>Weekly Time Report — W8, Jul 20–Jul 26, 2026 <span class="partial-flag">Week in progress</span></h1>
+    <p>Project: ET &nbsp;·&nbsp; Fix Version: [Q3 2026] Verifone Central &nbsp;·&nbsp; Generated: 23 Jul 2026 — covers Jul 20–23 so far, the rest of the week hasn't happened yet</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Team Summary</div>
+    <div class="summary-grid">
+      <div class="sum-cell">
+        <div class="sum-name">Anand BS</div>
+        <div class="sum-hours">3h 30m</div>
+        <div class="sum-sub">3 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Sruthi Nakul Mysore</div>
+        <div class="sum-hours">16h</div>
+        <div class="sum-sub">2 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Senthil Chidambaram</div>
+        <div class="sum-hours">16h</div>
+        <div class="sum-sub">6 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Akshat Aggarwal</div>
+        <div class="sum-hours zero">0h</div>
+        <div class="sum-sub">no logs</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Tanya Saxena</div>
+        <div class="sum-hours">21h 15m</div>
+        <div class="sum-sub">9 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Ashish Verma</div>
+        <div class="sum-hours">16h</div>
+        <div class="sum-sub">4 entries</div>
+      </div>
+      <div class="sum-cell">
+        <div class="sum-name">Sumit Ashish</div>
+        <div class="sum-hours">16h</div>
+        <div class="sum-sub">5 entries</div>
+      </div>
+    </div>
+    <div class="bar-section">
+      <div class="bar-row">
+        <div class="bar-person">Tanya Saxena</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:100%;background:#b06000;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">21h 15m</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Sruthi Mysore</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:75%;background:#e91e63;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">16h</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Senthil Chidambaram</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:75%;background:#c5221f;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">16h</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Ashish Verma</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:75%;background:#1a73e8;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">16h</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Sumit Ashish</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:75%;background:#188038;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">16h</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Anand BS</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:16%;background:#5f6368;"></div>
+        </div>
+        <div class="bar-val" style="color:#333;">3h 30m</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-person">Akshat Aggarwal</div>
+        <div class="bar-track-wrap">
+          <div class="bar-fill" style="width:0%;background:#e0e0e0;"></div>
+        </div>
+        <div class="bar-val" style="color:#ccc;">0h</div>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:13px;font-weight:700;color:#333;
+                margin-top:14px;padding-top:12px;border-top:1px solid #f0f0f0;">
+      Team Total (Jul 20–23 so far) &nbsp;<span style="font-size:22px;">88h 45m</span>
+    </div>
+  </div>
+
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#5f6368;">AB</div>
+        <div>
+          <div class="person-name">Anand BS</div>
+          <div class="person-role">Technical Manager — Software Development</div>
+        </div>
+      </div>
+      <div class="person-total">3h 30m <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2877</td>
+            <td>CLONE - PPC creation failing in CST for Paypal Brantree</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2900</td>
+            <td>[Verifone Central][PBL] - Zip code accepts only numeric characters</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2896</td>
+            <td>Access to dev and QA verifone central environments</td>
+            <td><span class="day-chip day-wed">Wed Jul 22</span></td>
+            <td class="hours-cell">0h 30m</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">3h 30m</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#e91e63;">SN</div>
+        <div>
+          <div class="person-name">Sruthi Nakul Mysore</div>
+          <div class="person-role">Principal Developer, Cloud Engineering</div>
+        </div>
+      </div>
+      <div class="person-total">16h <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2535</td>
+            <td>Meetings & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">8h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2331</td>
+            <td>Enable POS Receipts for only McDonalds Merchant in Q1</td>
+            <td><span class="day-chip day-thu">Thu Jul 23</span></td>
+            <td class="hours-cell">8h</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">16h</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#c5221f;">SC</div>
+        <div>
+          <div class="person-name">Senthil Chidambaram</div>
+          <div class="person-role">Engineer Manager / Principal Engineer</div>
+        </div>
+      </div>
+      <div class="person-total">16h <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2355</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2027</td>
+            <td>Nexus App – Enhancements</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">3h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-973</td>
+            <td>Decouple all existing applications in VFC into modular Micro Frontend (MFE) appli…</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2355</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2027</td>
+            <td>Nexus App – Enhancements</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-973</td>
+            <td>Decouple all existing applications in VFC into modular Micro Frontend (MFE) appli…</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">16h</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#7627bb;">AA</div>
+        <div>
+          <div class="person-name">Akshat Aggarwal</div>
+          <div class="person-role">Software Development Lead</div>
+        </div>
+      </div>
+      <div class="person-total zero">0h <span>logged</span></div>
+    </div>
+    <div class="no-logs">No worklogs found for Jul 20–23 yet.</div>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#b06000;">TS</div>
+        <div>
+          <div class="person-name">Tanya Saxena</div>
+          <div class="person-role">Senior Software Engineer</div>
+        </div>
+      </div>
+      <div class="person-total">21h 15m <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2644</td>
+            <td>Create reusable Common Components in VDS</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">4h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2643</td>
+            <td>Create reusable Common Components using VDS in Verifone Web Core repo</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">2h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">1h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2644</td>
+            <td>Create reusable Common Components in VDS</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">1h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2027</td>
+            <td>Nexus App – Enhancements</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">2h 45m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2643</td>
+            <td>Create reusable Common Components using VDS in Verifone Web Core repo</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2359</td>
+            <td>UI not setting phone number callingCode in the order</td>
+            <td><span class="day-chip day-wed">Wed Jul 22</span></td>
+            <td class="hours-cell">1h 30m</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2359</td>
+            <td>UI not setting phone number callingCode in the order</td>
+            <td><span class="day-chip day-thu">Thu Jul 23</span></td>
+            <td class="hours-cell">2h 30m</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">21h 15m</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#1a73e8;">AV</div>
+        <div>
+          <div class="person-name">Ashish Verma</div>
+          <div class="person-role">Senior Software Engineer</div>
+        </div>
+      </div>
+      <div class="person-total">16h <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2387</td>
+            <td>VDS VF-Commerce-Reporting-Audit log</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">7h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1527</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2387</td>
+            <td>VDS VF-Commerce-Reporting-Audit log</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">7h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1527</td>
+            <td>Sprint Ceremonies | DSM | Meetings | Code review | Planning | Grooming | Trainin…</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">16h</td>
+          </tr></tbody>
+      </table>
+  </div>
+  <div class="person-card">
+    <div class="person-header">
+      <div class="person-left">
+        <div class="person-avatar" style="background:#188038;">SA</div>
+        <div>
+          <div class="person-name">Sumit Ashish</div>
+          <div class="person-role">Senior Web Engineer</div>
+        </div>
+      </div>
+      <div class="person-total">16h <span>logged</span></div>
+    </div>
+    <table class="log-table">
+        <thead><tr><th>Ticket</th><th>Summary</th><th>Day</th><th style="text-align:right">Hours</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="ticket-key">ET-2885</td>
+            <td>Update ui-components Packages to VDS & Remove Bulma — Payments Portal MFE</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">7h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-mon">Mon Jul 20</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2885</td>
+            <td>Update ui-components Packages to VDS & Remove Bulma — Payments Portal MFE</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">4h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-2791</td>
+            <td>Implement AG Grid Table for Payments Portal MFE</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">3h</td>
+          </tr>
+          <tr>
+            <td class="ticket-key">ET-1098</td>
+            <td>Meeting & Collaboration Hours (Standups, Discussions, KT)</td>
+            <td><span class="day-chip day-tue">Tue Jul 21</span></td>
+            <td class="hours-cell">1h</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" style="text-align:right;color:#555;">Total</td>
+            <td class="hours-cell">16h</td>
+          </tr></tbody>
+      </table>
+  </div>
+</div>
+</body>
+</html>

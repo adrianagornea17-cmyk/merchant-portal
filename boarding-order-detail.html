@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boarding · Order Detail — Verifone Central</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --border: #e5e7eb;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --accent: #2563eb;
+      --hover-bg: #f3f4f6;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #e5e7eb;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── FULL-PAGE MODAL ─── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,0.6);
+      display: flex; align-items: center; justify-content: center;
+      padding: 22px;
+      z-index: 100;
+    }
+    .modal-card {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 1320px;
+      height: calc(100vh - 44px);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 18px; right: 18px;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: none; background: #111827; color: #fff;
+      font-size: 17px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.12s; z-index: 5; flex-shrink: 0;
+    }
+    .modal-close:hover { background: #374151; }
+
+    .modal-scroll { flex: 1; overflow-y: auto; }
+    .modal-scroll::-webkit-scrollbar { width: 6px; }
+    .modal-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+    .page-content { max-width: 1200px; margin: 0 auto; padding: 28px 48px 56px; }
+
+    .breadcrumb-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--text-3); text-decoration: none; margin-bottom: 16px; font-weight: 500; transition: color 0.12s; }
+    .breadcrumb-back:hover { color: var(--accent); }
+
+    .order-head-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; }
+    .order-id-label { font-size: 22px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; margin-bottom: 6px; }
+    .order-id-val { font-weight: 400; color: var(--text-3); font-size: 15px; }
+    .copy-btn { background: none; border: none; cursor: pointer; color: var(--text-4); vertical-align: middle; margin-left: 6px; padding: 2px; transition: color 0.12s; }
+    .copy-btn:hover { color: var(--accent); }
+    .order-status-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-3); }
+    .status-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #374151; border: 1px solid #e2e8f0; white-space: nowrap; }
+
+    .order-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .more-wrap { position: relative; }
+    .more-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-3); transition: border-color 0.12s, color 0.12s; }
+    .more-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .more-btn.open { border-color: var(--accent); color: var(--accent); }
+    .more-popover { position: absolute; top: calc(100% + 8px); right: 0; background: #fff; border: 1.5px solid var(--border); border-radius: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); padding: 6px; display: none; flex-direction: column; min-width: 150px; z-index: 20; }
+    .more-popover.open { display: flex; }
+    .more-popover-item { background: none; border: none; text-align: left; padding: 9px 12px; border-radius: 7px; font-size: 13.5px; font-weight: 500; color: var(--text-2); cursor: pointer; font-family: inherit; }
+    .more-popover-item:hover { background: var(--hover-bg); }
+    .more-popover-item.delete { color: #ef4444; }
+    .more-popover-item.delete:hover { background: #fef2f2; }
+
+    .lifecycle-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 24px 28px 24px; margin-bottom: 24px; }
+    .lifecycle-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 22px; }
+    .lifecycle-steps { display: flex; align-items: flex-start; }
+    .lc-step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; min-width: 90px; }
+    .lc-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #e5e7eb; color: #9ca3af; cursor: default; }
+    .lc-circle.done { background: var(--accent); color: #fff; }
+    .lc-circle.current { background: var(--accent); color: #fff; box-shadow: 0 0 0 4px #dbeafe; }
+    .lc-label { font-size: 12.5px; font-weight: 600; color: var(--text-2); }
+    .lc-connector { flex: 0 0 24px; height: 3px; background: #e5e7eb; margin-top: 17px; }
+    .lc-connector.done { background: var(--accent); }
+    .lc-tooltip {
+      position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%);
+      background: #1e293b; color: #fff; padding: 10px 14px; border-radius: 10px;
+      font-size: 12px; line-height: 1.5; width: 220px; text-align: left;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 20;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .lc-tooltip strong { display: block; font-size: 12.5px; margin-bottom: 2px; }
+    .lc-tooltip .lc-tooltip-copy { background: none; border: none; color: inherit; cursor: pointer; display: inline-flex; vertical-align: middle; margin-left: 4px; opacity: 0.75; }
+    .lc-tooltip .lc-tooltip-copy:hover { opacity: 1; }
+    .lc-step.has-detail:hover .lc-tooltip, .lc-step.has-detail:focus-within .lc-tooltip { opacity: 1; }
+    .lc-step.has-detail .lc-circle { cursor: pointer; }
+    .lifecycle-divider { border: none; border-top: 1px solid #f1f5f9; margin: 4px 0 16px; }
+
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 18px; height: 38px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: background 0.12s, border-color 0.12s, color 0.12s; white-space: nowrap; text-decoration: none; font-family: inherit; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+
+    .detail-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: flex-start; }
+    .expand-all-link { text-align: right; margin-bottom: 10px; }
+    .expand-all-link a { font-size: 13px; color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+    .expand-all-link a:hover { text-decoration: underline; }
+    .acc-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .acc-header { flex: 1; background: #f1f5f9; border-radius: 10px; padding: 13px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; font-size: 14px; color: #111827; user-select: none; transition: background 0.1s; }
+    .acc-header:hover { background: #e9edf2; }
+    .acc-chevron { flex-shrink: 0; transition: transform 0.2s; color: #6b7280; }
+    .acc-header.open .acc-chevron { transform: rotate(180deg); }
+    .acc-check { width: 22px; height: 22px; border-radius: 50%; background: #22c55e; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .acc-check.not-done { background: #ef4444; }
+    .acc-body { display: none; padding: 18px 4px 6px 8px; }
+    .acc-body.open { display: block; }
+    .acc-subhead { font-size: 13.5px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+    .acc-subhead:not(:first-child) { margin-top: 22px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 28px; margin-bottom: 4px; }
+    .detail-field { display: flex; flex-direction: column; gap: 4px; }
+    .detail-field.full { grid-column: 1 / -1; }
+    .detail-label { font-size: 12px; color: var(--text-3); }
+    .detail-value { font-size: 13.5px; color: var(--accent); border-bottom: 1.5px dashed #93c5fd; padding-bottom: 1px; width: fit-content; }
+    .detail-value.plain { color: var(--text-2); border-bottom: none; font-weight: 500; }
+    .detail-note { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+    .cost-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 22px 24px 24px; position: sticky; top: 24px; }
+    .cost-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+    .cost-sub { font-size: 13.5px; font-weight: 700; color: var(--text-2); margin: 16px 0 8px; }
+    .cost-sub:first-of-type { margin-top: 0; }
+    .cost-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .cost-table thead th { text-align: left; font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.3px; padding: 6px 0; border-bottom: 1.5px solid var(--border); }
+    .cost-table thead th:not(:first-child) { text-align: right; padding-left: 12px; }
+    .cost-table td { padding: 9px 0; color: var(--text-2); border-bottom: 1px solid #f1f5f9; }
+    .cost-table td:not(:first-child) { text-align: right; padding-left: 12px; }
+    .cost-table tr.total td { font-weight: 700; color: #0f172a; border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<!-- ─── FULL-PAGE MODAL ─── -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Order Detail">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+
+    <div class="modal-scroll">
+      <div class="page-content">
+
+        <a class="breadcrumb-back" href="boarding-orders.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Orders
+        </a>
+
+        <div class="order-head-row">
+          <div>
+            <div class="order-id-label">Order ID: <span class="order-id-val" id="orderIdVal">fee9b37a-0133-4284-859d-8cb65ce2b7f8</span>
+              <button class="copy-btn" onclick="copyOrderId()" title="Copy order ID">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              </button>
+            </div>
+            <div class="order-status-row">Order status: <span class="status-badge" id="orderStatusBadge">Completed</span></div>
+          </div>
+          <div class="order-actions">
+            <button class="btn btn-primary" id="completeOrderBtn" style="display:none;" onclick="completeOrder()">Complete order</button>
+            <div class="more-wrap">
+              <button class="more-btn" id="moreBtn" onclick="toggleMorePopover()" title="More actions">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+              </button>
+              <div class="more-popover" id="morePopover">
+                <button class="more-popover-item delete" onclick="deleteOrder()">Delete order</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lifecycle-card">
+          <div class="lifecycle-title">Order Lifecycle</div>
+          <div class="lifecycle-steps" id="lifecycleSteps"></div>
+        </div>
+
+        <div class="detail-layout">
+
+          <div>
+            <div class="expand-all-link"><a onclick="toggleExpandAll()" id="expandAllLink">Expand All Details</a></div>
+
+            <div class="acc-row">
+              <div class="acc-header" onclick="toggleAcc(this,'acc-company')">
+                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                Company and contact details
+              </div>
+              <div class="acc-check" id="acc-check-company"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="acc-body" id="acc-company">
+              <div class="acc-subhead">Company details</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Company name</span><span class="detail-value">MPOC VTap Test</span></div>
+                <div class="detail-field"><span class="detail-label">Registration number</span><span class="detail-value plain">—</span></div>
+              </div>
+              <div class="acc-subhead">Contact details</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">First name</span><span class="detail-value">MPOC</span></div>
+                <div class="detail-field"><span class="detail-label">Last Name</span><span class="detail-value">VTap Test</span></div>
+                <div class="detail-field"><span class="detail-label">Email address</span><span class="detail-value">mpoc_vtap@gr.ia</span></div>
+                <div class="detail-field"><span class="detail-label">Phone number</span><span class="detail-value">+351987654321</span></div>
+              </div>
+            </div>
+
+            <div class="acc-row">
+              <div class="acc-header" onclick="toggleAcc(this,'acc-service')">
+                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                Service plan, payment methods and devices
+              </div>
+              <div class="acc-check" id="acc-check-service"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="acc-body" id="acc-service">
+              <div class="acc-subhead">Service plan</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Portfolio</span><span class="detail-value">Verifone Only</span></div>
+                <div class="detail-field"><span class="detail-label">Service package</span><span class="detail-value">Basic</span></div>
+                <div class="detail-field"><span class="detail-label">Contract duration</span><span class="detail-value">12 months contract</span></div>
+              </div>
+              <div class="acc-subhead">Payment Terminal Information</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Acquirer Contract</span><span class="detail-value">Verifone acquiring</span></div>
+                <div class="detail-field"><span class="detail-label">Merchant ID</span><span class="detail-value">810836</span></div>
+                <div class="detail-field full"><span class="detail-label">Payment Methods</span><span class="detail-value">Visa &amp; MasterCard, Maestro, Vpay, Electron — 0.7% 0.5% per transaction</span></div>
+              </div>
+              <div class="acc-subhead">Payment Terminals</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Terminal #1</span><span class="detail-value">Android Tap <span class="detail-note">(Rent) · 2 Units</span></span></div>
+              </div>
+            </div>
+
+            <div class="acc-row">
+              <div class="acc-header" onclick="toggleAcc(this,'acc-address')">
+                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                Addresses and Shipping
+              </div>
+              <div class="acc-check" id="acc-check-address"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="acc-body" id="acc-address">
+              <div class="acc-subhead">Company address</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Address Line 1</span><span class="detail-value">R. de Alexandre Herculano 123</span></div>
+                <div class="detail-field"><span class="detail-label">Postal Code</span><span class="detail-value">4000-054</span></div>
+                <div class="detail-field"><span class="detail-label">City</span><span class="detail-value">Porto</span></div>
+                <div class="detail-field"><span class="detail-label">Country</span><span class="detail-value">Portugal</span></div>
+                <div class="detail-field"><span class="detail-label">Shipping Address</span><span class="detail-value">Same as Company address</span></div>
+                <div class="detail-field"><span class="detail-label">Billing Address</span><span class="detail-value">Same as Company address</span></div>
+                <div class="detail-field"><span class="detail-label">Installation Address</span><span class="detail-value">Same as Company address</span></div>
+                <div class="detail-field"><span class="detail-label">Shipping method</span><span class="detail-value">Field installation, Free</span></div>
+              </div>
+            </div>
+
+            <div class="acc-row">
+              <div class="acc-header" onclick="toggleAcc(this,'acc-structure')">
+                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                Company structure and business information
+              </div>
+              <div class="acc-check" id="acc-check-structure"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="acc-body" id="acc-structure">
+              <div class="acc-subhead">Company structure</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Legal form</span><span class="detail-value">Professional Liberal (Sole proprietorship)</span></div>
+                <div class="detail-field"><span class="detail-label">Ownership structure</span><span class="detail-value plain">Proprietor acts on own behalf</span></div>
+                <div class="detail-field full">
+                  <span class="detail-label">Owner #1</span>
+                  <span class="detail-value">MPOC VTap Test</span>
+                  <span class="detail-note">ID required, Signature required · Acts as: Legal representative, Authorised representative</span>
+                </div>
+              </div>
+              <div class="acc-subhead">Business information</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">DBA name</span><span class="detail-value">MPOC VTap Test</span></div>
+                <div class="detail-field"><span class="detail-label">Goods or services offered</span><span class="detail-value">Bikes</span></div>
+                <div class="detail-field"><span class="detail-label">Turnover per annual</span><span class="detail-value">178499004</span></div>
+                <div class="detail-field"><span class="detail-label">Turnover per transaction</span><span class="detail-value">367</span></div>
+              </div>
+              <div class="acc-subhead">Settlement account</div>
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Account Name</span><span class="detail-value">MPOC VTap Test</span></div>
+                <div class="detail-field"><span class="detail-label">IBAN/SOT</span><span class="detail-value">GB29NWBK60161331926819</span></div>
+                <div class="detail-field"><span class="detail-label">BIC/SWIFT</span><span class="detail-value">NWBKGB2L</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cost-card">
+            <div class="cost-title">Cost summary</div>
+            <div class="cost-sub">Recurring monthly costs</div>
+            <table class="cost-table">
+              <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Basic</td><td>p/m</td><td>1</td><td>p/m</td></tr>
+                <tr><td>Android Tap (rent)</td><td>€0.00 p/m</td><td>2</td><td>€0.00 p/m</td></tr>
+                <tr class="total"><td colspan="3">Total per month</td><td>€0.00 p/m</td></tr>
+              </tbody>
+            </table>
+            <div class="cost-sub">One-time costs</div>
+            <table class="cost-table">
+              <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Field installation</td><td>€0.00</td><td>1</td><td>€0.00</td></tr>
+                <tr class="total"><td colspan="3">Total one-time cost</td><td>€0.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function closeModal() { window.location.href = 'boarding-orders.html'; }
+  function handleBackdropClick(e) { if (e.target === document.getElementById('modalBackdrop')) closeModal(); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* ─── STEP DEFINITIONS ─── */
+  const STEPS = [
+    { key: 'draft', label: 'Draft', icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>' },
+    { key: 'submitted', label: 'Submitted', icon: '<path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/>' },
+    { key: 'signature', label: 'Signature', icon: '<path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/>' },
+    { key: 'review', label: 'Review', icon: '<circle cx="10" cy="10" r="6"/><line x1="21" y1="21" x2="15" y2="15"/>' },
+    { key: 'booked', label: 'Booked', icon: '<path d="M4 4h16v16H4z"/><path d="M4 10h16"/><path d="M9 4v6"/>' },
+    { key: 'picked', label: 'Picked', icon: '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>' },
+    { key: 'completed', label: 'Completed', icon: '<polyline points="20 6 9 17 4 12"/>' }
+  ];
+  const CHECK = '<polyline points="20 6 9 17 4 12"/>';
+  const STATUS_STAGE = { 'Draft': 0, 'Submitted': 1, 'Pending Signature': 2, 'In Progress': 3, 'On Hold': 3, 'Completed': STEPS.length - 1 };
+
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get('id') || 'fee9b37a-0133-4284-859d-8cb65ce2b7f8';
+  const status = params.get('status') || 'Completed';
+  const org = params.get('org') || 'MPOC VTap Test';
+  const isDraft = status === 'Draft';
+
+  document.getElementById('orderIdVal').textContent = orderId;
+  const badge = document.getElementById('orderStatusBadge');
+  badge.textContent = status;
+  document.title = 'Boarding · Order ' + org + ' — Verifone Central';
+  document.getElementById('completeOrderBtn').style.display = isDraft ? 'inline-flex' : 'none';
+
+  let currentStage = STATUS_STAGE.hasOwnProperty(status) ? STATUS_STAGE[status] : STEPS.length - 1;
+  let allDone = status === 'Completed';
+
+  const STEP_DETAILS = [
+    { date: '7/21/2026, 20:05:42', extra: `O-ID: ${orderId.slice(0,8)}… <button class="lc-tooltip-copy" onclick="copyOrderId()" title="Copy order ID"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button><br>Created by Softpos User` },
+    { date: '7/21/2026, 19:47:12' },
+    { extra: `By: ${org}` },
+    { extra: 'Order details reviewed and approved' },
+    { extra: 'The order is booked and awaiting to be picked' },
+    { extra: 'The order has been picked and is ready to ship' },
+    { }
+  ];
+
+  function renderLifecycle() {
+    const wrap = document.getElementById('lifecycleSteps');
+    wrap.innerHTML = '';
+    STEPS.forEach((step, i) => {
+      const done = allDone || i < currentStage;
+      const isCurrent = !allDone && i === currentStage;
+      const reached = done || isCurrent;
+      const circleClass = done ? 'done' : (isCurrent ? 'current' : '');
+      const iconSvg = done ? CHECK : step.icon;
+      const detail = STEP_DETAILS[i];
+      const hasDetail = reached && (detail.date || detail.extra);
+      const tooltipHtml = hasDetail
+        ? `<div class="lc-tooltip"><strong>${step.label}</strong>${detail.date ? detail.date + '<br>' : ''}${detail.extra || ''}</div>`
+        : '';
+      const stepEl = document.createElement('div');
+      stepEl.className = 'lc-step' + (hasDetail ? ' has-detail' : '');
+      stepEl.tabIndex = hasDetail ? 0 : -1;
+      stepEl.innerHTML = `
+        <div class="lc-circle ${circleClass}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>
+        </div>
+        <div class="lc-label">${step.label}</div>
+        ${tooltipHtml}`;
+      wrap.appendChild(stepEl);
+      if (i < STEPS.length - 1) {
+        const conn = document.createElement('div');
+        conn.className = 'lc-connector' + (done ? ' done' : '');
+        wrap.appendChild(conn);
+      }
+    });
+  }
+  renderLifecycle();
+
+  /* ─── SECTION COMPLETENESS ─── */
+  function setSectionState(id, done) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('not-done', !done);
+    el.innerHTML = done
+      ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+      : '<svg width="3" height="10" viewBox="0 0 4 14" fill="none"><line x1="2" y1="1" x2="2" y2="9" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="2" cy="12.4" r="1.3" fill="#fff"/></svg>';
+  }
+  if (isDraft) {
+    setSectionState('acc-check-company', true);
+    setSectionState('acc-check-service', false);
+    setSectionState('acc-check-address', false);
+    setSectionState('acc-check-structure', false);
+  }
+
+  /* ─── ORDER ACTIONS ─── */
+  function toggleMorePopover() {
+    document.getElementById('morePopover').classList.toggle('open');
+    document.getElementById('moreBtn').classList.toggle('open');
+  }
+  function closeMorePopover() {
+    document.getElementById('morePopover').classList.remove('open');
+    document.getElementById('moreBtn').classList.remove('open');
+  }
+  document.addEventListener('click', e => {
+    if (!document.querySelector('.more-wrap').contains(e.target)) closeMorePopover();
+  });
+  function completeOrder() {
+    badge.textContent = 'Completed';
+    allDone = true;
+    document.getElementById('completeOrderBtn').style.display = 'none';
+    setSectionState('acc-check-service', true);
+    setSectionState('acc-check-address', true);
+    setSectionState('acc-check-structure', true);
+    renderLifecycle();
+  }
+  function deleteOrder() {
+    closeMorePopover();
+    window.location.href = 'boarding-orders.html';
+  }
+
+  /* ─── ACCORDIONS (collapsed by default) ─── */
+  function toggleAcc(headerEl, bodyId) {
+    const body = document.getElementById(bodyId);
+    const open = body.classList.toggle('open');
+    headerEl.classList.toggle('open', open);
+    updateExpandAllLabel();
+  }
+  function toggleExpandAll() {
+    const bodies = document.querySelectorAll('.acc-body');
+    const headers = document.querySelectorAll('.acc-header');
+    const anyClosed = [...bodies].some(b => !b.classList.contains('open'));
+    bodies.forEach(b => b.classList.toggle('open', anyClosed));
+    headers.forEach(h => h.classList.toggle('open', anyClosed));
+    updateExpandAllLabel();
+  }
+  function updateExpandAllLabel() {
+    const bodies = document.querySelectorAll('.acc-body');
+    const anyClosed = [...bodies].some(b => !b.classList.contains('open'));
+    document.getElementById('expandAllLink').textContent = anyClosed ? 'Expand All Details' : 'Collapse All Details';
+  }
+
+  function copyOrderId() { navigator.clipboard && navigator.clipboard.writeText(orderId).catch(()=>{}); }
+</script>
+
+</body>
+</html>

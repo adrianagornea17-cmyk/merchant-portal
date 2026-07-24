@@ -532,6 +532,12 @@
       padding: 16px 18px;
       border-left-width: 3px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      position: relative;
+    }
+    .stat-card.clickable { cursor: pointer; }
+    .stat-card.clickable:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
     .stat-label {
       font-size: 12px;
@@ -545,6 +551,7 @@
       line-height: 1;
       margin-bottom: 6px;
     }
+    .stat-value.not-ok { color: #dc2626; }
     .stat-note {
       font-size: 12px;
       color: var(--text-3);
@@ -553,6 +560,20 @@
     .stat-note.positive { color: #16a34a; font-weight: 500; }
     .stat-note.alert    { color: #dc2626; font-weight: 600; }
     .stat-note.alert span { font-weight: 400; color: var(--text-2); }
+    .stat-link-arrow {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2563eb;
+      flex-shrink: 0;
+    }
+    .stat-link-arrow.alert { background: #dc2626; }
   </style>
 </head>
 <body>
@@ -686,30 +707,42 @@
       </div>
       <div id="statsCardsContainer">
         <div class="stats-grid stats-grid-5">
-          <div class="stat-card" style="border-left-color:#4338ca">
+          <div class="stat-card" style="border-left-color:#2563eb">
             <div class="stat-label">Active Sites</div>
             <div class="stat-value">62.5k</div>
-            <div class="stat-note positive">+2.1% vs yesterday</div>
+            <div class="stat-note positive"></div>
           </div>
-          <div class="stat-card" style="border-left-color:#2563eb">
+          <div class="stat-card clickable" style="border-left-color:#2563eb" title="View sale transaction details">
+            <div class="stat-link-arrow">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+            </div>
             <div class="stat-label">Total Sale Transactions</div>
             <div class="stat-value">4.0k</div>
-            <div class="stat-note positive">Last 24 hours</div>
+            <div class="stat-note positive"></div>
           </div>
-          <div class="stat-card" style="border-left-color:#16a34a">
+          <div class="stat-card clickable" style="border-left-color:#2563eb" title="View authorized transaction details">
+            <div class="stat-link-arrow">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+            </div>
             <div class="stat-label">Total Authorized Transactions</div>
             <div class="stat-value">2.7k</div>
-            <div class="stat-note positive">Last 24 hours</div>
+            <div class="stat-note positive"></div>
           </div>
-          <div class="stat-card" style="border-left-color:#dc2626">
+          <div class="stat-card clickable" style="border-left-color:#dc2626" title="View failed transaction details">
+            <div class="stat-link-arrow alert">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+            </div>
             <div class="stat-label">Total Failed Transactions</div>
-            <div class="stat-value">502</div>
+            <div class="stat-value not-ok">502</div>
             <div class="stat-note"></div>
           </div>
-          <div class="stat-card" style="border-left-color:#f59e0b">
+          <div class="stat-card clickable" style="border-left-color:#2563eb" title="View refund transaction details">
+            <div class="stat-link-arrow">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+            </div>
             <div class="stat-label">Total Refund Transactions</div>
             <div class="stat-value">232</div>
-            <div class="stat-note">Last 24 hours</div>
+            <div class="stat-note"></div>
           </div>
         </div>
       </div>
@@ -820,25 +853,25 @@
 <script>
   const TRANSACTIONS = {
     '24h': [
-      { color: '#4338ca', label: 'Active Sites',           value: '62.5k', note: 'Last 24 hours',            cls: '' },
-      { color: '#2563eb', label: 'Total Sale Transactions',       value: '4.0k',  note: 'Last 24 hours',            cls: '' },
-      { color: '#16a34a', label: 'Total Authorized Transactions', value: '2.7k',  note: 'Last 24 hours',            cls: 'positive' },
-      { color: '#dc2626', label: 'Total Failed Transactions',     value: '502',   note: '', cls: '' },
-      { color: '#f59e0b', label: 'Total Refund Transactions',     value: '232',   note: 'Last 24 hours',            cls: '' },
+      { color: '#2563eb', label: 'Active Sites',          value: '62.5k', note: '',            cls: '', link: false, notOk: false },
+      { color: '#2563eb', label: 'Total Sale Transactions',       value: '4.0k',  note: '',            cls: '', link: true, notOk: false },
+      { color: '#2563eb', label: 'Total Authorized Transactions', value: '2.7k',  note: '',            cls: 'positive', link: true, notOk: false },
+      { color: '#dc2626', label: 'Total Failed Transactions',     value: '502',   note: '', cls: '', link: true, notOk: true },
+      { color: '#2563eb', label: 'Total Refund Transactions',     value: '232',   note: '',            cls: '', link: true, notOk: false },
     ],
     '7d': [
-      { color: '#4338ca', label: 'Active Sites',           value: '62.5k', note: 'Last 7 days',              cls: '' },
-      { color: '#2563eb', label: 'Total Sale Transactions',       value: '13.4k', note: 'Last 7 days',              cls: '' },
-      { color: '#16a34a', label: 'Total Authorized Transactions', value: '9.9k',  note: 'Last 7 days',              cls: 'positive' },
-      { color: '#dc2626', label: 'Total Failed Transactions',     value: '1.4k',  note: '', cls: '' },
-      { color: '#f59e0b', label: 'Total Refund Transactions',     value: '2.3k',  note: 'Last 7 days',              cls: '' },
+      { color: '#2563eb', label: 'Active Sites',          value: '62.5k', note: '',              cls: '', link: false, notOk: false },
+      { color: '#2563eb', label: 'Total Sale Transactions',       value: '13.4k', note: '',              cls: '', link: true, notOk: false },
+      { color: '#2563eb', label: 'Total Authorized Transactions', value: '9.9k',  note: '',              cls: 'positive', link: true, notOk: false },
+      { color: '#dc2626', label: 'Total Failed Transactions',     value: '1.4k',  note: '', cls: '', link: true, notOk: true },
+      { color: '#2563eb', label: 'Total Refund Transactions',     value: '2.3k',  note: '',              cls: '', link: true, notOk: false },
     ],
     '30d': [
-      { color: '#4338ca', label: 'Active Sites',           value: '62.5k', note: 'Last 30 days',             cls: '' },
-      { color: '#2563eb', label: 'Total Sale Transactions',       value: '58.8k', note: 'Last 30 days',             cls: '' },
-      { color: '#16a34a', label: 'Total Authorized Transactions', value: '43.8k', note: 'Last 30 days',             cls: 'positive' },
-      { color: '#dc2626', label: 'Total Failed Transactions',     value: '6.2k',  note: '', cls: '' },
-      { color: '#f59e0b', label: 'Total Refund Transactions',     value: '4.2k',  note: 'Last 30 days',             cls: '' },
+      { color: '#2563eb', label: 'Active Sites',          value: '62.5k', note: '',             cls: '', link: false, notOk: false },
+      { color: '#2563eb', label: 'Total Sale Transactions',       value: '58.8k', note: '',             cls: '', link: true, notOk: false },
+      { color: '#2563eb', label: 'Total Authorized Transactions', value: '43.8k', note: '',             cls: 'positive', link: true, notOk: false },
+      { color: '#dc2626', label: 'Total Failed Transactions',     value: '6.2k',  note: '', cls: '', link: true, notOk: true },
+      { color: '#2563eb', label: 'Total Refund Transactions',     value: '4.2k',  note: '',             cls: '', link: true, notOk: false },
     ]
   };
 
@@ -850,9 +883,12 @@
     document.getElementById('statsCardsContainer').innerHTML =
       '<div class="stats-grid stats-grid-5">' +
       items.map(s => `
-        <div class="stat-card" style="border-left-color:${s.color}">
+        <div class="stat-card ${s.link ? 'clickable' : ''}" style="border-left-color:${s.color}" ${s.link ? `title="View ${s.label.toLowerCase()} details"` : ''}>
+          ${s.link ? `<div class="stat-link-arrow ${s.notOk ? 'alert' : ''}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </div>` : ''}
           <div class="stat-label">${s.label}</div>
-          <div class="stat-value">${s.value}</div>
+          <div class="stat-value ${s.notOk ? 'not-ok' : ''}">${s.value}</div>
           <div class="stat-note ${s.cls}">${s.note}</div>
         </div>`).join('') +
       '</div>';

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boarding · Create Order — Verifone Central</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --border: #e5e7eb;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --accent: #2563eb;
+      --hover-bg: #f3f4f6;
+      --green: #16a34a;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #e5e7eb;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── FULL-PAGE MODAL ─── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,0.6);
+      display: flex; align-items: center; justify-content: center;
+      padding: 22px;
+      z-index: 100;
+    }
+    .modal-card {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 1320px;
+      height: calc(100vh - 44px);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 18px; right: 18px;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: none; background: #111827; color: #fff;
+      font-size: 17px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.12s; z-index: 5; flex-shrink: 0;
+    }
+    .modal-close:hover { background: #374151; }
+
+    .modal-scroll { flex: 1; overflow-y: auto; }
+    .modal-scroll::-webkit-scrollbar { width: 6px; }
+    .modal-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+    /* ─── WIZARD STEPPER ─── */
+    .wiz-stepper { display: flex; align-items: flex-start; gap: 0; padding: 22px 56px 20px; border-bottom: 1px solid var(--border); background: #fff; overflow-x: auto; flex-shrink: 0; }
+    .wiz-step { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; min-width: 110px; position: relative; }
+    .wiz-circle { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #d1d5db; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 1; }
+    .wiz-circle.done { background: var(--green); border-color: var(--green); }
+    .wiz-circle.current { background: var(--accent); border-color: var(--accent); }
+    .wiz-label { font-size: 12.5px; font-weight: 600; color: var(--text-4); text-align: center; }
+    .wiz-step.done .wiz-label, .wiz-step.current .wiz-label { color: var(--text); }
+    .wiz-line { position: absolute; top: 13px; left: -50%; width: 100%; height: 2px; background: #d1d5db; z-index: 0; }
+    .wiz-line.done { background: var(--green); }
+    .wiz-step:first-child .wiz-line { display: none; }
+
+    /* ─── CONTENT ─── */
+    .content { padding: 32px 24px 56px; }
+    .wiz-inner { max-width: 660px; margin: 0 auto; }
+    .wide .wiz-inner { max-width: 980px; }
+
+    .step-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 26px; }
+    .step-head-icon { flex-shrink: 0; color: #111827; opacity: 0.85; margin-top: 2px; }
+    .step-title { font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+    .step-sub { font-size: 13.5px; color: var(--text-3); }
+
+    .form-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 26px 30px; margin-bottom: 20px; }
+    .form-card-title { font-size: 17px; font-weight: 700; color: #111827; margin-bottom: 18px; }
+    .form-card-intro { font-size: 13.5px; color: var(--text-3); line-height: 1.6; margin-bottom: 18px; }
+    .form-card-divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-row { display: flex; gap: 16px; }
+    .field-row .field { flex: 1; }
+    .field-label { display: block; font-size: 13.5px; font-weight: 600; color: var(--text-2); margin-bottom: 7px; }
+    .field-label .opt { font-weight: 400; color: var(--text-4); }
+    .field-input, .field-select {
+      width: 100%; height: 42px; padding: 0 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13.5px; color: var(--text); background: #fff; outline: none;
+      transition: border-color 0.15s; font-family: inherit; appearance: none;
+    }
+    .field-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer;
+    }
+    .field-input:focus, .field-select:focus { border-color: var(--accent); }
+    .field-input::placeholder { color: var(--text-4); }
+
+    .tag-input {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 42px; padding: 0 14px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13.5px; color: var(--text-2); background: #fff;
+    }
+    .tag-input button { background: none; border: none; cursor: pointer; color: var(--text-4); display: flex; align-items: center; }
+    .tag-input button:hover { color: #ef4444; }
+
+    .phone-input { display: flex; align-items: stretch; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; height: 42px; }
+    .phone-input:focus-within { border-color: var(--accent); }
+    .phone-code { display: flex; align-items: center; gap: 6px; padding: 0 12px; background: #f9fafb; border-right: 1.5px solid var(--border); font-size: 13px; font-weight: 500; color: var(--text-2); flex-shrink: 0; }
+    .phone-input input { border: none; outline: none; padding: 0 14px; font-size: 13.5px; font-family: inherit; flex: 1; }
+
+    /* Radio / checkbox option cards */
+    .option-card {
+      display: flex; align-items: flex-start; gap: 12px;
+      border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 18px;
+      cursor: pointer; margin-bottom: 12px; transition: border-color 0.15s, background 0.1s;
+    }
+    .option-card:hover { border-color: #93c5fd; }
+    .option-card.selected { border-color: var(--accent); background: #eff6ff; }
+    .option-radio, .option-checkbox {
+      width: 18px; height: 18px; border: 2px solid #cbd5e1; flex-shrink: 0; margin-top: 2px;
+      display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, background 0.15s;
+    }
+    .option-radio { border-radius: 50%; }
+    .option-checkbox { border-radius: 4px; }
+    .option-card.selected .option-radio { border-color: var(--accent); }
+    .option-card.selected .option-radio::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+    .option-card.selected .option-checkbox { border-color: var(--accent); background: var(--accent); }
+    .option-body { flex: 1; }
+    .option-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .option-title { font-size: 14.5px; font-weight: 700; color: #111827; display: flex; align-items: center; gap: 8px; }
+    .option-desc { font-size: 13px; color: var(--text-3); line-height: 1.55; }
+    .option-link { font-size: 13px; color: var(--accent); font-weight: 600; text-decoration: none; }
+    .card-logo { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; color: #ea580c; }
+
+    .qty-stepper { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .qty-btn { width: 30px; height: 30px; border-radius: 7px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-2); font-size: 15px; font-weight: 600; }
+    .qty-btn:hover { background: var(--hover-bg); }
+    .qty-val { font-size: 14px; font-weight: 700; min-width: 20px; text-align: center; }
+
+    /* Footer nav (Back / Continue) */
+    .wiz-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 22px; height: 40px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: background 0.12s, border-color 0.12s, color 0.12s; white-space: nowrap; text-decoration: none; font-family: inherit; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+    .btn-ghost { background: #fff; border-color: var(--border); color: var(--text-2); }
+    .btn-ghost:hover { border-color: #9ca3af; background: var(--hover-bg); }
+    .btn-outline-red { background: none; border-color: #fecaca; color: #ef4444; }
+    .btn-outline-red:hover { background: #fef2f2; border-color: #fca5a5; }
+    .wiz-footer-left { display: flex; gap: 10px; }
+    .wiz-footer-right { display: flex; gap: 10px; }
+
+    /* Order summary accordion (reuses detail pattern) */
+    .summary-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: flex-start; }
+    .expand-all-link { text-align: right; margin-bottom: 10px; }
+    .expand-all-link a { font-size: 13px; color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+    .expand-all-link a:hover { text-decoration: underline; }
+    .acc-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .acc-header { flex: 1; background: #f1f5f9; border-radius: 10px; padding: 13px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; font-size: 14px; color: #111827; user-select: none; transition: background 0.1s; }
+    .acc-header:hover { background: #e9edf2; }
+    .acc-chevron { flex-shrink: 0; transition: transform 0.2s; color: #6b7280; }
+    .acc-header.open .acc-chevron { transform: rotate(180deg); }
+    .acc-check { width: 22px; height: 22px; border-radius: 50%; background: #22c55e; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .acc-body { display: none; padding: 16px 4px 6px 8px; }
+    .acc-body.open { display: block; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+    .detail-field { display: flex; flex-direction: column; gap: 4px; }
+    .detail-field.full { grid-column: 1 / -1; }
+    .detail-label { font-size: 12px; color: var(--text-3); }
+    .detail-value { font-size: 13.5px; color: var(--accent); border-bottom: 1.5px dashed #93c5fd; padding-bottom: 1px; width: fit-content; }
+
+    .cost-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 22px 24px 24px; position: sticky; top: 24px; }
+    .cost-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+    .cost-sub { font-size: 13.5px; font-weight: 700; color: var(--text-2); margin: 16px 0 8px; }
+    .cost-sub:first-of-type { margin-top: 0; }
+    .cost-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .cost-table thead th { text-align: left; font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.3px; padding: 6px 0; border-bottom: 1.5px solid var(--border); }
+    .cost-table thead th:not(:first-child) { text-align: right; padding-left: 12px; }
+    .cost-table td { padding: 9px 0; color: var(--text-2); border-bottom: 1px solid #f1f5f9; }
+    .cost-table td:not(:first-child) { text-align: right; padding-left: 12px; }
+    .cost-table tr.total td { font-weight: 700; color: #0f172a; border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<!-- ─── FULL-PAGE MODAL ─── -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Create Order">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+
+    <!-- ─── STEPPER ─── -->
+    <div class="wiz-stepper" id="wizStepper"></div>
+
+    <div class="modal-scroll">
+      <!-- ─── CONTENT ─── -->
+      <div class="content" id="wizContent">
+        <div class="wiz-inner" id="wizInner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function closeModal() { window.location.href = 'boarding-orders.html'; }
+  function handleBackdropClick(e) { if (e.target === document.getElementById('modalBackdrop')) closeModal(); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* ─── WIZARD ─── */
+  const STEP_LABELS = ['Basic Information','Service Plans','Payment Methods','Payment Devices','Addresses','Company Structure','Business Details','Order Summary'];
+  let currentStep = 0;
+
+  const state = {
+    companyName: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    addressLine1: 'R. de Alexandre Herculano 123',
+    postalCode: '4000-054',
+    city: 'Porto',
+    country: 'Portugal',
+    storeNumber: '21323',
+    deviceQty: 2
+  };
+
+  function renderStepper() {
+    const wrap = document.getElementById('wizStepper');
+    wrap.innerHTML = '';
+    STEP_LABELS.forEach((label, i) => {
+      const stepEl = document.createElement('div');
+      const cls = i < currentStep ? 'done' : (i === currentStep ? 'current' : '');
+      stepEl.className = 'wiz-step ' + cls;
+      stepEl.innerHTML = `
+        <div class="wiz-line ${i < currentStep ? 'done' : ''}"></div>
+        <div class="wiz-circle ${cls}">
+          ${i < currentStep ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+        </div>
+        <div class="wiz-label">${label}</div>`;
+      wrap.appendChild(stepEl);
+    });
+  }
+
+  function qtyChange(delta) {
+    state.deviceQty = Math.max(1, state.deviceQty + delta);
+    document.getElementById('qtyVal').textContent = state.deviceQty;
+    document.getElementById('qtyValSummary') && (document.getElementById('qtyValSummary').textContent = state.deviceQty);
+  }
+
+  function selectCard(el, groupName) {
+    el.closest('.form-card').querySelectorAll('[data-group="' + groupName + '"]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  function toggleCheck(el) { el.classList.toggle('selected'); }
+
+  function captureBasicInfo() {
+    state.companyName = (document.getElementById('inCompanyName') || {}).value || state.companyName || 'Verifone Merchant';
+    state.firstName = (document.getElementById('inFirstName') || {}).value || state.firstName;
+    state.lastName = (document.getElementById('inLastName') || {}).value || state.lastName;
+    state.email = (document.getElementById('inEmail') || {}).value || state.email;
+  }
+  function captureAddress() {
+    state.addressLine1 = (document.getElementById('inAddr1') || {}).value || state.addressLine1;
+    state.postalCode = (document.getElementById('inPostal') || {}).value || state.postalCode;
+    state.city = (document.getElementById('inCity') || {}).value || state.city;
+    state.country = (document.getElementById('inCountry') || {}).value || state.country;
+    state.storeNumber = (document.getElementById('inStoreNum') || {}).value || state.storeNumber;
+  }
+
+  function goNext() {
+    if (currentStep === 0) captureBasicInfo();
+    if (currentStep === 4) captureAddress();
+    if (currentStep < STEP_LABELS.length - 1) { currentStep++; renderStep(); }
+  }
+  function goBack() {
+    if (currentStep > 0) { currentStep--; renderStep(); }
+  }
+  function saveAndExit() { window.location.href = 'boarding-orders.html'; }
+  function discardOrder() { window.location.href = 'boarding-orders.html'; }
+
+  function confirmOrder() {
+    const params = new URLSearchParams({
+      id: 'a9f1c2e3-' + Math.random().toString(16).slice(2,6) + '-4d21-9a02-' + Math.random().toString(16).slice(2,14),
+      status: 'Completed',
+      org: state.companyName || 'Verifone Merchant',
+      user: (state.firstName + ' ' + state.lastName).trim() || 'AG User'
+    });
+    window.location.href = 'boarding-order-detail.html?' + params.toString();
+  }
+
+  const STEP_ICONS = {
+    0: '<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3.1-6 7-6s7 2 7 6"/><path d="M17 8h5M17 12h5M17 16h3"/>',
+    1: '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+    2: '<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+    3: '<rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>',
+    4: '<path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/>',
+    5: '<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h.01M9 13h.01M15 9h.01M15 13h.01"/>',
+    6: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>',
+    7: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>'
+  };
+
+  function stepHead(title, sub) {
+    return `<div class="step-head">
+      <svg class="step-head-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${STEP_ICONS[currentStep]}</svg>
+      <div><div class="step-title">${title}</div><div class="step-sub">${sub}</div></div>
+    </div>`;
+  }
+
+  function footerNav() {
+    const isFirst = currentStep === 0;
+    const isLast = currentStep === STEP_LABELS.length - 1;
+    return `<div class="wiz-footer">
+      <div class="wiz-footer-left">
+        <button class="btn btn-outline-red" onclick="discardOrder()">Discard</button>
+      </div>
+      <div class="wiz-footer-right">
+        <button class="btn btn-ghost" onclick="saveAndExit()">Save and Exit</button>
+        ${!isFirst ? '<button class="btn btn-ghost" onclick="goBack()">Back</button>' : ''}
+        ${isLast
+          ? '<button class="btn btn-primary" onclick="confirmOrder()">Confirm &amp; generate contract</button>'
+          : '<button class="btn btn-primary" onclick="goNext()">Continue</button>'}
+      </div>
+    </div>`;
+  }
+
+  function renderStep() {
+    renderStepper();
+    document.getElementById('wizContent').classList.toggle('wide', currentStep === STEP_LABELS.length - 1);
+    const inner = document.getElementById('wizInner');
+    let html = '';
+
+    if (currentStep === 0) {
+      html = stepHead('Tell us about your company…', 'Please start by selecting your contract settings.') + `
+        <div class="form-card">
+          <div class="form-card-title">Contract Settings</div>
+          <div class="field">
+            <label class="field-label">Entity</label>
+            <div class="tag-input"><span>CAESARS OF GREENVILLE,LLC(1309-0019)</span><button title="Remove">✕</button></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Site/store number</label>
+            <input class="field-input" type="text" placeholder="">
+          </div>
+          <hr class="form-card-divider">
+          <div class="form-card-title">Company Details</div>
+          <div class="form-card-intro">Great! Now let's cover the basics — please provide company details and whom to contact.</div>
+          <div class="field">
+            <label class="field-label">Company name</label>
+            <input class="field-input" id="inCompanyName" type="text" placeholder="Full legal business name" value="${state.companyName}">
+          </div>
+          <div class="field">
+            <label class="field-label">Business registration number <span class="opt">(optional)</span></label>
+            <input class="field-input" type="text" placeholder="123456789">
+          </div>
+          <div class="field">
+            <label class="field-label">Business legal form</label>
+            <select class="field-select"><option>- Select business legal form -</option><option>Sole proprietorship</option><option>LLC</option><option>Corporation</option></select>
+          </div>
+          <div class="field">
+            <label class="field-label">Business industry</label>
+            <div class="tag-input"><span>Eating Places, Restaurants (5812)</span><button title="Remove">✕</button></div>
+          </div>
+          <hr class="form-card-divider">
+          <div class="form-card-title">Contact Details</div>
+          <div class="field-row">
+            <div class="field"><label class="field-label">First name</label><input class="field-input" id="inFirstName" type="text" value="${state.firstName}"></div>
+            <div class="field"><label class="field-label">Last name</label><input class="field-input" id="inLastName" type="text" value="${state.lastName}"></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Email address</label>
+            <input class="field-input" id="inEmail" type="email" placeholder="firstname.lastname@email.com" value="${state.email}">
+          </div>
+          <div class="field">
+            <label class="field-label">Business title</label>
+            <input class="field-input" type="text" placeholder="CFO">
+          </div>
+          <div class="field">
+            <label class="field-label">Phone number</label>
+            <div class="phone-input">
+              <span class="phone-code">🇺🇸 +1</span>
+              <input type="text" placeholder="e.g. +123123123">
+            </div>
+          </div>
+        </div>
+        ${footerNav()}`;
+    }
+
+    else if (currentStep === 1) {
+      html = stepHead("Let's select your Service plans", "We've preselected the Service package we think best will suit your business needs.") + `
+        <div class="form-card">
+          <div class="form-card-title">Service package</div>
+          <div class="option-card selected" data-group="pkg" onclick="selectCard(this,'pkg')">
+            <div class="option-radio"></div>
+            <div class="option-body">
+              <div class="option-title-row"><span class="option-title">📦 Verifone M400 Upgrade</span><a class="option-link">Learn More</a></div>
+              <div class="option-desc">M400 rental: includes payment devices, power supply, cables, priority exchange, buyer protection and software fee</div>
+            </div>
+          </div>
+          <hr class="form-card-divider">
+          <div class="form-card-title">Contract duration <span style="font-size:12.5px;color:var(--text-4);font-weight:400;">(service fees may apply)</span></div>
+          <div class="option-card selected" data-group="duration" onclick="selectCard(this,'duration')">
+            <div class="option-radio"></div>
+            <div class="option-body"><span class="option-title">36 month</span></div>
+          </div>
+          <div class="field" style="margin-top:8px;">
+            <label class="field-label">Requested Service Start Date <span class="opt">(optional)</span></label>
+            <input class="field-input" type="text" placeholder="DD-MM-YYYY">
+          </div>
+        </div>
+        ${footerNav()}`;
+    }
+
+    else if (currentStep === 2) {
+      html = stepHead('In-store Payment Terminal Information', "Let's confirm your Acquirer contract details and explore how you wish to accept payment in store.") + `
+        <div class="form-card">
+          <div class="form-card-title">Acquirer contract</div>
+          <div class="option-card selected" data-group="acquirer" onclick="selectCard(this,'acquirer')" style="max-width:260px;">
+            <div class="option-body"><span class="card-logo">💳 First Data</span></div>
+          </div>
+          <hr class="form-card-divider">
+          <div class="form-card-title">Payment methods</div>
+          <div class="option-card selected" onclick="toggleCheck(this)" style="max-width:340px;">
+            <div class="option-checkbox"></div>
+            <div class="option-body">
+              <div class="option-title-row"><span class="option-title">💳 Visa &amp; MasterCard</span></div>
+              <a class="option-link">Learn More</a>
+            </div>
+          </div>
+        </div>
+        ${footerNav()}`;
+    }
+
+    else if (currentStep === 3) {
+      html = stepHead('Payment Devices', 'Choose the devices you need in-store and how many of each.') + `
+        <div class="form-card">
+          <div class="form-card-title">Devices</div>
+          <div class="option-card selected">
+            <div class="option-checkbox" style="background:var(--accent);border-color:var(--accent);"></div>
+            <div class="option-body">
+              <div class="option-title-row"><span class="option-title">📟 M400 New restaurant Kit (rent)</span><span style="font-size:13px;color:var(--text-3);">$19.95 p/m</span></div>
+              <div class="option-desc">Countertop terminal kit with receipt printer, stand and charging dock.</div>
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="qtyChange(-1)">−</button>
+                <span class="qty-val" id="qtyVal">${state.deviceQty}</span>
+                <button class="qty-btn" onclick="qtyChange(1)">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        ${footerNav()}`;
+    }
+
+    else if (currentStep === 4) {
+      html = stepHead('Addresses', 'Tell us where to bill, ship and install your devices.') + `
+        <div class="form-card">
+          <div class="form-card-title">Company address</div>
+          <div class="field"><label class="field-label">Address Line 1</label><input class="field-input" id="inAddr1" type="text" value="${state.addressLine1}"></div>
+          <div class="field"><label class="field-label">Address Line 2 <span class="opt">(optional)</span></label><input class="field-input" type="text" placeholder="qewqe"></div>
+          <div class="field-row">
+            <div class="field"><label class="field-label">Postal Code</label><input class="field-input" id="inPostal" type="text" value="${state.postalCode}"></div>
+            <div class="field"><label class="field-label">City</label><input class="field-input" id="inCity" type="text" value="${state.city}"></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Country</label>
+            <select class="field-select" id="inCountry">
+              <option ${state.country==='Portugal'?'selected':''}>Portugal</option>
+              <option ${state.country==='Barbados'?'selected':''}>Barbados</option>
+              <option>United States</option>
+              <option>United Kingdom</option>
+            </select>
+          </div>
+          <div class="field"><label class="field-label">Store number</label><input class="field-input" id="inStoreNum" type="text" value="${state.storeNumber}"></div>
+          <hr class="form-card-divider">
+          <div class="form-card-title">Shipping method</div>
+          <div class="option-card selected" data-group="ship" onclick="selectCard(this,'ship')">
+            <div class="option-radio"></div>
+            <div class="option-body"><span class="option-title">Delivery service — Free</span></div>
+          </div>
+        </div>
+        ${footerNav()}`;
+    }
+
+    else if (currentStep === 5) {
+      html = stepHead('Company Structure', 'Tell us about legal form, ownership and who represents the business.') + `
+        <div class="form-card">
+          <div class="form-card-title">Company structure</div>
+          <div class="field">
+            <label class="field-label">Legal form</label>
+            <input class="field-input" type="text" value="Professional Liberal (Sole proprietorship)" disabled>
+          </div>
+          <div class="field">
+            <label class="field-label">Ownership structure</label>
+            <select class="field-select"><option>Proprietor acts on own behalf</option><option>Multiple owners</option><option>Corporate structure</option></select>
+          </div>
+          <hr class="form-card-divider">
+          <div class="form-card-title">Owner #1</div>
+          <div class="field-row">
+            <div class="field"><label class="field-label">First name</label><input class="field-input" type="text" value="${state.firstName}"></div>
+            <div class="field"><label class="field-label">Last name</label><input class="field-input" type="text" value="${state.lastName}"></div>
+          </div>
+          <div class="field" style="margin-top:4px;">
+            <label class="field-label">Acts as</label>
+            <div class="option-card selected" onclick="toggleCheck(this)" style="margin-bottom:8px;"><div class="option-checkbox" style="background:var(--accent);border-color:var(--accent);"></div><div class="option-body"><span class="option-title">Legal representative</span></div></div>
+            <div class="option-card selected" onclick="toggleCheck(this)"><div class="option-checkbox" style="background:var(--accent);border-color:var(--accent);"></div><div class="option-body"><span class="option-title">Authorised representative</span></div></div>
+          </div>
+        </div>
+        ${footerNav()}`;
+    }
+
+    else if (currentStep === 6) {
+      html = stepHead('Business Details', 'Please advise further business information such as bank account or other details.') + `
+        <div class="form-card">
+          <div class="form-card-title">ACH Information</div>
+          <div class="field">
+            <label class="field-label">Currency code</label>
+            <select class="field-select"><option>USD</option><option>EUR</option><option>GBP</option></select>
+          </div>
+        </div>
+        ${footerNav()}`;
+    }
+
+    else {
+      const fullName = (state.firstName + ' ' + state.lastName).trim() || 'Owner Name';
+      html = `<div class="step-head"><svg class="step-head-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${STEP_ICONS[7]}</svg><div><div class="step-title">Order summary</div></div></div>
+        <div class="summary-layout">
+          <div>
+            <div class="expand-all-link"><a onclick="toggleExpandAll()" id="expandAllLink">Expand All Details</a></div>
+
+            <div class="acc-row">
+              <div class="acc-header" onclick="toggleAcc(this,'sum-company')">
+                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                Company and contact details
+              </div>
+              <div class="acc-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="acc-body" id="sum-company">
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Company name</span><span class="detail-value">${state.companyName || 'Verifone Merchant'}</span></div>
+                <div class="detail-field"><span class="detail-label">Contact</span><span class="detail-value">${fullName}</span></div>
+                <div class="detail-field full"><span class="detail-label">Email address</span><span class="detail-value">${state.email || '—'}</span></div>
+              </div>
+            </div>
+
+            <div class="acc-row">
+              <div class="acc-header" onclick="toggleAcc(this,'sum-service')">
+                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                Service plan, payment methods and devices
+              </div>
+              <div class="acc-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="acc-body" id="sum-service">
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Service package</span><span class="detail-value">Verifone M400 Upgrade — 36 month contract</span></div>
+                <div class="detail-field"><span class="detail-label">Acquirer contract</span><span class="detail-value">First Data</span></div>
+                <div class="detail-field"><span class="detail-label">Payment methods</span><span class="detail-value">Visa &amp; MasterCard</span></div>
+                <div class="detail-field"><span class="detail-label">Devices</span><span class="detail-value">M400 New restaurant Kit (rent) × <span id="qtyValSummary">${state.deviceQty}</span></span></div>
+              </div>
+            </div>
+
+            <div class="acc-row">
+              <div class="acc-header" onclick="toggleAcc(this,'sum-address')">
+                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                Addresses and Shipping
+              </div>
+              <div class="acc-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="acc-body" id="sum-address">
+              <div class="detail-grid">
+                <div class="detail-field"><span class="detail-label">Address Line 1</span><span class="detail-value">${state.addressLine1}</span></div>
+                <div class="detail-field"><span class="detail-label">Postal Code</span><span class="detail-value">${state.postalCode}</span></div>
+                <div class="detail-field"><span class="detail-label">City</span><span class="detail-value">${state.city}</span></div>
+                <div class="detail-field"><span class="detail-label">Country</span><span class="detail-value">${state.country}</span></div>
+                <div class="detail-field"><span class="detail-label">Shipping Address</span><span class="detail-value">Same as Company address</span></div>
+                <div class="detail-field"><span class="detail-label">Billing Address</span><span class="detail-value">Same as Company address</span></div>
+                <div class="detail-field"><span class="detail-label">Installation Address</span><span class="detail-value">Same as Company address</span></div>
+                <div class="detail-field"><span class="detail-label">Shipping method</span><span class="detail-value">Delivery service, Free</span></div>
+                <div class="detail-field"><span class="detail-label">Store number</span><span class="detail-value">${state.storeNumber}</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cost-card">
+            <div class="cost-title">Cost summary</div>
+            <div class="cost-sub">Recurring monthly costs</div>
+            <table class="cost-table">
+              <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Verifone M400 Upgrade</td><td>$0.00 p/m</td><td>1</td><td>$0.00 p/m</td></tr>
+                <tr><td>M400 New restaurant Kit (rent)</td><td>$19.95 p/m</td><td>${state.deviceQty}</td><td>$${(19.95*state.deviceQty).toFixed(2)} p/m</td></tr>
+                <tr class="total"><td colspan="3">Total per month</td><td>$${(19.95*state.deviceQty).toFixed(2)} p/m</td></tr>
+              </tbody>
+            </table>
+            <div class="cost-sub">One-time costs</div>
+            <table class="cost-table">
+              <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Delivery service</td><td>$0.00</td><td>1</td><td>$0.00</td></tr>
+                <tr class="total"><td colspan="3">Total one-time cost</td><td>$0.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        ${footerNav()}`;
+    }
+
+    inner.innerHTML = html;
+    document.querySelector('.modal-scroll').scrollTo({ top: 0 });
+  }
+
+  function toggleAcc(headerEl, bodyId) {
+    const body = document.getElementById(bodyId);
+    const open = body.classList.toggle('open');
+    headerEl.classList.toggle('open', open);
+    updateExpandAllLabel();
+  }
+  function toggleExpandAll() {
+    const bodies = document.querySelectorAll('.acc-body');
+    const headers = document.querySelectorAll('.acc-header');
+    const anyClosed = [...bodies].some(b => !b.classList.contains('open'));
+    bodies.forEach(b => b.classList.toggle('open', anyClosed));
+    headers.forEach(h => h.classList.toggle('open', anyClosed));
+    updateExpandAllLabel();
+  }
+  function updateExpandAllLabel() {
+    const bodies = document.querySelectorAll('.acc-body');
+    if (!bodies.length) return;
+    const anyClosed = [...bodies].some(b => !b.classList.contains('open'));
+    const link = document.getElementById('expandAllLink');
+    if (link) link.textContent = anyClosed ? 'Expand All Details' : 'Collapse All Details';
+  }
+
+  renderStep();
+</script>
+
+</body>
+</html>

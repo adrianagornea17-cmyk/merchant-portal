@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0086)https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Organization — Test UI Org</title>
 <style>
@@ -155,6 +155,30 @@ table.dt tr:hover td{background:#fafbfc}
 table.dt td a{color:#185FA5;text-decoration:none;font-weight:500}
 table.dt td a:hover{text-decoration:underline}
 .tbl-foot{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-top:1.5px solid #dde1e8;background:#f8f9fb;font-size:12px;color:#888}
+
+/* ── No-results (search/filter empty) ── */
+.no-results-content{display:flex;flex-direction:column;align-items:center;padding:60px 24px}
+.no-results-icon{width:56px;height:56px;background:#fef3c7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.no-results-icon svg{width:26px;height:26px;stroke:#d97706;stroke-width:2;fill:none}
+.no-results-title{font-size:18px;font-weight:700;color:#111827;margin-bottom:8px}
+.no-results-sub{font-size:14px;color:#6b7280;text-align:center;max-width:380px;line-height:1.65;margin:0}
+
+/* ── Empty state (no data yet) ── */
+.empty-state-wrap{display:none;align-items:center;justify-content:center;padding:32px 24px}
+.empty-state-wrap.active{display:flex}
+.empty-state-card{background:#fff;border:1.5px solid #dde1e8;border-radius:16px;padding:36px 40px;max-width:480px;width:100%;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.empty-state-icon{width:56px;height:56px;background:#e8f0fb;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.empty-state-icon svg{width:26px;height:26px;stroke:#1a4fa5;stroke-width:2;fill:none}
+.empty-state-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:8px}
+.empty-state-desc{font-size:13.5px;color:#6b7280;line-height:1.6}
+
+/* ── View toggle bar (prototype) ── */
+.view-toggle-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;background:#1e293b;border-radius:10px;padding:5px 10px 5px 14px;box-shadow:0 4px 20px rgba(0,0,0,.25);z-index:500;white-space:nowrap}
+.vtb-label{font-size:12px;font-weight:500;color:#94a3b8;margin-right:10px}
+.vtb-btn{padding:5px 12px;border-radius:6px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;background:none;color:#94a3b8;font-family:inherit;transition:background .1s,color .1s}
+.vtb-btn.vtb-active{background:#fff;color:#0f172a}
+.vtb-btn:not(.vtb-active):hover{color:#e2e8f0}
+
 .pager{display:flex;gap:3px}
 .pg{padding:3px 9px;border:1.5px solid #d4d8de;border-radius:6px;background:#fff;cursor:pointer;font-size:12px;color:#555}
 .pg:hover{background:#f5f6f8}
@@ -189,6 +213,41 @@ table.dt td a:hover{text-decoration:underline}
 .feature-ro-flags{display:flex;flex-wrap:wrap;gap:6px}
 .feature-ro-flag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:4px 10px;background:#e4f5ec;color:#1a7a47;border-radius:20px;border:1px solid #b8e6cc}
 .feature-ro-flag svg{width:11px;height:11px;stroke:#1a7a47;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+/* ── Column-header search (commission configs list) ── */
+.th-label{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;white-space:nowrap}
+.th-sort{color:#c7cbd1;display:flex;align-items:center;cursor:pointer}
+.th-sort:hover{color:#777}
+.col-filter{width:100%;height:30px;border:1.5px solid #d4d8de;border-radius:7px;padding:0 10px;font-size:12.5px;font-weight:400;text-transform:none;letter-spacing:normal;color:#111;background:#fff;outline:none;font-family:inherit;transition:border-color .15s}
+.col-filter:focus{border-color:#185FA5}
+.col-filter::placeholder{color:#bbb}
+
+/* ── Commission config side panel ── */
+.cp-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.32);z-index:900;display:none}
+.cp-backdrop.open{display:block}
+.cp-panel{position:fixed;top:0;right:0;height:100vh;width:460px;max-width:92vw;background:#fff;box-shadow:-8px 0 24px rgba(0,0,0,.14);z-index:901;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column}
+.cp-backdrop.open .cp-panel{transform:translateX(0)}
+.cp-header{padding:16px 20px;border-bottom:1.5px solid #e8eaed;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+.cp-title{font-size:17px;font-weight:700;color:#0f1923}
+.cp-subtitle{font-size:12px;color:#888;margin-top:2px}
+.cp-close{background:none;border:none;cursor:pointer;font-size:18px;color:#888;line-height:1;padding:2px 4px;border-radius:4px}
+.cp-close:hover{color:#333;background:#f5f6f8}
+.cp-body{flex:1;overflow-y:auto;padding:18px 20px}
+.cp-section{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin:18px 0 8px}
+.cp-section:first-child{margin-top:0}
+.cp-footer{padding:14px 20px;border-top:1.5px solid #e8eaed;display:flex;gap:8px;justify-content:flex-end;flex-shrink:0}
+
+/* ── Commission config full-page add/edit modal ── */
+.cm-overlay{display:none;position:fixed;inset:0;z-index:1000;background:#f0f2f5;flex-direction:column}
+.cm-overlay.open{display:flex}
+.cm-topbar{background:#fff;border-bottom:1.5px solid #e8eaed;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cm-title{font-size:17px;font-weight:700;color:#0f1923}
+.cm-close{background:none;border:none;cursor:pointer;font-size:20px;color:#888;line-height:1;padding:2px 6px;border-radius:4px}
+.cm-close:hover{color:#333;background:#f5f6f8}
+.cm-body{flex:1;overflow-y:auto;padding:24px 28px}
+.cm-inner{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.cm-footer{background:#fff;border-top:1.5px solid #e8eaed;padding:14px 28px;display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
+.cm-num{width:100px;text-align:right}
 </style>
 </head>
 <body>
@@ -199,11 +258,11 @@ table.dt td a:hover{text-decoration:underline}
   <!-- Logo -->
   <div style="padding:13px 14px 12px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #e8eaed;flex-shrink:0">
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="22" height="22" rx="4" fill="#111827"/>
-      <rect x="4" y="4" width="6" height="6" rx="1.5" fill="white"/>
-      <rect x="12" y="4" width="6" height="6" rx="1.5" fill="white"/>
-      <rect x="4" y="12" width="6" height="6" rx="1.5" fill="white"/>
-      <rect x="12" y="12" width="6" height="6" rx="1.5" fill="white"/>
+      <rect width="22" height="22" rx="4" fill="#111827"></rect>
+      <rect x="4" y="4" width="6" height="6" rx="1.5" fill="white"></rect>
+      <rect x="12" y="4" width="6" height="6" rx="1.5" fill="white"></rect>
+      <rect x="4" y="12" width="6" height="6" rx="1.5" fill="white"></rect>
+      <rect x="12" y="12" width="6" height="6" rx="1.5" fill="white"></rect>
     </svg>
     <span style="font-size:14px;font-weight:700;color:#111827;letter-spacing:-.01em">Verifone</span>
   </div>
@@ -211,23 +270,23 @@ table.dt td a:hover{text-decoration:underline}
   <div style="padding:6px 0;flex:1">
 
     <!-- Collapse -->
-    <div class="s-item" onclick="document.getElementById('sidebar').style.width=document.getElementById('sidebar').style.width==='48px'?'165px':'48px'">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <div class="s-item" onclick="document.getElementById(&#39;sidebar&#39;).style.width=document.getElementById(&#39;sidebar&#39;).style.width===&#39;48px&#39;?&#39;165px&#39;:&#39;48px&#39;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
       <span class="s-label">Collapse</span>
     </div>
 
     <!-- Home -->
     <div class="s-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
       <span class="s-label">Home</span>
     </div>
 
     <!-- Reporting tools — COLLAPSED -->
     <div class="s-group">
-      <div class="s-item s-group-hdr" onclick="toggleNav('nav-reporting')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <div class="s-item s-group-hdr" onclick="toggleNav(&#39;nav-reporting&#39;)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
         <span class="s-label">Reporting tools</span>
-        <svg id="cv-nav-reporting" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto;transition:transform .15s;transform:rotate(-90deg)"><polyline points="6 9 12 15 18 9"/></svg>
+        <svg id="cv-nav-reporting" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto;transition:transform .15s;transform:rotate(-90deg)"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div id="nav-reporting" style="display:none">
         <div class="s-sub">Payments Dashboard</div>
@@ -242,10 +301,10 @@ table.dt td a:hover{text-decoration:underline}
 
     <!-- Payment tools — collapsed -->
     <div class="s-group">
-      <div class="s-item s-group-hdr" onclick="toggleNav('nav-payment')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <div class="s-item s-group-hdr" onclick="toggleNav(&#39;nav-payment&#39;)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
         <span class="s-label">Payment tools</span>
-        <svg id="cv-nav-payment" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto;transition:transform .15s;transform:rotate(-90deg)"><polyline points="6 9 12 15 18 9"/></svg>
+        <svg id="cv-nav-payment" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto;transition:transform .15s;transform:rotate(-90deg)"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div id="nav-payment" style="display:none">
         <div class="s-sub">Virtual Terminal</div>
@@ -255,16 +314,16 @@ table.dt td a:hover{text-decoration:underline}
 
     <!-- Devices -->
     <div class="s-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
       <span class="s-label">Devices</span>
     </div>
 
     <!-- Administration — EXPANDED with Organization active -->
     <div class="s-group">
-      <div class="s-item s-group-hdr s-active-group" onclick="toggleNav('nav-admin')" style="color:#2563eb">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <div class="s-item s-group-hdr s-active-group" onclick="toggleNav(&#39;nav-admin&#39;)" style="color:#2563eb">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         <span class="s-label" style="color:#2563eb">Admin</span>
-        <svg id="cv-nav-admin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto;transition:transform .15s"><polyline points="6 9 12 15 18 9"/></svg>
+        <svg id="cv-nav-admin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto;transition:transform .15s"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <div id="nav-admin" style="display:block">
         <div class="s-sub s-sub-active">Organization</div>
@@ -274,19 +333,19 @@ table.dt td a:hover{text-decoration:underline}
 
     <!-- Boarding -->
     <div class="s-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
       <span class="s-label">Boarding</span>
     </div>
 
     <!-- Org. filter -->
     <div class="s-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="4"/><rect x="1" y="17" width="6" height="4"/><rect x="9" y="17" width="6" height="4"/><rect x="17" y="17" width="6" height="4"/><path d="M4 17v-2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><line x1="12" y1="7" x2="12" y2="13"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="4"></rect><rect x="1" y="17" width="6" height="4"></rect><rect x="9" y="17" width="6" height="4"></rect><rect x="17" y="17" width="6" height="4"></rect><path d="M4 17v-2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"></path><line x1="12" y1="7" x2="12" y2="13"></line></svg>
       <span class="s-label">Org. filter</span>
     </div>
 
     <!-- Favorites -->
     <div class="s-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
       <span class="s-label">Favorites</span>
     </div>
   </div>
@@ -294,11 +353,11 @@ table.dt td a:hover{text-decoration:underline}
   <!-- Bottom items -->
   <div style="border-top:1px solid #e8eaed;padding:6px 0">
     <div class="s-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
       <span class="s-label">Portal Home</span>
     </div>
     <div class="s-item">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
       <span class="s-label">Logout</span>
     </div>
     <div style="padding:8px 16px;font-size:10px;color:#bbb">© 2026 Verifone</div>
@@ -321,7 +380,7 @@ table.dt td a:hover{text-decoration:underline}
 <div class="main">
 <div class="inner">
 
-  <div class="bc"><a href="#">Organizations</a><span class="bc-sep">›</span><span>Test UI Org</span></div>
+  <div class="bc"><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Organizations</a><span class="bc-sep">›</span><span>Test UI Org</span></div>
 
   <div class="page-header">
     <div>
@@ -330,7 +389,7 @@ table.dt td a:hover{text-decoration:underline}
         <span class="badge badge-green"><span class="dot dot-green"></span>Enabled</span>
         <span class="badge badge-blue">Merchant Company</span>
         <span class="org-id">ID: 4d712fd6-c64c-4425-bd23-3d1cfd74test
-          <button class="copy-btn" onclick="navigator.clipboard.writeText('4d712fd6-c64c-4425-bd23-3d1cfd74test');this.textContent='✓';setTimeout(()=>this.textContent='⎘',1500)">⎘</button>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(&#39;4d712fd6-c64c-4425-bd23-3d1cfd74test&#39;);this.textContent=&#39;✓&#39;;setTimeout(()=&gt;this.textContent=&#39;⎘&#39;,1500)">⎘</button>
         </span>
       </div>
     </div>
@@ -350,17 +409,18 @@ table.dt td a:hover{text-decoration:underline}
     <span class="role-note" id="roleNote">All fields are editable</span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:#faf7ff;border:1.5px solid #e0d8f5;border-radius:8px;margin-bottom:14px;font-size:12px;color:#6b4fa5">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
     <span><strong>Mockup only —</strong> This role switcher is for review and demonstration purposes only. It will not be present in the final design.</span>
   </div>
 
   <!-- Primary tabs -->
   <div class="primary-tabs">
-    <div class="primary-tab active" onclick="switchTab('org',this)">Organization Details</div>
-    <div class="primary-tab" onclick="switchTab('feature',this)">Feature Access</div>
-    <div class="primary-tab" onclick="switchTab('contacts',this)">Contacts &amp; Addresses</div>
-    <div class="primary-tab" onclick="switchTab('linked',this)">Linked Records</div>
-    <div class="primary-tab" onclick="switchTab('custom',this)">Custom Configuration</div>
+    <div class="primary-tab active" onclick="switchTab(&#39;org&#39;,this)">Organization Details</div>
+    <div class="primary-tab" onclick="switchTab(&#39;feature&#39;,this)">Feature Access</div>
+    <div class="primary-tab" onclick="switchTab(&#39;contacts&#39;,this)">Contacts &amp; Addresses</div>
+    <div class="primary-tab" onclick="switchTab(&#39;linked&#39;,this)">Linked Records</div>
+    <div class="primary-tab" onclick="switchTab(&#39;custom&#39;,this)">Custom Configuration</div>
+    <div class="primary-tab" onclick="switchTab(&#39;commissions&#39;,this)">Commissions Configurations</div>
   </div>
 
   <!-- ═══ TAB 1: ORGANIZATION DETAILS ═══ -->
@@ -373,14 +433,14 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card-title">Identity details</div>
           <div class="card-body">
             <div class="fields single" style="gap:12px">
-              <div class="f"><div class="f-label">Organization name</div><input class="f-edit ro" value="Test UI Org" disabled></div>
-              <div class="f"><div class="f-label">Organization type</div><select class="f-edit ro" disabled><option selected>Merchant Company</option></select></div>
-              <div class="f"><div class="f-label">Parent organization</div><select class="f-edit ro" disabled><option selected>Verifone Parent Org</option></select></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Friendly name <small>(optional)</small></div><input class="f-edit" value="" placeholder="Enter a friendly name"></div>
-              <div class="f"><div class="f-label">Cross entity access</div><input class="f-edit ro" value="Disabled" disabled></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Description <small>(optional)</small></div><textarea class="f-edit" placeholder="Enter a description" rows="3"></textarea></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Merchant URL <small>(optional)</small></div><input class="f-edit" value="" placeholder="https://…"></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Merchant logo URL <small>(optional)</small></div><input class="f-edit" value="" placeholder="https://…"></div>
+              <div class="f"><div class="f-label">Organization name</div><input class="f-edit" value="Test UI Org"></div>
+              <div class="f"><div class="f-label">Organization type</div><select class="f-edit"><option selected="">Merchant Company</option></select></div>
+              <div class="f"><div class="f-label">Parent organization</div><select class="f-edit"><option selected="">Verifone Parent Org</option></select></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Friendly name <small>(optional)</small></div><input class="f-edit" value="" placeholder="Enter a friendly name"></div>
+              <div class="f"><div class="f-label">Cross entity access</div><input class="f-edit" value="Disabled"></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Description <small>(optional)</small></div><textarea class="f-edit" placeholder="Enter a description" rows="3"></textarea></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Merchant URL <small>(optional)</small></div><input class="f-edit" value="" placeholder="https://…"></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Merchant logo URL <small>(optional)</small></div><input class="f-edit" value="" placeholder="https://…"></div>
             </div>
           </div>
         </div>
@@ -389,13 +449,13 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card-title">Legal &amp; structural</div>
           <div class="card-body">
             <div class="fields single" style="gap:12px">
-              <div class="f" data-edit="vf_admin"><div class="f-label">Legal name <small>(optional)</small></div><input class="f-edit" value="Test UI Org Legal"></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Legal entity type <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option><option selected>Private Limited Company</option><option>Public Limited Company</option><option>Sole Trader</option></select></div>
-              <div class="f"><div class="f-label">Verifone ID</div><input class="f-edit ro" value="503288" disabled></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Token entity ID <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Legal name <small>(optional)</small></div><input class="f-edit" value="Test UI Org Legal"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Legal entity type <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option><option selected="">Private Limited Company</option><option>Public Limited Company</option><option>Sole Trader</option></select></div>
+              <div class="f"><div class="f-label">Verifone ID</div><input class="f-edit" value="503288"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Token entity ID <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
               <div class="fields" style="gap:12px;display:grid;grid-template-columns:1fr 1fr">
-                <div class="f" data-edit="vf_admin"><div class="f-label">Merchant category code <small>(optional)</small></div><input class="f-edit" value="5411"></div>
-                <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Tax registration number <small>(optional)</small></div><input class="f-edit" value="FI07654321"></div>
+                <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Merchant category code <small>(optional)</small></div><input class="f-edit" value="5411"></div>
+                <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Tax registration number <small>(optional)</small></div><input class="f-edit" value="FI07654321"></div>
               </div>
             </div>
           </div>
@@ -408,13 +468,13 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card-title">Regulatory &amp; financial</div>
           <div class="card-body">
             <div class="fields" style="gap:12px">
-              <div class="f" data-edit="vf_admin"><div class="f-label">Billing currency <small>(optional)</small></div><select class="f-edit"><option selected>Euro (EUR)</option><option>USD</option><option>GBP</option></select></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">POI cutover strategy ID <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option></select></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Industry <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option><option selected>Retail</option><option>Hospitality</option></select></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">FNS number <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Creditor reference type <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Creditor reference custom specifier <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Batch theme ID <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Billing currency <small>(optional)</small></div><select class="f-edit"><option selected="">Euro (EUR)</option><option>USD</option><option>GBP</option></select></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">POI cutover strategy ID <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option></select></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Industry <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option><option selected="">Retail</option><option>Hospitality</option></select></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">FNS number <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Creditor reference type <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Creditor reference custom specifier <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Batch theme ID <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
             </div>
           </div>
         </div>
@@ -424,11 +484,11 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card-body">
             <div class="fields single" style="gap:12px">
               <div class="fields" style="gap:12px;display:grid;grid-template-columns:1fr 1fr">
-                <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Site reference <small>(optional)</small></div><input class="f-edit" value="" placeholder="0/256"></div>
-                <div class="f" data-edit="vf_admin"><div class="f-label">Company group ref. identifier <small>(optional)</small></div><input class="f-edit" value="" placeholder="0/256"></div>
+                <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Site reference <small>(optional)</small></div><input class="f-edit" value="" placeholder="0/256"></div>
+                <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Company group ref. identifier <small>(optional)</small></div><input class="f-edit" value="" placeholder="0/256"></div>
               </div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Business identifier type <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option><option>VHQ Customer ID</option><option>VHQ Customer UID</option></select></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Label <small>(optional — free-form tags)</small></div><input class="f-edit" value="" placeholder="Add tags for grouping"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Business identifier type <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option><option>VHQ Customer ID</option><option>VHQ Customer UID</option></select></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Label <small>(optional — free-form tags)</small></div><input class="f-edit" value="" placeholder="Add tags for grouping"></div>
             </div>
           </div>
         </div>
@@ -440,9 +500,9 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card-title">Platform &amp; access</div>
           <div class="card-body">
             <div class="fields single" style="gap:12px">
-              <div class="f" data-edit="vf_admin"><div class="f-label">Federation login <small>(optional)</small></div><select class="f-edit"><option selected>Not set</option><option>SSO</option><option>SAML</option></select></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">API key <small>(optional)</small></div><input class="f-edit" value="" placeholder="Generate or enter API key"></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">SFTP connection <small>(shown when SFTP_DELIVERY flag is on)</small></div><input class="f-edit" id="sftpPlatform" value="" placeholder="sftp://hostname:port/path"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Federation login <small>(optional)</small></div><select class="f-edit"><option selected="">Not set</option><option>SSO</option><option>SAML</option></select></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">API key <small>(optional)</small></div><input class="f-edit" value="" placeholder="Generate or enter API key"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">SFTP connection <small>(shown when SFTP_DELIVERY flag is on)</small></div><input class="f-edit" id="sftpPlatform" value="" placeholder="sftp://hostname:port/path"></div>
             </div>
           </div>
         </div>
@@ -473,22 +533,307 @@ table.dt td a:hover{text-decoration:underline}
     <!-- VF Admin only: full edit view -->
     <div id="feature-edit-view">
       <div class="flag-pill-bar" id="flagPillBar">
-        <div class="flag-pill active" onclick="switchFlagPill('commerce',this)">Commerce</div>
-        <div class="flag-pill" onclick="switchFlagPill('devices',this)">Devices</div>
-        <div class="flag-pill" onclick="switchFlagPill('appmarket',this)">App Market</div>
-        <div class="flag-pill" onclick="switchFlagPill('petro',this)">Petro</div>
-        <div class="flag-pill" onclick="switchFlagPill('orders',this)">Orders</div>
-        <div class="flag-pill" onclick="switchFlagPill('admin',this)">Administration</div>
+        <div class="flag-pill active" onclick="switchFlagPill(&#39;commerce&#39;,this)">Commerce</div>
+        <div class="flag-pill" onclick="switchFlagPill(&#39;devices&#39;,this)">Devices</div>
+        <div class="flag-pill" onclick="switchFlagPill(&#39;appmarket&#39;,this)">App Market</div>
+        <div class="flag-pill" onclick="switchFlagPill(&#39;petro&#39;,this)">Petro</div>
+        <div class="flag-pill" onclick="switchFlagPill(&#39;orders&#39;,this)">Orders</div>
+        <div class="flag-pill" onclick="switchFlagPill(&#39;admin&#39;,this)">Administration</div>
       </div>
       <div class="flag-info-bar">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
         Each flag has two toggles: <strong style="margin:0 2px">Current organization</strong> (enables for this org) and <strong style="margin:0 2px">Sub-organizations</strong> (cascades to child orgs).
       </div>
       <div class="flag-search">
-        <svg viewBox="0 0 20 20" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+        <svg viewBox="0 0 20 20" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"></circle><line x1="13" y1="13" x2="18" y2="18"></line></svg>
         <input type="text" placeholder="Search flags by name or description…" oninput="filterFlags(this.value)">
       </div>
-      <div id="flag-content-commerce"></div>
+      <div id="flag-content-commerce"><div class="fg-card"><div class="fg-header" onclick="tgGrp(&#39;portal&#39;)">
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-title">Portal &amp; dashboard access</span><span class="fg-meta">6 flags</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-badge">5 enabled</span><svg id="cv-portal" style="width:13px;height:13px;stroke:#aaa;fill:none;stroke-width:2.5;stroke-linecap:round;transition:transform .15s" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+    </div><div id="gb-portal"><div class="div-inh">Inherited from parent organization</div><div class="flag-row on" id="fr-PAYMENTS_PORTAL_CORE">
+    <div class="fi"><div class="fn">Payments Portal Core<span class="inh-b">inherited</span></div><div class="fd">Verifone Central (Common Portal) core functionality</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;PAYMENTS_PORTAL_CORE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;PAYMENTS_PORTAL_CORE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-PLATFORM_CORE">
+    <div class="fi"><div class="fn">Platform Core<span class="inh-b">inherited</span></div><div class="fd">Associated with core permissions such as entity service and RMS</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;PLATFORM_CORE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;PLATFORM_CORE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-COMMERCE_CARD_WIDGET">
+    <div class="fi"><div class="fn">Commerce card widget<span class="inh-b">inherited</span></div><div class="fd">Enables Commerce card section and time range filters on the landing page</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;COMMERCE_CARD_WIDGET&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;COMMERCE_CARD_WIDGET&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-COMMERCE_KPI">
+    <div class="fi"><div class="fn">Commerce KPI<span class="inh-b">inherited</span></div><div class="fd">Enables KPI pills on the Commerce card on the landing page</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;COMMERCE_KPI&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;COMMERCE_KPI&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="div-inh">Configurable at this organization</div><div class="flag-row on" id="fr-NOTIFICATIONS">
+    <div class="fi"><div class="fn">Notifications</div><div class="fd">Manage Notifications</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;NOTIFICATIONS&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;NOTIFICATIONS&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-TERMS_AND_CONDITIONS">
+    <div class="fi"><div class="fn">Terms and conditions</div><div class="fd">Enable Terms &amp; Conditions modal before using Verifone Central</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;TERMS_AND_CONDITIONS&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;TERMS_AND_CONDITIONS&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div></div></div><div class="fg-card"><div class="fg-header" onclick="tgGrp(&#39;analytics&#39;)">
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-title">Reporting &amp; analytics</span><span class="fg-meta">8 flags</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-badge">2 enabled</span><svg id="cv-analytics" style="width:13px;height:13px;stroke:#aaa;fill:none;stroke-width:2.5;stroke-linecap:round;transition:transform .15s" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+    </div><div id="gb-analytics"><div class="div-inh">Inherited from parent organization</div><div class="flag-row on" id="fr-PORTAL_ANALYTIC">
+    <div class="fi"><div class="fn">Portal analytics<span class="inh-b">inherited</span></div><div class="fd">Analytics Dashboard</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;PORTAL_ANALYTIC&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;PORTAL_ANALYTIC&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-REPORT_ENGINE">
+    <div class="fi"><div class="fn">Report engine<span class="inh-b">inherited</span></div><div class="fd">Report Scheduler and Generated Reports</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;REPORT_ENGINE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;REPORT_ENGINE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="div-inh">Configurable at this organization</div><div class="flag-row" id="fr-REPORT_SCHEDULER">
+    <div class="fi"><div class="fn">Report scheduler</div><div class="fd">Make Report Scheduler page accessible and enable Schedule Report functionality</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;REPORT_SCHEDULER&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;REPORT_SCHEDULER&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-SFTP_DELIVERY">
+    <div class="fi"><div class="fn">SFTP delivery</div><div class="fd">Make delivery of reports to SFTP site accessible. When enabled, enter SFTP connection details below.</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;SFTP_DELIVERY&#39;,this.checked,true)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;SFTP_DELIVERY&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-WIC_OFFLINE_REPORTING">
+    <div class="fi"><div class="fn">WIC offline reporting</div><div class="fd">Enable WIC reconciliation reports in Generated Reports page</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;WIC_OFFLINE_REPORTING&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;WIC_OFFLINE_REPORTING&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-PARTNER_COMMISSION_REPORT">
+    <div class="fi"><div class="fn">Partner commission report</div><div class="fd">Enable Partner Commission Report type in Generated Reports</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;PARTNER_COMMISSION_REPORT&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;PARTNER_COMMISSION_REPORT&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-REPORTING_GROUP">
+    <div class="fi"><div class="fn">Reporting group</div><div class="fd">Controls the visibility of reporting group feature</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;REPORTING_GROUP&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;REPORTING_GROUP&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-SETTLEMENT_DATE_FILTER">
+    <div class="fi"><div class="fn">Settlement date filter</div><div class="fd">Enables Settlement Date filter on Transactions, Orders, and Report Scheduler pages</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;SETTLEMENT_DATE_FILTER&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;SETTLEMENT_DATE_FILTER&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div></div></div><div class="fg-card"><div class="fg-header" onclick="tgGrp(&#39;payments&#39;)">
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-title">Payments &amp; checkout</span><span class="fg-meta">11 flags</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-badge">4 enabled</span><svg id="cv-payments" style="width:13px;height:13px;stroke:#aaa;fill:none;stroke-width:2.5;stroke-linecap:round;transition:transform .15s" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+    </div><div id="gb-payments"><div class="div-inh">Inherited from parent organization</div><div class="flag-row on" id="fr-VIRTUAL_TERMINAL">
+    <div class="fi"><div class="fn">Virtual terminal<span class="inh-b">inherited</span></div><div class="fd">Payment Tool: Virtual Terminal</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;VIRTUAL_TERMINAL&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;VIRTUAL_TERMINAL&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-VIRTUAL_TERMINAL_TRANSACTION_TYPE">
+    <div class="fi"><div class="fn">Virtual terminal transaction type<span class="inh-b">inherited</span></div><div class="fd">Enables displaying the transaction type in Virtual Terminal</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;VIRTUAL_TERMINAL_TRANSACTION_TYPE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;VIRTUAL_TERMINAL_TRANSACTION_TYPE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-PAY_BY_LINK">
+    <div class="fi"><div class="fn">Pay by link<span class="inh-b">inherited</span></div><div class="fd">Payment Tool: Pay By Link</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;PAY_BY_LINK&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;PAY_BY_LINK&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-PAYMENT_ACTIONS">
+    <div class="fi"><div class="fn">Payment actions<span class="inh-b">inherited</span></div><div class="fd">Option to execute payment actions on transactions</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;PAYMENT_ACTIONS&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;PAYMENT_ACTIONS&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="div-inh">Configurable at this organization</div><div class="flag-row" id="fr-PBL_SMS_DELIVERY">
+    <div class="fi"><div class="fn">Pay by link — SMS delivery</div><div class="fd">Pay By Link: Option to send payment link in SMS</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;PBL_SMS_DELIVERY&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;PBL_SMS_DELIVERY&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-PBL_EMAIL_DELIVERY">
+    <div class="fi"><div class="fn">Pay by link — email delivery</div><div class="fd">Pay By Link: Option to send payment link in e-mail</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;PBL_EMAIL_DELIVERY&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;PBL_EMAIL_DELIVERY&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-PBL_TIP">
+    <div class="fi"><div class="fn">Pay by link — tip</div><div class="fd">Enables tip option for Pay By Link transactions</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;PBL_TIP&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;PBL_TIP&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-PRE_AUTH_MANUAL_CAPTURE">
+    <div class="fi"><div class="fn">Pre-auth manual capture</div><div class="fd">Enables pre-auth transactions with manual capture for supervisors</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;PRE_AUTH_MANUAL_CAPTURE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;PRE_AUTH_MANUAL_CAPTURE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-SETTLEMENTS">
+    <div class="fi"><div class="fn">Settlements</div><div class="fd">View Settlement Reports page</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;SETTLEMENTS&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;SETTLEMENTS&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-SURCHARGE">
+    <div class="fi"><div class="fn">Surcharge</div><div class="fd">Enables surcharge option on the virtual terminal page</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;SURCHARGE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;SURCHARGE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-TAX_INPUTS">
+    <div class="fi"><div class="fn">Tax inputs</div><div class="fd">Enables tax input fields on the virtual terminal page</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;TAX_INPUTS&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;TAX_INPUTS&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div></div></div><div class="fg-card"><div class="fg-header" onclick="tgGrp(&#39;merchant&#39;)">
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-title">Merchant account &amp; acquiring</span><span class="fg-meta">6 flags</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-badge">3 enabled</span><svg id="cv-merchant" style="width:13px;height:13px;stroke:#aaa;fill:none;stroke-width:2.5;stroke-linecap:round;transition:transform .15s" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+    </div><div id="gb-merchant"><div class="flag-row on" id="fr-MERCHANT_CONFIGURATION">
+    <div class="fi"><div class="fn">Merchant configuration</div><div class="fd">Enables management of acquiring configuration at merchant level</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;MERCHANT_CONFIGURATION&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;MERCHANT_CONFIGURATION&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-MERCHANT_SETTLEMENT">
+    <div class="fi"><div class="fn">Merchant settlement</div><div class="fd">Enables creation and tracking of merchant payouts</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;MERCHANT_SETTLEMENT&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;MERCHANT_SETTLEMENT&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-MERCHANT_BALANCE">
+    <div class="fi"><div class="fn">Merchant balance</div><div class="fd">Enables balance calculation for merchants with Verifone Acquiring Services</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;MERCHANT_BALANCE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;MERCHANT_BALANCE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-INVOICE">
+    <div class="fi"><div class="fn">Invoice</div><div class="fd">Enables monthly invoice summaries and fee details</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;INVOICE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;INVOICE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-VAS_LIQUIDITY_OVERVIEW">
+    <div class="fi"><div class="fn">VAS liquidity overview</div><div class="fd">Dashboard showing actual liquidity before submitting payouts</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;VAS_LIQUIDITY_OVERVIEW&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;VAS_LIQUIDITY_OVERVIEW&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-DISPUTE_MANAGEMENT_CARD_SCHEMES">
+    <div class="fi"><div class="fn">Dispute management</div><div class="fd">Provides the ability to see disputes and their details</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;DISPUTE_MANAGEMENT_CARD_SCHEMES&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;DISPUTE_MANAGEMENT_CARD_SCHEMES&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div></div></div><div class="fg-card"><div class="fg-header" onclick="tgGrp(&#39;security&#39;)">
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-title">Security &amp; compliance</span><span class="fg-meta">5 flags</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-badge">2 enabled</span><svg id="cv-security" style="width:13px;height:13px;stroke:#aaa;fill:none;stroke-width:2.5;stroke-linecap:round;transition:transform .15s" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+    </div><div id="gb-security"><div class="div-inh">Inherited from parent organization</div><div class="flag-row on" id="fr-API_KEYS_AUTHENTICATION">
+    <div class="fi"><div class="fn">API keys authentication<span class="inh-b">inherited</span></div><div class="fd">Enable API-key generation functionality for users in Portal</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;API_KEYS_AUTHENTICATION&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;API_KEYS_AUTHENTICATION&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-BLOCKING_RULESETS">
+    <div class="fi"><div class="fn">Blocking rulesets<span class="inh-b">inherited</span></div><div class="fd">Enable the Blocking Rulesets page in Portal Administration</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;BLOCKING_RULESETS&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;BLOCKING_RULESETS&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="div-inh">Configurable at this organization</div><div class="flag-row" id="fr-FRAUD_PREVENTION_SERVICE">
+    <div class="fi"><div class="fn">Fraud prevention service</div><div class="fd">Administer Fraud Prevention Services (Added Value Service)</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;FRAUD_PREVENTION_SERVICE&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;FRAUD_PREVENTION_SERVICE&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-AUDIT_LOG">
+    <div class="fi"><div class="fn">Audit log</div><div class="fd">Enables Audit Log page for Admin users</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;AUDIT_LOG&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;AUDIT_LOG&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-MFA_MANDATORY">
+    <div class="fi"><div class="fn">MFA mandatory</div><div class="fd">Make multi-factor authentication mandatory for the organization</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;MFA_MANDATORY&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;MFA_MANDATORY&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div></div></div><div class="fg-card"><div class="fg-header" onclick="tgGrp(&#39;checkout&#39;)">
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-title">Checkout &amp; branding</span><span class="fg-meta">3 flags</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-badge">1 enabled</span><svg id="cv-checkout" style="width:13px;height:13px;stroke:#aaa;fill:none;stroke-width:2.5;stroke-linecap:round;transition:transform .15s" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+    </div><div id="gb-checkout"><div class="div-inh">Inherited from parent organization</div><div class="flag-row on" id="fr-CHECKOUT_THEMES">
+    <div class="fi"><div class="fn">Checkout themes<span class="inh-b">inherited</span></div><div class="fd">Theme editor for the Checkout screen</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;CHECKOUT_THEMES&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;CHECKOUT_THEMES&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="div-inh">Configurable at this organization</div><div class="flag-row" id="fr-PORTAL_WHITELABELING">
+    <div class="fi"><div class="fn">Portal white-labeling</div><div class="fd">Enables white-label editor to customize portal and email layouts</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;PORTAL_WHITELABELING&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;PORTAL_WHITELABELING&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-PAYMENT_DOCUMENTS">
+    <div class="fi"><div class="fn">Payment documents</div><div class="fd">Enable Document tab in Transaction Details panel</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;PAYMENT_DOCUMENTS&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;PAYMENT_DOCUMENTS&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div></div></div><div class="fg-card"><div class="fg-header" onclick="tgGrp(&#39;integrations&#39;)">
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-title">Payment methods &amp; integrations</span><span class="fg-meta">5 flags</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="fg-badge">4 enabled</span><svg id="cv-integrations" style="width:13px;height:13px;stroke:#aaa;fill:none;stroke-width:2.5;stroke-linecap:round;transition:transform .15s" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+    </div><div id="gb-integrations"><div class="div-inh">Inherited from parent organization</div><div class="flag-row on" id="fr-3DS_PROVIDER_CONTRACTS">
+    <div class="fi"><div class="fn">3DS provider contracts<span class="inh-b">inherited</span></div><div class="fd">Manage 3-D Secure Provider Contracts</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;3DS_PROVIDER_CONTRACTS&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;3DS_PROVIDER_CONTRACTS&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-ONBOARDING_PAYPAL">
+    <div class="fi"><div class="fn">PayPal onboarding<span class="inh-b">inherited</span></div><div class="fd">Enable onboarding of PayPal PPC</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;ONBOARDING_PAYPAL&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;ONBOARDING_PAYPAL&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row on" id="fr-TOKEN_SCOPES">
+    <div class="fi"><div class="fn">Token scopes<span class="inh-b">inherited</span></div><div class="fd">Create/edit token scopes for organizations</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;TOKEN_SCOPES&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" checked="" onchange="FSub[&#39;TOKEN_SCOPES&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="div-inh">Configurable at this organization</div><div class="flag-row on" id="fr-MOBILEPAY">
+    <div class="fi"><div class="fn">MobilePay</div><div class="fd">Support MobilePay payment type</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" checked="" onchange="togF(&#39;MOBILEPAY&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;MOBILEPAY&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div><div class="flag-row" id="fr-CRYPTO">
+    <div class="fi"><div class="fn">Crypto</div><div class="fd">Support onboarding Crypto PPC and reporting Crypto transactions</div></div>
+    <div class="flag-toggles">
+      <div class="tgl-grp"><div class="tgl-lbl">Current org</div><label class="tgl"><input type="checkbox" onchange="togF(&#39;CRYPTO&#39;,this.checked,false)"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+      <div class="tgl-grp"><div class="tgl-lbl">Sub-orgs</div><label class="tgl"><input type="checkbox" onchange="FSub[&#39;CRYPTO&#39;]=this.checked"><div class="tgl-t"></div><div class="tgl-k"></div></label></div>
+    </div>
+  </div></div></div></div>
       <div id="flag-content-devices" style="display:none"></div>
       <div id="flag-content-appmarket" style="display:none"></div>
       <div id="flag-content-petro" style="display:none"></div>
@@ -517,14 +862,14 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card-title">Billing address</div>
           <div class="card-body">
             <div class="fields" style="gap:12px">
-              <div class="f span2" data-edit="vf_admin,merchant_admin"><div class="f-label">Address line 1</div><input class="f-edit" value="123 Main Street"></div>
-              <div class="f span2" data-edit="vf_admin,merchant_admin"><div class="f-label">Address line 2 <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">City</div><input class="f-edit" value="Helsinki"></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Zip code</div><input class="f-edit" value="00100"></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Country</div><select class="f-edit"><option selected>Finland</option><option>United States of America</option></select></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Province / State</div><input class="f-edit" value="Uusimaa"></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Latitude <small>(optional)</small></div><input class="f-edit" value="60.18104930000001"></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Longitude <small>(optional)</small></div><input class="f-edit" value="24.9272885"></div>
+              <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value="123 Main Street"></div>
+              <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 2 <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value="Helsinki"></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Zip code</div><input class="f-edit" value="00100"></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option selected="">Finland</option><option>United States of America</option></select></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Province / State</div><input class="f-edit" value="Uusimaa"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Latitude <small>(optional)</small></div><input class="f-edit" value="60.18104930000001"></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Longitude <small>(optional)</small></div><input class="f-edit" value="24.9272885"></div>
             </div>
           </div>
         </div>
@@ -533,12 +878,12 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card">
             <div class="card-title">Shipping address</div>
             <div class="card-body">
-              <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="shipSame" checked onchange="document.getElementById('shipFields').style.display=this.checked?'none':''"><label for="shipSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
+              <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="shipSame" checked="" onchange="document.getElementById(&#39;shipFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="shipSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
               <div id="shipFields" style="display:none;margin-top:12px">
                 <div class="fields" style="gap:10px">
-                  <div class="f span2" data-edit="vf_admin,merchant_admin"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">City</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+                  <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
+                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
+                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
                 </div>
               </div>
             </div>
@@ -547,12 +892,12 @@ table.dt td a:hover{text-decoration:underline}
             <div class="card-title">Trading address</div>
             <div class="card-body">
               <div style="background:#fff8e6;border:1px solid #f0d080;border-radius:7px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#7a5c00">⚠ Time zone is derived from the trading address. If not provided, some payment types will fail.</div>
-              <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tradeSame" checked onchange="document.getElementById('tradeFields').style.display=this.checked?'none':''"><label for="tradeSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
+              <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tradeSame" checked="" onchange="document.getElementById(&#39;tradeFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="tradeSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
               <div id="tradeFields" style="display:none;margin-top:12px">
                 <div class="fields" style="gap:10px">
-                  <div class="f span2" data-edit="vf_admin,merchant_admin"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">City</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+                  <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
+                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
+                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
                 </div>
               </div>
             </div>
@@ -565,25 +910,25 @@ table.dt td a:hover{text-decoration:underline}
         <div class="card">
           <div class="card-title">AML &amp; Opening hours <span style="font-size:11px;color:#aaa;font-weight:400">(Merchant Site only)</span></div>
           <div class="card-body">
-            <div class="f" style="margin-bottom:14px" data-edit="vf_admin">
+            <div class="f" style="margin-bottom: 14px; opacity: 1;" data-edit="vf_admin">
               <div class="f-label">AML timeout</div>
               <div style="display:flex;gap:16px;margin-top:6px">
-                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="aml" value="allow" checked> Allow</label>
-                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="aml" value="block"> Block</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="aml" value="allow" checked="" style="opacity: 1; cursor: pointer;"> Allow</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="aml" value="block" style="opacity: 1; cursor: pointer;"> Block</label>
               </div>
             </div>
-            <div data-edit="vf_admin,merchant_admin">
+            <div data-edit="vf_admin,merchant_admin" style="opacity: 1;">
               <div class="f-label" style="margin-bottom:8px">Opening hours</div>
               <table style="width:100%;font-size:13px;border-collapse:collapse">
-                <tr style="background:#f6f7f9"><th style="text-align:left;padding:6px 8px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase">Day</th><th style="text-align:right;padding:6px 8px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase">Hours</th></tr>
-                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked> Monday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 &ndash; 23:59</td></tr>
-                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked> Tuesday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 &ndash; 23:59</td></tr>
-                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked> Wednesday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 &ndash; 23:59</td></tr>
-                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked> Thursday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 &ndash; 23:59</td></tr>
-                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked> Friday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 &ndash; 23:59</td></tr>
-                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox"> Saturday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">Closed</td></tr>
-                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox"> Sunday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">Closed</td></tr>
-              </table>
+                <tbody><tr style="background:#f6f7f9"><th style="text-align:left;padding:6px 8px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase">Day</th><th style="text-align:right;padding:6px 8px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase">Hours</th></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked="" style="opacity: 1; cursor: pointer;"> Monday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked="" style="opacity: 1; cursor: pointer;"> Tuesday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked="" style="opacity: 1; cursor: pointer;"> Wednesday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked="" style="opacity: 1; cursor: pointer;"> Thursday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" checked="" style="opacity: 1; cursor: pointer;"> Friday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" style="opacity: 1; cursor: pointer;"> Saturday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">Closed</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" style="opacity: 1; cursor: pointer;"> Sunday</label></td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">Closed</td></tr>
+              </tbody></table>
             </div>
           </div>
         </div>
@@ -594,11 +939,11 @@ table.dt td a:hover{text-decoration:underline}
             <table class="dt">
               <thead><tr><th>Name</th><th>Type</th><th>Email</th><th></th></tr></thead>
               <tbody>
-                <tr><td><strong>Admin User</strong></td><td><span class="tag tag-blue">Owner</span></td><td>admin@testorg.com</td><td><button class="btn btn-secondary btn-sm contact-action-btn">Edit</button></td></tr>
-                <tr><td><strong>Support Contact</strong></td><td><span class="tag tag-gray">Business</span></td><td>support@testorg.com</td><td><button class="btn btn-secondary btn-sm contact-action-btn">Edit</button></td></tr>
+                <tr><td><strong>Admin User</strong></td><td><span class="tag tag-blue">Owner</span></td><td>admin@testorg.com</td><td><button class="btn btn-secondary btn-sm contact-action-btn" style="display: inline-flex;">Edit</button></td></tr>
+                <tr><td><strong>Support Contact</strong></td><td><span class="tag tag-gray">Business</span></td><td>support@testorg.com</td><td><button class="btn btn-secondary btn-sm contact-action-btn" style="display: inline-flex;">Edit</button></td></tr>
               </tbody>
             </table>
-            <div style="padding:10px 14px"><button class="btn btn-secondary btn-sm contact-action-btn">+ Add new contact</button></div>
+            <div style="padding:10px 14px"><button class="btn btn-secondary btn-sm contact-action-btn" style="display: inline-flex;">+ Add new contact</button></div>
           </div>
         </div>
       </div>
@@ -608,14 +953,14 @@ table.dt td a:hover{text-decoration:underline}
         <div class="card-title">Bank accounts</div>
         <div class="card-body">
           <div class="fields" style="gap:12px">
-            <div class="f" data-edit="vf_admin"><div class="f-label">Bank account type</div><select class="f-edit"><option>Domestic</option><option>SEPA</option><option>External</option></select></div>
-            <div class="f" data-edit="vf_admin"><div class="f-label">Account number</div><input class="f-edit" value="" placeholder=""></div>
-            <div class="f" data-edit="vf_admin"><div class="f-label">ABA routing number</div><input class="f-edit" value="" placeholder=""></div>
-            <div class="f" data-edit="vf_admin"><div class="f-label">Account holder name</div><input class="f-edit" value="" placeholder=""></div>
-            <div class="f" data-edit="vf_admin"><div class="f-label">Account holder type</div><select class="f-edit"><option>— Select —</option><option>Individual</option><option>Business</option></select></div>
-            <div class="f" data-edit="vf_admin"><div class="f-label">Currency</div><select class="f-edit"><option>Euro (EUR)</option><option>USD</option></select></div>
-            <div class="f" data-edit="vf_admin"><div class="f-label">Description <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
-            <div class="f" data-edit="vf_admin"><div class="f-label">Nickname <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+            <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Bank account type</div><select class="f-edit"><option>Domestic</option><option>SEPA</option><option>External</option></select></div>
+            <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Account number</div><input class="f-edit" value="" placeholder=""></div>
+            <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">ABA routing number</div><input class="f-edit" value="" placeholder=""></div>
+            <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Account holder name</div><input class="f-edit" value="" placeholder=""></div>
+            <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Account holder type</div><select class="f-edit"><option>— Select —</option><option>Individual</option><option>Business</option></select></div>
+            <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Currency</div><select class="f-edit"><option>Euro (EUR)</option><option>USD</option></select></div>
+            <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Description <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+            <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Nickname <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
           </div>
           <div style="margin-top:12px"><button class="btn btn-secondary btn-sm">+ Add extra bank account</button></div>
         </div>
@@ -633,75 +978,75 @@ table.dt td a:hover{text-decoration:underline}
     <div class="section-gap">
 
       <div class="tbl-section">
-        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated payment provider contracts</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only">+ Add new</button><button class="view-all">View all →</button></div></div>
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated payment provider contracts</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only" style="display: inline-flex;">+ Add new</button><button class="view-all">View all →</button></div></div>
         <div class="tbl-wrap">
           <table class="dt"><thead><tr><th>Name</th><th>Payment types</th><th>Currencies</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td><a href="#">TEST-CONTRACT-VISA-001</a></td><td>Visa, Mastercard</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">TEST-CONTRACT-AMEX-002</a></td><td>American Express</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">TEST-CONTRACT-PAYPAL-003</a></td><td>PayPal QR</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">TEST-CONTRACT-CRYPTO-004</a></td><td>Crypto</td><td>EUR</td><td><span class="chip chip-gr">Inactive</span></td></tr>
-            <tr><td><a href="#">TEST-CONTRACT-APPLE-005</a></td><td>Apple Pay</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-CONTRACT-VISA-001</a></td><td>Visa, Mastercard</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-CONTRACT-AMEX-002</a></td><td>American Express</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-CONTRACT-PAYPAL-003</a></td><td>PayPal QR</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-CONTRACT-CRYPTO-004</a></td><td>Crypto</td><td>EUR</td><td><span class="chip chip-gr">Inactive</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-CONTRACT-APPLE-005</a></td><td>Apple Pay</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
           </tbody></table>
           <div class="tbl-foot"><span>5 of 8 records</span><div class="pager"><button class="pg">‹</button><button class="pg active">1</button><button class="pg">2</button><button class="pg">›</button></div></div>
         </div>
       </div>
 
       <div class="tbl-section">
-        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated 3DS contracts</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only">+ Add new</button><button class="view-all">View all →</button></div></div>
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated 3DS contracts</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only" style="display: inline-flex;">+ Add new</button><button class="view-all">View all →</button></div></div>
         <div class="tbl-wrap">
           <table class="dt"><thead><tr><th>Name</th><th>Provider</th><th>Protocol version</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td><a href="#">TEST-3DS-STRIPE-001</a></td><td>Stripe</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">TEST-3DS-ADYEN-002</a></td><td>Adyen</td><td>2.1.0</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">TEST-3DS-WORLDPAY-003</a></td><td>Worldpay</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">TEST-3DS-PAYMENTSENSE-004</a></td><td>Paymentsense</td><td>2.1.0</td><td><span class="chip chip-gr">Inactive</span></td></tr>
-            <tr><td><a href="#">TEST-3DS-BLUESNAP-005</a></td><td>BlueSnap</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-3DS-STRIPE-001</a></td><td>Stripe</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-3DS-ADYEN-002</a></td><td>Adyen</td><td>2.1.0</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-3DS-WORLDPAY-003</a></td><td>Worldpay</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-3DS-PAYMENTSENSE-004</a></td><td>Paymentsense</td><td>2.1.0</td><td><span class="chip chip-gr">Inactive</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">TEST-3DS-BLUESNAP-005</a></td><td>BlueSnap</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
           </tbody></table>
           <div class="tbl-foot"><span>5 of 6 records</span><div class="pager"><button class="pg">‹</button><button class="pg active">1</button><button class="pg">2</button><button class="pg">›</button></div></div>
         </div>
       </div>
 
       <div class="tbl-section">
-        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated points of interaction</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only">+ Add new</button><button class="view-all">View all →</button></div></div>
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated points of interaction</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only" style="display: inline-flex;">+ Add new</button><button class="view-all">View all →</button></div></div>
         <div class="tbl-wrap">
           <table class="dt"><thead><tr><th>Name</th><th>Terminal ID</th><th>Type</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td><a href="#">E280-TEST-001</a></td><td>50003361</td><td>Point of Sale</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">E285-TEST-002</a></td><td>50003362</td><td>Point of Sale</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">VIRTUAL-TEST-001</a></td><td>50003363</td><td>Virtual</td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">E280-TEST-003</a></td><td>50003364</td><td>Point of Sale</td><td><span class="chip chip-gr">Inactive</span></td></tr>
-            <tr><td><a href="#">MOBILE-TEST-001</a></td><td>50003365</td><td>Mobile</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">E280-TEST-001</a></td><td>50003361</td><td>Point of Sale</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">E285-TEST-002</a></td><td>50003362</td><td>Point of Sale</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">VIRTUAL-TEST-001</a></td><td>50003363</td><td>Virtual</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">E280-TEST-003</a></td><td>50003364</td><td>Point of Sale</td><td><span class="chip chip-gr">Inactive</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">MOBILE-TEST-001</a></td><td>50003365</td><td>Mobile</td><td><span class="chip chip-g">Active</span></td></tr>
           </tbody></table>
           <div class="tbl-foot"><span>5 of 12 records</span><div class="pager"><button class="pg">‹</button><button class="pg active">1</button><button class="pg">2</button><button class="pg">3</button><button class="pg">›</button></div></div>
         </div>
       </div>
 
       <div class="tbl-section">
-        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated organizations</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only">+ Add new</button><button class="view-all">View all →</button></div></div>
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated organizations</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only" style="display: inline-flex;">+ Add new</button><button class="view-all">View all →</button></div></div>
         <div class="tbl-wrap">
           <table class="dt"><thead><tr><th>Name</th><th>Type</th><th>Country</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td><a href="#">Test Org Site 1</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
-            <tr><td><a href="#">Test Org Site 2</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
-            <tr><td><a href="#">Test Org Site 3</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
-            <tr><td><a href="#">Test Org Site 4</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-gr">Disabled</span></td></tr>
-            <tr><td><a href="#">Test Org Site 5</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Test Org Site 1</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Test Org Site 2</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Test Org Site 3</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Test Org Site 4</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-gr">Disabled</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Test Org Site 5</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
           </tbody></table>
           <div class="tbl-foot"><span>5 of 23 records</span><div class="pager"><button class="pg">‹</button><button class="pg active">1</button><button class="pg">2</button><button class="pg">3</button><button class="pg">4</button><button class="pg">5</button><button class="pg">›</button></div></div>
         </div>
       </div>
 
       <div class="tbl-section">
-        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated users</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only">+ Add new</button><button class="view-all">View all →</button></div></div>
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated users</div><div class="tbl-actions"><button class="btn btn-secondary btn-sm vf-only" style="display: inline-flex;">+ Add new</button><button class="view-all">View all →</button></div></div>
         <div class="tbl-wrap">
           <table class="dt"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td><a href="#">John Smith</a></td><td>john.smith@testorg.com</td><td><span class="tag tag-blue">Admin</span></td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">Sarah Jones</a></td><td>sarah.jones@testorg.com</td><td><span class="tag tag-gr">Supervisor</span></td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">Mike Johnson</a></td><td>mike.johnson@testorg.com</td><td><span class="tag tag-gray">User</span></td><td><span class="chip chip-g">Active</span></td></tr>
-            <tr><td><a href="#">Anna Williams</a></td><td>anna.williams@testorg.com</td><td><span class="tag tag-gray">Reviewer</span></td><td><span class="chip chip-gr">Inactive</span></td></tr>
-            <tr><td><a href="#">David Brown</a></td><td>david.brown@testorg.com</td><td><span class="tag tag-gray">Cashier</span></td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">John Smith</a></td><td>john.smith@testorg.com</td><td><span class="tag tag-blue">Admin</span></td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Sarah Jones</a></td><td>sarah.jones@testorg.com</td><td><span class="tag tag-gr">Supervisor</span></td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Mike Johnson</a></td><td>mike.johnson@testorg.com</td><td><span class="tag tag-gray">User</span></td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">Anna Williams</a></td><td>anna.williams@testorg.com</td><td><span class="tag tag-gray">Reviewer</span></td><td><span class="chip chip-gr">Inactive</span></td></tr>
+            <tr><td><a href="https://adrianagornea17-cmyk.github.io/merchant-portal/NEW%20organization-page-ui.html#">David Brown</a></td><td>david.brown@testorg.com</td><td><span class="tag tag-gray">Cashier</span></td><td><span class="chip chip-g">Active</span></td></tr>
           </tbody></table>
           <div class="tbl-foot"><span>5 of 7 records</span><div class="pager"><button class="pg">‹</button><button class="pg active">1</button><button class="pg">2</button><button class="pg">›</button></div></div>
         </div>
@@ -720,13 +1065,13 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card-title">Payment documents</div>
           <div class="card-body">
             <div class="fields" style="gap:12px">
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Provider</div><select class="f-edit"><option selected>Verifone</option><option>None</option></select></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Attachment type</div><select class="f-edit"><option selected>PDF</option><option>HTML</option></select></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">Allow child reuse</div><select class="f-edit"><option>No</option><option>Yes</option></select></div>
-              <div class="f" data-edit="vf_admin"><div class="f-label">API token <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Merchant logo <small>(optional)</small></div><input class="f-edit" value="" placeholder="Upload or enter URL"></div>
-              <div class="f" data-edit="vf_admin,merchant_admin"><div class="f-label">Default receipt template</div><select class="f-edit"><option>— None —</option></select></div>
-              <div class="f span2" data-edit="vf_admin,merchant_admin"><div class="f-label">Custom receipt templates</div><button class="btn btn-secondary btn-sm" style="margin-top:4px">+ Add template</button></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Provider</div><select class="f-edit"><option selected="">Verifone</option><option>None</option></select></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Attachment type</div><select class="f-edit"><option selected="">PDF</option><option>HTML</option></select></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Allow child reuse</div><select class="f-edit"><option>No</option><option>Yes</option></select></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">API token <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Merchant logo <small>(optional)</small></div><input class="f-edit" value="" placeholder="Upload or enter URL"></div>
+              <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Default receipt template</div><select class="f-edit"><option>— None —</option></select></div>
+              <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Custom receipt templates</div><button class="btn btn-secondary btn-sm" style="margin-top:4px">+ Add template</button></div>
             </div>
           </div>
         </div>
@@ -740,11 +1085,11 @@ table.dt td a:hover{text-decoration:underline}
             <div class="card-title">Branding &amp; domain</div>
             <div class="card-body">
               <div class="fields single" style="gap:12px">
-                <div class="f" data-edit="vf_admin"><div class="f-label">Domain name <small>(optional)</small></div><input class="f-edit" value="emea.live.verifone.com"></div>
-                <div class="f" data-edit="vf_admin"><div class="f-label">Login domain name <small>(optional)</small></div><input class="f-edit" value="emea.verifone.com"></div>
-                <div class="f" data-edit="vf_admin"><div class="f-label">Email sender <small>(optional)</small></div><input class="f-edit" value="verifone.com"></div>
-                <div class="f" data-edit="vf_admin"><div class="f-label">Brand name <small>(optional)</small></div><input class="f-edit" value="Verifone"></div>
-                <div class="f" data-edit="vf_admin"><div class="f-label">Privacy policy URL <small>(optional)</small></div><input class="f-edit" value="" placeholder="https://…"></div>
+                <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Domain name <small>(optional)</small></div><input class="f-edit" value="emea.live.verifone.com"></div>
+                <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Login domain name <small>(optional)</small></div><input class="f-edit" value="emea.verifone.com"></div>
+                <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Email sender <small>(optional)</small></div><input class="f-edit" value="verifone.com"></div>
+                <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Brand name <small>(optional)</small></div><input class="f-edit" value="Verifone"></div>
+                <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Privacy policy URL <small>(optional)</small></div><input class="f-edit" value="" placeholder="https://…"></div>
               </div>
             </div>
           </div>
@@ -761,7 +1106,7 @@ table.dt td a:hover{text-decoration:underline}
               <div class="card-title">Branding styles</div>
               <div class="card-body">
                 <div style="font-size:13px;color:#aaa;margin-bottom:10px">No custom styles created.</div>
-                <button class="btn btn-secondary btn-sm vf-only" onclick="openStylesEditor()">+ Add custom styles</button>
+                <button class="btn btn-secondary btn-sm vf-only" onclick="openStylesEditor()" style="display: inline-flex;">+ Add custom styles</button>
               </div>
             </div>
           </div>
@@ -775,6 +1120,76 @@ table.dt td a:hover{text-decoration:underline}
     </div>
   </div>
 
+  <!-- ═══ TAB 6: COMMISSIONS CONFIGURATIONS ═══ -->
+  <div id="tab-commissions" style="display:none">
+    <div id="commLvDefault">
+    <div class="section-gap">
+      <div class="tbl-section">
+        <div class="tbl-hdr" style="justify-content:flex-end">
+          <div class="tbl-actions">
+            <button class="btn btn-primary btn-sm vf-only" onclick="openCommissionModal(&#39;add&#39;)" style="display: inline-flex;">+ Add configuration</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="dt">
+            <thead>
+              <tr>
+                <th style="vertical-align:top">
+                  <div class="th-label">Currency<span class="th-sort"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"></path></svg></span></div>
+                  <input class="col-filter" type="text" id="commSearch" placeholder="Search…" oninput="filterCommissions(this.value)">
+                </th>
+                <th>Payment modes</th>
+                <th>Additional fees</th>
+                <th>Status</th>
+                <th>Last updated</th>
+              </tr>
+            </thead>
+            <tbody id="commTableBody"><tr style="cursor:pointer" onclick="openCommissionPanel(&#39;GBP&#39;)">
+      <td><strong>GBP</strong></td>
+      <td>6 payment modes</td>
+      <td>1 fee</td>
+      <td><span class="chip chip-g">Active</span></td>
+      <td>2026-06-24</td>
+    </tr><tr style="cursor:pointer" onclick="openCommissionPanel(&#39;EUR&#39;)">
+      <td><strong>EUR</strong></td>
+      <td>6 payment modes</td>
+      <td>1 fee</td>
+      <td><span class="chip chip-g">Active</span></td>
+      <td>2026-05-03</td>
+    </tr><tr style="cursor:pointer" onclick="openCommissionPanel(&#39;USD&#39;)">
+      <td><strong>USD</strong></td>
+      <td>6 payment modes</td>
+      <td>1 fee</td>
+      <td><span class="chip chip-gr">Inactive</span></td>
+      <td>2026-04-11</td>
+    </tr></tbody>
+          </table>
+          <div class="tbl-foot"><span id="commCount">3 of 3 records</span><div class="pager"><button class="pg">‹</button><button class="pg active">1</button><button class="pg">›</button></div></div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /commLvDefault -->
+
+    <!-- EMPTY STATE (no commission configurations exist yet) -->
+    <div class="empty-state-wrap" id="commLvEmpty">
+      <div class="empty-state-card">
+        <div class="empty-state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2.5"></circle><circle cx="15" cy="15" r="2.5"></circle><line x1="16" y1="8" x2="8" y2="16"></line></svg>
+        </div>
+        <div class="empty-state-title">Set up commission configurations</div>
+        <div class="empty-state-desc">Define commission rates, payment mode pricing, and additional fees for each currency this organization processes. Once a configuration is added, you can track its status and review the details here.</div>
+      </div>
+    </div><!-- /commLvEmpty -->
+
+    <!-- VIEW TOGGLE BAR (prototype only) -->
+    <div class="view-toggle-bar" id="commVtb">
+      <span class="vtb-label">VIEW</span>
+      <button class="vtb-btn vtb-active" id="commVtbDefault" onclick="setCommissionsView('default')">Default</button>
+      <button class="vtb-btn" id="commVtbEmpty" onclick="setCommissionsView('empty')">Empty state</button>
+    </div>
+  </div>
+
+
 </div><!-- /inner -->
 </div><!-- /main -->
 
@@ -784,7 +1199,7 @@ table.dt td a:hover{text-decoration:underline}
   <!-- Top notice bar -->
   <div style="background:#faf7ff;border-bottom:1.5px solid #e0d8f5;padding:8px 20px;font-size:12px;color:#6b4fa5;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
     <div style="display:flex;align-items:center;gap:7px">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
       <strong>Preview</strong> — for review and demonstration purposes only
     </div>
     <button onclick="closeStylesEditor()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#888;line-height:1;padding:0 4px" title="Close">✕</button>
@@ -799,7 +1214,7 @@ table.dt td a:hover{text-decoration:underline}
       <!-- Mini topbar inside preview -->
       <div id="previewTopbar" style="background:#1a1f2e;height:46px;display:flex;align-items:center;padding:0 20px;gap:20px;flex-shrink:0;transition:background .3s">
         <div id="previewLogo" style="color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"></polygon></svg>
           <span id="previewBrandName">Verifone</span>
         </div>
         <nav style="display:flex;gap:18px">
@@ -818,7 +1233,7 @@ table.dt td a:hover{text-decoration:underline}
           <!-- Filter bar -->
           <div style="background:#fff;border:1.5px solid #dde1e8;border-radius:8px;padding:12px 16px;margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
             <span style="font-size:12px;color:#888">Search or filter:</span>
-            <div style="display:flex;align-items:center;gap:6px;border:1px solid #d4d8de;border-radius:6px;padding:5px 10px;font-size:12px;background:#f6f7f9">Transaction ID <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+            <div style="display:flex;align-items:center;gap:6px;border:1px solid #d4d8de;border-radius:6px;padding:5px 10px;font-size:12px;background:#f6f7f9">Transaction ID <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
             <input style="border:1px solid #d4d8de;border-radius:6px;padding:5px 10px;font-size:12px;outline:none" placeholder="Search…">
             <div style="font-size:11px;color:#555;background:#eef0f4;border-radius:14px;padding:3px 10px">Created: 6/3/2026 – 6/10/2026</div>
             <div style="font-size:11px;color:#555;background:#eef0f4;border-radius:14px;padding:3px 10px">Organizations (+10)</div>
@@ -865,16 +1280,16 @@ table.dt td a:hover{text-decoration:underline}
 
         <!-- Logo -->
         <div class="acc-section">
-          <div class="acc-header" onclick="toggleAcc('acc-logo')">
+          <div class="acc-header" onclick="toggleAcc(&#39;acc-logo&#39;)">
             <span>Logo</span>
-            <svg id="cv-acc-logo" class="acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg id="cv-acc-logo" class="acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </div>
           <div id="acc-logo" class="acc-body" style="display:none">
             <div class="acc-field"><label class="acc-label">Upload logo file</label><input type="file" accept="image/*" style="font-size:12px;width:100%" onchange="handleLogoUpload(this)"></div>
             <div class="acc-field"><label class="acc-label">Logo URL</label><input class="acc-input" placeholder="https://…" id="logoUrlInput" oninput="updateLogo(this.value)"></div>
             <div class="acc-field">
               <label class="acc-label">Logo width</label>
-              <input type="range" min="60" max="200" value="120" style="width:100%;accent-color:#185FA5" oninput="document.getElementById('logoWVal').textContent=this.value+'px'">
+              <input type="range" min="60" max="200" value="120" style="width:100%;accent-color:#185FA5" oninput="document.getElementById(&#39;logoWVal&#39;).textContent=this.value+&#39;px&#39;">
               <span id="logoWVal" style="font-size:11px;color:#888">120px</span>
             </div>
           </div>
@@ -882,9 +1297,9 @@ table.dt td a:hover{text-decoration:underline}
 
         <!-- Favicon -->
         <div class="acc-section">
-          <div class="acc-header" onclick="toggleAcc('acc-fav')">
+          <div class="acc-header" onclick="toggleAcc(&#39;acc-fav&#39;)">
             <span>Favicon</span>
-            <svg id="cv-acc-fav" class="acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg id="cv-acc-fav" class="acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </div>
           <div id="acc-fav" class="acc-body" style="display:none">
             <div class="acc-field"><label class="acc-label">Upload favicon (.ico, .png)</label><input type="file" accept=".ico,.png" style="font-size:12px;width:100%"></div>
@@ -893,23 +1308,23 @@ table.dt td a:hover{text-decoration:underline}
 
         <!-- Typography — open by default -->
         <div class="acc-section">
-          <div class="acc-header" onclick="toggleAcc('acc-typo')" style="background:#f6f7f9">
+          <div class="acc-header" onclick="toggleAcc(&#39;acc-typo&#39;)" style="background:#f6f7f9">
             <span>Typography</span>
-            <svg id="cv-acc-typo" class="acc-chevron" viewBox="0 0 24 24" style="transform:rotate(180deg)"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg id="cv-acc-typo" class="acc-chevron" viewBox="0 0 24 24" style="transform:rotate(180deg)"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </div>
           <div id="acc-typo" class="acc-body">
             <div class="acc-field">
               <div class="acc-sel-wrap">
                 <select id="fontFamilySelect" class="acc-sel" onchange="applyFont(this.value)">
                   <option value="Noto Sans">Noto Sans</option>
-                  <option value="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">System default</option>
+                  <option value="-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,sans-serif">System default</option>
                   <option value="Inter">Inter</option>
                   <option value="Roboto">Roboto</option>
                   <option value="Open Sans">Open Sans</option>
                   <option value="Lato">Lato</option>
                 </select>
-                <button onclick="document.getElementById('fontFamilySelect').selectedIndex=0;applyFont('Noto Sans')" style="background:none;border:none;cursor:pointer;color:#888;font-size:14px;padding:0 4px">✕</button>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <button onclick="document.getElementById(&#39;fontFamilySelect&#39;).selectedIndex=0;applyFont(&#39;Noto Sans&#39;)" style="background:none;border:none;cursor:pointer;color:#888;font-size:14px;padding:0 4px">✕</button>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </div>
             </div>
           </div>
@@ -917,27 +1332,27 @@ table.dt td a:hover{text-decoration:underline}
 
         <!-- Navigation bar — open by default -->
         <div class="acc-section">
-          <div class="acc-header" onclick="toggleAcc('acc-nav')" style="background:#f6f7f9">
+          <div class="acc-header" onclick="toggleAcc(&#39;acc-nav&#39;)" style="background:#f6f7f9">
             <span>Navigation bar</span>
-            <svg id="cv-acc-nav" class="acc-chevron" viewBox="0 0 24 24" style="transform:rotate(180deg)"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg id="cv-acc-nav" class="acc-chevron" viewBox="0 0 24 24" style="transform:rotate(180deg)"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </div>
           <div id="acc-nav" class="acc-body">
             <div class="acc-field">
               <label class="acc-label">Background color</label>
               <div class="color-row">
-                <input type="color" id="navBgColor" value="#1a1f2e" class="color-swatch" oninput="document.getElementById('previewTopbar').style.background=this.value;document.getElementById('navBgHex').value=this.value">
+                <input type="color" id="navBgColor" value="#1a1f2e" class="color-swatch" oninput="document.getElementById(&#39;previewTopbar&#39;).style.background=this.value;document.getElementById(&#39;navBgHex&#39;).value=this.value">
                 <span class="hex-label">HEX:</span>
-                <input id="navBgHex" class="hex-input" value="#1a1f2e" oninput="document.getElementById('previewTopbar').style.background=this.value;document.getElementById('navBgColor').value=this.value">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <input id="navBgHex" class="hex-input" value="#1a1f2e" oninput="document.getElementById(&#39;previewTopbar&#39;).style.background=this.value;document.getElementById(&#39;navBgColor&#39;).value=this.value">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </div>
             </div>
             <div class="acc-field">
               <label class="acc-label">Font color</label>
               <div class="color-row">
-                <input type="color" id="navFontColor" value="#ffffff" class="color-swatch" oninput="document.getElementById('navFontHex').value=this.value;updateNavFontColor(this.value)">
+                <input type="color" id="navFontColor" value="#ffffff" class="color-swatch" oninput="document.getElementById(&#39;navFontHex&#39;).value=this.value;updateNavFontColor(this.value)">
                 <span class="hex-label">HEX:</span>
-                <input id="navFontHex" class="hex-input" value="#ffffff" oninput="document.getElementById('navFontColor').value=this.value;updateNavFontColor(this.value)">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <input id="navFontHex" class="hex-input" value="#ffffff" oninput="document.getElementById(&#39;navFontColor&#39;).value=this.value;updateNavFontColor(this.value)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </div>
             </div>
           </div>
@@ -945,9 +1360,9 @@ table.dt td a:hover{text-decoration:underline}
 
         <!-- Buttons — open by default -->
         <div class="acc-section">
-          <div class="acc-header" onclick="toggleAcc('acc-btn')" style="background:#f6f7f9">
+          <div class="acc-header" onclick="toggleAcc(&#39;acc-btn&#39;)" style="background:#f6f7f9">
             <span>Buttons</span>
-            <svg id="cv-acc-btn" class="acc-chevron" viewBox="0 0 24 24" style="transform:rotate(180deg)"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg id="cv-acc-btn" class="acc-chevron" viewBox="0 0 24 24" style="transform:rotate(180deg)"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </div>
           <div id="acc-btn" class="acc-body">
 
@@ -956,19 +1371,19 @@ table.dt td a:hover{text-decoration:underline}
             <div class="acc-field">
               <label class="acc-label">Background color</label>
               <div class="color-row">
-                <input type="color" id="btnBgColor" value="#185FA5" class="color-swatch" oninput="document.getElementById('previewApplyBtn').style.background=this.value;document.getElementById('btnBgHex').value=this.value">
+                <input type="color" id="btnBgColor" value="#185FA5" class="color-swatch" oninput="document.getElementById(&#39;previewApplyBtn&#39;).style.background=this.value;document.getElementById(&#39;btnBgHex&#39;).value=this.value">
                 <span class="hex-label">HEX:</span>
-                <input id="btnBgHex" class="hex-input" value="#185FA5" oninput="document.getElementById('previewApplyBtn').style.background=this.value;document.getElementById('btnBgColor').value=this.value">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <input id="btnBgHex" class="hex-input" value="#185FA5" oninput="document.getElementById(&#39;previewApplyBtn&#39;).style.background=this.value;document.getElementById(&#39;btnBgColor&#39;).value=this.value">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </div>
             </div>
             <div class="acc-field">
               <label class="acc-label">Font color</label>
               <div class="color-row">
-                <input type="color" id="btnFontColor" value="#ffffff" class="color-swatch" oninput="document.getElementById('previewApplyBtn').style.color=this.value;document.getElementById('btnFontHex').value=this.value">
+                <input type="color" id="btnFontColor" value="#ffffff" class="color-swatch" oninput="document.getElementById(&#39;previewApplyBtn&#39;).style.color=this.value;document.getElementById(&#39;btnFontHex&#39;).value=this.value">
                 <span class="hex-label">HEX:</span>
-                <input id="btnFontHex" class="hex-input" value="#ffffff" oninput="document.getElementById('previewApplyBtn').style.color=this.value;document.getElementById('btnFontColor').value=this.value">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <input id="btnFontHex" class="hex-input" value="#ffffff" oninput="document.getElementById(&#39;previewApplyBtn&#39;).style.color=this.value;document.getElementById(&#39;btnFontColor&#39;).value=this.value">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </div>
             </div>
 
@@ -982,10 +1397,10 @@ table.dt td a:hover{text-decoration:underline}
             <div class="acc-field">
               <label class="acc-label">Font color</label>
               <div class="color-row">
-                <input type="color" id="secBtnColor" value="#185FA5" class="color-swatch" oninput="document.getElementById('secBtnHex').value=this.value">
+                <input type="color" id="secBtnColor" value="#185FA5" class="color-swatch" oninput="document.getElementById(&#39;secBtnHex&#39;).value=this.value">
                 <span class="hex-label">HEX:</span>
-                <input id="secBtnHex" class="hex-input" value="#185FA5" oninput="document.getElementById('secBtnColor').value=this.value">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <input id="secBtnHex" class="hex-input" value="#185FA5" oninput="document.getElementById(&#39;secBtnColor&#39;).value=this.value">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </div>
             </div>
 
@@ -996,10 +1411,10 @@ table.dt td a:hover{text-decoration:underline}
             <div class="acc-field">
               <label class="acc-label">Color</label>
               <div class="color-row">
-                <input type="color" id="dangerBtnColor" value="#c0392b" class="color-swatch" oninput="document.getElementById('dangerBtnHex').value=this.value">
+                <input type="color" id="dangerBtnColor" value="#c0392b" class="color-swatch" oninput="document.getElementById(&#39;dangerBtnHex&#39;).value=this.value">
                 <span class="hex-label">HEX:</span>
-                <input id="dangerBtnHex" class="hex-input" value="#c0392b" oninput="document.getElementById('dangerBtnColor').value=this.value">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <input id="dangerBtnHex" class="hex-input" value="#c0392b" oninput="document.getElementById(&#39;dangerBtnColor&#39;).value=this.value">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </div>
             </div>
 
@@ -1017,6 +1432,76 @@ table.dt td a:hover{text-decoration:underline}
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ═══ COMMISSION CONFIG SIDE PANEL (view on row click) ═══ -->
+<div class="cp-backdrop" id="commPanelBackdrop" onclick="if(event.target===this)closeCommissionPanel()">
+  <div class="cp-panel">
+    <div class="cp-header">
+      <div>
+        <div class="cp-title" id="cpTitle">GBP</div>
+        <div class="cp-subtitle">Commission configuration</div>
+      </div>
+      <button class="cp-close" onclick="closeCommissionPanel()" aria-label="Close">✕</button>
+    </div>
+    <div class="cp-body" id="cpBody"><!-- populated by JS --></div>
+    <div class="cp-footer">
+      <button class="btn btn-secondary" onclick="closeCommissionPanel()">Close</button>
+      <button class="btn btn-primary vf-only" onclick="editFromPanel()" style="display: inline-flex;">Edit configuration</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMMISSION CONFIG ADD/EDIT — FULL MODAL PAGE ═══ -->
+<div class="cm-overlay" id="commModal">
+  <div class="cm-topbar">
+    <div class="cm-title" id="cmTitle">Add commission configuration</div>
+    <button class="cm-close" onclick="closeCommissionModal()" aria-label="Close">✕</button>
+  </div>
+  <div class="cm-body">
+    <div class="cm-inner">
+      <div class="card">
+        <div class="card-title">Select the currency to view / configure the fee structure</div>
+        <div class="card-body">
+          <div class="fields single" style="gap:12px;max-width:280px">
+            <div class="f">
+              <div class="f-label">Currency</div>
+              <select class="f-edit" id="cmCurrency">
+                <option value="GBP">GBP</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+                <option value="SEK">SEK</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Add / manage pricing plan (per currency)</div>
+        <div class="card-body" style="padding:0">
+          <table class="dt">
+            <thead><tr><th>Payment mode</th><th>Percentage *</th><th>Fixed (amount) *</th><th>Minimum (amount) *</th></tr></thead>
+            <tbody id="cmPricingBody"><!-- rows rendered by JS --></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Additional fees (per currency)</div>
+        <div class="card-body" style="padding:0">
+          <table class="dt">
+            <thead><tr><th>Fee</th><th>Percentage *</th><th>Fixed (amount) *</th><th>Minimum (amount) *</th></tr></thead>
+            <tbody id="cmFeesBody"><!-- rows rendered by JS --></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cm-footer">
+    <button class="btn btn-secondary" onclick="closeCommissionModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveCommissionConfig()">Save configuration</button>
   </div>
 </div>
 
@@ -1088,6 +1573,9 @@ const FLAGS={
       {id:'INVOICE',name:'Invoice',desc:'Enables monthly invoice summaries and fee details',on:false,sub:false,inh:false},
       {id:'VAS_LIQUIDITY_OVERVIEW',name:'VAS liquidity overview',desc:'Dashboard showing actual liquidity before submitting payouts',on:false,sub:false,inh:false},
       {id:'DISPUTE_MANAGEMENT_CARD_SCHEMES',name:'Dispute management',desc:'Provides the ability to see disputes and their details',on:false,sub:false,inh:false},
+      {id:'CUSTOMER_CATALOG',name:'Customer catalog',desc:'Enables management of the customer catalog for the organization',on:false,sub:false,inh:false},
+      {id:'PRODUCT_CATALOG',name:'Product catalog',desc:'Enables management of the product catalog for the organization',on:false,sub:false,inh:false},
+      {id:'GROUP_ENTITIES',name:'Group entities',desc:'Enables grouping of entities within the organization',on:false,sub:false,inh:false},
     ]},
     {id:'security',label:'Security & compliance',flags:[
       {id:'API_KEYS_AUTHENTICATION',name:'API keys authentication',desc:'Enable API-key generation functionality for users in Portal',on:true,sub:true,inh:true},
@@ -1107,6 +1595,7 @@ const FLAGS={
       {id:'MOBILEPAY',name:'MobilePay',desc:'Support MobilePay payment type',on:true,sub:false,inh:false},
       {id:'CRYPTO',name:'Crypto',desc:'Support onboarding Crypto PPC and reporting Crypto transactions',on:false,sub:false,inh:false},
       {id:'TOKEN_SCOPES',name:'Token scopes',desc:'Create/edit token scopes for organizations',on:true,sub:true,inh:true},
+      {id:'OMNICHANNEL_ACTION_TOGGLE_PPC',name:'Omnichannel action toggle (PPC)',desc:'Enables toggling omnichannel actions for Payment Provider Contracts',on:false,sub:false,inh:false},
     ]},
   ],
   devices:[
@@ -1203,7 +1692,7 @@ function switchFlagPill(key,el){curPill=key;['commerce','devices','appmarket','p
 renderFlagGroups('commerce',null);
 
 // ── Tab navigation ──
-const TABS={org:'tab-org',feature:'tab-feature',contacts:'tab-contacts',linked:'tab-linked',custom:'tab-custom'};
+const TABS={org:'tab-org',feature:'tab-feature',contacts:'tab-contacts',linked:'tab-linked',custom:'tab-custom',commissions:'tab-commissions'};
 function switchTab(key,el){Object.values(TABS).forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});const t=document.getElementById(TABS[key]);if(t)t.style.display='';document.querySelectorAll('.primary-tab').forEach(e=>e.classList.remove('active'));if(el)el.classList.add('active');}
 
 // ── Role-based editing ──
@@ -1364,10 +1853,169 @@ function applyStyleChanges(){
   btn.style.background='#1a7a47';
   setTimeout(()=>{btn.textContent=orig;btn.style.background='#185FA5';},2000);
 }
+
+// ── COMMISSIONS CONFIGURATIONS ──
+const COMMISSION_MODES=['CreditcardMCA','DebitcardMCA','NonEEAcardMCA','CommercialcardsMCA','Manual key entry','Non-EMV'];
+const COMMISSION_FEES=['Chargeback fee'];
+
+let COMM_CONFIGS=[
+  {currency:'GBP',status:'Active',updated:'2026-06-24',
+    pricing:{CreditcardMCA:{pct:0.6,fixed:0.02,min:0},DebitcardMCA:{pct:0.6,fixed:0.02,min:0},NonEEAcardMCA:{pct:1,fixed:0,min:0},CommercialcardsMCA:{pct:1.3,fixed:0,min:0},'Manual key entry':{pct:0.2,fixed:0,min:0},'Non-EMV':{pct:0.35,fixed:0,min:0}},
+    fees:{'Chargeback fee':{pct:0,fixed:0,min:40}}},
+  {currency:'EUR',status:'Active',updated:'2026-05-03',
+    pricing:{CreditcardMCA:{pct:0.55,fixed:0.02,min:0},DebitcardMCA:{pct:0.55,fixed:0.02,min:0},NonEEAcardMCA:{pct:0.95,fixed:0,min:0},CommercialcardsMCA:{pct:1.25,fixed:0,min:0},'Manual key entry':{pct:0.2,fixed:0,min:0},'Non-EMV':{pct:0.3,fixed:0,min:0}},
+    fees:{'Chargeback fee':{pct:0,fixed:0,min:35}}},
+  {currency:'USD',status:'Inactive',updated:'2026-04-11',
+    pricing:{CreditcardMCA:{pct:0.65,fixed:0.03,min:0},DebitcardMCA:{pct:0.65,fixed:0.03,min:0},NonEEAcardMCA:{pct:1.1,fixed:0,min:0},CommercialcardsMCA:{pct:1.4,fixed:0,min:0},'Manual key entry':{pct:0.25,fixed:0,min:0},'Non-EMV':{pct:0.4,fixed:0,min:0}},
+    fees:{'Chargeback fee':{pct:0,fixed:0,min:45}}},
+];
+
+function renderCommTable(filter){
+  const body=document.getElementById('commTableBody');
+  if(!body)return;
+  const q=(filter||'').toLowerCase().trim();
+  const rows=COMM_CONFIGS.filter(c=>!q||c.currency.toLowerCase().includes(q));
+  body.innerHTML=rows.map(c=>{
+    const modesOn=Object.keys(c.pricing).length;
+    const feesOn=Object.keys(c.fees).length;
+    const statusChip=c.status==='Active'?'<span class="chip chip-g">Active</span>':'<span class="chip chip-gr">Inactive</span>';
+    return `<tr style="cursor:pointer" onclick="openCommissionPanel('${c.currency}')">
+      <td><strong>${c.currency}</strong></td>
+      <td>${modesOn} payment mode${modesOn!==1?'s':''}</td>
+      <td>${feesOn} fee${feesOn!==1?'s':''}</td>
+      <td>${statusChip}</td>
+      <td>${c.updated}</td>
+    </tr>`;
+  }).join('')||`<tr><td colspan="5" style="padding:0;border:none;">
+      <div class="no-results-content">
+        <div class="no-results-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+            <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+            <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="no-results-title">No Configuration found</p>
+        <p class="no-results-sub">No Configuration matches your current search or filters. Try different values or adjust the filters.</p>
+      </div>
+    </td></tr>`;
+  const countEl=document.getElementById('commCount');
+  if(countEl)countEl.textContent=`${rows.length} of ${COMM_CONFIGS.length} records`;
+}
+function filterCommissions(v){renderCommTable(v);}
+function setCommissionsView(mode){
+  const def=document.getElementById('commLvDefault');
+  const empty=document.getElementById('commLvEmpty');
+  const btnDef=document.getElementById('commVtbDefault');
+  const btnEmp=document.getElementById('commVtbEmpty');
+  if(mode==='empty'){
+    def.style.display='none';
+    empty.classList.add('active');
+    btnDef.classList.remove('vtb-active');
+    btnEmp.classList.add('vtb-active');
+  }else{
+    def.style.display='';
+    empty.classList.remove('active');
+    btnDef.classList.add('vtb-active');
+    btnEmp.classList.remove('vtb-active');
+  }
+}
+renderCommTable();
+
+let currentCommCurrency=null;
+function openCommissionPanel(currency){
+  const c=COMM_CONFIGS.find(x=>x.currency===currency);
+  if(!c)return;
+  currentCommCurrency=currency;
+  document.getElementById('cpTitle').textContent=c.currency;
+  const statusBadge=c.status==='Active'
+    ?'<span class="badge badge-green"><span class="dot dot-green"></span>Active</span>'
+    :'<span class="badge" style="background:#fde8e8;color:#c0392b">Inactive</span>';
+  let html=`<div style="margin-bottom:16px;display:flex;align-items:center;gap:10px">${statusBadge}<span style="font-size:12px;color:#888">Last updated ${c.updated}</span></div>`;
+  html+=`<div class="cp-section">Pricing plan</div>`;
+  html+=`<div class="tbl-wrap"><table class="dt"><thead><tr><th>Payment mode</th><th>%</th><th>Fixed</th><th>Min</th></tr></thead><tbody>`;
+  Object.entries(c.pricing).forEach(([mode,v])=>{html+=`<tr><td>${mode}</td><td>${v.pct}</td><td>${v.fixed}</td><td>${v.min}</td></tr>`;});
+  html+=`</tbody></table></div>`;
+  html+=`<div class="cp-section">Additional fees</div>`;
+  html+=`<div class="tbl-wrap"><table class="dt"><thead><tr><th>Fee</th><th>%</th><th>Fixed</th><th>Min</th></tr></thead><tbody>`;
+  Object.entries(c.fees).forEach(([fee,v])=>{html+=`<tr><td>${fee}</td><td>${v.pct}</td><td>${v.fixed}</td><td>${v.min}</td></tr>`;});
+  html+=`</tbody></table></div>`;
+  document.getElementById('cpBody').innerHTML=html;
+  document.getElementById('commPanelBackdrop').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCommissionPanel(){
+  document.getElementById('commPanelBackdrop').classList.remove('open');
+  document.body.style.overflow='';
+}
+function editFromPanel(){
+  const currency=currentCommCurrency;
+  closeCommissionPanel();
+  openCommissionModal('edit',currency);
+}
+
+let editingCommCurrency=null;
+function buildCommRows(tbodyId,names,dataKeyGetter){
+  const tbody=document.getElementById(tbodyId);
+  tbody.innerHTML=names.map(name=>{
+    const v=dataKeyGetter(name)||{pct:0,fixed:0,min:0};
+    return `<tr><td>${name}</td>
+      <td><input class="f-edit cm-num" type="number" step="0.01" value="${v.pct}" data-name="${name}" data-field="pct"></td>
+      <td><input class="f-edit cm-num" type="number" step="0.01" value="${v.fixed}" data-name="${name}" data-field="fixed"></td>
+      <td><input class="f-edit cm-num" type="number" step="0.01" value="${v.min}" data-name="${name}" data-field="min"></td>
+    </tr>`;
+  }).join('');
+}
+function openCommissionModal(mode,currency){
+  const isEdit=mode==='edit';
+  editingCommCurrency=isEdit?currency:null;
+  document.getElementById('cmTitle').textContent=isEdit?`Edit commission configuration — ${currency}`:'Add commission configuration';
+  const c=isEdit?COMM_CONFIGS.find(x=>x.currency===currency):null;
+  const currencySelect=document.getElementById('cmCurrency');
+  currencySelect.value=c?c.currency:currencySelect.options[0].value;
+  currencySelect.disabled=isEdit;
+  buildCommRows('cmPricingBody',COMMISSION_MODES,name=>c&&c.pricing[name]);
+  buildCommRows('cmFeesBody',COMMISSION_FEES,name=>c&&c.fees[name]);
+  document.getElementById('commModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCommissionModal(){
+  document.getElementById('commModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function readCommRows(tbodyId){
+  const out={};
+  document.querySelectorAll('#'+tbodyId+' tr').forEach(tr=>{
+    const inputs=tr.querySelectorAll('input');
+    const name=inputs[0].dataset.name;
+    out[name]={
+      pct:parseFloat(inputs[0].value)||0,
+      fixed:parseFloat(inputs[1].value)||0,
+      min:parseFloat(inputs[2].value)||0,
+    };
+  });
+  return out;
+}
+function saveCommissionConfig(){
+  const currency=document.getElementById('cmCurrency').value;
+  const pricing=readCommRows('cmPricingBody');
+  const fees=readCommRows('cmFeesBody');
+  const today=new Date().toISOString().slice(0,10);
+  const existing=COMM_CONFIGS.find(c=>c.currency===currency);
+  if(existing){
+    existing.pricing=pricing;existing.fees=fees;existing.updated=today;
+  } else {
+    COMM_CONFIGS.push({currency,status:'Active',updated:today,pricing,fees});
+  }
+  closeCommissionModal();
+  renderCommTable(document.getElementById('commSearch').value);
+}
 </script>
 
 
 
 
-</body>
-</html>
+
+
+</body></html>
