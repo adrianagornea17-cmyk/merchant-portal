@@ -302,6 +302,7 @@ body.mode-mobile #desktopView { display: none; }
   box-shadow: 0 12px 32px rgba(0,0,0,0.28);
 }
 .view-toggle-label { font-size: 10.5px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; }
+.view-toggle-sep { width: 1px; height: 18px; background: #334155; }
 .view-toggle-btn {
   border: none; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;
   padding: 7px 16px; border-radius: 999px; background: transparent; color: #cbd5e1;
@@ -560,6 +561,10 @@ body.mode-mobile #desktopView { display: none; }
   <span class="view-toggle-label">View</span>
   <button class="view-toggle-btn active" id="viewBtnDesktop" onclick="setViewMode('desktop')">Desktop</button>
   <button class="view-toggle-btn" id="viewBtnMobile" onclick="setViewMode('mobile')">Mobile</button>
+  <span class="view-toggle-sep"></span>
+  <span class="view-toggle-label">Data</span>
+  <button class="view-toggle-btn active" id="dataBtnDefault" onclick="setDataMode('default')">Default</button>
+  <button class="view-toggle-btn" id="dataBtnEmpty" onclick="setDataMode('empty')">Empty state</button>
 </div>
 
 <!-- ─────────────────────────────────────────
@@ -621,6 +626,14 @@ body.mode-mobile #desktopView { display: none; }
   const STATUS_LABEL = { active:'Active', needs:'Needs Activation' };
 
   const state = { deviceId:'', org:'', os:'all', status:'all' };
+  let forceEmpty = false;
+
+  function setDataMode(mode) {
+    forceEmpty = mode === 'empty';
+    document.getElementById('dataBtnDefault').classList.toggle('active', mode === 'default');
+    document.getElementById('dataBtnEmpty').classList.toggle('active', mode === 'empty');
+    render();
+  }
 
   function onFilterChange(key, value) {
     state[key] = value;
@@ -633,6 +646,7 @@ body.mode-mobile #desktopView { display: none; }
   }
 
   function getFiltered() {
+    if (forceEmpty) return [];
     const q = state.deviceId.toLowerCase().trim();
     const oq = state.org.toLowerCase().trim();
     return DEVICES.filter(d =>
