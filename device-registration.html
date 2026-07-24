@@ -251,11 +251,17 @@ table.dt tbody tr:hover td { background: var(--bg); }
 .swap-btn:hover { border-color: #9ca3af; background: var(--hover-bg); }
 
 /* ─── NO RESULTS EMPTY STATE ─── */
-.no-results-content { display: flex; flex-direction: column; align-items: center; padding: 60px 24px; }
+.no-results-wrap { display: flex; align-items: center; justify-content: center; padding: 40px 24px; background: var(--bg); }
+.no-results-card {
+  background: #fff; border: 1.5px solid var(--border); border-radius: 16px;
+  padding: 36px 40px; max-width: 420px; width: 100%; text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex; flex-direction: column; align-items: center;
+}
 .no-results-icon { width: 56px; height: 56px; background: #fef3c7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
 .no-results-icon svg { width: 26px; height: 26px; stroke: #d97706; stroke-width: 2; fill: none; }
-.no-results-title { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 8px; }
-.no-results-sub { font-size: 14px; color: #6b7280; text-align: center; max-width: 380px; line-height: 1.65; margin: 0; }
+.no-results-title { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+.no-results-sub { font-size: 13.5px; color: var(--text-3); line-height: 1.6; margin: 0; }
 
 /* ─── MOBILE VIEW ─── */
 #mobileView { display: none; }
@@ -287,7 +293,6 @@ body.mode-mobile #desktopView { display: none; }
 .mobile-card .m-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .mobile-card .m-foot-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-.mobile-empty { background: #fff; border: 1.5px solid var(--border); border-radius: 14px; }
 
 /* ─── VIEW TOGGLE (mockup preview aid) ─── */
 .view-toggle {
@@ -639,17 +644,19 @@ body.mode-mobile #desktopView { display: none; }
   }
 
   const EMPTY_STATE_HTML = `
-    <div class="no-results-content">
-      <div class="no-results-icon">
-        <svg viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
-          <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
-          <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
-        </svg>
+    <div class="no-results-wrap">
+      <div class="no-results-card">
+        <div class="no-results-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+            <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+            <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="no-results-title">No Device found</p>
+        <p class="no-results-sub">No Device matches your current search or filters. Try a different values or adjust the filters.</p>
       </div>
-      <p class="no-results-title">No Device found</p>
-      <p class="no-results-sub">No Device matches your current search or filters. Try a different values or adjust the filters.</p>
     </div>`;
 
   function render() {
@@ -687,7 +694,7 @@ body.mode-mobile #desktopView { display: none; }
           <button class="swap-btn" onclick="openSwapModal('${d.id}')">Swap</button>
         </div>
       </div>`).join('')
-      : `<div class="mobile-empty">${EMPTY_STATE_HTML}</div>`;
+      : EMPTY_STATE_HTML;
 
     const label = `Showing ${filtered.length} device${filtered.length === 1 ? '' : 's'}`;
     document.getElementById('deviceCountLabel').textContent = label;
