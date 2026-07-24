@@ -280,18 +280,28 @@ table.fee-tbl td { padding: 8px 14px; border-bottom: 1px solid #f1f3f5; backgrou
 table.fee-tbl tr:last-child td { border-bottom: none; }
 table.fee-tbl td input { width: 100%; max-width: 110px; }
 
-/* ─── FULL-PAGE CREATE MODAL ─── */
-#countryCreateOverlay { display: none; position: fixed; inset: 0; z-index: 300; background: var(--bg); flex-direction: column; }
-.cc-topbar { flex-shrink: 0; padding: 16px 28px; }
-.cc-topbar button { background: none; border: none; cursor: pointer; color: #0f172a; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; font-family: inherit; }
+/* ─── FULL-MODAL CREATE VIEW ─── */
+#countryCreateOverlay { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(15,23,42,0.45); align-items: center; justify-content: center; padding: 24px; }
+.cc-modal { width: 960px; max-width: 100%; height: 92vh; max-height: 92vh; background: var(--bg); border-radius: 16px; box-shadow: 0 24px 64px rgba(0,0,0,0.28); display: flex; flex-direction: column; overflow: hidden; }
+.cc-topbar { flex-shrink: 0; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1.5px solid var(--border); background: #fff; }
+.cc-topbar-title { font-size: 15px; font-weight: 700; color: #0f172a; }
+.cc-topbar button { background: none; border: none; cursor: pointer; color: #0f172a; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; font-family: inherit; }
+.cc-topbar button:hover { background: #f1f5f9; }
 .cc-topbar svg { width: 18px; height: 18px; stroke: #0f172a; stroke-width: 2.2; }
-.cc-body { flex: 1; overflow-y: auto; padding: 0 28px 28px; }
+.cc-body { flex: 1; overflow-y: auto; padding: 24px 28px; }
 .cc-inner { max-width: 900px; margin: 0 auto; }
 .cc-card { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
 .cc-section { padding: 20px 24px; border-bottom: 1.5px solid #f1f3f5; }
 .cc-section:last-child { border-bottom: none; }
 .cc-section-title { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 14px; }
-.cc-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; }
+.cc-footer { flex-shrink: 0; display: flex; justify-content: flex-end; gap: 8px; padding: 14px 20px; border-top: 1.5px solid var(--border); background: #fff; }
+
+/* ─── NO RESULTS EMPTY STATE ─── */
+.no-results-content { display: flex; flex-direction: column; align-items: center; padding: 60px 24px; }
+.no-results-icon { width: 56px; height: 56px; background: #fef3c7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+.no-results-icon svg { width: 26px; height: 26px; stroke: #d97706; stroke-width: 2; fill: none; }
+.no-results-title { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 8px; }
+.no-results-sub { font-size: 14px; color: #6b7280; text-align: center; max-width: 380px; line-height: 1.65; margin: 0; }
 </style>
 </head>
 <body>
@@ -576,12 +586,13 @@ table.fee-tbl td input { width: 100%; max-width: 110px; }
   </div>
 </div>
 
-<!-- ═══ MERCHANT COUNTRY — CREATE (FULL PAGE) ═══ -->
-<div id="countryCreateOverlay">
+<!-- ═══ MERCHANT COUNTRY — CREATE (FULL MODAL) ═══ -->
+<div id="countryCreateOverlay" onclick="if(event.target===this)closeCountryCreateModal()">
+  <div class="cc-modal">
   <div class="cc-topbar">
-    <button onclick="closeCountryCreateModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-      Back
+    <span class="cc-topbar-title">Create merchant country configuration</span>
+    <button onclick="closeCountryCreateModal()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
   <div class="cc-body">
@@ -668,13 +679,13 @@ table.fee-tbl td input { width: 100%; max-width: 110px; }
           </div>
         </div>
 
-        <div class="cc-footer">
-          <button class="btn btn-secondary" onclick="closeCountryCreateModal()">Cancel</button>
-          <button class="btn btn-primary" onclick="createCountrySubmit()">Create</button>
-        </div>
-
       </div>
     </div>
+  </div>
+  <div class="cc-footer">
+    <button class="btn btn-secondary" onclick="closeCountryCreateModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="createCountrySubmit()">Create</button>
+  </div>
   </div>
 </div>
 
@@ -776,7 +787,20 @@ function renderCountryTable(){
     return `<tr onclick="openCountryPanel(${idx})">
       <td>${r.country}</td><td>${r.code}</td><td>${r.start}</td><td>${r.end||''}</td><td>${r.editedBy}</td><td>${r.lastEdited}</td>
     </tr>`;
-  }).join('')||'<tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px">No results found.</td></tr>';
+  }).join('')||`<tr><td colspan="6" style="padding:0;border:none;">
+      <div class="no-results-content">
+        <div class="no-results-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+            <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+            <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="no-results-title">No Country Configuration found</p>
+        <p class="no-results-sub">No Country Configuration match your current search or filters. Try a different name or adjust the organization filter.</p>
+      </div>
+    </td></tr>`;
   const totalPages=Math.max(1,Math.ceil(mcFiltered.length/mcPageSize));
   if(mcPage>totalPages)mcPage=totalPages;
   document.getElementById('mcPageLabel').textContent=`Page ${mcPage} of ${totalPages}`;
@@ -882,7 +906,7 @@ function saveCountryPanel(btn){
   },1400);
 }
 
-// ── CREATE (FULL PAGE) ──
+// ── CREATE (FULL MODAL) ──
 function openCountryCreateModal(){
   const sel=document.getElementById('ccCode');
   sel.innerHTML='<option value="">— Select —</option>'+Object.keys(COUNTRY_NAMES).map(c=>`<option value="${c}">${c} — ${COUNTRY_NAMES[c]}</option>`).join('');
