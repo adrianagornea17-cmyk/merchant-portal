@@ -155,6 +155,30 @@ table.dt tr:hover td{background:#fafbfc}
 table.dt td a{color:#185FA5;text-decoration:none;font-weight:500}
 table.dt td a:hover{text-decoration:underline}
 .tbl-foot{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-top:1.5px solid #dde1e8;background:#f8f9fb;font-size:12px;color:#888}
+
+/* ── No-results (search/filter empty) ── */
+.no-results-content{display:flex;flex-direction:column;align-items:center;padding:60px 24px}
+.no-results-icon{width:56px;height:56px;background:#fef3c7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.no-results-icon svg{width:26px;height:26px;stroke:#d97706;stroke-width:2;fill:none}
+.no-results-title{font-size:18px;font-weight:700;color:#111827;margin-bottom:8px}
+.no-results-sub{font-size:14px;color:#6b7280;text-align:center;max-width:380px;line-height:1.65;margin:0}
+
+/* ── Empty state (no data yet) ── */
+.empty-state-wrap{display:none;align-items:center;justify-content:center;padding:32px 24px}
+.empty-state-wrap.active{display:flex}
+.empty-state-card{background:#fff;border:1.5px solid #dde1e8;border-radius:16px;padding:36px 40px;max-width:480px;width:100%;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.empty-state-icon{width:56px;height:56px;background:#e8f0fb;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.empty-state-icon svg{width:26px;height:26px;stroke:#1a4fa5;stroke-width:2;fill:none}
+.empty-state-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:8px}
+.empty-state-desc{font-size:13.5px;color:#6b7280;line-height:1.6}
+
+/* ── View toggle bar (prototype) ── */
+.view-toggle-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;background:#1e293b;border-radius:10px;padding:5px 10px 5px 14px;box-shadow:0 4px 20px rgba(0,0,0,.25);z-index:500;white-space:nowrap}
+.vtb-label{font-size:12px;font-weight:500;color:#94a3b8;margin-right:10px}
+.vtb-btn{padding:5px 12px;border-radius:6px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;background:none;color:#94a3b8;font-family:inherit;transition:background .1s,color .1s}
+.vtb-btn.vtb-active{background:#fff;color:#0f172a}
+.vtb-btn:not(.vtb-active):hover{color:#e2e8f0}
+
 .pager{display:flex;gap:3px}
 .pg{padding:3px 9px;border:1.5px solid #d4d8de;border-radius:6px;background:#fff;cursor:pointer;font-size:12px;color:#555}
 .pg:hover{background:#f5f6f8}
@@ -1098,6 +1122,7 @@ table.dt td a:hover{text-decoration:underline}
 
   <!-- ═══ TAB 6: COMMISSIONS CONFIGURATIONS ═══ -->
   <div id="tab-commissions" style="display:none">
+    <div id="commLvDefault">
     <div class="section-gap">
       <div class="tbl-section">
         <div class="tbl-hdr">
@@ -1143,6 +1168,25 @@ table.dt td a:hover{text-decoration:underline}
           <div class="tbl-foot"><span id="commCount">3 of 3 records</span><div class="pager"><button class="pg">‹</button><button class="pg active">1</button><button class="pg">›</button></div></div>
         </div>
       </div>
+    </div>
+    </div><!-- /commLvDefault -->
+
+    <!-- EMPTY STATE (no commission configurations exist yet) -->
+    <div class="empty-state-wrap" id="commLvEmpty">
+      <div class="empty-state-card">
+        <div class="empty-state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2.5"></circle><circle cx="15" cy="15" r="2.5"></circle><line x1="16" y1="8" x2="8" y2="16"></line></svg>
+        </div>
+        <div class="empty-state-title">Set up commission configurations</div>
+        <div class="empty-state-desc">Define commission rates, payment mode pricing, and additional fees for each currency this organization processes. Once a configuration is added, you can track its status and review the details here.</div>
+      </div>
+    </div><!-- /commLvEmpty -->
+
+    <!-- VIEW TOGGLE BAR (prototype only) -->
+    <div class="view-toggle-bar" id="commVtb">
+      <span class="vtb-label">VIEW</span>
+      <button class="vtb-btn vtb-active" id="commVtbDefault" onclick="setCommissionsView('default')">Default</button>
+      <button class="vtb-btn" id="commVtbEmpty" onclick="setCommissionsView('empty')">Empty state</button>
     </div>
   </div>
 
@@ -1843,11 +1887,41 @@ function renderCommTable(filter){
       <td>${statusChip}</td>
       <td>${c.updated}</td>
     </tr>`;
-  }).join('')||`<tr><td colspan="5" style="text-align:center;color:#aaa;padding:16px;font-size:13px">No commission configurations match your search.</td></tr>`;
+  }).join('')||`<tr><td colspan="5" style="padding:0;border:none;">
+      <div class="no-results-content">
+        <div class="no-results-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/>
+            <line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/>
+            <line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="no-results-title">No Configuration found</p>
+        <p class="no-results-sub">No Configuration matches your current search or filters. Try different values or adjust the filters.</p>
+      </div>
+    </td></tr>`;
   const countEl=document.getElementById('commCount');
   if(countEl)countEl.textContent=`${rows.length} of ${COMM_CONFIGS.length} records`;
 }
 function filterCommissions(v){renderCommTable(v);}
+function setCommissionsView(mode){
+  const def=document.getElementById('commLvDefault');
+  const empty=document.getElementById('commLvEmpty');
+  const btnDef=document.getElementById('commVtbDefault');
+  const btnEmp=document.getElementById('commVtbEmpty');
+  if(mode==='empty'){
+    def.style.display='none';
+    empty.classList.add('active');
+    btnDef.classList.remove('vtb-active');
+    btnEmp.classList.add('vtb-active');
+  }else{
+    def.style.display='';
+    empty.classList.remove('active');
+    btnDef.classList.add('vtb-active');
+    btnEmp.classList.remove('vtb-active');
+  }
+}
 renderCommTable();
 
 let currentCommCurrency=null;
