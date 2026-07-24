@@ -484,7 +484,7 @@ body.mode-mobile #desktopView { display: none; }
 
         <!-- ═══ DESKTOP VIEW ═══ -->
         <div id="desktopView">
-          <div class="tbl-wrap">
+          <div class="tbl-wrap" id="desktopTableWrap">
             <table class="dt">
               <thead>
                 <tr>
@@ -518,6 +518,19 @@ body.mode-mobile #desktopView { display: none; }
               <tbody id="dtBody"></tbody>
             </table>
           </div>
+
+          <!-- Empty state (preview aid): replaces the whole table, filters included -->
+          <div class="tbl-wrap" id="desktopEmptyState" style="display:none;">
+            <div class="no-results-wrap" style="padding:56px 24px;">
+              <div class="no-results-card">
+                <div class="no-results-icon">
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/><line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/><line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/></svg>
+                </div>
+                <p class="no-results-title">No Device found</p>
+                <p class="no-results-sub">No Device matches your current search or filters. Try a different values or adjust the filters.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- ═══ MOBILE VIEW ═══ -->
@@ -528,24 +541,37 @@ body.mode-mobile #desktopView { display: none; }
               <div class="m-count" id="mCountLabel">Showing 5 devices</div>
             </div>
 
-            <div class="mobile-filters">
-              <input type="text" id="mDeviceId" placeholder="Search by Device ID…" oninput="onFilterChange('deviceId', this.value)">
-              <input type="text" id="mOrg" placeholder="Search by Organisation…" oninput="onFilterChange('org', this.value)">
-              <div class="mobile-filter-row">
-                <select id="mOS" onchange="onFilterChange('os', this.value)">
-                  <option value="all">All OS</option>
-                  <option value="iOS">iOS</option>
-                  <option value="Android">Android</option>
-                </select>
-                <select id="mStatus" onchange="onFilterChange('status', this.value)">
-                  <option value="all">All statuses</option>
-                  <option value="active">Active</option>
-                  <option value="needs">Needs Activation</option>
-                </select>
+            <div id="mobileDefault">
+              <div class="mobile-filters">
+                <input type="text" id="mDeviceId" placeholder="Search by Device ID…" oninput="onFilterChange('deviceId', this.value)">
+                <input type="text" id="mOrg" placeholder="Search by Organisation…" oninput="onFilterChange('org', this.value)">
+                <div class="mobile-filter-row">
+                  <select id="mOS" onchange="onFilterChange('os', this.value)">
+                    <option value="all">All OS</option>
+                    <option value="iOS">iOS</option>
+                    <option value="Android">Android</option>
+                  </select>
+                  <select id="mStatus" onchange="onFilterChange('status', this.value)">
+                    <option value="all">All statuses</option>
+                    <option value="active">Active</option>
+                    <option value="needs">Needs Activation</option>
+                  </select>
+                </div>
               </div>
+
+              <div id="mList"></div>
             </div>
 
-            <div id="mList"></div>
+            <!-- Empty state (preview aid): replaces filters + list -->
+            <div class="no-results-wrap" id="mobileEmptyState" style="display:none;padding:16px 0;">
+              <div class="no-results-card">
+                <div class="no-results-icon">
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"/><line x1="8" y1="8" x2="14" y2="14" stroke-linecap="round"/><line x1="14" y1="8" x2="8" y2="14" stroke-linecap="round"/></svg>
+                </div>
+                <p class="no-results-title">No Device found</p>
+                <p class="no-results-sub">No Device matches your current search or filters. Try a different values or adjust the filters.</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -626,13 +652,26 @@ body.mode-mobile #desktopView { display: none; }
   const STATUS_LABEL = { active:'Active', needs:'Needs Activation' };
 
   const state = { deviceId:'', org:'', os:'all', status:'all' };
-  let forceEmpty = false;
 
+  // "Empty state" here is a standalone preview page (mockup aid) that replaces the
+  // whole table/filters — distinct from the "No Device found" message that appears
+  // inside the table when a real search/filter legitimately returns zero rows.
   function setDataMode(mode) {
-    forceEmpty = mode === 'empty';
-    document.getElementById('dataBtnDefault').classList.toggle('active', mode === 'default');
-    document.getElementById('dataBtnEmpty').classList.toggle('active', mode === 'empty');
-    render();
+    const isEmpty = mode === 'empty';
+    document.getElementById('dataBtnDefault').classList.toggle('active', !isEmpty);
+    document.getElementById('dataBtnEmpty').classList.toggle('active', isEmpty);
+
+    document.getElementById('desktopTableWrap').style.display = isEmpty ? 'none' : '';
+    document.getElementById('desktopEmptyState').style.display = isEmpty ? 'block' : 'none';
+    document.getElementById('mobileDefault').style.display = isEmpty ? 'none' : '';
+    document.getElementById('mobileEmptyState').style.display = isEmpty ? 'flex' : 'none';
+
+    if (isEmpty) {
+      document.getElementById('deviceCountLabel').textContent = 'Showing 0 devices';
+      document.getElementById('mCountLabel').textContent = 'Showing 0 devices';
+    } else {
+      render();
+    }
   }
 
   function onFilterChange(key, value) {
@@ -646,7 +685,6 @@ body.mode-mobile #desktopView { display: none; }
   }
 
   function getFiltered() {
-    if (forceEmpty) return [];
     const q = state.deviceId.toLowerCase().trim();
     const oq = state.org.toLowerCase().trim();
     return DEVICES.filter(d =>
