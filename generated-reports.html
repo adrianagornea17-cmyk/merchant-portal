@@ -240,13 +240,6 @@
 <div id="reportsScreen" class="page">
   <h2>Generated reports</h2>
 
-  <div class="filters-row">
-    <div class="chip">Created: 7/9/2026 — 7/23/2026 ▾</div>
-    <div class="chip">Organizations (+1) ▾</div>
-    <div class="chip">Report types ▾</div>
-    <div class="chip clear">Clear filters</div>
-  </div>
-
   <div class="total-line">Total: <b id="totalCount">58</b> reports</div>
 
   <div class="grid-toolbar">
@@ -266,6 +259,7 @@
         <col>
         <col style="width:130px">
         <col style="width:160px">
+        <col style="width:150px">
         <col style="width:96px">
       </colgroup>
       <thead>
@@ -307,6 +301,15 @@
               </span>
             </div>
           </th>
+          <th data-key="reportType">
+            <div class="th-label-row">
+              <span class="th-text">Report Type</span>
+              <span class="th-icons">
+                <button class="th-icon-btn th-sort" data-key="reportType" title="Sort"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
+                <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+              </span>
+            </div>
+          </th>
           <th class="col-actions">Actions</th>
         </tr>
         <tr class="filter-row">
@@ -321,16 +324,7 @@
               <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
             </div>
           </th>
-          <th>
-            <div class="filter-cell">
-              <div class="filter-pill">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-                <input class="filter-input" placeholder="Search" data-filter="reportName">
-                <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-              </div>
-              <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
-            </div>
-          </th>
+          <th></th>
           <th>
             <div class="filter-cell">
               <div class="filter-pill">
@@ -346,6 +340,16 @@
               <div class="filter-pill">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
                 <input class="filter-input" placeholder="Search" data-filter="organization">
+                <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+              </div>
+              <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
+            </div>
+          </th>
+          <th>
+            <div class="filter-cell">
+              <div class="filter-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                <input class="filter-input" placeholder="Search" data-filter="reportType">
                 <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
               </div>
               <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
@@ -459,22 +463,22 @@
 function rid(){ return "RPT-" + Math.floor(10000000 + Math.random()*89999999); }
 
 const REPORTS = [
-  { id:1, generatedOn:"7/23/2026, 22:51:41", reportName:"custom report__2026-06-28T00_00_00Z-2026-06-30T23_59_59Z__abf3", organization:"Parent", reportId: rid(), hasScheduler:false },
-  { id:2, generatedOn:"7/23/2026, 22:51:05", reportName:"custom report__2026-06-23T00_00_00Z-2026-06-27T23_59_59Z__1e92", organization:"Parent", reportId: rid(), hasScheduler:false },
-  { id:3, generatedOn:"7/23/2026, 22:49:41", reportName:"custom report__2026-06-18T00_00_00Z-2026-06-22T23_59_59Z__77ac", organization:"Parent", reportId: rid(), hasScheduler:false },
-  { id:4, generatedOn:"7/23/2026, 22:48:08", reportName:"custom report__2026-06-13T00_00_00Z-2026-06-17T23_59_59Z__b4d1", organization:"Parent", reportId: rid(), hasScheduler:false },
-  { id:5, generatedOn:"7/23/2026, 22:46:10", reportName:"custom report__2026-06-07T00_00_00Z-2026-06-12T23_59_59Z__90fe", organization:"Parent", reportId: rid(), hasScheduler:false },
-  { id:6, generatedOn:"7/23/2026, 22:45:07", reportName:"custom report__2026-06-01T00_00_00Z-2026-06-06T23_59_59Z__2c31", organization:"Parent", reportId: rid(), hasScheduler:false },
-  { id:7, generatedOn:"7/23/2026, 22:33:13", reportName:"custom report__2026-07-01T00_00_00Z-2026-07-23T23_59_59Z__2a88", organization:"Parent", reportId: rid(), hasScheduler:false },
-  { id:8, generatedOn:"7/23/2026, 15:37:00", reportName:"PIV test 20230323 6__2026-07-22T04_00_00Z-2026-07-23T04_00_00Z__9f10", organization:"Parent", reportId: rid(), hasScheduler:true },
-  { id:9, generatedOn:"7/23/2026, 12:05:02", reportName:"Org filter Only__2026-07-22T11_59_00Z-2026-07-23T11_59_00Z__bc44", organization:"Parent", reportId: rid(), hasScheduler:true },
-  { id:10, generatedOn:"7/23/2026, 10:43:01", reportName:"just org__2026-07-22T10_41_00Z-2026-07-23T10_41_00Z__5f45acb2", organization:"Parent", reportId: rid(), hasScheduler:true },
+  { id:1, generatedOn:"7/23/2026, 22:51:41", reportName:"custom report__2026-06-28T00_00_00Z-2026-06-30T23_59_59Z__abf3", organization:"Parent", reportType:"Custom Report", reportId: rid(), hasScheduler:false },
+  { id:2, generatedOn:"7/23/2026, 22:51:05", reportName:"custom report__2026-06-23T00_00_00Z-2026-06-27T23_59_59Z__1e92", organization:"Parent", reportType:"Custom Report", reportId: rid(), hasScheduler:false },
+  { id:3, generatedOn:"7/23/2026, 22:49:41", reportName:"custom report__2026-06-18T00_00_00Z-2026-06-22T23_59_59Z__77ac", organization:"Parent", reportType:"Custom Report", reportId: rid(), hasScheduler:false },
+  { id:4, generatedOn:"7/23/2026, 22:48:08", reportName:"custom report__2026-06-13T00_00_00Z-2026-06-17T23_59_59Z__b4d1", organization:"Parent", reportType:"Custom Report", reportId: rid(), hasScheduler:false },
+  { id:5, generatedOn:"7/23/2026, 22:46:10", reportName:"custom report__2026-06-07T00_00_00Z-2026-06-12T23_59_59Z__90fe", organization:"Parent", reportType:"Custom Report", reportId: rid(), hasScheduler:false },
+  { id:6, generatedOn:"7/23/2026, 22:45:07", reportName:"custom report__2026-06-01T00_00_00Z-2026-06-06T23_59_59Z__2c31", organization:"Parent", reportType:"Custom Report", reportId: rid(), hasScheduler:false },
+  { id:7, generatedOn:"7/23/2026, 22:33:13", reportName:"custom report__2026-07-01T00_00_00Z-2026-07-23T23_59_59Z__2a88", organization:"Parent", reportType:"Custom Report", reportId: rid(), hasScheduler:false },
+  { id:8, generatedOn:"7/23/2026, 15:37:00", reportName:"PIV test 20230323 6__2026-07-22T04_00_00Z-2026-07-23T04_00_00Z__9f10", organization:"Parent", reportType:"Transaction Report - Full", reportId: rid(), hasScheduler:true },
+  { id:9, generatedOn:"7/23/2026, 12:05:02", reportName:"Org filter Only__2026-07-22T11_59_00Z-2026-07-23T11_59_00Z__bc44", organization:"Parent", reportType:"Transaction Report - Full", reportId: rid(), hasScheduler:true },
+  { id:10, generatedOn:"7/23/2026, 10:43:01", reportName:"just org__2026-07-22T10_41_00Z-2026-07-23T10_41_00Z__5f45acb2", organization:"Parent", reportType:"Transaction Report - Full", reportId: rid(), hasScheduler:true },
 ];
 
 let sortKey = "generatedOn";
 let sortDir = "asc"; // matches the ascending arrow shown in the original screenshot
 const selected = new Set();
-const filters = { generatedOn:"", reportName:"", reportId:"", organization:"" };
+const filters = { generatedOn:"", reportId:"", organization:"", reportType:"" };
 
 const tbody = document.getElementById("tbody");
 const headerCheck = document.getElementById("headerCheck");
@@ -487,9 +491,9 @@ const REDIRECT_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 function getFiltered(){
   return REPORTS.filter(r =>
     r.generatedOn.toLowerCase().includes(filters.generatedOn.toLowerCase()) &&
-    r.reportName.toLowerCase().includes(filters.reportName.toLowerCase()) &&
     r.reportId.toLowerCase().includes(filters.reportId.toLowerCase()) &&
-    r.organization.toLowerCase().includes(filters.organization.toLowerCase())
+    r.organization.toLowerCase().includes(filters.organization.toLowerCase()) &&
+    r.reportType.toLowerCase().includes(filters.reportType.toLowerCase())
   );
 }
 
@@ -510,7 +514,7 @@ function render(){
   tbody.innerHTML = "";
 
   if(rows.length === 0){
-    tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No reports match your filters.</td></tr>`;
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No reports match your filters.</td></tr>`;
   }
 
   rows.forEach(r=>{
@@ -534,6 +538,7 @@ function render(){
       <td class="cell-name" title="${r.reportName}">${r.reportName}</td>
       <td class="reportid">${r.reportId}</td>
       <td>${r.organization}</td>
+      <td>${r.reportType}</td>
       <td class="col-actions">${actionsHtml}</td>
     `;
     tbody.appendChild(tr);
