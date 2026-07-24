@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Generated Reports — Mockup</title>
+<style>
+  :root{
+    --blue: #1656c9;
+    --blue-dark: #0f3f96;
+    --ink: #1a1f24;
+    --muted: #6b7280;
+    --border: #e2e4e8;
+    --header-bg: #eceef1;
+    --page-bg: #f2f3f5;
+    --card-bg: #ffffff;
+    --teal-1: #0b3a3d;
+    --teal-2: #1f9c86;
+    --row-selected: #eaf1ff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--page-bg);
+    color: var(--ink);
+  }
+  a{color:var(--blue);}
+
+  /* ---------- top nav ---------- */
+  .topbar{
+    background: linear-gradient(120deg, var(--teal-1) 0%, var(--teal-1) 35%, var(--teal-2) 100%);
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .topbar::after{
+    content:"";
+    position:absolute; right:-60px; top:-120px;
+    width:420px; height:420px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.10), rgba(255,255,255,0) 60%);
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 28px; position:relative; z-index:2;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.3px;}
+  .brand-dots{display:inline-flex; gap:2px;}
+  .brand-dots span{width:5px;height:5px;border-radius:50%;background:#fff;display:inline-block;}
+  .nav-links{display:flex; gap:32px; font-size:14px; font-weight:600;}
+  .nav-links span{opacity:.9; cursor:default;}
+  .avatar{
+    width:34px;height:34px;border-radius:50%;background:#0b0f10;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;
+  }
+  .hero{
+    padding: 6px 28px 40px; position:relative; z-index:2;
+    display:flex; align-items:center; gap:16px;
+  }
+  .hero-icon{
+    width:48px;height:48px; border:2px solid #fff; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; font-size:20px;
+  }
+  .hero h1{ margin:0; font-size:30px; font-weight:800;}
+
+  /* ---------- page shell ---------- */
+  .page{ max-width:1300px; margin:0 auto; padding:22px 28px 60px; }
+  .breadcrumb{
+    font-size:13px; color:var(--blue); cursor:pointer; margin-bottom:10px; display:none;
+    align-items:center; gap:6px; font-weight:600;
+  }
+  .breadcrumb.show{display:inline-flex;}
+  .page h2{ font-size:20px; margin: 4px 0 14px; }
+
+  .filters-row{ display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .chip{
+    border:1px solid var(--border); background:#fff; border-radius:20px;
+    padding:8px 14px; font-size:13px; color:#333; cursor:default; display:flex; align-items:center; gap:6px;
+  }
+  .chip.clear{ color:var(--blue); border-color:var(--border); font-weight:600; }
+  .total-line{ font-size:13px; margin-bottom:10px; color:var(--ink); }
+  .total-line b{font-weight:700;}
+
+  /* ---------- grid toolbar (top of table) ---------- */
+  .grid-toolbar{
+    display:flex; align-items:center; justify-content:flex-end;
+    background:#fff; border:1px solid var(--border); border-bottom:none;
+    border-radius:8px 8px 0 0; padding:10px 14px; min-height:24px;
+  }
+  .grid-toolbar .left{ display:flex; align-items:center; gap:12px; }
+  .selection-count{ font-size:13px; color:var(--muted); font-weight:600; }
+  .btn{
+    border:none; border-radius:6px; padding:9px 16px; font-size:13.5px; font-weight:600;
+    cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{ background:var(--blue); color:#fff; }
+  .btn-primary:hover{ background:var(--blue-dark); }
+  .btn-primary[disabled]{ background:#c9d3e6; cursor:not-allowed; }
+  .btn-ghost{
+    background:#fff; color:var(--ink); border:1px solid var(--border);
+  }
+  .btn-ghost:hover{ background:#f5f6f8; }
+
+  /* ---------- table ---------- */
+  .grid-wrap{
+    background:#fff; border:1px solid var(--border); border-radius:0 0 8px 8px; overflow:hidden;
+  }
+  table{ width:100%; table-layout:fixed; border-collapse:collapse; font-size:13.5px; }
+  thead tr.header-row th{
+    background:var(--header-bg); text-align:left; padding:11px 12px;
+    font-weight:700; color:#222; border-bottom:1px solid var(--border);
+    white-space:nowrap; position:relative;
+  }
+  .th-label-row{ display:flex; align-items:center; gap:6px; }
+  .th-label-row .th-text{ font-weight:700; }
+  .th-icons{ display:flex; align-items:center; gap:4px; }
+  .th-icon-btn{
+    border:none; background:none; padding:2px; cursor:pointer; color:#6b7280;
+    display:flex; align-items:center; justify-content:center; border-radius:4px;
+  }
+  .th-icon-btn:hover{ background:#dfe2e7; color:var(--ink); }
+  .th-icon-btn svg{ width:13px; height:13px; }
+  thead tr.filter-row th{
+    background:#fff; padding:8px 10px; border-bottom:1px solid var(--border);
+  }
+  .filter-cell{ display:flex; align-items:center; gap:6px; }
+  .filter-pill{
+    flex:1; display:flex; align-items:center; gap:6px;
+    border:1px solid var(--border); border-radius:16px; padding:5px 10px; background:#fff; min-width:0;
+  }
+  .filter-pill svg{ width:13px; height:13px; color:#9aa1ab; flex-shrink:0; }
+  .filter-input{
+    flex:1; border:none; outline:none; font-size:12.5px; font-family:inherit; background:transparent; min-width:0;
+  }
+  .filter-pill:focus-within{ border-color:var(--blue); box-shadow:0 0 0 2px rgba(22,86,201,.12); }
+  .filter-caret{ color:#9aa1ab; flex-shrink:0; cursor:pointer; }
+  .filter-caret svg{ width:11px; height:11px; }
+  .filter-funnel{
+    width:26px; height:26px; flex-shrink:0; border:1px solid var(--border); border-radius:6px;
+    background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#6b7280;
+  }
+  .filter-funnel:hover{ background:#f3f4f6; color:var(--blue); }
+  .filter-funnel svg{ width:13px; height:13px; }
+  tbody td{ padding:11px 12px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr.selected{ background:var(--row-selected); }
+  tbody tr:hover:not(.selected){ background:#fafbfc; }
+  .cell-name{ max-width:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .reportid{ font-variant-numeric:tabular-nums; color:#333; }
+  th.col-check, td.col-check{ width:40px; }
+  th.col-actions, td.col-actions{ text-align:left; padding-left:12px; }
+
+  input[type="checkbox"]{ width:15px; height:15px; accent-color:var(--blue); cursor:pointer; }
+
+  /* action icon buttons + tooltip */
+  .action-icons{ display:flex; gap:6px; align-items:center; }
+  .icon-btn{
+    position:relative; width:30px; height:30px; border-radius:6px; border:1px solid transparent;
+    background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#3a4048;
+  }
+  .icon-btn:hover{ background:#eef1f5; color:var(--blue); }
+  .icon-btn .tip{
+    visibility:hidden; opacity:0; transition:opacity .12s ease;
+    position:absolute; bottom:calc(100% + 7px); left:50%; transform:translateX(-50%);
+    background:#1a1f24; color:#fff; font-size:11.5px; font-weight:500; padding:5px 9px; border-radius:5px;
+    white-space:nowrap; z-index:5; pointer-events:none;
+  }
+  .icon-btn .tip::after{
+    content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:5px solid transparent; border-top-color:#1a1f24;
+  }
+  .icon-btn:hover .tip{ visibility:visible; opacity:1; }
+  .icon-btn svg{ width:16px; height:16px; }
+  .no-schedule-slot{ width:30px; height:30px; }
+
+  .empty-row td{ text-align:center; color:var(--muted); padding:30px; }
+
+  footer{
+    background:#0b0f10; color:#c7cbd1; font-size:12.5px;
+    display:flex; justify-content:space-between; padding:16px 28px; margin-top:40px;
+  }
+  footer a{ color:#c7cbd1; margin-left:20px; text-decoration:none; }
+
+  /* ---------- Report Scheduler screen ---------- */
+  #schedulerScreen{ display:none; }
+  .sched-layout{ display:flex; }
+  .sched-main{ flex:1; padding: 22px 28px 60px; min-width:0; }
+  .side-panel{
+    width:420px; background:#fff; border-left:1px solid var(--border);
+    box-shadow:-6px 0 18px rgba(0,0,0,0.06); min-height:100vh; padding:22px 26px;
+    display:none;
+  }
+  .side-panel.open{ display:block; animation:slidein .18s ease; }
+  @keyframes slidein{ from{ transform:translateX(24px); opacity:0;} to{ transform:translateX(0); opacity:1;} }
+  .side-panel h3{ margin:0 0 18px; font-size:19px; }
+  .panel-topline{ display:flex; align-items:center; justify-content:space-between; }
+  .panel-close{ border:none; background:none; cursor:pointer; font-size:18px; color:#333; width:28px; height:28px; border-radius:50%; }
+  .panel-close:hover{ background:#f0f1f3; }
+  .field-label{ font-size:12px; color:var(--muted); font-weight:600; margin-bottom:6px; display:block; margin-top:18px; }
+  .field-input{
+    width:100%; border:1px solid var(--border); border-radius:6px; padding:9px 10px; font-size:13.5px;
+    font-family:inherit;
+  }
+  .filter-chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .filter-chip{
+    display:flex; align-items:center; gap:8px; border:1px solid var(--border); border-radius:18px;
+    padding:6px 10px; font-size:12.5px; background:#fff;
+  }
+  .filter-chip button{ border:none; background:none; cursor:pointer; color:#888; font-size:12px; }
+  .add-filter-btn{
+    margin-top:12px; border:1px dashed var(--border); background:#fff; border-radius:6px;
+    padding:8px 14px; font-size:13px; color:var(--blue); font-weight:600; cursor:pointer;
+  }
+  .info-box{
+    background:#eef4ff; border:1px solid #cfe0fb; border-radius:8px; padding:12px 14px;
+    font-size:12.5px; line-height:1.5; color:#1c2a3d; margin-top:18px;
+  }
+  .info-box b{ font-weight:700; }
+  .two-col{ display:flex; gap:14px; }
+  .two-col > div{ flex:1; }
+  .section-title{ font-size:14px; font-weight:700; margin-top:22px; }
+
+  .sched-table thead th{ background:var(--header-bg); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="nav-row">
+    <div class="brand"><span class="brand-dots"><span></span><span></span><span></span><span></span></span> verifone</div>
+    <div class="nav-links"><span>Commerce</span><span>Administration</span><span>App Marketplace</span></div>
+    <div class="avatar">AG</div>
+  </div>
+  <div class="hero">
+    <div class="hero-icon">🛒</div>
+    <h1 id="heroTitle">Commerce</h1>
+  </div>
+</div>
+
+<!-- ================= GENERATED REPORTS SCREEN ================= -->
+<div id="reportsScreen" class="page">
+  <h2>Generated reports</h2>
+
+  <div class="filters-row">
+    <div class="chip">Created: 7/9/2026 — 7/23/2026 ▾</div>
+    <div class="chip">Organizations (+1) ▾</div>
+    <div class="chip">Report types ▾</div>
+    <div class="chip clear">Clear filters</div>
+  </div>
+
+  <div class="total-line">Total: <b id="totalCount">58</b> reports</div>
+
+  <div class="grid-toolbar">
+    <div class="left">
+      <button class="btn btn-primary" id="downloadBtn" style="display:none;">
+        ⬇ Download reports
+      </button>
+      <span class="selection-count" id="selectionCount"></span>
+    </div>
+  </div>
+
+  <div class="grid-wrap">
+    <table>
+      <colgroup>
+        <col style="width:40px">
+        <col style="width:160px">
+        <col>
+        <col style="width:130px">
+        <col style="width:160px">
+        <col style="width:96px">
+      </colgroup>
+      <thead>
+        <tr class="header-row">
+          <th class="col-check"><input type="checkbox" id="headerCheck"></th>
+          <th data-key="generatedOn">
+            <div class="th-label-row">
+              <span class="th-text">Generated On</span>
+              <span class="th-icons">
+                <button class="th-icon-btn th-sort" data-key="generatedOn" title="Sort"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
+                <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+              </span>
+            </div>
+          </th>
+          <th data-key="reportName">
+            <div class="th-label-row">
+              <span class="th-text">Report Name</span>
+              <span class="th-icons">
+                <button class="th-icon-btn th-sort" data-key="reportName" title="Sort"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
+                <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+              </span>
+            </div>
+          </th>
+          <th data-key="reportId">
+            <div class="th-label-row">
+              <span class="th-text">Report Id</span>
+              <span class="th-icons">
+                <button class="th-icon-btn th-sort" data-key="reportId" title="Sort"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
+                <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+              </span>
+            </div>
+          </th>
+          <th data-key="organization">
+            <div class="th-label-row">
+              <span class="th-text">Organization</span>
+              <span class="th-icons">
+                <button class="th-icon-btn th-sort" data-key="organization" title="Sort"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
+                <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+              </span>
+            </div>
+          </th>
+          <th class="col-actions">Actions</th>
+        </tr>
+        <tr class="filter-row">
+          <th></th>
+          <th>
+            <div class="filter-cell">
+              <div class="filter-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                <input class="filter-input" placeholder="Search" data-filter="generatedOn">
+                <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+              </div>
+              <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
+            </div>
+          </th>
+          <th>
+            <div class="filter-cell">
+              <div class="filter-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                <input class="filter-input" placeholder="Search" data-filter="reportName">
+                <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+              </div>
+              <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
+            </div>
+          </th>
+          <th>
+            <div class="filter-cell">
+              <div class="filter-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                <input class="filter-input" placeholder="Search" data-filter="reportId">
+                <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+              </div>
+              <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
+            </div>
+          </th>
+          <th>
+            <div class="filter-cell">
+              <div class="filter-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                <input class="filter-input" placeholder="Search" data-filter="organization">
+                <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+              </div>
+              <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
+            </div>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ================= REPORT SCHEDULER SCREEN ================= -->
+<div id="schedulerScreen">
+  <div class="sched-layout">
+    <div class="sched-main">
+      <div class="breadcrumb show" id="backLink">← Back to Generated reports</div>
+      <h2>Report Scheduler</h2>
+      <input class="field-input" id="schedSearchBox" style="margin-bottom:14px; max-width:100%;" readonly>
+      <div class="filters-row">
+        <div class="chip">Scheduled on: 7/1/2026 — 7/30/2026 ▾</div>
+        <div class="chip">Organization: Parent ▾</div>
+        <div class="chip">Frequency ▾</div>
+        <div class="chip">Report Status ▾</div>
+        <div class="chip">Report types ▾</div>
+        <div class="chip clear">Clear filters</div>
+      </div>
+      <div class="total-line">Total: <b id="schedTotal">1</b> scheduler</div>
+      <div class="grid-wrap sched-table">
+        <table>
+          <thead>
+            <tr class="header-row">
+              <th>Scheduler name</th>
+              <th>Scheduled on</th>
+              <th>Organization</th>
+              <th>Frequency</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="schedTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="side-panel" id="sidePanel">
+      <div class="panel-topline">
+        <h3>Edit schedule report</h3>
+        <button class="panel-close" id="panelClose">✕</button>
+      </div>
+
+      <label class="field-label">Scheduled report name</label>
+      <input class="field-input" id="panelName">
+
+      <label class="field-label">Email subject</label>
+      <input class="field-input" placeholder="(optional)">
+
+      <div class="section-title">Report content</div>
+      <label class="field-label">Report template</label>
+      <input class="field-input" value="Transaction report - Full" readonly>
+
+      <label class="field-label">Set up filters to manage report content</label>
+      <div class="filter-chip-row">
+        <div class="filter-chip">Transaction Date: Created <button>✕</button></div>
+        <div class="filter-chip">Channel: E-commerce, Mail +1 <button>✕</button></div>
+        <div class="filter-chip">Organization ID: 2Checkout <button>✕</button></div>
+      </div>
+      <button class="add-filter-btn">+ Add filter</button>
+
+      <div class="section-title">Schedule settings</div>
+      <div class="info-box">
+        <b>Transaction time</b> represents the time when the business day ends and is used to know which transactions will be included in the report.<br><br>
+        <b>Report time</b> represents the time when the report will start to run.<br>
+        <i>Example: schedule a report daily that will include transactions recorded until 10:00 PM and will start to run at 02:00 AM next day.</i><br><br>
+        <b>Offset days</b> Specify the number of days after a transaction (T) when a report should be generated. For instance, an offset of 2 days (T+2) means the report will be generated 2 days after the transaction date.
+      </div>
+
+      <div class="two-col">
+        <div>
+          <label class="field-label">Frequency</label>
+          <input class="field-input" value="Daily" readonly>
+        </div>
+        <div>
+          <label class="field-label">offsetDays (Optional)</label>
+          <input class="field-input" placeholder="—">
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <label class="field-label">Transaction time</label>
+          <input class="field-input" value="11:59">
+        </div>
+        <div>
+          <label class="field-label">Report time</label>
+          <input class="field-input" value="12:05">
+        </div>
+      </div>
+      <label class="field-label">Report time zone</label>
+      <input class="field-input" value="UTC+05:30" readonly>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2026 Verifone</div>
+  <div><a href="#">Privacy and Compliance Policies</a><a href="#">Terms and conditions</a><a href="#">Documentation</a></div>
+</footer>
+
+<script>
+/* ---------------- data ---------------- */
+function rid(){ return "RPT-" + Math.floor(10000000 + Math.random()*89999999); }
+
+const REPORTS = [
+  { id:1, generatedOn:"7/23/2026, 22:51:41", reportName:"custom report__2026-06-28T00_00_00Z-2026-06-30T23_59_59Z__abf3", organization:"Parent", reportId: rid(), hasScheduler:false },
+  { id:2, generatedOn:"7/23/2026, 22:51:05", reportName:"custom report__2026-06-23T00_00_00Z-2026-06-27T23_59_59Z__1e92", organization:"Parent", reportId: rid(), hasScheduler:false },
+  { id:3, generatedOn:"7/23/2026, 22:49:41", reportName:"custom report__2026-06-18T00_00_00Z-2026-06-22T23_59_59Z__77ac", organization:"Parent", reportId: rid(), hasScheduler:false },
+  { id:4, generatedOn:"7/23/2026, 22:48:08", reportName:"custom report__2026-06-13T00_00_00Z-2026-06-17T23_59_59Z__b4d1", organization:"Parent", reportId: rid(), hasScheduler:false },
+  { id:5, generatedOn:"7/23/2026, 22:46:10", reportName:"custom report__2026-06-07T00_00_00Z-2026-06-12T23_59_59Z__90fe", organization:"Parent", reportId: rid(), hasScheduler:false },
+  { id:6, generatedOn:"7/23/2026, 22:45:07", reportName:"custom report__2026-06-01T00_00_00Z-2026-06-06T23_59_59Z__2c31", organization:"Parent", reportId: rid(), hasScheduler:false },
+  { id:7, generatedOn:"7/23/2026, 22:33:13", reportName:"custom report__2026-07-01T00_00_00Z-2026-07-23T23_59_59Z__2a88", organization:"Parent", reportId: rid(), hasScheduler:false },
+  { id:8, generatedOn:"7/23/2026, 15:37:00", reportName:"PIV test 20230323 6__2026-07-22T04_00_00Z-2026-07-23T04_00_00Z__9f10", organization:"Parent", reportId: rid(), hasScheduler:true },
+  { id:9, generatedOn:"7/23/2026, 12:05:02", reportName:"Org filter Only__2026-07-22T11_59_00Z-2026-07-23T11_59_00Z__bc44", organization:"Parent", reportId: rid(), hasScheduler:true },
+  { id:10, generatedOn:"7/23/2026, 10:43:01", reportName:"just org__2026-07-22T10_41_00Z-2026-07-23T10_41_00Z__5f45acb2", organization:"Parent", reportId: rid(), hasScheduler:true },
+];
+
+let sortKey = "generatedOn";
+let sortDir = "asc"; // matches the ascending arrow shown in the original screenshot
+const selected = new Set();
+const filters = { generatedOn:"", reportName:"", reportId:"", organization:"" };
+
+const tbody = document.getElementById("tbody");
+const headerCheck = document.getElementById("headerCheck");
+const downloadBtn = document.getElementById("downloadBtn");
+const selectionCount = document.getElementById("selectionCount");
+
+const DOWNLOAD_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>`;
+const REDIRECT_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/></svg>`;
+
+function getFiltered(){
+  return REPORTS.filter(r =>
+    r.generatedOn.toLowerCase().includes(filters.generatedOn.toLowerCase()) &&
+    r.reportName.toLowerCase().includes(filters.reportName.toLowerCase()) &&
+    r.reportId.toLowerCase().includes(filters.reportId.toLowerCase()) &&
+    r.organization.toLowerCase().includes(filters.organization.toLowerCase())
+  );
+}
+
+function getSorted(list){
+  const copy = [...list];
+  copy.sort((a,b)=>{
+    let av = a[sortKey], bv = b[sortKey];
+    if(sortKey === "generatedOn"){ av = new Date(av); bv = new Date(bv); }
+    if(av < bv) return sortDir === "asc" ? -1 : 1;
+    if(av > bv) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
+  return copy;
+}
+
+function render(){
+  const rows = getSorted(getFiltered());
+  tbody.innerHTML = "";
+
+  if(rows.length === 0){
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No reports match your filters.</td></tr>`;
+  }
+
+  rows.forEach(r=>{
+    const tr = document.createElement("tr");
+    if(selected.has(r.id)) tr.classList.add("selected");
+
+    const actionsHtml = `
+      <div class="action-icons">
+        <button class="icon-btn" data-action="download" data-id="${r.id}">
+          ${DOWNLOAD_ICON}<span class="tip">Download report</span>
+        </button>
+        ${r.hasScheduler ? `
+        <button class="icon-btn" data-action="redirect" data-id="${r.id}">
+          ${REDIRECT_ICON}<span class="tip">Change report scheduler configurations</span>
+        </button>` : `<span class="no-schedule-slot"></span>`}
+      </div>`;
+
+    tr.innerHTML = `
+      <td class="col-check"><input type="checkbox" data-id="${r.id}" ${selected.has(r.id)?"checked":""}></td>
+      <td>${r.generatedOn}</td>
+      <td class="cell-name" title="${r.reportName}">${r.reportName}</td>
+      <td class="reportid">${r.reportId}</td>
+      <td>${r.organization}</td>
+      <td class="col-actions">${actionsHtml}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.querySelectorAll('input[type="checkbox"][data-id]').forEach(cb=>{
+    cb.addEventListener("change", e=>{
+      const id = Number(e.target.dataset.id);
+      if(e.target.checked) selected.add(id); else selected.delete(id);
+      updateToolbar();
+      render();
+    });
+  });
+
+  document.querySelectorAll('.icon-btn[data-action="download"]').forEach(btn=>{
+    btn.addEventListener("click", e=>{
+      const r = REPORTS.find(x=>x.id === Number(btn.dataset.id));
+      alert("Downloading: " + r.reportName);
+    });
+  });
+
+  document.querySelectorAll('.icon-btn[data-action="redirect"]').forEach(btn=>{
+    btn.addEventListener("click", e=>{
+      const r = REPORTS.find(x=>x.id === Number(btn.dataset.id));
+      openScheduler(r);
+    });
+  });
+
+  updateHeaderCheckState(rows);
+}
+
+function updateHeaderCheckState(visibleRows){
+  const visibleIds = visibleRows.map(r=>r.id);
+  const allSelected = visibleIds.length>0 && visibleIds.every(id=>selected.has(id));
+  headerCheck.checked = allSelected;
+}
+
+function updateToolbar(){
+  const n = selected.size;
+  downloadBtn.style.display = n>0 ? "inline-flex" : "none";
+  selectionCount.textContent = n>0 ? `${n} selection${n>1?"s":""}` : "";
+}
+
+headerCheck.addEventListener("change", e=>{
+  const rows = getSorted(getFiltered());
+  if(e.target.checked){
+    rows.forEach(r=>selected.add(r.id));
+  } else {
+    rows.forEach(r=>selected.delete(r.id));
+  }
+  updateToolbar();
+  render();
+});
+
+function refreshSortIcons(){
+  document.querySelectorAll(".th-sort").forEach(btn=>{
+    const active = btn.dataset.key === sortKey;
+    btn.style.color = active ? "var(--blue)" : "#6b7280";
+    btn.style.transform = (active && sortDir === "desc") ? "scaleY(-1)" : "none";
+  });
+}
+
+document.querySelectorAll(".th-sort").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const key = btn.dataset.key;
+    if(sortKey === key){
+      sortDir = sortDir === "asc" ? "desc" : "asc";
+    } else {
+      sortKey = key; sortDir = "asc";
+    }
+    refreshSortIcons();
+    render();
+  });
+});
+
+document.querySelectorAll(".th-menu").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    alert("Column options (mock) — pin, autosize, hide column, etc.");
+  });
+});
+
+refreshSortIcons();
+
+document.querySelectorAll(".filter-input").forEach(inp=>{
+  inp.addEventListener("input", e=>{
+    filters[e.target.dataset.filter] = e.target.value;
+    render();
+  });
+});
+
+downloadBtn.addEventListener("click", ()=>{
+  const names = REPORTS.filter(r=>selected.has(r.id)).map(r=>r.reportName);
+  alert("Downloading " + names.length + " report(s):\n\n" + names.join("\n"));
+});
+
+/* ---------------- scheduler screen ---------------- */
+const reportsScreen = document.getElementById("reportsScreen");
+const schedulerScreen = document.getElementById("schedulerScreen");
+const sidePanel = document.getElementById("sidePanel");
+const schedTbody = document.getElementById("schedTbody");
+const heroTitle = document.getElementById("heroTitle");
+
+function schedulerRows(){
+  return REPORTS.filter(r=>r.hasScheduler);
+}
+
+function cleanName(reportName){
+  return reportName.split("__")[0];
+}
+
+function renderSchedulerTable(activeReport){
+  schedTbody.innerHTML = "";
+  const tr = document.createElement("tr");
+  tr.classList.add("selected");
+  tr.innerHTML = `
+    <td><a href="#" data-open="${activeReport.id}" style="color:var(--blue); font-weight:600; text-decoration:none;">${cleanName(activeReport.reportName)}</a></td>
+    <td>25/07/2026, 12:05 PM</td>
+    <td>Parent</td>
+    <td>Daily</td>
+    <td><span style="background:#e5f7ec;color:#127a3d;border-radius:12px;padding:3px 10px;font-size:12px;font-weight:600;">Enabled</span></td>
+  `;
+  schedTbody.appendChild(tr);
+  document.getElementById("schedTotal").textContent = "1";
+
+  document.querySelectorAll('a[data-open]').forEach(a=>{
+    a.addEventListener("click", e=>{
+      e.preventDefault();
+      const r = REPORTS.find(x=>x.id === Number(a.dataset.open));
+      openScheduler(r);
+    });
+  });
+}
+
+function openScheduler(report){
+  reportsScreen.style.display = "none";
+  schedulerScreen.style.display = "block";
+  heroTitle.textContent = "Commerce";
+  document.getElementById("schedSearchBox").value = cleanName(report.reportName);
+  renderSchedulerTable(report);
+  document.getElementById("panelName").value = cleanName(report.reportName);
+  sidePanel.classList.add("open");
+}
+
+document.getElementById("backLink").addEventListener("click", ()=>{
+  schedulerScreen.style.display = "none";
+  reportsScreen.style.display = "block";
+  sidePanel.classList.remove("open");
+});
+
+document.getElementById("panelClose").addEventListener("click", ()=>{
+  sidePanel.classList.remove("open");
+});
+
+/* ---------------- init ---------------- */
+updateToolbar();
+render();
+</script>
+</body>
+</html>
