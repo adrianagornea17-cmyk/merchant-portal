@@ -76,15 +76,10 @@
   .page-title{font-size:24px;font-weight:700;display:flex;align-items:center;gap:8px;}
   .page-title .star{color:var(--text-faint);font-size:16px;}
 
-  .searchbar{display:flex;gap:10px;margin-bottom:12px;}
-  .searchbar select{width:210px;flex-shrink:0;}
-  .searchbar input{flex:1;}
-
-  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
-  .chip{border:1px solid var(--border-strong);background:var(--surface);border-radius:20px;padding:7px 12px;font-size:12.5px;font-weight:600;color:var(--text-soft);cursor:pointer;display:flex;align-items:center;gap:6px;}
-  .chip.active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);}
-  .chip .caret{font-size:9px;opacity:.7;}
-  .clear-link{font-size:12.5px;font-weight:600;color:var(--text-faint);cursor:pointer;margin-left:2px;}
+  .filters-row{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-bottom:16px;}
+  .filters-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:20px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;}
+  .filters-btn:hover{border-color:var(--text-faint);background:var(--neutral-bg);}
+  .clear-link{font-size:12.5px;font-weight:600;color:var(--text-faint);cursor:pointer;}
   .result-count{font-size:12.5px;color:var(--text-faint);margin-bottom:10px;}
 
   .grid-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
@@ -304,23 +299,12 @@
           <button class="btn btn-primary" onclick="showCreate()">+ Create Payment link</button>
         </div>
 
-        <div class="searchbar">
-          <select id="searchField">
-            <option>Merchant Reference</option>
-            <option>Email (Recipient)</option>
-            <option>Email (Customer)</option>
-            <option>Phone Number (Customer)</option>
-            <option>First Name (Customer)</option>
-            <option>Last Name (Customer)</option>
-            <option>Organizations</option>
-          </select>
-          <input type="text" id="globalSearch" placeholder="Search by Merchant Reference" oninput="applyFilters()">
-          <button class="btn" onclick="applyFilters()">Search</button>
-        </div>
-
-        <div class="filters">
-          <div class="chip" onclick="openFilterPanel()">Filters <span class="caret">▾</span></div>
+        <div class="filters-row">
           <span class="clear-link" onclick="clearAllFilters()">Clear filters</span>
+          <button class="filters-btn" onclick="openFilterPanel()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Filters
+          </button>
         </div>
 
         <div class="result-count" id="resultCount">Total: 6 Payment links</div>
@@ -854,11 +838,6 @@
         if(k==='status'){ if(r.status!==colFilters[k]) return false; continue; }
         if(!String(r[k]).toLowerCase().includes(v)) return false;
       }
-      const gs = (document.getElementById('globalSearch').value||'').toLowerCase();
-      if(gs){
-        const hay = Object.values(r).join(' ').toLowerCase();
-        if(!hay.includes(gs)) return false;
-      }
       return true;
     });
 
@@ -890,14 +869,11 @@
   }
 
   function colFilter(key, value){ colFilters[key] = value; render(); }
-  function applyFilters(){ render(); }
   function clearAllFilters(){
     colFilters = {};
     document.querySelectorAll('.th-filter input').forEach(i=>i.value='');
     document.querySelectorAll('.th-filter select').forEach(s=>s.value='');
     document.querySelectorAll('.side-panel-body input').forEach(i=>i.value='');
-    document.getElementById('globalSearch').value='';
-    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
     render();
   }
   function sortBy(key){
