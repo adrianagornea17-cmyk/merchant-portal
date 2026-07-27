@@ -141,6 +141,30 @@
     .option-link { font-size: 13px; color: var(--accent); font-weight: 600; text-decoration: none; }
     .card-logo { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; color: #ea580c; }
 
+    /* Order type cards (initial "what kind of order" step) */
+    .type-card-row { display: flex; gap: 16px; }
+    .type-card { flex: 1; border: 1.5px solid var(--border); border-radius: 12px; padding: 22px 16px; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.1s; }
+    .type-card:hover { border-color: #93c5fd; }
+    .type-card.selected { border-color: var(--accent); background: #eff6ff; }
+    .type-card svg { color: #475569; }
+    .type-card.selected svg { color: var(--accent); }
+    .type-card-title { font-size: 14.5px; font-weight: 700; color: #111827; margin-top: 12px; }
+    .type-card-desc { font-size: 12.5px; color: var(--text-3); margin-top: 4px; line-height: 1.5; min-height: 32px; }
+    .type-card .option-radio { margin: 14px auto 0; }
+    .type-card.selected .option-radio { border-color: var(--accent); }
+    .type-card.selected .option-radio::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+
+    /* Parent company / location search fields */
+    .search-field { position: relative; }
+    .search-field-input { display: flex; align-items: center; justify-content: space-between; }
+    .search-dropdown { position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #fff; border: 1.5px solid var(--border); border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.14); z-index: 30; max-height: 230px; overflow-y: auto; }
+    .search-result-label { font-size: 11px; font-weight: 700; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.3px; padding: 10px 14px 4px; }
+    .search-result { padding: 10px 14px; cursor: pointer; border-top: 1px solid #f1f5f9; }
+    .search-result:first-of-type { border-top: none; }
+    .search-result:hover { background: #f9fafb; }
+    .search-result-title { font-size: 13.5px; font-weight: 600; color: #111827; }
+    .search-result-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
     .qty-stepper { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
     .qty-btn { width: 30px; height: 30px; border-radius: 7px; border: 1.5px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-2); font-size: 15px; font-weight: 600; }
     .qty-btn:hover { background: var(--hover-bg); }
@@ -155,6 +179,7 @@
     .btn-ghost:hover { border-color: #9ca3af; background: var(--hover-bg); }
     .btn-outline-red { background: none; border-color: #fecaca; color: #ef4444; }
     .btn-outline-red:hover { background: #fef2f2; border-color: #fca5a5; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
     .wiz-footer-left { display: flex; gap: 10px; }
     .wiz-footer-right { display: flex; gap: 10px; }
 
@@ -214,10 +239,44 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   /* ─── WIZARD ─── */
-  const STEP_LABELS = ['Basic Information','Service Plans','Payment Methods','Payment Devices','Addresses','Company Structure','Business Details','Order Summary'];
+  const ALL_STEPS = [
+    { key: 'basicInfo', label: 'Basic Information' },
+    { key: 'servicePlans', label: 'Service Plans' },
+    { key: 'paymentMethods', label: 'Payment Methods' },
+    { key: 'paymentDevices', label: 'Payment Devices' },
+    { key: 'addresses', label: 'Addresses' },
+    { key: 'companyStructure', label: 'Company Structure' },
+    { key: 'businessDetails', label: 'Business Details' },
+    { key: 'orderSummary', label: 'Order Summary' }
+  ];
+  const EXISTING_SOLUTION_KEYS = ['paymentDevices','addresses','companyStructure','businessDetails','orderSummary'];
+
+  function getActiveSteps() {
+    if (state.orderType === 'existing') return ALL_STEPS.filter(s => EXISTING_SOLUTION_KEYS.includes(s.key));
+    return ALL_STEPS;
+  }
+
+  const PARENT_COMPANY_RESULTS = [
+    { name: 'DTMUK_Merchant0054', sub: 'Verifone MID: 100542' },
+    { name: 'Lithuania business test', sub: 'Reg. Number: 123456789012 · Verifone MID: 304037' },
+    { name: 'ABC Company', sub: 'Verifone MID: 808219' },
+    { name: 'Bookstore Lithuanai', sub: 'Reg. Number: LT123456789011' }
+  ];
+  const LOCATION_RESULTS = [
+    { name: '1234 Main St, Las Vegas, NV 89109', sub: 'Store #0012' },
+    { name: '58 Market Square, London, EC1A 1BB', sub: 'Store #0045' },
+    { name: 'R. de Alexandre Herculano 123, Porto', sub: 'Store #0021' }
+  ];
+
+  let wizardStarted = false;
   let currentStep = 0;
 
   const state = {
+    orderType: null,
+    parentCompany: null,
+    location: null,
+    parentDropdownOpen: false,
+    locationDropdownOpen: false,
     companyName: '',
     firstName: '',
     lastName: '',
@@ -231,10 +290,11 @@
     deviceQty: 2
   };
 
-  function renderStepper() {
+  function renderStepper(activeSteps) {
     const wrap = document.getElementById('wizStepper');
+    wrap.style.display = '';
     wrap.innerHTML = '';
-    STEP_LABELS.forEach((label, i) => {
+    activeSteps.forEach((step, i) => {
       const stepEl = document.createElement('div');
       const cls = i < currentStep ? 'done' : (i === currentStep ? 'current' : '');
       stepEl.className = 'wiz-step ' + cls;
@@ -243,9 +303,153 @@
         <div class="wiz-circle ${cls}">
           ${i < currentStep ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
         </div>
-        <div class="wiz-label">${label}</div>`;
+        <div class="wiz-label">${step.label}</div>`;
       wrap.appendChild(stepEl);
     });
+  }
+
+  /* ─── ORDER TYPE STEP (before the wizard starts) ─── */
+  function selectOrderType(type) {
+    state.orderType = type;
+    state.parentDropdownOpen = false;
+    state.locationDropdownOpen = false;
+    if (type !== 'newStore' && type !== 'existing') state.parentCompany = null;
+    if (type !== 'existing') state.location = null;
+    renderOrderTypeStep();
+  }
+  function toggleParentDropdown(e) {
+    e.stopPropagation();
+    state.parentDropdownOpen = !state.parentDropdownOpen;
+    state.locationDropdownOpen = false;
+    renderOrderTypeStep();
+  }
+  function selectParentCompany(name, sub) {
+    state.parentCompany = { name, sub };
+    state.parentDropdownOpen = false;
+    renderOrderTypeStep();
+  }
+  function clearParentCompany(e) {
+    e.stopPropagation();
+    state.parentCompany = null;
+    renderOrderTypeStep();
+  }
+  function toggleLocationDropdown(e) {
+    e.stopPropagation();
+    state.locationDropdownOpen = !state.locationDropdownOpen;
+    state.parentDropdownOpen = false;
+    renderOrderTypeStep();
+  }
+  function selectLocation(name, sub) {
+    state.location = { name, sub };
+    state.locationDropdownOpen = false;
+    renderOrderTypeStep();
+  }
+  function clearLocation(e) {
+    e.stopPropagation();
+    state.location = null;
+    renderOrderTypeStep();
+  }
+  document.addEventListener('click', (e) => {
+    if (!wizardStarted && (state.parentDropdownOpen || state.locationDropdownOpen) && !e.target.closest('.search-field')) {
+      state.parentDropdownOpen = false;
+      state.locationDropdownOpen = false;
+      renderOrderTypeStep();
+    }
+  });
+
+  function canStartWizard() {
+    if (state.orderType === 'newCompany') return true;
+    if (state.orderType === 'newStore') return !!state.parentCompany;
+    if (state.orderType === 'existing') return !!state.parentCompany && !!state.location;
+    return false;
+  }
+  function startWizard() {
+    if (!canStartWizard()) return;
+    wizardStarted = true;
+    currentStep = 0;
+    renderStep();
+  }
+
+  function searchFieldHtml(label, placeholder, value, onToggle, onClear, results, onSelect) {
+    if (value) {
+      return `<div class="field">
+        <label class="field-label">${label}</label>
+        <div class="tag-input"><span>${value.name}</span><button title="Remove" onclick="${onClear}(event)">✕</button></div>
+      </div>`;
+    }
+    return `<div class="field">
+      <label class="field-label">${label}</label>
+      <div class="search-field">
+        <div class="field-input search-field-input" style="cursor:pointer;color:var(--text-4);" onclick="${onToggle}(event)">
+          <span>${placeholder}</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        ${(state.parentDropdownOpen && onToggle === 'toggleParentDropdown') || (state.locationDropdownOpen && onToggle === 'toggleLocationDropdown') ? `
+          <div class="search-dropdown">
+            <div class="search-result-label">Result</div>
+            ${results.map(r => `<div class="search-result" onclick="${onSelect}('${r.name.replace(/'/g,"\\'")}', '${r.sub.replace(/'/g,"\\'")}')"><div class="search-result-title">${r.name}</div><div class="search-result-sub">${r.sub}</div></div>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+    </div>`;
+  }
+
+  function renderOrderTypeStep() {
+    const wrap = document.getElementById('wizStepper');
+    wrap.style.display = 'none';
+    wrap.innerHTML = '';
+    document.getElementById('wizContent').classList.remove('wide');
+    const inner = document.getElementById('wizInner');
+    const canContinue = canStartWizard();
+
+    const parentField = searchFieldHtml('Parent Company Name', 'Select Parent Company Name', state.parentCompany, 'toggleParentDropdown', 'clearParentCompany', PARENT_COMPANY_RESULTS, 'selectParentCompany');
+    const locationField = searchFieldHtml('Select a Location', 'Select Address', state.location, 'toggleLocationDropdown', 'clearLocation', LOCATION_RESULTS, 'selectLocation');
+
+    let extra = '';
+    if (state.orderType === 'newStore') {
+      extra = `<hr class="form-card-divider">${parentField}`;
+    } else if (state.orderType === 'existing') {
+      extra = `<hr class="form-card-divider"><div class="form-card-title">Enter Order Details</div><div class="field-row">${parentField}${locationField}</div>`;
+    }
+
+    inner.innerHTML = `
+      <div class="step-head">
+        <svg class="step-head-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        <div><div class="step-title">What kind of order would you like to create?</div><div class="step-sub">Let's start the sign up.</div></div>
+      </div>
+      <div class="form-card">
+        <div class="type-card-row">
+          <div class="type-card ${state.orderType==='newCompany'?'selected':''}" onclick="selectOrderType('newCompany')">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <div class="type-card-title">New Company</div>
+            <div class="type-card-desc">Order for/ or as a new customer</div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="type-card ${state.orderType==='newStore'?'selected':''}" onclick="selectOrderType('newStore')">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9z"/><path d="M9 21v-6h6v6"/></svg>
+            <div class="type-card-title">New Store</div>
+            <div class="type-card-desc">Add a new site to an existing company</div>
+            <div class="option-radio"></div>
+          </div>
+          <div class="type-card ${state.orderType==='existing'?'selected':''}" onclick="selectOrderType('existing')">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+            <div class="type-card-title">Add to Existing Solution</div>
+            <div class="type-card-desc">New devices, accessories &amp; features</div>
+            <div class="option-radio"></div>
+          </div>
+        </div>
+        ${extra}
+      </div>
+      <div class="wiz-footer">
+        <div class="wiz-footer-left">
+          <button class="btn btn-outline-red" onclick="discardOrder()">Discard</button>
+        </div>
+        <div class="wiz-footer-right">
+          <button class="btn btn-primary" ${canContinue ? '' : 'disabled'} onclick="startWizard()">Continue</button>
+        </div>
+      </div>
+    `;
+    document.querySelector('.modal-scroll').scrollTo({ top: 0 });
   }
 
   function qtyChange(delta) {
@@ -275,12 +479,15 @@
   }
 
   function goNext() {
-    if (currentStep === 0) captureBasicInfo();
-    if (currentStep === 4) captureAddress();
-    if (currentStep < STEP_LABELS.length - 1) { currentStep++; renderStep(); }
+    const activeSteps = getActiveSteps();
+    const stepKey = activeSteps[currentStep].key;
+    if (stepKey === 'basicInfo') captureBasicInfo();
+    if (stepKey === 'addresses') captureAddress();
+    if (currentStep < activeSteps.length - 1) { currentStep++; renderStep(); }
   }
   function goBack() {
     if (currentStep > 0) { currentStep--; renderStep(); }
+    else { wizardStarted = false; renderOrderTypeStep(); }
   }
   function saveAndExit() { window.location.href = 'boarding-orders.html'; }
   function discardOrder() { window.location.href = 'boarding-orders.html'; }
@@ -296,33 +503,33 @@
   }
 
   const STEP_ICONS = {
-    0: '<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3.1-6 7-6s7 2 7 6"/><path d="M17 8h5M17 12h5M17 16h3"/>',
-    1: '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
-    2: '<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
-    3: '<rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>',
-    4: '<path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/>',
-    5: '<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h.01M9 13h.01M15 9h.01M15 13h.01"/>',
-    6: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>',
-    7: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>'
+    basicInfo: '<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3.1-6 7-6s7 2 7 6"/><path d="M17 8h5M17 12h5M17 16h3"/>',
+    servicePlans: '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+    paymentMethods: '<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+    paymentDevices: '<rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>',
+    addresses: '<path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/>',
+    companyStructure: '<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h.01M9 13h.01M15 9h.01M15 13h.01"/>',
+    businessDetails: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>',
+    orderSummary: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>'
   };
 
-  function stepHead(title, sub) {
+  function stepHead(title, sub, iconKey) {
     return `<div class="step-head">
-      <svg class="step-head-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${STEP_ICONS[currentStep]}</svg>
+      <svg class="step-head-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${STEP_ICONS[iconKey]}</svg>
       <div><div class="step-title">${title}</div><div class="step-sub">${sub}</div></div>
     </div>`;
   }
 
   function footerNav() {
-    const isFirst = currentStep === 0;
-    const isLast = currentStep === STEP_LABELS.length - 1;
+    const activeSteps = getActiveSteps();
+    const isLast = currentStep === activeSteps.length - 1;
     return `<div class="wiz-footer">
       <div class="wiz-footer-left">
         <button class="btn btn-outline-red" onclick="discardOrder()">Discard</button>
       </div>
       <div class="wiz-footer-right">
         <button class="btn btn-ghost" onclick="saveAndExit()">Save and Exit</button>
-        ${!isFirst ? '<button class="btn btn-ghost" onclick="goBack()">Back</button>' : ''}
+        <button class="btn btn-ghost" onclick="goBack()">Back</button>
         ${isLast
           ? '<button class="btn btn-primary" onclick="confirmOrder()">Confirm &amp; generate contract</button>'
           : '<button class="btn btn-primary" onclick="goNext()">Continue</button>'}
@@ -331,13 +538,15 @@
   }
 
   function renderStep() {
-    renderStepper();
-    document.getElementById('wizContent').classList.toggle('wide', currentStep === STEP_LABELS.length - 1);
+    const activeSteps = getActiveSteps();
+    const stepKey = activeSteps[currentStep].key;
+    renderStepper(activeSteps);
+    document.getElementById('wizContent').classList.toggle('wide', currentStep === activeSteps.length - 1);
     const inner = document.getElementById('wizInner');
     let html = '';
 
-    if (currentStep === 0) {
-      html = stepHead('Tell us about your company…', 'Please start by selecting your contract settings.') + `
+    if (stepKey === 'basicInfo') {
+      html = stepHead('Tell us about your company…', 'Please start by selecting your contract settings.', 'basicInfo') + `
         <div class="form-card">
           <div class="form-card-title">Contract Settings</div>
           <div class="field">
@@ -392,8 +601,8 @@
         ${footerNav()}`;
     }
 
-    else if (currentStep === 1) {
-      html = stepHead("Let's select your Service plans", "We've preselected the Service package we think best will suit your business needs.") + `
+    else if (stepKey === 'servicePlans') {
+      html = stepHead("Let's select your Service plans", "We've preselected the Service package we think best will suit your business needs.", 'servicePlans') + `
         <div class="form-card">
           <div class="form-card-title">Service package</div>
           <div class="option-card selected" data-group="pkg" onclick="selectCard(this,'pkg')">
@@ -417,8 +626,8 @@
         ${footerNav()}`;
     }
 
-    else if (currentStep === 2) {
-      html = stepHead('In-store Payment Terminal Information', "Let's confirm your Acquirer contract details and explore how you wish to accept payment in store.") + `
+    else if (stepKey === 'paymentMethods') {
+      html = stepHead('In-store Payment Terminal Information', "Let's confirm your Acquirer contract details and explore how you wish to accept payment in store.", 'paymentMethods') + `
         <div class="form-card">
           <div class="form-card-title">Acquirer contract</div>
           <div class="option-card selected" data-group="acquirer" onclick="selectCard(this,'acquirer')" style="max-width:260px;">
@@ -437,8 +646,8 @@
         ${footerNav()}`;
     }
 
-    else if (currentStep === 3) {
-      html = stepHead('Payment Devices', 'Choose the devices you need in-store and how many of each.') + `
+    else if (stepKey === 'paymentDevices') {
+      html = stepHead('Payment Devices', 'Choose the devices you need in-store and how many of each.', 'paymentDevices') + `
         <div class="form-card">
           <div class="form-card-title">Devices</div>
           <div class="option-card selected">
@@ -457,8 +666,8 @@
         ${footerNav()}`;
     }
 
-    else if (currentStep === 4) {
-      html = stepHead('Addresses', 'Tell us where to bill, ship and install your devices.') + `
+    else if (stepKey === 'addresses') {
+      html = stepHead('Addresses', 'Tell us where to bill, ship and install your devices.', 'addresses') + `
         <div class="form-card">
           <div class="form-card-title">Company address</div>
           <div class="field"><label class="field-label">Address Line 1</label><input class="field-input" id="inAddr1" type="text" value="${state.addressLine1}"></div>
@@ -487,8 +696,8 @@
         ${footerNav()}`;
     }
 
-    else if (currentStep === 5) {
-      html = stepHead('Company Structure', 'Tell us about legal form, ownership and who represents the business.') + `
+    else if (stepKey === 'companyStructure') {
+      html = stepHead('Company Structure', 'Tell us about legal form, ownership and who represents the business.', 'companyStructure') + `
         <div class="form-card">
           <div class="form-card-title">Company structure</div>
           <div class="field">
@@ -514,8 +723,8 @@
         ${footerNav()}`;
     }
 
-    else if (currentStep === 6) {
-      html = stepHead('Business Details', 'Please advise further business information such as bank account or other details.') + `
+    else if (stepKey === 'businessDetails') {
+      html = stepHead('Business Details', 'Please advise further business information such as bank account or other details.', 'businessDetails') + `
         <div class="form-card">
           <div class="form-card-title">ACH Information</div>
           <div class="field">
@@ -528,7 +737,7 @@
 
     else {
       const fullName = (state.firstName + ' ' + state.lastName).trim() || 'Owner Name';
-      html = `<div class="step-head"><svg class="step-head-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${STEP_ICONS[7]}</svg><div><div class="step-title">Order summary</div></div></div>
+      html = `<div class="step-head"><svg class="step-head-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${STEP_ICONS.orderSummary}</svg><div><div class="step-title">Order summary</div></div></div>
         <div class="summary-layout">
           <div>
             <div class="expand-all-link"><a onclick="toggleExpandAll()" id="expandAllLink">Expand All Details</a></div>
@@ -636,7 +845,7 @@
     if (link) link.textContent = anyClosed ? 'Expand All Details' : 'Collapse All Details';
   }
 
-  renderStep();
+  renderOrderTypeStep();
 </script>
 
 </body>
