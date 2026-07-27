@@ -74,6 +74,7 @@
     .content { padding: 32px 24px 56px; }
     .wiz-inner { max-width: 660px; margin: 0 auto; }
     .wide .wiz-inner { max-width: 980px; }
+    .compact .wiz-inner { max-width: 560px; }
 
     .step-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 26px; }
     .step-head-icon { flex-shrink: 0; color: #111827; opacity: 0.85; margin-top: 2px; }
@@ -82,6 +83,15 @@
 
     .form-card { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 26px 30px; margin-bottom: 20px; }
     .form-card-title { font-size: 17px; font-weight: 700; color: #111827; margin-bottom: 18px; }
+
+    .content.compact { padding: 20px 24px 40px; }
+    .compact .step-head { gap: 10px; margin-bottom: 16px; }
+    .compact .step-head-icon { width: 22px; height: 22px; }
+    .compact .step-title { font-size: 18px; }
+    .compact .step-sub { font-size: 12.5px; }
+    .compact .form-card { padding: 16px 18px; }
+    .compact .form-card-title { font-size: 14px; margin-bottom: 10px; }
+    .compact .form-card-divider { margin: 14px 0; }
     .form-card-intro { font-size: 13.5px; color: var(--text-3); line-height: 1.6; margin-bottom: 18px; }
     .form-card-divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
 
@@ -142,15 +152,16 @@
     .card-logo { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; color: #ea580c; }
 
     /* Order type cards (initial "what kind of order" step) */
-    .type-card-row { display: flex; gap: 16px; }
-    .type-card { flex: 1; border: 1.5px solid var(--border); border-radius: 12px; padding: 22px 16px; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.1s; }
+    .type-card-row { display: flex; gap: 10px; }
+    .type-card { flex: 1; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 10px; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.1s; }
     .type-card:hover { border-color: #93c5fd; }
     .type-card.selected { border-color: var(--accent); background: #eff6ff; }
-    .type-card svg { color: #475569; }
+    .type-card svg { color: #475569; width: 22px; height: 22px; }
     .type-card.selected svg { color: var(--accent); }
-    .type-card-title { font-size: 14.5px; font-weight: 700; color: #111827; margin-top: 12px; }
-    .type-card-desc { font-size: 12.5px; color: var(--text-3); margin-top: 4px; line-height: 1.5; min-height: 32px; }
-    .type-card .option-radio { margin: 14px auto 0; }
+    .type-card-title { font-size: 12.5px; font-weight: 700; color: #111827; margin-top: 8px; }
+    .type-card-desc { font-size: 11px; color: var(--text-3); margin-top: 3px; line-height: 1.4; min-height: 26px; }
+    .type-card .option-radio { width: 15px; height: 15px; margin: 8px auto 0; }
+    .type-card.selected .option-radio::after { width: 7px; height: 7px; }
     .type-card.selected .option-radio { border-color: var(--accent); }
     .type-card.selected .option-radio::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
 
@@ -399,6 +410,7 @@
     wrap.style.display = 'none';
     wrap.innerHTML = '';
     document.getElementById('wizContent').classList.remove('wide');
+    document.getElementById('wizContent').classList.add('compact');
     const inner = document.getElementById('wizInner');
     const canContinue = canStartWizard();
 
@@ -420,19 +432,19 @@
       <div class="form-card">
         <div class="type-card-row">
           <div class="type-card ${state.orderType==='newCompany'?'selected':''}" onclick="selectOrderType('newCompany')">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             <div class="type-card-title">New Company</div>
             <div class="type-card-desc">Order for/ or as a new customer</div>
             <div class="option-radio"></div>
           </div>
           <div class="type-card ${state.orderType==='newStore'?'selected':''}" onclick="selectOrderType('newStore')">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9z"/><path d="M9 21v-6h6v6"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9z"/><path d="M9 21v-6h6v6"/></svg>
             <div class="type-card-title">New Store</div>
             <div class="type-card-desc">Add a new site to an existing company</div>
             <div class="option-radio"></div>
           </div>
           <div class="type-card ${state.orderType==='existing'?'selected':''}" onclick="selectOrderType('existing')">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
             <div class="type-card-title">Add to Existing Solution</div>
             <div class="type-card-desc">New devices, accessories &amp; features</div>
             <div class="option-radio"></div>
@@ -541,6 +553,7 @@
     const activeSteps = getActiveSteps();
     const stepKey = activeSteps[currentStep].key;
     renderStepper(activeSteps);
+    document.getElementById('wizContent').classList.remove('compact');
     document.getElementById('wizContent').classList.toggle('wide', currentStep === activeSteps.length - 1);
     const inner = document.getElementById('wizInner');
     let html = '';
