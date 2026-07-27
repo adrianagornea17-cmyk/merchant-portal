@@ -49,7 +49,6 @@
   .org-pill{border:1px solid var(--border-strong);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;color:var(--text-soft);}
 
   .content{padding:24px 28px 60px;max-width:1360px;width:100%;margin:0 auto;}
-  #view-create{padding-bottom:88px;}
 
   /* ---------- BUTTONS / INPUTS ---------- */
   .btn{border:1px solid var(--border-strong);background:var(--surface);color:var(--text);border-radius:8px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s;}
@@ -123,23 +122,30 @@
   .pg-btn{border:1px solid var(--border-strong);background:var(--surface);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-soft);}
   .pg-btn:hover{border-color:var(--text-faint);}
 
-  .filter-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px;display:none;}
-  .filter-panel.open{display:block;}
-  .filter-panel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
-  .filter-panel-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;}
+  .side-panel-overlay{position:fixed;inset:0;background:rgba(12,18,32,.35);display:none;z-index:150;}
+  .side-panel-overlay.open{display:block;}
+  .side-panel{position:fixed;top:0;right:0;bottom:0;width:360px;max-width:92vw;background:var(--surface);box-shadow:-8px 0 32px rgba(16,24,40,.14);transform:translateX(100%);transition:transform .22s ease;z-index:151;display:flex;flex-direction:column;}
+  .side-panel.open{transform:translateX(0);}
+  .side-panel-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .side-panel-hd h3{margin:0;font-size:15px;font-weight:700;}
+  .side-panel-body{flex:1;overflow-y:auto;padding:20px;}
+  .side-panel-section-label{font-size:11px;font-weight:700;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;margin:0 0 14px;}
+  .side-panel-actions{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;}
 
-  /* ---------- CREATE VIEW ---------- */
-  .view{display:none;}
-  .view.visible{display:block;}
+  /* ---------- CREATE PAYMENT LINK MODAL ---------- */
+  .modal-overlay{position:fixed;inset:0;background:rgba(12,18,32,.55);display:none;align-items:center;justify-content:center;z-index:200;padding:24px;}
+  .modal-overlay.open{display:flex;}
+  .create-modal-box{background:var(--bg);border-radius:var(--radius);width:100%;max-width:1280px;height:92vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.28);overflow:hidden;}
 
-  .create-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;position:sticky;top:0;background:var(--bg);padding:4px 0 12px;z-index:5;}
-  .create-title{display:flex;align-items:center;gap:12px;}
+  .create-head{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--surface);padding:16px 28px;border-bottom:1px solid var(--border);}
+  .create-head h1{font-size:20px;font-weight:700;margin:0;}
   .back-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-soft);font-size:16px;}
   .back-btn:hover{background:var(--neutral-bg);}
-  .create-title h1{font-size:22px;font-weight:700;margin:0;}
   .centered{margin-left:auto;margin-right:auto;}
 
-  .wizard-footer{position:fixed;left:56px;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;z-index:30;box-shadow:0 -2px 8px rgba(16,24,40,.04);}
+  .create-modal-body{flex:1;overflow-y:auto;padding:24px 28px;}
+
+  .wizard-footer{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;}
   .wizard-footer.final-step > .btn-text{visibility:hidden;}
   .wizard-footer-right{display:flex;align-items:center;gap:10px;}
   .footer-actions{display:flex;align-items:center;gap:10px;}
@@ -265,7 +271,6 @@
 
   @media (max-width:960px){
     .create-grid{grid-template-columns:1fr;}
-    .filter-panel-grid{grid-template-columns:repeat(2,1fr);}
     .done-grid{grid-template-columns:1fr;}
   }
 </style>
@@ -293,7 +298,7 @@
     <div class="content">
 
       <!-- ===================== LIST VIEW ===================== -->
-      <div class="view visible" id="view-list">
+      <div id="view-list">
         <div class="page-head">
           <div class="page-title">Pay by Link <span class="star">☆</span></div>
           <button class="btn btn-primary" onclick="showCreate()">+ Create Payment link</button>
@@ -302,11 +307,12 @@
         <div class="searchbar">
           <select id="searchField">
             <option>Merchant Reference</option>
+            <option>Email (Recipient)</option>
             <option>Email (Customer)</option>
             <option>Phone Number (Customer)</option>
             <option>First Name (Customer)</option>
             <option>Last Name (Customer)</option>
-            <option>Organization</option>
+            <option>Organizations</option>
           </select>
           <input type="text" id="globalSearch" placeholder="Search by Merchant Reference" oninput="applyFilters()">
           <button class="btn" onclick="applyFilters()">Search</button>
@@ -316,21 +322,8 @@
           <div class="chip active" onclick="toggleChip(this)">Created: 5/1/2026 – 7/27/2026 <span class="caret">▾</span></div>
           <div class="chip" onclick="toggleChip(this)">Organization (+1) <span class="caret">▾</span></div>
           <div class="chip" onclick="toggleChip(this)">Payment status <span class="caret">▾</span></div>
-          <div class="chip" onclick="toggleFilterPanel()">More filters <span class="caret">▾</span></div>
+          <div class="chip" onclick="openFilterPanel()">Filters <span class="caret">▾</span></div>
           <span class="clear-link" onclick="clearAllFilters()">Clear filters</span>
-        </div>
-
-        <div class="filter-panel" id="morefilters">
-          <div class="filter-panel-grid">
-            <div class="field" style="margin-bottom:0"><label class="field-label">First Name (Customer)</label><input type="text" id="f_first" oninput="applyFilters()"></div>
-            <div class="field" style="margin-bottom:0"><label class="field-label">Last Name (Customer)</label><input type="text" id="f_last" oninput="applyFilters()"></div>
-            <div class="field" style="margin-bottom:0"><label class="field-label">Email (Customer)</label><input type="text" id="f_email" oninput="applyFilters()"></div>
-            <div class="field" style="margin-bottom:0"><label class="field-label">Phone Number (Customer)</label><input type="text" id="f_phone" oninput="applyFilters()"></div>
-          </div>
-          <div class="filter-panel-actions">
-            <button class="btn-text" onclick="clearAllFilters()">Reset</button>
-            <button class="btn btn-primary" onclick="toggleFilterPanel()">Done</button>
-          </div>
         </div>
 
         <div class="result-count" id="resultCount">Total: 6 Payment links</div>
@@ -347,19 +340,19 @@
                 </th>
                 <th>
                   <div class="th-inner">
+                    <div class="th-label">Organizations</div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('org', this.value)"></div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
                     <div class="th-label" style="cursor:default">Amount</div>
                   </div>
                 </th>
                 <th>
                   <div class="th-inner">
-                    <div class="th-label">First Name</div>
-                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('first', this.value)"></div>
-                  </div>
-                </th>
-                <th>
-                  <div class="th-inner">
-                    <div class="th-label">Last Name</div>
-                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('last', this.value)"></div>
+                    <div class="th-label">Email (Recipient)</div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('recipient', this.value)"></div>
                   </div>
                 </th>
                 <th>
@@ -370,25 +363,13 @@
                 </th>
                 <th>
                   <div class="th-inner">
-                    <div class="th-label">Phone (Customer)</div>
-                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('phone', this.value)"></div>
-                  </div>
-                </th>
-                <th>
-                  <div class="th-inner">
-                    <div class="th-label">Organization</div>
-                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('org', this.value)"></div>
-                  </div>
-                </th>
-                <th>
-                  <div class="th-inner">
                     <div class="th-label">Merchant Reference</div>
                     <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('ref', this.value)"></div>
                   </div>
                 </th>
                 <th>
                   <div class="th-inner">
-                    <div class="th-label">Status</div>
+                    <div class="th-label">Payment Status</div>
                     <div class="th-filter">
                       <select onchange="colFilter('status', this.value)" style="padding:5px 7px;font-size:12px;border-radius:6px;">
                         <option value="">All</option>
@@ -415,15 +396,38 @@
         </div>
       </div>
 
-      <!-- ===================== CREATE VIEW ===================== -->
-      <div class="view" id="view-create">
-        <div class="create-head">
-          <div class="create-title">
-            <div class="back-btn" onclick="showList()">←</div>
-            <h1>Create Payment Link</h1>
-          </div>
-        </div>
+    </div>
+  </div>
+</div>
 
+<!-- ===================== FILTERS SIDE PANEL ===================== -->
+<div class="side-panel-overlay" id="filterPanelOverlay" onclick="closeFilterPanel()"></div>
+<div class="side-panel" id="filterPanel">
+  <div class="side-panel-hd">
+    <h3>Filters</h3>
+    <div class="back-btn" onclick="closeFilterPanel()" title="Close">✕</div>
+  </div>
+  <div class="side-panel-body">
+    <div class="side-panel-section-label">Customer</div>
+    <div class="field"><label class="field-label">Phone Number (Customer)</label><input type="text" id="f_phone" placeholder="e.g. +31..." oninput="colFilter('phone', this.value)"></div>
+    <div class="field"><label class="field-label">First Name (Customer)</label><input type="text" id="f_first" oninput="colFilter('first', this.value)"></div>
+    <div class="field"><label class="field-label">Last Name (Customer)</label><input type="text" id="f_last" oninput="colFilter('last', this.value)"></div>
+  </div>
+  <div class="side-panel-actions">
+    <button class="btn-text" onclick="clearAllFilters()">Reset</button>
+    <button class="btn btn-primary" onclick="closeFilterPanel()">Apply</button>
+  </div>
+</div>
+
+<!-- ===================== CREATE PAYMENT LINK MODAL ===================== -->
+<div class="modal-overlay" id="createModalOverlay">
+  <div class="create-modal-box">
+    <div class="create-head">
+      <h1>Create Payment Link</h1>
+      <div class="back-btn" onclick="showList()" title="Close">✕</div>
+    </div>
+
+    <div class="create-modal-body">
         <div class="stepper centered">
           <div class="step-node" id="step-node-1"><div class="step-dot">1</div><div class="step-label">Payment Settings</div></div>
           <div class="step-line" id="step-line-1"></div>
@@ -705,41 +709,36 @@
         </div>
         <!-- ---------- /STEP 3 ---------- -->
 
-        <!-- ---------- UNIFIED WIZARD FOOTER ---------- -->
-        <div class="wizard-footer" id="wizardFooter">
-          <button class="btn-text" onclick="showList()">Discard</button>
-          <div class="wizard-footer-right">
-            <div class="footer-actions" id="footer-actions-1">
-              <button class="btn btn-primary" onclick="goStep(2)">Continue to link settings →</button>
-            </div>
-            <div class="footer-actions" id="footer-actions-2" style="display:none">
-              <button class="btn" onclick="goStep(1)">← Back to payment settings</button>
-              <button class="btn btn-primary" onclick="submitLink()">Create payment link</button>
-            </div>
-            <div class="footer-actions" id="footer-actions-3" style="display:none">
-              <a href="#" onclick="showList();return false;">Return to payment links →</a>
-            </div>
-          </div>
+    </div><!-- /create-modal-body -->
+
+    <!-- ---------- UNIFIED WIZARD FOOTER ---------- -->
+    <div class="wizard-footer" id="wizardFooter">
+      <button class="btn-text" onclick="showList()">Discard</button>
+      <div class="wizard-footer-right">
+        <div class="footer-actions" id="footer-actions-1">
+          <button class="btn btn-primary" onclick="goStep(2)">Continue to link settings →</button>
         </div>
-
+        <div class="footer-actions" id="footer-actions-2" style="display:none">
+          <button class="btn" onclick="goStep(1)">← Back to payment settings</button>
+          <button class="btn btn-primary" onclick="submitLink()">Create payment link</button>
+        </div>
+        <div class="footer-actions" id="footer-actions-3" style="display:none">
+          <a href="#" onclick="showList();return false;">Return to payment links →</a>
+        </div>
       </div>
-
     </div>
-  </div>
-</div>
+
+  </div><!-- /create-modal-box -->
+</div><!-- /createModalOverlay -->
 
 <script>
   // ---------- view switching ----------
   function showCreate(){
-    document.getElementById('view-list').classList.remove('visible');
-    document.getElementById('view-create').classList.add('visible');
+    document.getElementById('createModalOverlay').classList.add('open');
     goStep(1);
-    window.scrollTo(0,0);
   }
   function showList(){
-    document.getElementById('view-create').classList.remove('visible');
-    document.getElementById('view-list').classList.add('visible');
-    window.scrollTo(0,0);
+    document.getElementById('createModalOverlay').classList.remove('open');
   }
   function submitLink(){ goStep(3); }
 
@@ -776,7 +775,8 @@
         toggleReveal('sendPhone','phoneField');
       }
     }
-    window.scrollTo(0,0);
+    const modalBody = document.querySelector('.create-modal-body');
+    if(modalBody) modalBody.scrollTop = 0;
   }
 
   function resetCreateFlow(){
@@ -825,16 +825,23 @@
     document.getElementById(fieldId).style.display = document.getElementById(checkboxId).checked ? 'block' : 'none';
   }
   function toggleChip(el){ el.classList.toggle('active'); }
-  function toggleFilterPanel(){ document.getElementById('morefilters').classList.toggle('open'); }
+  function openFilterPanel(){
+    document.getElementById('filterPanelOverlay').classList.add('open');
+    document.getElementById('filterPanel').classList.add('open');
+  }
+  function closeFilterPanel(){
+    document.getElementById('filterPanelOverlay').classList.remove('open');
+    document.getElementById('filterPanel').classList.remove('open');
+  }
 
   // ---------- mock data + grid ----------
   const rows = [
-    {created:'25 Jul 2026, 19:36', amount:'150.00 EUR', first:'Joshua', last:'Simon', email:'joshua.simon@verifone.com', phone:'+31 6 1122 3344', org:'Verifone Nordics', ref:'123456789', status:'Expired', link:'https://checkout.vficloud.net/v2/checkout/48aa774d-b7c4-4520-941a-9e21c8f30b6d'},
-    {created:'10 Jul 2026, 18:22', amount:'1.00 SEK', first:'—', last:'—', email:'test@test.com', phone:'—', org:'Verifone Australia', ref:'DefaultMerch', status:'Completed', link:'https://checkout.vficloud.net/v2/checkout/7c119a02-4e6a-4d31-8f0b-1a2e3c4d5e6f'},
-    {created:'21 Jun 2026, 15:48', amount:'20.00 EUR', first:'Anna', last:'Gomez', email:'a.gomez@test.com', phone:'+31 6 5566 7788', org:'Parent', ref:'DefaultMerch', status:'Pending', link:'https://checkout.vficloud.net/v2/checkout/9b2d6e10-55a1-4c8e-b6f0-2d3e4f5a6b7c'},
-    {created:'18 Jun 2026, 09:12', amount:'75.00 EUR', first:'Mikael', last:'Berg', email:'m.berg@verifone.com', phone:'+46 7 0011 2233', org:'Verifone Nordics', ref:'INV-2291', status:'Completed', link:'https://checkout.vficloud.net/v2/checkout/3f4a5b6c-7d8e-49f0-a1b2-c3d4e5f6a7b8'},
-    {created:'02 Jun 2026, 14:05', amount:'320.00 USD', first:'—', last:'—', email:'—', phone:'—', org:'Verifone Australia', ref:'ORD-8842', status:'Disabled', link:'https://checkout.vficloud.net/v2/checkout/aa11bb22-cc33-4dd4-ee55-ff6600aa11bb'},
-    {created:'22 May 2026, 11:40', amount:'44.90 EUR', first:'Sofia', last:'Rossi', email:'s.rossi@test.com', phone:'+39 3 1234 5678', org:'Parent', ref:'DefaultMerch', status:'Expired', link:'https://checkout.vficloud.net/v2/checkout/deadbeef-1234-4abc-9def-0123456789ab'},
+    {created:'25 Jul 2026, 19:36', amount:'150.00 EUR', first:'Joshua', last:'Simon', email:'joshua.simon@verifone.com', recipient:'joshua.simon@verifone.com', phone:'+31 6 1122 3344', org:'Verifone Nordics', ref:'123456789', status:'Expired', link:'https://checkout.vficloud.net/v2/checkout/48aa774d-b7c4-4520-941a-9e21c8f30b6d'},
+    {created:'10 Jul 2026, 18:22', amount:'1.00 SEK', first:'—', last:'—', email:'test@test.com', recipient:'—', phone:'—', org:'Verifone Australia', ref:'DefaultMerch', status:'Completed', link:'https://checkout.vficloud.net/v2/checkout/7c119a02-4e6a-4d31-8f0b-1a2e3c4d5e6f'},
+    {created:'21 Jun 2026, 15:48', amount:'20.00 EUR', first:'Anna', last:'Gomez', email:'a.gomez@test.com', recipient:'accounts@acmecorp.com', phone:'+31 6 5566 7788', org:'Parent', ref:'DefaultMerch', status:'Pending', link:'https://checkout.vficloud.net/v2/checkout/9b2d6e10-55a1-4c8e-b6f0-2d3e4f5a6b7c'},
+    {created:'18 Jun 2026, 09:12', amount:'75.00 EUR', first:'Mikael', last:'Berg', email:'m.berg@verifone.com', recipient:'m.berg@verifone.com', phone:'+46 7 0011 2233', org:'Verifone Nordics', ref:'INV-2291', status:'Completed', link:'https://checkout.vficloud.net/v2/checkout/3f4a5b6c-7d8e-49f0-a1b2-c3d4e5f6a7b8'},
+    {created:'02 Jun 2026, 14:05', amount:'320.00 USD', first:'—', last:'—', email:'—', recipient:'billing@retailer.com', phone:'—', org:'Verifone Australia', ref:'ORD-8842', status:'Disabled', link:'https://checkout.vficloud.net/v2/checkout/aa11bb22-cc33-4dd4-ee55-ff6600aa11bb'},
+    {created:'22 May 2026, 11:40', amount:'44.90 EUR', first:'Sofia', last:'Rossi', email:'s.rossi@test.com', recipient:'s.rossi@test.com', phone:'+39 3 1234 5678', org:'Parent', ref:'DefaultMerch', status:'Expired', link:'https://checkout.vficloud.net/v2/checkout/deadbeef-1234-4abc-9def-0123456789ab'},
   ];
   let colFilters = {};
   let sortState = {key:'created', dir:'desc'};
@@ -865,19 +872,17 @@
     document.getElementById('tbody').innerHTML = data.map((r,i)=>`
       <tr>
         <td>${r.created}</td>
-        <td class="mono">${r.amount}</td>
-        <td>${r.first}</td>
-        <td>${r.last}</td>
-        <td class="${r.email==='—'?'muted':''}">${r.email}</td>
-        <td class="${r.phone==='—'?'muted':''}">${r.phone}</td>
         <td>${r.org}</td>
+        <td class="mono">${r.amount}</td>
+        <td class="${r.recipient==='—'?'muted':''}">${r.recipient}</td>
+        <td class="${r.email==='—'?'muted':''}">${r.email}</td>
         <td class="mono">${r.ref}</td>
         <td><span class="status ${statusClass(r.status)}">${r.status}</span></td>
         <td class="row-action-cell">
           <button class="row-copy-btn" title="Copy payment link" onclick="copyRowLink(this,'${r.link}')">📋</button>
         </td>
       </tr>
-    `).join('') || `<tr><td colspan="10" style="text-align:center;color:var(--text-faint);padding:32px">No payment links match these filters.</td></tr>`;
+    `).join('') || `<tr><td colspan="8" style="text-align:center;color:var(--text-faint);padding:32px">No payment links match these filters.</td></tr>`;
   }
 
   function copyRowLink(btn, url){
@@ -892,14 +897,10 @@
   function applyFilters(){ render(); }
   function clearAllFilters(){
     colFilters = {};
-    amountRange = {min:'', max:''};
     document.querySelectorAll('.th-filter input').forEach(i=>i.value='');
     document.querySelectorAll('.th-filter select').forEach(s=>s.value='');
+    document.querySelectorAll('.side-panel-body input').forEach(i=>i.value='');
     document.getElementById('globalSearch').value='';
-    document.getElementById('f_first').value='';
-    document.getElementById('f_last').value='';
-    document.getElementById('f_email').value='';
-    document.getElementById('f_phone').value='';
     document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
     render();
   }
