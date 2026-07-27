@@ -319,9 +319,6 @@
         </div>
 
         <div class="filters">
-          <div class="chip active" onclick="toggleChip(this)">Created: 5/1/2026 – 7/27/2026 <span class="caret">▾</span></div>
-          <div class="chip" onclick="toggleChip(this)">Organization (+1) <span class="caret">▾</span></div>
-          <div class="chip" onclick="toggleChip(this)">Payment status <span class="caret">▾</span></div>
           <div class="chip" onclick="openFilterPanel()">Filters <span class="caret">▾</span></div>
           <span class="clear-link" onclick="clearAllFilters()">Clear filters</span>
         </div>
@@ -824,7 +821,6 @@
   function toggleReveal(checkboxId, fieldId){
     document.getElementById(fieldId).style.display = document.getElementById(checkboxId).checked ? 'block' : 'none';
   }
-  function toggleChip(el){ el.classList.toggle('active'); }
   function openFilterPanel(){
     document.getElementById('filterPanelOverlay').classList.add('open');
     document.getElementById('filterPanel').classList.add('open');
