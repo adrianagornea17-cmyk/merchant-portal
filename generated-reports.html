@@ -254,11 +254,11 @@
   }
   table{ width:100%; table-layout:fixed; border-collapse:collapse; font-size:13.5px; }
   thead tr.header-row th{
-    background:var(--header-bg); text-align:left; padding:11px 12px;
+    background:var(--header-bg); text-align:left; padding:10px 12px 12px;
     font-weight:700; color:#222; border-bottom:1px solid var(--border);
-    white-space:nowrap; position:relative;
+    white-space:nowrap; position:relative; vertical-align:top;
   }
-  .th-label-row{ display:flex; align-items:center; gap:6px; }
+  .th-label-row{ display:flex; align-items:center; gap:6px; margin-bottom:8px; }
   .th-label-row .th-text{ font-weight:700; }
   .th-icons{ display:flex; align-items:center; gap:4px; }
   .th-icon-btn{
@@ -267,27 +267,13 @@
   }
   .th-icon-btn:hover{ background:#dfe2e7; color:var(--ink); }
   .th-icon-btn svg{ width:13px; height:13px; }
-  thead tr.filter-row th{
-    background:#fff; padding:8px 10px; border-bottom:1px solid var(--border);
-  }
-  .filter-cell{ display:flex; align-items:center; gap:6px; }
-  .filter-pill{
-    flex:1; display:flex; align-items:center; gap:6px;
-    border:1px solid var(--border); border-radius:16px; padding:5px 10px; background:#fff; min-width:0;
-  }
-  .filter-pill svg{ width:13px; height:13px; color:#9aa1ab; flex-shrink:0; }
   .filter-input{
-    flex:1; border:none; outline:none; font-size:12.5px; font-family:inherit; background:transparent; min-width:0;
+    width:100%; height:30px; border:1.5px solid var(--border); border-radius:7px; padding:0 10px;
+    font-size:12.5px; font-weight:400; color:var(--ink); background:#fff; outline:none;
+    font-family:inherit; white-space:normal; box-sizing:border-box; transition:border-color .15s;
   }
-  .filter-pill:focus-within{ border-color:var(--blue); box-shadow:0 0 0 2px rgba(37,99,235,.12); }
-  .filter-caret{ color:#9aa1ab; flex-shrink:0; cursor:pointer; }
-  .filter-caret svg{ width:11px; height:11px; }
-  .filter-funnel{
-    width:26px; height:26px; flex-shrink:0; border:1px solid var(--border); border-radius:6px;
-    background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#6b7280;
-  }
-  .filter-funnel:hover{ background:#f3f4f6; color:var(--blue); }
-  .filter-funnel svg{ width:13px; height:13px; }
+  .filter-input:focus{ border-color:var(--blue); }
+  .filter-input::placeholder{ color:#9aa1ab; }
   tbody td{ padding:11px 12px; border-bottom:1px solid var(--border); vertical-align:middle; }
   tbody tr:last-child td{ border-bottom:none; }
   tbody tr.selected{ background:var(--row-selected); }
@@ -618,7 +604,7 @@
             <colgroup>
               <col style="width:40px">
               <col style="width:160px">
-              <col>
+              <col style="width:220px">
               <col style="width:130px">
               <col style="width:160px">
               <col style="width:150px">
@@ -635,6 +621,7 @@
                       <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
                     </span>
                   </div>
+                  <input class="filter-input" type="text" placeholder="Search…" data-filter="generatedOn">
                 </th>
                 <th data-key="reportName">
                   <div class="th-label-row">
@@ -644,6 +631,7 @@
                       <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
                     </span>
                   </div>
+                  <input class="filter-input" type="text" placeholder="Search by Report Name…" data-filter="reportName">
                 </th>
                 <th data-key="reportId">
                   <div class="th-label-row">
@@ -653,6 +641,7 @@
                       <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
                     </span>
                   </div>
+                  <input class="filter-input" type="text" placeholder="Search…" data-filter="reportId">
                 </th>
                 <th data-key="organization">
                   <div class="th-label-row">
@@ -662,6 +651,7 @@
                       <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
                     </span>
                   </div>
+                  <input class="filter-input" type="text" placeholder="Search…" data-filter="organization">
                 </th>
                 <th data-key="reportType">
                   <div class="th-label-row">
@@ -671,53 +661,9 @@
                       <button class="th-icon-btn th-menu" title="Column options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
                     </span>
                   </div>
+                  <input class="filter-input" type="text" placeholder="Search…" data-filter="reportType">
                 </th>
                 <th class="col-actions">Actions</th>
-              </tr>
-              <tr class="filter-row">
-                <th></th>
-                <th>
-                  <div class="filter-cell">
-                    <div class="filter-pill">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-                      <input class="filter-input" placeholder="Search" data-filter="generatedOn">
-                      <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-                    </div>
-                    <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
-                  </div>
-                </th>
-                <th></th>
-                <th>
-                  <div class="filter-cell">
-                    <div class="filter-pill">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-                      <input class="filter-input" placeholder="Search" data-filter="reportId">
-                      <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-                    </div>
-                    <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
-                  </div>
-                </th>
-                <th>
-                  <div class="filter-cell">
-                    <div class="filter-pill">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-                      <input class="filter-input" placeholder="Search" data-filter="organization">
-                      <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-                    </div>
-                    <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
-                  </div>
-                </th>
-                <th>
-                  <div class="filter-cell">
-                    <div class="filter-pill">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-                      <input class="filter-input" placeholder="Search" data-filter="reportType">
-                      <span class="filter-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-                    </div>
-                    <button class="filter-funnel" title="Filter options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16l-6 8v6l-4 2v-8z"/></svg></button>
-                  </div>
-                </th>
-                <th></th>
               </tr>
             </thead>
             <tbody id="tbody"></tbody>
@@ -941,7 +887,7 @@ const REPORTS = [
 let sortKey = "generatedOn";
 let sortDir = "asc"; // matches the ascending arrow shown in the original screenshot
 const selected = new Set();
-const filters = { generatedOn:"", reportId:"", organization:"", reportType:"" };
+const filters = { generatedOn:"", reportName:"", reportId:"", organization:"", reportType:"" };
 
 const tbody = document.getElementById("tbody");
 const headerCheck = document.getElementById("headerCheck");
@@ -954,6 +900,7 @@ const REDIRECT_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 function getFiltered(){
   return REPORTS.filter(r =>
     r.generatedOn.toLowerCase().includes(filters.generatedOn.toLowerCase()) &&
+    r.reportName.toLowerCase().includes(filters.reportName.toLowerCase()) &&
     r.reportId.toLowerCase().includes(filters.reportId.toLowerCase()) &&
     r.organization.toLowerCase().includes(filters.organization.toLowerCase()) &&
     r.reportType.toLowerCase().includes(filters.reportType.toLowerCase())
