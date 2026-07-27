@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pay by Link — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#1456EB;
+    --primary-hover:#0F42BD;
+    --primary-soft:#EAF0FF;
+    --bg:#F4F5F7;
+    --surface:#FFFFFF;
+    --border:#E3E6EB;
+    --border-strong:#D3D7DE;
+    --text:#171B21;
+    --text-soft:#5B6472;
+    --text-faint:#8A93A1;
+    --success-bg:#E6F6EC;
+    --success-text:#127A3B;
+    --warn-bg:#FDEEEE;
+    --warn-text:#B0264A;
+    --neutral-bg:#EEF0F3;
+    --neutral-text:#5B6472;
+    --sidebar:#0C1220;
+    --radius:10px;
+    --radius-sm:6px;
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+    font-family:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  body{font-size:14px;line-height:1.45;}
+  a{color:var(--primary);text-decoration:none;}
+
+  /* ---------- SHELL ---------- */
+  .shell{display:flex;min-height:100vh;}
+  .sidebar{width:56px;background:var(--sidebar);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:22px;flex-shrink:0;}
+  .sidebar .brand{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #4C7BFF, #0C1220 70%);margin-bottom:14px;}
+  .sidebar .icon{width:20px;height:20px;opacity:.5;color:#fff;}
+  .sidebar .icon.active{opacity:1;background:var(--primary);border-radius:8px;padding:6px;width:20px;height:20px;}
+  .sidebar-spacer{flex:1;}
+
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .breadcrumb{font-size:13px;color:var(--text-faint);}
+  .breadcrumb b{color:var(--text-soft);font-weight:500;}
+  .org-pill{border:1px solid var(--border-strong);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;color:var(--text-soft);}
+
+  .content{padding:24px 28px 60px;max-width:1360px;width:100%;margin:0 auto;}
+  #view-create{padding-bottom:88px;}
+
+  /* ---------- BUTTONS / INPUTS ---------- */
+  .btn{border:1px solid var(--border-strong);background:var(--surface);color:var(--text);border-radius:8px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s;}
+  .btn:hover{border-color:var(--text-faint);}
+  .btn-primary{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .btn-primary:hover{background:var(--primary-hover);border-color:var(--primary-hover);}
+  .btn-ghost{border-color:transparent;background:transparent;color:var(--text-soft);}
+  .btn-ghost:hover{background:var(--neutral-bg);}
+  .btn-text{background:none;border:none;color:var(--text-soft);font-weight:600;font-size:13.5px;cursor:pointer;}
+  .btn-text.danger{color:var(--warn-text);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  input[type=text],input[type=number],input[type=email],input[type=tel],select,textarea{
+    width:100%;border:1px solid var(--border-strong);border-radius:8px;padding:9px 11px;font-size:13.5px;font-family:inherit;color:var(--text);background:var(--surface);
+  }
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--primary-soft);border-color:var(--primary);}
+  label.field-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-soft);margin-bottom:5px;}
+  label.field-label .opt{font-weight:400;color:var(--text-faint);}
+  .field{margin-bottom:16px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .hint{font-size:11.5px;color:var(--text-faint);margin-top:4px;}
+
+  /* ---------- LIST VIEW ---------- */
+  .page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .page-title{font-size:24px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .page-title .star{color:var(--text-faint);font-size:16px;}
+
+  .searchbar{display:flex;gap:10px;margin-bottom:12px;}
+  .searchbar select{width:210px;flex-shrink:0;}
+  .searchbar input{flex:1;}
+
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+  .chip{border:1px solid var(--border-strong);background:var(--surface);border-radius:20px;padding:7px 12px;font-size:12.5px;font-weight:600;color:var(--text-soft);cursor:pointer;display:flex;align-items:center;gap:6px;}
+  .chip.active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);}
+  .chip .caret{font-size:9px;opacity:.7;}
+  .clear-link{font-size:12.5px;font-weight:600;color:var(--text-faint);cursor:pointer;margin-left:2px;}
+  .result-count{font-size:12.5px;color:var(--text-faint);margin-bottom:10px;}
+
+  .grid-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+  table.ag{width:100%;border-collapse:collapse;font-size:13px;}
+  table.ag thead th{background:#FAFBFC;border-bottom:1px solid var(--border);padding:0;vertical-align:top;position:relative;}
+  .th-inner{padding:9px 12px 6px;}
+  .th-label{display:flex;align-items:center;gap:5px;font-weight:600;color:var(--text-soft);font-size:12px;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;user-select:none;}
+  .th-label .sort{font-size:10px;color:var(--text-faint);display:flex;flex-direction:column;line-height:.6;margin-left:2px;}
+  .th-label .sort span{opacity:.4;}
+  .th-label .sort span.on{opacity:1;color:var(--primary);}
+  .th-filter{display:flex;gap:4px;margin-top:6px;}
+  .th-filter input{padding:5px 7px;font-size:12px;border-radius:6px;}
+  .th-filter-btn{border:1px solid var(--border-strong);border-radius:6px;background:var(--surface);width:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-faint);}
+  .th-filter-btn.active{color:var(--primary);border-color:var(--primary);background:var(--primary-soft);}
+
+  table.ag tbody td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text);white-space:nowrap;}
+  table.ag tbody tr:last-child td{border-bottom:none;}
+  table.ag tbody tr:hover{background:#FAFBFF;}
+  .row-action-cell{text-align:center;}
+  .row-copy-btn{border:1px solid var(--border-strong);background:var(--surface);border-radius:6px;width:28px;height:28px;cursor:pointer;opacity:0;transition:.12s;font-size:13px;}
+  table.ag tbody tr:hover .row-copy-btn{opacity:1;}
+  .row-copy-btn:hover{border-color:var(--primary);background:var(--primary-soft);}
+  .row-copy-btn.copied{opacity:1;color:var(--success-text);border-color:var(--success-text);background:var(--success-bg);}
+  .mono{font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
+  .muted{color:var(--text-faint);}
+
+  .status{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.02em;}
+  .status.expired{background:var(--neutral-bg);color:var(--neutral-text);}
+  .status.completed{background:var(--success-bg);color:var(--success-text);}
+  .status.pending{background:#FFF6E5;color:#9A6700;}
+  .status.disabled{background:var(--warn-bg);color:var(--warn-text);}
+
+  .pager{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text-soft);}
+  .pager .pg-btns{display:flex;gap:4px;}
+  .pg-btn{border:1px solid var(--border-strong);background:var(--surface);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-soft);}
+  .pg-btn:hover{border-color:var(--text-faint);}
+
+  .filter-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px;display:none;}
+  .filter-panel.open{display:block;}
+  .filter-panel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .filter-panel-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;}
+
+  /* ---------- CREATE VIEW ---------- */
+  .view{display:none;}
+  .view.visible{display:block;}
+
+  .create-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;position:sticky;top:0;background:var(--bg);padding:4px 0 12px;z-index:5;}
+  .create-title{display:flex;align-items:center;gap:12px;}
+  .back-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-soft);font-size:16px;}
+  .back-btn:hover{background:var(--neutral-bg);}
+  .create-title h1{font-size:22px;font-weight:700;margin:0;}
+  .centered{margin-left:auto;margin-right:auto;}
+
+  .wizard-footer{position:fixed;left:56px;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;z-index:30;box-shadow:0 -2px 8px rgba(16,24,40,.04);}
+  .wizard-footer.final-step > .btn-text{visibility:hidden;}
+  .wizard-footer-right{display:flex;align-items:center;gap:10px;}
+  .footer-actions{display:flex;align-items:center;gap:10px;}
+
+  .create-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:start;}
+  .disabled-block{transition:opacity .15s;}
+  .disabled-block.is-disabled{opacity:.55;}
+  .disabled-block.is-disabled .field-label{color:var(--text-faint);}
+
+  .accordion{border-top:1px solid var(--border);}
+  .accordion-trigger{padding:16px 20px;display:flex;align-items:baseline;gap:10px;cursor:pointer;font-weight:600;font-size:13.5px;color:var(--primary);user-select:none;}
+  .accordion-trigger:hover{background:#FAFBFF;}
+  .accordion-trigger.card-head-trigger{border-top:none;font-size:15px;}
+  .acc-icon{font-size:14px;width:16px;text-align:center;transition:.15s;}
+  .acc-sub{font-weight:400;color:var(--text-faint);font-size:12px;margin-left:2px;}
+  .accordion-body{display:none;padding:0 20px 20px;}
+  .accordion.open .accordion-body{display:block;}
+  .accordion.open .acc-icon{transform:rotate(45deg);}
+  .col{display:flex;flex-direction:column;gap:20px;}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .card-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .card-head h2{font-size:15px;font-weight:700;margin:0;}
+  .card-head .tag{font-size:11px;font-weight:700;color:var(--text-faint);text-transform:uppercase;letter-spacing:.04em;}
+  .card-body{padding:20px;}
+  .card-body .field:last-child{margin-bottom:0;}
+
+  .divider-label{font-size:11px;font-weight:700;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;margin:18px 0 10px;padding-top:14px;border-top:1px solid var(--border);}
+  .divider-label:first-child{margin-top:0;padding-top:0;border-top:none;}
+
+  .radio-row{display:flex;gap:22px;margin-bottom:16px;}
+  .radio-opt{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:500;cursor:pointer;}
+  .radio-opt input{width:auto;}
+
+  .currency-amount{display:grid;grid-template-columns:110px 1fr;gap:0;}
+  .currency-amount select{border-radius:8px 0 0 8px;border-right:none;}
+  .currency-amount input{border-radius:0 8px 8px 0;}
+
+  .product-card{border:1px solid var(--border);border-radius:8px;padding:16px;background:#FAFBFC;margin-bottom:12px;}
+  .product-total{background:var(--neutral-bg);border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:14px;}
+  .product-total.grand{background:var(--primary-soft);color:var(--primary);}
+
+  .pm-row{border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;}
+  .pm-row.warn{border-color:#F4C7D3;}
+  .pm-summary{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;background:var(--surface);}
+  .pm-summary:hover{background:#FAFBFF;}
+  .pm-summary input[type=checkbox]{width:auto;margin:0;}
+  .pm-summary .pm-name{font-weight:600;flex:1;display:flex;align-items:center;gap:8px;}
+  .pm-summary .pm-icons{display:flex;gap:4px;align-items:center;}
+  .pm-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--neutral-bg);color:var(--text-soft);}
+  .pm-chev{color:var(--text-faint);transition:.15s;font-size:11px;}
+  .pm-detail{padding:14px;border-top:1px solid var(--border);background:#FCFCFD;display:none;}
+  .pm-row.open .pm-detail{display:block;}
+  .pm-row.open .pm-chev{transform:rotate(180deg);}
+  .pm-warn-text{font-size:11.5px;color:var(--warn-text);font-weight:600;padding:0 14px 10px;margin-top:-4px;}
+
+  .contract-note{background:#FFF9E8;border:1px solid #F3E3AC;border-radius:6px;padding:9px 11px;font-size:12px;color:#7A5C00;margin-bottom:12px;display:flex;gap:8px;}
+
+  .toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;cursor:pointer;}
+  .toggle input{display:none;}
+  .toggle .track{width:34px;height:19px;border-radius:20px;background:var(--border-strong);position:relative;transition:.15s;flex-shrink:0;}
+  .toggle .track::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:.15s;}
+  .toggle input:checked + .track{background:var(--primary);}
+  .toggle input:checked + .track::after{left:17px;}
+
+  .summary-bar{background:var(--neutral-bg);border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:18px;font-size:14px;max-width:640px;}
+  .summary-bar span.amt{color:var(--primary);font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- STEPPER ---------- */
+  .stepper{display:flex;align-items:center;max-width:640px;margin:4px auto 28px;}
+  .step-node{display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0;}
+  .step-dot{width:28px;height:28px;border-radius:50%;background:var(--border-strong);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;transition:.15s;}
+  .step-label{font-size:12.5px;font-weight:600;color:var(--text-faint);white-space:nowrap;}
+  .step-node.active .step-dot{background:var(--primary);}
+  .step-node.active .step-label{color:var(--text);}
+  .step-node.done .step-dot{background:var(--success-text);}
+  .step-node.done .step-label{color:var(--text-soft);}
+  .step-line{flex:1;height:2px;background:var(--border-strong);margin:0 10px 24px;transition:.15s;}
+  .step-line.done{background:var(--success-text);}
+
+
+
+  .success-inline{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;max-width:480px;}
+  .success-inline .success-top{background:var(--success-bg);padding:28px 24px;text-align:center;}
+  .success-inline .success-body{padding:18px 24px 20px;}
+
+  .done-grid{display:grid;grid-template-columns:1.3fr .9fr;gap:20px;align-items:start;max-width:820px;}
+  .success-inline{max-width:none;}
+  .link-copy-full{display:flex;gap:8px;margin:6px 0 14px;}
+  .link-copy-full input{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-soft);background:var(--neutral-bg);border-color:var(--border);}
+  .link-copy-full button{flex-shrink:0;}
+  .link-copy-full button.copied{background:var(--success-text);border-color:var(--success-text);}
+  .done-quick-actions{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+
+  .checkout-preview{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+  .preview-frame{border:1px solid var(--border-strong);border-radius:10px;padding:20px;text-align:center;background:#FAFBFC;margin-bottom:8px;}
+  .preview-header{font-weight:700;font-size:12px;display:flex;justify-content:space-between;color:var(--text-soft);margin-bottom:16px;text-transform:lowercase;}
+  .preview-header span{font-weight:500;color:var(--text-faint);text-transform:none;}
+  .preview-merchant{font-size:12px;color:var(--text-faint);margin-bottom:4px;}
+  .preview-amount{font-size:26px;font-weight:700;margin-bottom:14px;font-family:'IBM Plex Mono',monospace;}
+  .preview-methods{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+  .preview-btn{background:var(--primary);color:#fff;border-radius:8px;padding:10px;font-weight:700;font-size:13px;}
+
+  .done-next-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
+  .done-next-card h4{margin:0 0 12px;font-size:14px;}
+  .next-list{margin:0 0 16px;padding-left:18px;font-size:12.5px;color:var(--text-soft);line-height:1.6;}
+  .next-list li{margin-bottom:8px;}
+
+  /* success overlay */
+  .overlay{position:fixed;inset:0;background:rgba(12,18,32,.45);display:none;align-items:center;justify-content:center;z-index:50;}
+  .overlay.open{display:flex;}
+  .success-card{background:var(--surface);border-radius:var(--radius);width:480px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;}
+  .success-top{background:var(--success-bg);padding:28px 24px;text-align:center;}
+  .success-check{width:44px;height:44px;border-radius:50%;background:var(--success-text);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 12px;}
+  .success-top h3{margin:0 0 6px;font-size:16px;}
+  .link-copy{display:flex;gap:8px;background:var(--surface);border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;align-items:center;margin-top:14px;}
+  .link-copy input{border:none;padding:2px;font-size:12px;color:var(--text-soft);}
+  .success-body{padding:20px 24px;}
+  .success-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px solid var(--border);}
+  .success-row:last-child{border-bottom:none;}
+  .success-row span:first-child{color:var(--text-faint);}
+  .success-footer{padding:14px 24px;text-align:right;border-top:1px solid var(--border);}
+
+  @media (max-width:960px){
+    .create-grid{grid-template-columns:1fr;}
+    .filter-panel-grid{grid-template-columns:repeat(2,1fr);}
+    .done-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="sidebar">
+    <div class="brand"></div>
+    <div class="icon">▤</div>
+    <div class="icon active">▣</div>
+    <div class="icon">◈</div>
+    <div class="icon">♡</div>
+    <div class="icon">☰</div>
+    <div class="sidebar-spacer"></div>
+    <div class="icon">◐</div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="breadcrumb"><a href="#">Home</a> / <a href="#">Commerce</a> / <b>Pay by Link</b></div>
+      <div class="org-pill">🏬 Parent Organization <span style="font-size:10px">▾</span></div>
+    </div>
+
+    <div class="content">
+
+      <!-- ===================== LIST VIEW ===================== -->
+      <div class="view visible" id="view-list">
+        <div class="page-head">
+          <div class="page-title">Pay by Link <span class="star">☆</span></div>
+          <button class="btn btn-primary" onclick="showCreate()">+ Create Payment link</button>
+        </div>
+
+        <div class="searchbar">
+          <select id="searchField">
+            <option>Merchant Reference</option>
+            <option>Email (Customer)</option>
+            <option>Phone Number (Customer)</option>
+            <option>First Name (Customer)</option>
+            <option>Last Name (Customer)</option>
+            <option>Organization</option>
+          </select>
+          <input type="text" id="globalSearch" placeholder="Search by Merchant Reference" oninput="applyFilters()">
+          <button class="btn" onclick="applyFilters()">Search</button>
+        </div>
+
+        <div class="filters">
+          <div class="chip active" onclick="toggleChip(this)">Created: 5/1/2026 – 7/27/2026 <span class="caret">▾</span></div>
+          <div class="chip" onclick="toggleChip(this)">Organization (+1) <span class="caret">▾</span></div>
+          <div class="chip" onclick="toggleChip(this)">Payment status <span class="caret">▾</span></div>
+          <div class="chip" onclick="toggleFilterPanel()">More filters <span class="caret">▾</span></div>
+          <span class="clear-link" onclick="clearAllFilters()">Clear filters</span>
+        </div>
+
+        <div class="filter-panel" id="morefilters">
+          <div class="filter-panel-grid">
+            <div class="field" style="margin-bottom:0"><label class="field-label">First Name (Customer)</label><input type="text" id="f_first" oninput="applyFilters()"></div>
+            <div class="field" style="margin-bottom:0"><label class="field-label">Last Name (Customer)</label><input type="text" id="f_last" oninput="applyFilters()"></div>
+            <div class="field" style="margin-bottom:0"><label class="field-label">Email (Customer)</label><input type="text" id="f_email" oninput="applyFilters()"></div>
+            <div class="field" style="margin-bottom:0"><label class="field-label">Phone Number (Customer)</label><input type="text" id="f_phone" oninput="applyFilters()"></div>
+          </div>
+          <div class="filter-panel-actions">
+            <button class="btn-text" onclick="clearAllFilters()">Reset</button>
+            <button class="btn btn-primary" onclick="toggleFilterPanel()">Done</button>
+          </div>
+        </div>
+
+        <div class="result-count" id="resultCount">Total: 6 Payment links</div>
+
+        <div class="grid-panel">
+          <table class="ag">
+            <thead>
+              <tr>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label" onclick="sortBy('created')">Created <span class="sort"><span id="sort-created-up">▲</span><span id="sort-created-dn" class="on">▼</span></span></div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('created', this.value)"></div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label" style="cursor:default">Amount</div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label">First Name</div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('first', this.value)"></div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label">Last Name</div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('last', this.value)"></div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label">Email (Customer)</div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('email', this.value)"></div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label">Phone (Customer)</div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('phone', this.value)"></div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label">Organization</div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('org', this.value)"></div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label">Merchant Reference</div>
+                    <div class="th-filter"><input type="text" placeholder="Filter…" oninput="colFilter('ref', this.value)"></div>
+                  </div>
+                </th>
+                <th>
+                  <div class="th-inner">
+                    <div class="th-label">Status</div>
+                    <div class="th-filter">
+                      <select onchange="colFilter('status', this.value)" style="padding:5px 7px;font-size:12px;border-radius:6px;">
+                        <option value="">All</option>
+                        <option value="Expired">Expired</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Disabled">Disabled</option>
+                      </select>
+                    </div>
+                  </div>
+                </th>
+                <th style="width:44px"><div class="th-inner"></div></th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+          <div class="pager">
+            <div>Results per page: <b>10</b></div>
+            <div id="pagerCount">Page 1 of 1</div>
+            <div class="pg-btns">
+              <div class="pg-btn">«</div><div class="pg-btn">‹</div><div class="pg-btn">›</div><div class="pg-btn">»</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== CREATE VIEW ===================== -->
+      <div class="view" id="view-create">
+        <div class="create-head">
+          <div class="create-title">
+            <div class="back-btn" onclick="showList()">←</div>
+            <h1>Create Payment Link</h1>
+          </div>
+        </div>
+
+        <div class="stepper centered">
+          <div class="step-node" id="step-node-1"><div class="step-dot">1</div><div class="step-label">Payment Settings</div></div>
+          <div class="step-line" id="step-line-1"></div>
+          <div class="step-node" id="step-node-2"><div class="step-dot">2</div><div class="step-label">Link Settings</div></div>
+          <div class="step-line" id="step-line-2"></div>
+          <div class="step-node" id="step-node-3"><div class="step-dot">3</div><div class="step-label">Done</div></div>
+        </div>
+
+        <!-- ---------- STEP 1: PAYMENT SETTINGS ---------- -->
+        <div class="step-panel" id="step-panel-1">
+        <div class="create-grid">
+
+          <!-- LEFT COLUMN -->
+          <div class="col">
+            <div class="card">
+              <div class="card-head"><h2>Payment settings</h2></div>
+              <div class="card-body">
+                <div class="field">
+                  <label class="field-label">Organization</label>
+                  <select id="orgSelect" onchange="onOrgChange()">
+                    <option value="">- Select -</option>
+                    <option>Parent</option>
+                    <option>Verifone Australia</option>
+                    <option>Verifone Nordics</option>
+                  </select>
+                </div>
+
+                <div id="orgDependentFields" class="disabled-block">
+                  <div class="divider-label">Cart information</div>
+                  <div class="radio-row">
+                    <label class="radio-opt"><input type="radio" name="cart" checked disabled onchange="toggleCart(false)"> Amount</label>
+                    <label class="radio-opt"><input type="radio" name="cart" disabled onchange="toggleCart(true)"> Amount &amp; Product</label>
+                  </div>
+
+                  <div id="cart-amount">
+                    <div class="field">
+                      <label class="field-label">Transaction amount</label>
+                      <div class="currency-amount"><select disabled><option>Currency</option><option>EUR</option><option>USD</option><option>SEK</option></select><input type="number" value="0" disabled></div>
+                    </div>
+                  </div>
+
+                  <div id="cart-product" style="display:none">
+                    <div class="field">
+                      <label class="field-label">Currency</label>
+                      <select><option>Euro [EUR]</option><option>US Dollar [USD]</option></select>
+                    </div>
+                    <div class="divider-label">Product information</div>
+                    <div class="product-card">
+                      <div class="field"><label class="field-label">Product name</label><input type="text" placeholder="Enter product name"></div>
+                      <div class="field"><label class="field-label">Product description <span class="opt">(Optional)</span></label><textarea rows="2" placeholder="Enter a description"></textarea></div>
+                      <div class="field-row">
+                        <div class="field"><label class="field-label">Quantity</label><select><option>1</option><option>2</option><option>3</option></select></div>
+                        <div class="field"><label class="field-label">Price per unit</label><div class="currency-amount"><select><option>EUR</option></select><input type="number" value="0"></div></div>
+                      </div>
+                      <div class="field"><label class="field-label">Product ID/SKU <span class="opt">(Optional)</span></label><input type="text"></div>
+                    </div>
+                    <button class="btn" style="margin-bottom:14px">+ Add product</button>
+                    <div class="product-total grand"><span>Total price</span><span>EUR 0.00</span></div>
+                  </div>
+
+                  <div class="field" style="margin-top:16px"><label class="field-label">Merchant reference <span class="opt">(optional)</span></label><input type="text" disabled></div>
+                  <div class="field"><label class="field-label">Invoice number <span class="opt">(optional)</span></label><input type="text" disabled></div>
+                  <div class="field"><label class="field-label">Sales identifier <span class="opt">(optional)</span></label><input type="text" disabled></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment methods (collapsed by default) -->
+            <div class="card accordion" id="acc-pm">
+              <div class="accordion-trigger card-head-trigger" onclick="toggleAccordion('acc-pm')">
+                <span class="acc-icon">+</span> Configure payment methods <span class="acc-sub">Card, PayPal, Google Pay, Vipps</span>
+              </div>
+              <div class="accordion-body">
+                <p class="hint" style="margin:0 0 14px">Select the payment methods your customer will choose from at checkout.</p>
+
+                <div class="pm-row open">
+                  <div class="pm-summary" onclick="togglePm(this)">
+                    <input type="checkbox" checked onclick="event.stopPropagation()">
+                    <div class="pm-name">💳 Card <span class="pm-icons"><span class="pm-badge">CB</span><span class="pm-badge">Visa</span><span class="pm-badge">+6</span></span></div>
+                    <div class="pm-chev">▾</div>
+                  </div>
+                  <div class="pm-detail">
+                    <div class="contract-note">⚠ Payment type cannot be overridden by selecting different contracts.</div>
+                    <div class="field"><label class="field-label">Payment contract</label><select><option>Carte Bancaire, Mastercard, Visa, Vpay, Electron, Maestro, Diners, American Express, JCB</option></select></div>
+                    <label class="toggle"><input type="checkbox"><span class="track"></span> Enable 3D Secure authentication</label>
+                  </div>
+                </div>
+
+                <div class="pm-row">
+                  <div class="pm-summary" onclick="togglePm(this)">
+                    <input type="checkbox" checked onclick="event.stopPropagation()">
+                    <div class="pm-name">🅿️ PayPal</div>
+                    <div class="pm-chev">▾</div>
+                  </div>
+                  <div class="pm-detail"><p class="hint">No additional configuration required for PayPal.</p></div>
+                </div>
+
+                <div class="pm-row warn">
+                  <div class="pm-summary" onclick="togglePm(this)">
+                    <input type="checkbox" checked onclick="event.stopPropagation()">
+                    <div class="pm-name">🇬 Google Pay</div>
+                    <div class="pm-chev">▾</div>
+                  </div>
+                  <div class="pm-detail"><div class="field" style="margin-bottom:0"><label class="field-label">Payment contract</label><select><option>— Select contract —</option></select></div></div>
+                  <div class="pm-warn-text">Please select contract / mandatory options</div>
+                </div>
+
+                <div class="pm-row warn">
+                  <div class="pm-summary" onclick="togglePm(this)">
+                    <input type="checkbox" checked onclick="event.stopPropagation()">
+                    <div class="pm-name">🧡 Vipps</div>
+                    <div class="pm-chev">▾</div>
+                  </div>
+                  <div class="pm-detail"><div class="field" style="margin-bottom:0"><label class="field-label">Payment contract</label><select><option>— Select contract —</option></select></div></div>
+                  <div class="pm-warn-text">Please select contract / mandatory options</div>
+                </div>
+
+                <label class="toggle" style="margin-top:10px"><input type="checkbox" checked><span class="track"></span> Automatically send transaction for capture</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="col">
+            <!-- Customer details (collapsed by default) -->
+            <div class="card accordion" id="acc-customer">
+              <div class="accordion-trigger card-head-trigger" onclick="toggleAccordion('acc-customer')">
+                <span class="acc-icon">+</span> Add customer address details <span class="acc-sub">Optional</span>
+              </div>
+              <div class="accordion-body">
+                <div class="field"><label class="field-label">Search customer</label><input type="text" placeholder="Search by email or phone number"></div>
+
+                <div class="divider-label">Details</div>
+                <div class="field-row">
+                  <div class="field"><label class="field-label">First name</label><input type="text"></div>
+                  <div class="field"><label class="field-label">Last name</label><input type="text"></div>
+                </div>
+                <div class="field-row">
+                  <div class="field">
+                    <label class="field-label">Email <span class="opt">(Optional)</span></label>
+                    <input type="email" id="custEmail">
+                    <div class="hint">Needed to authenticate the customer for processing</div>
+                  </div>
+                  <div class="field">
+                    <label class="field-label">Phone <span class="opt">(Optional)</span></label>
+                    <input type="tel" id="custPhone" placeholder="06 12345678">
+                    <div class="hint">Will be shared with payment providers for processing</div>
+                  </div>
+                </div>
+                <div class="field"><label class="field-label">Identifier <span class="opt">(Optional)</span></label><input type="text"></div>
+
+                <div class="divider-label">Billing details</div>
+                <div class="field-row">
+                  <div class="field"><label class="field-label">First name</label><input type="text"></div>
+                  <div class="field"><label class="field-label">Last name</label><input type="text"></div>
+                </div>
+                <div class="field-row">
+                  <div class="field"><label class="field-label">Address line 1</label><input type="text"></div>
+                  <div class="field"><label class="field-label">Address line 2 <span class="opt">(Optional)</span></label><input type="text"></div>
+                </div>
+                <div class="field-row">
+                  <div class="field"><label class="field-label">Zip code</label><input type="text"></div>
+                  <div class="field"><label class="field-label">City</label><input type="text"></div>
+                </div>
+                <div class="field-row">
+                  <div class="field"><label class="field-label">State / Province / Region</label><select><option>—</option></select></div>
+                  <div class="field"><label class="field-label">Country</label><select><option>—</option></select></div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="shipSameToggle" checked onchange="toggleShipping()"><span class="track"></span> The shipping address is same as the Billing Address</label>
+
+                <div id="shippingDetails" style="display:none">
+                  <div class="divider-label">Shipping details</div>
+                  <div class="field-row">
+                    <div class="field"><label class="field-label">First name</label><input type="text"></div>
+                    <div class="field"><label class="field-label">Last name</label><input type="text"></div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field"><label class="field-label">Address line 1</label><input type="text"></div>
+                    <div class="field"><label class="field-label">Address line 2 <span class="opt">(Optional)</span></label><input type="text"></div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field"><label class="field-label">Zip code</label><input type="text"></div>
+                    <div class="field"><label class="field-label">City</label><input type="text"></div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field"><label class="field-label">State / Province / Region</label><select><option>—</option></select></div>
+                    <div class="field"><label class="field-label">Country</label><select><option>Netherlands</option></select></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        </div>
+        <!-- ---------- /STEP 1 ---------- -->
+
+        <!-- ---------- STEP 2: LINK SETTINGS ---------- -->
+        <div class="step-panel" id="step-panel-2" style="display:none">
+          <div class="summary-bar centered"><span>Payment settings summary</span> <span class="amt" id="summaryAmt">EUR 0.00</span></div>
+
+          <div class="card centered" style="max-width:640px">
+            <div class="card-head"><h2>Link settings</h2></div>
+            <div class="card-body">
+              <div class="field">
+                <label class="field-label">Link expiration</label>
+                <div class="currency-amount"><input type="number" value="7"><select><option>days</option><option>hours</option></select></div>
+                <div class="hint">30 days maximum</div>
+              </div>
+              <div class="field"><label class="field-label">Preselected language</label><select><option>English (English)</option></select></div>
+              <div class="field"><label class="field-label">Checkout theme</label><select><option>Default theme</option></select></div>
+
+              <div class="divider-label">Delivery settings</div>
+              <label class="toggle" style="margin-bottom:10px"><input type="checkbox" id="sendEmail" onchange="toggleReveal('sendEmail','emailField')"><span class="track"></span> Send link by email</label>
+              <div class="field" id="emailField" style="display:none"><input type="email" id="deliveryEmailInput" placeholder="name@company.com"><div class="hint">An email with the payment link will be sent to this address</div></div>
+
+              <label class="toggle" style="margin-bottom:10px"><input type="checkbox" id="sendPhone" onchange="toggleReveal('sendPhone','phoneField')"><span class="track"></span> Send link by phone number</label>
+              <div class="field" id="phoneField" style="display:none"><input type="tel" id="deliveryPhoneInput" placeholder="06 12345678"><div class="hint">An SMS with the payment link will be sent to this number</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- ---------- /STEP 2 ---------- -->
+
+        <!-- ---------- STEP 3: DONE ---------- -->
+        <div class="step-panel" id="step-panel-3" style="display:none">
+          <div class="done-grid centered">
+
+            <div class="success-inline">
+              <div class="success-top">
+                <div class="success-check">✓</div>
+                <h3>Payment link is successfully created</h3>
+                <div class="hint" style="margin-top:2px">Expires on 3 Aug 2026, 16:36 (7 days)</div>
+              </div>
+              <div class="success-body">
+                <label class="field-label">Payment link</label>
+                <div class="link-copy-full">
+                  <input type="text" readonly id="fullLinkInput" value="https://checkout.vficloud.net/v2/checkout/48aa774d-b7c4-4520-941a-9e21c8f30b6d">
+                  <button class="btn btn-primary" id="copyLinkBtn" onclick="copyLink()">📋 Copy link</button>
+                </div>
+                <div class="done-quick-actions">
+                  <button class="btn" onclick="alert('This would open the share/send dialog.')">Send via email or SMS</button>
+                  <button class="btn" onclick="togglePreview()">👁 Preview customer checkout</button>
+                </div>
+
+                <div class="checkout-preview" id="checkoutPreview" style="display:none">
+                  <div class="preview-frame">
+                    <div class="preview-header">verifone <span>Secure checkout</span></div>
+                    <div class="preview-merchant">Parent Organization</div>
+                    <div class="preview-amount">EUR 0.00</div>
+                    <div class="preview-methods">
+                      <span class="pm-badge">Card</span><span class="pm-badge">PayPal</span><span class="pm-badge">Google Pay</span><span class="pm-badge">Vipps</span>
+                    </div>
+                    <div class="preview-btn">Pay now</div>
+                  </div>
+                  <div class="hint">This is a simplified preview — your customer will see your checkout theme and branding.</div>
+                </div>
+
+                <div class="divider-label">Link details</div>
+                <div class="success-row"><span>Organization</span><span>Parent</span></div>
+                <div class="success-row"><span>Transaction amount</span><span>EUR 0.00</span></div>
+                <div class="success-row"><span>Merchant reference</span><span>—</span></div>
+                <div class="success-row"><span>Product(s)</span><span>—</span></div>
+                <div class="success-row"><span>Customer name</span><span>—</span></div>
+              </div>
+            </div>
+
+            <div class="done-next-card">
+              <h4>What's next?</h4>
+              <ul class="next-list">
+                <li>Share the link with your customer, or use the send button above.</li>
+                <li>Track its status — pending, completed, or expired — from the Payment links list.</li>
+                <li>Need to void or refund it after payment? Open the transaction from Orders/Transactions.</li>
+              </ul>
+              <button class="btn" style="width:100%;margin-top:6px" onclick="resetCreateFlow()">+ Create another payment link</button>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- ---------- /STEP 3 ---------- -->
+
+        <!-- ---------- UNIFIED WIZARD FOOTER ---------- -->
+        <div class="wizard-footer" id="wizardFooter">
+          <button class="btn-text" onclick="showList()">Discard</button>
+          <div class="wizard-footer-right">
+            <div class="footer-actions" id="footer-actions-1">
+              <button class="btn btn-primary" onclick="goStep(2)">Continue to link settings →</button>
+            </div>
+            <div class="footer-actions" id="footer-actions-2" style="display:none">
+              <button class="btn" onclick="goStep(1)">← Back to payment settings</button>
+              <button class="btn btn-primary" onclick="submitLink()">Create payment link</button>
+            </div>
+            <div class="footer-actions" id="footer-actions-3" style="display:none">
+              <a href="#" onclick="showList();return false;">Return to payment links →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- view switching ----------
+  function showCreate(){
+    document.getElementById('view-list').classList.remove('visible');
+    document.getElementById('view-create').classList.add('visible');
+    goStep(1);
+    window.scrollTo(0,0);
+  }
+  function showList(){
+    document.getElementById('view-create').classList.remove('visible');
+    document.getElementById('view-list').classList.add('visible');
+    window.scrollTo(0,0);
+  }
+  function submitLink(){ goStep(3); }
+
+  // ---------- stepper ----------
+  function goStep(n){
+    for(let i=1;i<=3;i++){
+      document.getElementById('step-panel-'+i).style.display = (i===n) ? 'block' : 'none';
+      document.getElementById('footer-actions-'+i).style.display = (i===n) ? 'flex' : 'none';
+      const node = document.getElementById('step-node-'+i);
+      node.classList.remove('active','done');
+      if(i < n) node.classList.add('done');
+      if(i === n) node.classList.add('active');
+    }
+    const line1 = document.getElementById('step-line-1');
+    const line2 = document.getElementById('step-line-2');
+    line1.classList.toggle('done', n > 1);
+    line2.classList.toggle('done', n > 2);
+
+    // Discard is meaningless once the link is created — swap it for spacing on step 3
+    document.getElementById('wizardFooter').classList.toggle('final-step', n === 3);
+
+    // Default delivery settings from customer details entered in step 1
+    if(n === 2){
+      const email = document.getElementById('custEmail').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      if(email){
+        document.getElementById('sendEmail').checked = true;
+        document.getElementById('deliveryEmailInput').value = email;
+        toggleReveal('sendEmail','emailField');
+      }
+      if(phone){
+        document.getElementById('sendPhone').checked = true;
+        document.getElementById('deliveryPhoneInput').value = phone;
+        toggleReveal('sendPhone','phoneField');
+      }
+    }
+    window.scrollTo(0,0);
+  }
+
+  function resetCreateFlow(){
+    document.getElementById('orgSelect').value = '';
+    onOrgChange();
+    document.getElementById('custEmail').value = '';
+    document.getElementById('custPhone').value = '';
+    document.querySelectorAll('.accordion').forEach(a=>a.classList.remove('open'));
+    goStep(1);
+  }
+
+  function onOrgChange(){
+    const chosen = document.getElementById('orgSelect').value !== '';
+    const block = document.getElementById('orgDependentFields');
+    block.classList.toggle('is-disabled', !chosen);
+    block.querySelectorAll('input,select,textarea,button').forEach(el=>{ el.disabled = !chosen; });
+  }
+
+  function toggleAccordion(id){ document.getElementById(id).classList.toggle('open'); }
+
+  function toggleShipping(){
+    document.getElementById('shippingDetails').style.display = document.getElementById('shipSameToggle').checked ? 'none' : 'block';
+  }
+
+  function copyLink(){
+    const input = document.getElementById('fullLinkInput');
+    input.select();
+    navigator.clipboard && navigator.clipboard.writeText(input.value).catch(()=>{});
+    const btn = document.getElementById('copyLinkBtn');
+    const original = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = original; btn.classList.remove('copied'); }, 1600);
+  }
+  function togglePreview(){
+    const el = document.getElementById('checkoutPreview');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function toggleCart(showProduct){
+    document.getElementById('cart-amount').style.display = showProduct ? 'none' : 'block';
+    document.getElementById('cart-product').style.display = showProduct ? 'block' : 'none';
+  }
+  function togglePm(el){ el.parentElement.classList.toggle('open'); }
+  function toggleReveal(checkboxId, fieldId){
+    document.getElementById(fieldId).style.display = document.getElementById(checkboxId).checked ? 'block' : 'none';
+  }
+  function toggleChip(el){ el.classList.toggle('active'); }
+  function toggleFilterPanel(){ document.getElementById('morefilters').classList.toggle('open'); }
+
+  // ---------- mock data + grid ----------
+  const rows = [
+    {created:'25 Jul 2026, 19:36', amount:'150.00 EUR', first:'Joshua', last:'Simon', email:'joshua.simon@verifone.com', phone:'+31 6 1122 3344', org:'Verifone Nordics', ref:'123456789', status:'Expired', link:'https://checkout.vficloud.net/v2/checkout/48aa774d-b7c4-4520-941a-9e21c8f30b6d'},
+    {created:'10 Jul 2026, 18:22', amount:'1.00 SEK', first:'—', last:'—', email:'test@test.com', phone:'—', org:'Verifone Australia', ref:'DefaultMerch', status:'Completed', link:'https://checkout.vficloud.net/v2/checkout/7c119a02-4e6a-4d31-8f0b-1a2e3c4d5e6f'},
+    {created:'21 Jun 2026, 15:48', amount:'20.00 EUR', first:'Anna', last:'Gomez', email:'a.gomez@test.com', phone:'+31 6 5566 7788', org:'Parent', ref:'DefaultMerch', status:'Pending', link:'https://checkout.vficloud.net/v2/checkout/9b2d6e10-55a1-4c8e-b6f0-2d3e4f5a6b7c'},
+    {created:'18 Jun 2026, 09:12', amount:'75.00 EUR', first:'Mikael', last:'Berg', email:'m.berg@verifone.com', phone:'+46 7 0011 2233', org:'Verifone Nordics', ref:'INV-2291', status:'Completed', link:'https://checkout.vficloud.net/v2/checkout/3f4a5b6c-7d8e-49f0-a1b2-c3d4e5f6a7b8'},
+    {created:'02 Jun 2026, 14:05', amount:'320.00 USD', first:'—', last:'—', email:'—', phone:'—', org:'Verifone Australia', ref:'ORD-8842', status:'Disabled', link:'https://checkout.vficloud.net/v2/checkout/aa11bb22-cc33-4dd4-ee55-ff6600aa11bb'},
+    {created:'22 May 2026, 11:40', amount:'44.90 EUR', first:'Sofia', last:'Rossi', email:'s.rossi@test.com', phone:'+39 3 1234 5678', org:'Parent', ref:'DefaultMerch', status:'Expired', link:'https://checkout.vficloud.net/v2/checkout/deadbeef-1234-4abc-9def-0123456789ab'},
+  ];
+  let colFilters = {};
+  let sortState = {key:'created', dir:'desc'};
+
+  function statusClass(s){
+    return {Expired:'expired', Completed:'completed', Pending:'pending', Disabled:'disabled'}[s] || 'expired';
+  }
+
+  function render(){
+    let data = rows.filter(r=>{
+      for(const k in colFilters){
+        const v = (colFilters[k]||'').toLowerCase();
+        if(!v) continue;
+        if(k==='status'){ if(r.status!==colFilters[k]) return false; continue; }
+        if(!String(r[k]).toLowerCase().includes(v)) return false;
+      }
+      const gs = (document.getElementById('globalSearch').value||'').toLowerCase();
+      if(gs){
+        const hay = Object.values(r).join(' ').toLowerCase();
+        if(!hay.includes(gs)) return false;
+      }
+      return true;
+    });
+
+    document.getElementById('resultCount').textContent = `Total: ${data.length} Payment link${data.length!==1?'s':''}`;
+    document.getElementById('pagerCount').textContent = `Page 1 of ${Math.max(1, Math.ceil(data.length/10))}`;
+
+    document.getElementById('tbody').innerHTML = data.map((r,i)=>`
+      <tr>
+        <td>${r.created}</td>
+        <td class="mono">${r.amount}</td>
+        <td>${r.first}</td>
+        <td>${r.last}</td>
+        <td class="${r.email==='—'?'muted':''}">${r.email}</td>
+        <td class="${r.phone==='—'?'muted':''}">${r.phone}</td>
+        <td>${r.org}</td>
+        <td class="mono">${r.ref}</td>
+        <td><span class="status ${statusClass(r.status)}">${r.status}</span></td>
+        <td class="row-action-cell">
+          <button class="row-copy-btn" title="Copy payment link" onclick="copyRowLink(this,'${r.link}')">📋</button>
+        </td>
+      </tr>
+    `).join('') || `<tr><td colspan="10" style="text-align:center;color:var(--text-faint);padding:32px">No payment links match these filters.</td></tr>`;
+  }
+
+  function copyRowLink(btn, url){
+    navigator.clipboard && navigator.clipboard.writeText(url).catch(()=>{});
+    const original = btn.textContent;
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = original; btn.classList.remove('copied'); }, 1400);
+  }
+
+  function colFilter(key, value){ colFilters[key] = value; render(); }
+  function applyFilters(){ render(); }
+  function clearAllFilters(){
+    colFilters = {};
+    amountRange = {min:'', max:''};
+    document.querySelectorAll('.th-filter input').forEach(i=>i.value='');
+    document.querySelectorAll('.th-filter select').forEach(s=>s.value='');
+    document.getElementById('globalSearch').value='';
+    document.getElementById('f_first').value='';
+    document.getElementById('f_last').value='';
+    document.getElementById('f_email').value='';
+    document.getElementById('f_phone').value='';
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    render();
+  }
+  function sortBy(key){
+    sortState.dir = (sortState.key===key && sortState.dir==='asc') ? 'desc' : 'asc';
+    sortState.key = key;
+    rows.sort((a,b)=>{
+      const A=a[key], B=b[key];
+      return sortState.dir==='asc' ? (A>B?1:-1) : (A<B?1:-1);
+    });
+    document.querySelectorAll('.sort span').forEach(s=>s.classList.remove('on'));
+    const el = document.getElementById(`sort-${key}-${sortState.dir==='asc'?'up':'dn'}`);
+    if(el) el.classList.add('on');
+    render();
+  }
+
+  render();
+</script>
+</body>
+</html>
