@@ -1294,6 +1294,45 @@
     .dd-item:hover { background: #f9fafb; }
     .dd-item.checked { color: var(--accent); font-weight: 600; }
     .dd-item.checked::before { content: "✓  "; }
+
+    /* AG Grid-style column filter row */
+    .filter-row th {
+      padding: 6px 10px 10px;
+      background: #f9fafb;
+      cursor: default;
+      text-transform: none;
+    }
+    .filter-row th:hover { color: var(--text-3); }
+    .col-filter {
+      width: 100%;
+      height: 28px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    .col-filter:focus { border-color: var(--accent); }
+    .col-filter::placeholder { color: var(--text-4); }
+    select.col-filter { cursor: pointer; }
+
+    /* View hierarchy icon button */
+    .hierarchy-btn {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text-3);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s, border-color 0.1s, color 0.1s;
+    }
+    .hierarchy-btn:hover { background: var(--hover-bg); border-color: #9ca3af; color: var(--text); }
   </style>
 </head>
 <body>
@@ -1560,52 +1599,6 @@
       </div>
     </div>
 
-    <div class="filter-bar">
-      <div class="dropdown-wrap">
-        <button class="search-type-btn" id="searchTypeBtn" onclick="toggleDropdown('searchTypeMenu', event)">
-          Organization name
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="dropdown-menu" id="searchTypeMenu">
-          <span class="dd-item checked" onclick="setSearchType('Organization name',this)">Organization name</span>
-          <span class="dd-item" onclick="setSearchType('Organization ID',this)">Organization ID</span>
-          <span class="dd-item" onclick="setSearchType('Friendly name',this)">Friendly name</span>
-        </div>
-      </div>
-      <div class="search-input-wrap">
-        <input class="search-input" id="mainSearch" type="text" placeholder="Search by Organization name" oninput="filterTable()" />
-      </div>
-      <button class="btn-search" onclick="filterTable()">Search</button>
-    </div>
-
-    <div class="filter-chips">
-      <div class="dropdown-wrap">
-        <button class="filter-chip" onclick="toggleDropdown('countryMenu',event)">Country <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="dropdown-menu" id="countryMenu">
-          <span class="dd-item" onclick="closeDropdown('countryMenu')">Germany</span>
-          <span class="dd-item" onclick="closeDropdown('countryMenu')">France</span>
-          <span class="dd-item" onclick="closeDropdown('countryMenu')">Spain</span>
-        </div>
-      </div>
-      <div class="dropdown-wrap">
-        <button class="filter-chip" onclick="toggleDropdown('typeMenu',event)">Type <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="dropdown-menu" id="typeMenu">
-          <span class="dd-item" onclick="closeDropdown('typeMenu')">Estate Owner</span>
-          <span class="dd-item" onclick="closeDropdown('typeMenu')">Merchant Company Group</span>
-          <span class="dd-item" onclick="closeDropdown('typeMenu')">Merchant Company</span>
-          <span class="dd-item" onclick="closeDropdown('typeMenu')">Merchant Site</span>
-        </div>
-      </div>
-      <div class="dropdown-wrap">
-        <button class="filter-chip" onclick="toggleDropdown('statusMenu',event)">Status <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="dropdown-menu" id="statusMenu">
-          <span class="dd-item" onclick="closeDropdown('statusMenu')">Enabled</span>
-          <span class="dd-item" onclick="closeDropdown('statusMenu')">Disabled</span>
-          <span class="dd-item" onclick="closeDropdown('statusMenu')">Deleted</span>
-        </div>
-      </div>
-    </div>
-
     <div class="table-card">
       <div class="table-meta" id="tableMeta">1 – 14 of 14 organizations</div>
       <table>
@@ -1617,6 +1610,43 @@
             <th>Parent organization</th>
             <th>Type</th>
             <th>Status</th>
+            <th>Tax registration number</th>
+            <th>Verifone ID</th>
+            <th>View hierarchy</th>
+          </tr>
+          <tr class="filter-row">
+            <th><input class="col-filter" type="text" placeholder="Filter…" oninput="setColFilter('name', this.value)"></th>
+            <th></th>
+            <th>
+              <select class="col-filter" onchange="setColFilter('country', this.value)">
+                <option value="">All</option>
+                <option>Germany</option>
+                <option>France</option>
+                <option>Spain</option>
+              </select>
+            </th>
+            <th></th>
+            <th>
+              <select class="col-filter" onchange="setColFilter('type', this.value)">
+                <option value="">All</option>
+                <option>Estate Owner</option>
+                <option>Merchant Company Group</option>
+                <option>Merchant Company</option>
+                <option>Merchant Site</option>
+                <option>Unspecified</option>
+              </select>
+            </th>
+            <th>
+              <select class="col-filter" onchange="setColFilter('status', this.value)">
+                <option value="">All</option>
+                <option>Enabled</option>
+                <option>Disabled</option>
+                <option>Deleted</option>
+              </select>
+            </th>
+            <th><input class="col-filter" type="text" placeholder="Filter…" oninput="setColFilter('taxRegNumber', this.value)"></th>
+            <th><input class="col-filter" type="text" placeholder="Filter…" oninput="setColFilter('verifoneId', this.value)"></th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="orgTableBody"></tbody>
@@ -1694,20 +1724,20 @@
 <script>
 /* ─── DATA ─── */
 const orgs = [
-  { id:'ORG-001', name:'ALDI Nord Estate',              friendly:'—',           country:'—',       parent:'—',                             type:'Estate Owner',          status:'Enabled'  },
-  { id:'ORG-002', name:'ALDI Nord France',              friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Merchant Company Group',status:'Enabled'  },
-  { id:'ORG-003', name:'ALDI Nord Germany',             friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Merchant Company Group',status:'Enabled'  },
-  { id:'ORG-004', name:'Aldi Avignon',                  friendly:'Aldi Avignon',country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-005', name:'Aldi La Charité Sur Loire',     friendly:'—',           country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-006', name:'Aldi Nord France - Company',    friendly:'—',           country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-007', name:'Bargteheide',                   friendly:'—',           country:'Germany', parent:'ALDI Nord Germany',             type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-008', name:'10001 Filiale Essen Achim DE',  friendly:'—',           country:'Germany', parent:'ALDI Nord Germany',             type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-009', name:'Aldi Avignon (Site)',           friendly:'—',           country:'France',  parent:'Aldi Avignon',                  type:'Merchant Site',         status:'Enabled'  },
-  { id:'ORG-010', name:'Aldi Bayonne',                  friendly:'—',           country:'France',  parent:'Aldi Nord France - Company',    type:'Merchant Site',         status:'Enabled'  },
-  { id:'ORG-011', name:'Aldi France',                   friendly:'—',           country:'France',  parent:'Aldi Nord France - Company',    type:'Merchant Site',         status:'Enabled'  },
-  { id:'ORG-012', name:'ALDI France',                   friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Unspecified',           status:'Deleted'  },
-  { id:'ORG-013', name:'Bargteheide - Location 2',      friendly:'—',           country:'—',       parent:'Bargteheide',                   type:'Merchant Site',         status:'Enabled'  },
-  { id:'ORG-014', name:'10001 Filiale Essen',           friendly:'—',           country:'Germany', parent:'10001 Filiale Essen Achim DE',  type:'Merchant Site',         status:'Enabled'  },
+  { id:'ORG-001', name:'ALDI Nord Estate',              friendly:'—',           country:'—',       parent:'—',                             type:'Estate Owner',          status:'Enabled',  taxRegNumber:'—',           verifoneId:'—'         },
+  { id:'ORG-002', name:'ALDI Nord France',              friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Merchant Company Group',status:'Enabled',  taxRegNumber:'—',           verifoneId:'—'         },
+  { id:'ORG-003', name:'ALDI Nord Germany',             friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Merchant Company Group',status:'Enabled',  taxRegNumber:'—',           verifoneId:'—'         },
+  { id:'ORG-004', name:'Aldi Avignon',                  friendly:'Aldi Avignon',country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled',  taxRegNumber:'FR07654321', verifoneId:'VF-100234' },
+  { id:'ORG-005', name:'Aldi La Charité Sur Loire',     friendly:'—',           country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled',  taxRegNumber:'FR01122334', verifoneId:'VF-100235' },
+  { id:'ORG-006', name:'Aldi Nord France - Company',    friendly:'—',           country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled',  taxRegNumber:'FR09988776', verifoneId:'VF-100236' },
+  { id:'ORG-007', name:'Bargteheide',                   friendly:'—',           country:'Germany', parent:'ALDI Nord Germany',             type:'Merchant Company',      status:'Enabled',  taxRegNumber:'DE55566778', verifoneId:'VF-100237' },
+  { id:'ORG-008', name:'10001 Filiale Essen Achim DE',  friendly:'—',           country:'Germany', parent:'ALDI Nord Germany',             type:'Merchant Company',      status:'Enabled',  taxRegNumber:'DE33445566', verifoneId:'VF-100238' },
+  { id:'ORG-009', name:'Aldi Avignon (Site)',           friendly:'—',           country:'France',  parent:'Aldi Avignon',                  type:'Merchant Site',         status:'Enabled',  taxRegNumber:'—',           verifoneId:'VF-100239' },
+  { id:'ORG-010', name:'Aldi Bayonne',                  friendly:'—',           country:'France',  parent:'Aldi Nord France - Company',    type:'Merchant Site',         status:'Enabled',  taxRegNumber:'—',           verifoneId:'VF-100240' },
+  { id:'ORG-011', name:'Aldi France',                   friendly:'—',           country:'France',  parent:'Aldi Nord France - Company',    type:'Merchant Site',         status:'Enabled',  taxRegNumber:'—',           verifoneId:'VF-100241' },
+  { id:'ORG-012', name:'ALDI France',                   friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Unspecified',           status:'Deleted',  taxRegNumber:'—',           verifoneId:'—'         },
+  { id:'ORG-013', name:'Bargteheide - Location 2',      friendly:'—',           country:'—',       parent:'Bargteheide',                   type:'Merchant Site',         status:'Enabled',  taxRegNumber:'—',           verifoneId:'VF-100242' },
+  { id:'ORG-014', name:'10001 Filiale Essen',           friendly:'—',           country:'Germany', parent:'10001 Filiale Essen Achim DE',  type:'Merchant Site',         status:'Enabled',  taxRegNumber:'—',           verifoneId:'VF-100243' },
 ];
 
 /* Tree mirrors org structure */
@@ -1750,37 +1780,57 @@ function statusBadge(s) {
   return `<span class="status-badge ${cls}"><span class="status-dot"></span>${s}</span>`;
 }
 
+const hierarchyIcon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4M12 11H5v4M12 11h7v4"/></svg>`;
+
 function renderTable(data) {
   document.getElementById('orgTableBody').innerHTML = data.map(o => `
-    <tr onclick="rowClick('${o.id}')" class="${selectedOrg===o.id?'row-selected':''}">
+    <tr onclick="viewOrganization('${o.id}')" class="${selectedOrg===o.id?'row-selected':''}">
       <td>${o.name}</td>
       <td class="${o.friendly==='—'?'cell-muted':''}">${o.friendly}</td>
       <td class="${o.country==='—'?'cell-muted':''}">${o.country}</td>
       <td class="${o.parent==='—'?'cell-muted':''}">${o.parent}</td>
       <td>${o.type}</td>
       <td>${statusBadge(o.status)}</td>
+      <td class="${o.taxRegNumber==='—'?'cell-muted':''}">${o.taxRegNumber}</td>
+      <td class="${o.verifoneId==='—'?'cell-muted':''}">${o.verifoneId}</td>
+      <td><button class="hierarchy-btn" title="View hierarchy" onclick="event.stopPropagation(); openHierarchy('${o.id}')">${hierarchyIcon}</button></td>
     </tr>`).join('');
-  document.getElementById('tableMeta').textContent = `1 – ${data.length} of ${data.length} organizations`;
+  document.getElementById('tableMeta').textContent = `${data.length} of ${orgs.length} organizations`;
 }
 
-function filterTable() {
-  const q = document.getElementById('mainSearch').value.toLowerCase();
+/* ─── AG Grid-style column filters ─── */
+const columnFilters = { name:'', country:'', type:'', status:'', taxRegNumber:'', verifoneId:'' };
+
+function setColFilter(key, value) {
+  columnFilters[key] = value.trim().toLowerCase();
+  applyFilters();
+}
+
+function applyFilters() {
+  const f = columnFilters;
   renderTable(orgs.filter(o =>
-    o.name.toLowerCase().includes(q) ||
-    o.id.toLowerCase().includes(q) ||
-    o.friendly.toLowerCase().includes(q)
+    (!f.name || o.name.toLowerCase().includes(f.name)) &&
+    (!f.country || o.country.toLowerCase() === f.country) &&
+    (!f.type || o.type.toLowerCase() === f.type) &&
+    (!f.status || o.status.toLowerCase() === f.status) &&
+    (!f.taxRegNumber || o.taxRegNumber.toLowerCase().includes(f.taxRegNumber)) &&
+    (!f.verifoneId || o.verifoneId.toLowerCase().includes(f.verifoneId))
   ));
 }
 
 function sortTable(col) {
-  const keys = ['name','friendly','country','parent','type','status'];
+  const keys = ['name','friendly','country','parent','type','status','taxRegNumber','verifoneId'];
   orgs.sort((a,b) => (a[keys[col]]||'').localeCompare(b[keys[col]]||''));
-  renderTable(orgs);
+  applyFilters();
 }
 
-function rowClick(id) {
+function viewOrganization(id) {
+  window.location.href = 'organization-view.html?id=' + encodeURIComponent(id);
+}
+
+function openHierarchy(id) {
   selectedOrg = id;
-  renderTable(orgs);
+  applyFilters();
   const org = orgs.find(o => o.id === id);
   openPanel(org);
 }
@@ -1806,7 +1856,7 @@ function closePanel() {
   document.getElementById('panel-backdrop').style.display = 'none';
   document.getElementById('hierarchy-panel').classList.remove('open');
   selectedOrg = null;
-  renderTable(orgs);
+  applyFilters();
 }
 
 document.addEventListener('keydown', e => {
@@ -1914,7 +1964,7 @@ function toggleNode(id) {
 
 function treeNodeClick(id, hasChildren) {
   selectedOrg = id;
-  renderTable(orgs);
+  applyFilters();
   if (hasChildren) {
     if (openNodes.has(id)) openNodes.delete(id);
     else openNodes.add(id);
@@ -1969,8 +2019,7 @@ function showDetail(org) {
 
 function viewOrgDetails() {
   if (!selectedOrg) return;
-  const org = orgs.find(o => o.id === selectedOrg);
-  alert(`Navigating to details page for:\n${org.name} (${org.id})\n\n(In production this would open the org details page.)`);
+  viewOrganization(selectedOrg);
 }
 
 /* ─── NAV ─── */
@@ -1984,30 +2033,8 @@ function setSubNav(el) {
   el.classList.add('active');
 }
 
-/* ─── DROPDOWNS ─── */
-function toggleDropdown(id, e) {
-  e.stopPropagation();
-  document.querySelectorAll('.dropdown-menu').forEach(m => { if (m.id!==id) m.classList.remove('open'); });
-  document.getElementById(id).classList.toggle('open');
-}
-
-function closeDropdown(id) { document.getElementById(id).classList.remove('open'); }
-
-function setSearchType(label, el) {
-  const btn = document.getElementById('searchTypeBtn');
-  btn.firstChild.textContent = label + ' ';
-  document.getElementById('mainSearch').placeholder = 'Search by ' + label;
-  el.closest('.dropdown-menu').querySelectorAll('.dd-item').forEach(i => i.classList.remove('checked'));
-  el.classList.add('checked');
-  closeDropdown('searchTypeMenu');
-}
-
-document.addEventListener('click', () => {
-  document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
-});
-
 /* ─── INIT ─── */
-renderTable(orgs);
+applyFilters();
 </script>
 
 <script>
@@ -2046,454 +2073,6 @@ renderTable(orgs);
     parent.querySelectorAll('.nav-sub-item').forEach(s => s.classList.remove('active'));
     el.classList.add('active');
   }
-
-
-  /* ─── FAVORITES ─── */
-  const PAGE_KEY = 'nav_favorites';
-  const CURRENT_PAGE = {
-    id: 'orders-transactions',
-    name: 'Orders / Transactions',
-    section: 'Reporting tools',
-    href: 'page-shell.html',
-    iconBg: '#eff6ff',
-    iconColor: '#2563eb'
-  };
-
-  function getFavorites() {
-    try { return JSON.parse(localStorage.getItem(PAGE_KEY) || '[]'); } catch(e) { return []; }
-  }
-  function saveFavorites(favs) {
-    localStorage.setItem(PAGE_KEY, JSON.stringify(favs));
-  }
-  function isCurrentFavorited() {
-    return getFavorites().some(f => f.id === CURRENT_PAGE.id);
-  }
-
-  function renderFavBtn() {
-    const btn = document.getElementById('favBtn');
-    const icon = document.getElementById('favBtnIcon');
-    if (isCurrentFavorited()) {
-      btn.classList.add('starred');
-      btn.title = 'Remove from Favorites';
-      icon.setAttribute('fill', '#f59e0b');
-    } else {
-      btn.classList.remove('starred');
-      btn.title = 'Add to Favorites';
-      icon.setAttribute('fill', 'none');
-    }
-  }
-
-  function renderFavPopover() {
-    const favs = getFavorites();
-    const list = document.getElementById('favPopList');
-    const footer = document.getElementById('favPopFooter');
-    list.innerHTML = '';
-
-    if (favs.length === 0) {
-      list.innerHTML = `
-        <div class="fav-pop-empty">
-          <div class="fav-pop-empty-icon">☆</div>
-          <div class="fav-pop-empty-text">No favorites yet.<br>Click ★ on any page to pin it here.</div>
-        </div>`;
-      footer.textContent = '';
-      return;
-    }
-
-    favs.forEach(f => {
-      const item = document.createElement('button');
-      item.className = 'fav-pop-item';
-      item.onclick = () => { window.location.href = f.href; };
-      item.innerHTML = `
-        <div class="fav-pop-icon" style="background:${f.iconBg}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${f.iconColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        </div>
-        <div>
-          <div class="fav-pop-name">${f.name}</div>
-          <div class="fav-pop-section">${f.section}</div>
-        </div>
-        <button class="fav-remove" onclick="removeFavorite(event,'${f.id}')" title="Remove" aria-label="Remove from favorites">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>`;
-      list.appendChild(item);
-    });
-
-    footer.textContent = `${favs.length} saved page${favs.length > 1 ? 's' : ''}`;
-  }
-
-  function toggleFavPopover() {
-    const pop = document.getElementById('favPopover');
-    if (pop.classList.contains('open')) {
-      closeFavPopover();
-    } else {
-      toggleCurrentFavorite();
-    }
-  }
-
-  function toggleCurrentFavorite() {
-    const favs = getFavorites();
-    const idx = favs.findIndex(f => f.id === CURRENT_PAGE.id);
-    if (idx >= 0) {
-      favs.splice(idx, 1);
-      saveFavorites(favs);
-      renderFavBtn();
-      renderFavPopover();
-    } else {
-      favs.unshift({ ...CURRENT_PAGE });
-      saveFavorites(favs);
-      renderFavBtn();
-      renderFavPopover();
-      openFavPopover();
-    }
-  }
-
-  function openFavPopover() {
-    renderFavPopover();
-    document.getElementById('favPopover').classList.add('open');
-  }
-
-  function closeFavPopover() {
-    document.getElementById('favPopover').classList.remove('open');
-  }
-
-  function removeFavorite(e, id) {
-    e.stopPropagation();
-    const favs = getFavorites().filter(f => f.id !== id);
-    saveFavorites(favs);
-    renderFavBtn();
-    renderFavPopover();
-    if (id === CURRENT_PAGE.id) renderFavBtn();
-  }
-
-  document.addEventListener('click', e => {
-    const pop = document.getElementById('favPopover');
-    const wrap = document.querySelector('.fav-wrap');
-    if (pop.classList.contains('open') && !wrap.contains(e.target)) closeFavPopover();
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeFavPopover();
-  });
-
-  renderFavBtn();
-  renderFavPopover();
-
-  
-/* ─── DATA ─── */
-const orgs = [
-  { id:'ORG-001', name:'ALDI Nord Estate',              friendly:'—',           country:'—',       parent:'—',                             type:'Estate Owner',          status:'Enabled'  },
-  { id:'ORG-002', name:'ALDI Nord France',              friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Merchant Company Group',status:'Enabled'  },
-  { id:'ORG-003', name:'ALDI Nord Germany',             friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Merchant Company Group',status:'Enabled'  },
-  { id:'ORG-004', name:'Aldi Avignon',                  friendly:'Aldi Avignon',country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-005', name:'Aldi La Charité Sur Loire',     friendly:'—',           country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-006', name:'Aldi Nord France - Company',    friendly:'—',           country:'France',  parent:'ALDI Nord France',              type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-007', name:'Bargteheide',                   friendly:'—',           country:'Germany', parent:'ALDI Nord Germany',             type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-008', name:'10001 Filiale Essen Achim DE',  friendly:'—',           country:'Germany', parent:'ALDI Nord Germany',             type:'Merchant Company',      status:'Enabled'  },
-  { id:'ORG-009', name:'Aldi Avignon (Site)',           friendly:'—',           country:'France',  parent:'Aldi Avignon',                  type:'Merchant Site',         status:'Enabled'  },
-  { id:'ORG-010', name:'Aldi Bayonne',                  friendly:'—',           country:'France',  parent:'Aldi Nord France - Company',    type:'Merchant Site',         status:'Enabled'  },
-  { id:'ORG-011', name:'Aldi France',                   friendly:'—',           country:'France',  parent:'Aldi Nord France - Company',    type:'Merchant Site',         status:'Enabled'  },
-  { id:'ORG-012', name:'ALDI France',                   friendly:'—',           country:'—',       parent:'ALDI Nord Estate',              type:'Unspecified',           status:'Deleted'  },
-  { id:'ORG-013', name:'Bargteheide - Location 2',      friendly:'—',           country:'—',       parent:'Bargteheide',                   type:'Merchant Site',         status:'Enabled'  },
-  { id:'ORG-014', name:'10001 Filiale Essen',           friendly:'—',           country:'Germany', parent:'10001 Filiale Essen Achim DE',  type:'Merchant Site',         status:'Enabled'  },
-];
-
-/* Tree mirrors org structure */
-const treeData = [
-  { id:'ORG-001', name:'ALDI Nord Estate', type:'estate', children:[
-    { id:'ORG-002', name:'ALDI Nord France', type:'group', children:[
-      { id:'ORG-004', name:'Aldi Avignon', type:'company', children:[
-        { id:'ORG-009', name:'Aldi Avignon (Site)', type:'site', children:[] }
-      ]},
-      { id:'ORG-005', name:'Aldi La Charité Sur Loire', type:'company', children:[] },
-      { id:'ORG-006', name:'Aldi Nord France - Company', type:'company', children:[
-        { id:'ORG-010', name:'Aldi Bayonne', type:'site', children:[] },
-        { id:'ORG-011', name:'Aldi France',  type:'site', children:[] }
-      ]}
-    ]},
-    { id:'ORG-003', name:'ALDI Nord Germany', type:'group', children:[
-      { id:'ORG-007', name:'Bargteheide', type:'company', children:[
-        { id:'ORG-013', name:'Bargteheide - Location 2', type:'site', children:[] }
-      ]},
-      { id:'ORG-008', name:'10001 Filiale Essen Achim DE', type:'company', children:[
-        { id:'ORG-014', name:'10001 Filiale Essen', type:'site', children:[] }
-      ]}
-    ]},
-    { id:'ORG-012', name:'ALDI France', type:'unspecified', children:[] }
-  ]}
-];
-
-const TYPE_LABELS = { estate:'Estate Owner', group:'Merchant Company Group', company:'Merchant Company', site:'Merchant Site', unspecified:'Unspecified' };
-const TYPE_BADGE  = { estate:'badge-estate', group:'badge-group', company:'badge-company', site:'badge-site', unspecified:'badge-company' };
-const TYPE_SHORT  = { estate:'Estate', group:'MCG', company:'Co.', site:'Site', unspecified:'—' };
-
-let openNodes   = new Set(['ORG-001']);  /* start with root open */
-let selectedOrg = null;
-let panelOpen   = false;
-let searchQ     = '';
-
-/* ─── TABLE ─── */
-function statusBadge(s) {
-  const cls = s==='Enabled'?'status-enabled':s==='Disabled'?'status-disabled':'status-deleted';
-  return `<span class="status-badge ${cls}"><span class="status-dot"></span>${s}</span>`;
-}
-
-function renderTable(data) {
-  document.getElementById('orgTableBody').innerHTML = data.map(o => `
-    <tr onclick="rowClick('${o.id}')" class="${selectedOrg===o.id?'row-selected':''}">
-      <td>${o.name}</td>
-      <td class="${o.friendly==='—'?'cell-muted':''}">${o.friendly}</td>
-      <td class="${o.country==='—'?'cell-muted':''}">${o.country}</td>
-      <td class="${o.parent==='—'?'cell-muted':''}">${o.parent}</td>
-      <td>${o.type}</td>
-      <td>${statusBadge(o.status)}</td>
-    </tr>`).join('');
-  document.getElementById('tableMeta').textContent = `1 – ${data.length} of ${data.length} organizations`;
-}
-
-function filterTable() {
-  const q = document.getElementById('mainSearch').value.toLowerCase();
-  renderTable(orgs.filter(o =>
-    o.name.toLowerCase().includes(q) ||
-    o.id.toLowerCase().includes(q) ||
-    o.friendly.toLowerCase().includes(q)
-  ));
-}
-
-function sortTable(col) {
-  const keys = ['name','friendly','country','parent','type','status'];
-  orgs.sort((a,b) => (a[keys[col]]||'').localeCompare(b[keys[col]]||''));
-  renderTable(orgs);
-}
-
-function rowClick(id) {
-  selectedOrg = id;
-  renderTable(orgs);
-  const org = orgs.find(o => o.id === id);
-  openPanel(org);
-}
-
-/* ─── PANEL OPEN/CLOSE ─── */
-function openPanel(org) {
-  document.getElementById('panelSubtitle').textContent = org.name;
-  panelOpen = true;
-  document.getElementById('panel-backdrop').style.display = 'block';
-  document.getElementById('hierarchy-panel').classList.add('open');
-  // Reset search
-  document.getElementById('panelSearch').value = '';
-  document.getElementById('panelSearchClear').classList.remove('visible');
-  searchQ = '';
-  // Expand path to selected org in tree, then render
-  expandPathTo(treeData, org.id);
-  refreshTree();
-  showDetail(org);
-}
-
-function closePanel() {
-  panelOpen = false;
-  document.getElementById('panel-backdrop').style.display = 'none';
-  document.getElementById('hierarchy-panel').classList.remove('open');
-  selectedOrg = null;
-  renderTable(orgs);
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && panelOpen) closePanel();
-});
-
-/* ─── TREE ─── */
-function getAllIds(nodes) {
-  return nodes.flatMap(n => [n.id, ...getAllIds(n.children)]);
-}
-
-function expandAll() {
-  openNodes = new Set(getAllIds(treeData));
-  refreshTree();
-}
-
-function collapseAll() {
-  openNodes = new Set();
-  refreshTree();
-}
-
-function expandPathTo(nodes, targetId, path=[]) {
-  for (const n of nodes) {
-    if (n.id === targetId) {
-      path.forEach(id => openNodes.add(id));
-      return true;
-    }
-    if (expandPathTo(n.children, targetId, [...path, n.id])) return true;
-  }
-  return false;
-}
-
-function highlight(text, q) {
-  if (!q) return escHtml(text);
-  const escaped = escHtml(text);
-  const re = new RegExp(`(${escRe(q)})`, 'gi');
-  return escaped.replace(re, '<mark>$1</mark>');
-}
-
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function escRe(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-}
-
-function nodeMatchesSearch(node, q) {
-  if (!q) return true;
-  const lq = q.toLowerCase();
-  return node.name.toLowerCase().includes(lq) || node.id.toLowerCase().includes(lq);
-}
-
-function renderTreeNodes(nodes, depth=0) {
-  let html = '';
-  for (const node of nodes) {
-    const hasChildren = node.children && node.children.length > 0;
-    const isOpen = openNodes.has(node.id);
-    const selfMatch = nodeMatchesSearch(node, searchQ);
-    const indent = 14 + depth * 16;
-
-    let visibleChildren = node.children;
-    if (searchQ) {
-      visibleChildren = node.children.filter(c => subtreeMatches(c, searchQ));
-    }
-
-    const showThisNode = !searchQ || selfMatch || visibleChildren.length > 0;
-    if (!showThisNode) continue;
-
-    const isSelected = selectedOrg === node.id;
-
-    html += `
-      <div>
-        <div class="tree-node ${isSelected?'selected':''} ${selfMatch&&searchQ?'search-match':''}"
-             style="padding-left:${indent}px"
-             onclick="treeNodeClick('${node.id}',${hasChildren})">
-          <button class="tree-toggle-btn ${hasChildren?'':'leaf'} ${isOpen&&hasChildren?'open':''}"
-                  onclick="event.stopPropagation();toggleNode('${node.id}');return false">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-          <span class="tree-label" title="${escHtml(node.name)}">${highlight(node.name, searchQ)}</span>
-          ${hasChildren?`<span class="tree-count">(${node.children.length})</span>`:''}
-          <span class="type-badge ${TYPE_BADGE[node.type]}">${TYPE_SHORT[node.type]}</span>
-        </div>
-        ${hasChildren && (isOpen || searchQ) ? `<div class="tree-children">${renderTreeNodes(visibleChildren, depth+1)}</div>` : ''}
-      </div>`;
-  }
-  return html || `<div class="tree-empty">No results</div>`;
-}
-
-function subtreeMatches(node, q) {
-  if (nodeMatchesSearch(node, q)) return true;
-  return node.children.some(c => subtreeMatches(c, q));
-}
-
-function refreshTree() {
-  document.getElementById('panelTree').innerHTML = renderTreeNodes(treeData);
-}
-
-function toggleNode(id) {
-  if (openNodes.has(id)) openNodes.delete(id);
-  else openNodes.add(id);
-  refreshTree();
-}
-
-function treeNodeClick(id, hasChildren) {
-  selectedOrg = id;
-  renderTable(orgs);
-  if (hasChildren) {
-    if (openNodes.has(id)) openNodes.delete(id);
-    else openNodes.add(id);
-  }
-  refreshTree();
-  const org = orgs.find(o => o.id === id);
-  if (org) showDetail(org);
-  else {
-    const node = findNode(treeData, id);
-    if (node) showDetail({ id, name: node.name, type: TYPE_LABELS[node.type], status:'Enabled', country:'N/A', parent:'—', friendly:'—' });
-  }
-}
-
-function findNode(nodes, id) {
-  for (const n of nodes) {
-    if (n.id === id) return n;
-    const f = findNode(n.children, id);
-    if (f) return f;
-  }
-  return null;
-}
-
-/* ─── PANEL SEARCH ─── */
-function onPanelSearch() {
-  searchQ = document.getElementById('panelSearch').value;
-  document.getElementById('panelSearchClear').classList.toggle('visible', searchQ.length > 0);
-  if (searchQ) {
-    // auto-expand all so search results are visible
-    openNodes = new Set(getAllIds(treeData));
-  }
-  refreshTree();
-}
-
-function clearPanelSearch() {
-  document.getElementById('panelSearch').value = '';
-  searchQ = '';
-  document.getElementById('panelSearchClear').classList.remove('visible');
-  refreshTree();
-}
-
-/* ─── DETAIL PANEL ─── */
-function showDetail(org) {
-  document.getElementById('detailEmpty').style.display = 'none';
-  document.getElementById('detailContent').style.display = 'block';
-  document.getElementById('detailName').textContent = org.name;
-  document.getElementById('detailId').textContent = 'ID: ' + org.id;
-  document.getElementById('detailType').textContent = org.type;
-  document.getElementById('detailStatus').textContent = org.status;
-  document.getElementById('detailCountry').textContent = (org.country==='—'||!org.country) ? 'N/A' : org.country;
-  document.getElementById('detailParent').textContent = (org.parent==='—'||!org.parent) ? 'None' : org.parent;
-}
-
-function viewOrgDetails() {
-  if (!selectedOrg) return;
-  const org = orgs.find(o => o.id === selectedOrg);
-  alert(`Navigating to details page for:\n${org.name} (${org.id})\n\n(In production this would open the org details page.)`);
-}
-
-/* ─── NAV ─── */
-function setNav(el) {
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function setSubNav(el) {
-  document.querySelectorAll('.nav-sub-item').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-}
-
-/* ─── DROPDOWNS ─── */
-function toggleDropdown(id, e) {
-  e.stopPropagation();
-  document.querySelectorAll('.dropdown-menu').forEach(m => { if (m.id!==id) m.classList.remove('open'); });
-  document.getElementById(id).classList.toggle('open');
-}
-
-function closeDropdown(id) { document.getElementById(id).classList.remove('open'); }
-
-function setSearchType(label, el) {
-  const btn = document.getElementById('searchTypeBtn');
-  btn.firstChild.textContent = label + ' ';
-  document.getElementById('mainSearch').placeholder = 'Search by ' + label;
-  el.closest('.dropdown-menu').querySelectorAll('.dd-item').forEach(i => i.classList.remove('checked'));
-  el.classList.add('checked');
-  closeDropdown('searchTypeMenu');
-}
-
-document.addEventListener('click', () => {
-  document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
-});
-
-/* ─── INIT ─── */
-renderTable(orgs);
 
 </script>
 
