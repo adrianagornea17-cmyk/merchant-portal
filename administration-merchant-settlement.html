@@ -205,6 +205,16 @@ body {
 .btn-secondary:hover { border-color: #9ca3af; background: var(--hover-bg); }
 .btn-sm { height: 30px; padding: 0 14px; font-size: 12.5px; }
 
+/* ─── BULK ACTIONS BAR ─── */
+.bulk-actions-bar { display: none; align-items: center; gap: 10px; padding: 10px 16px; background: #fff; border: 1.5px solid var(--border); border-radius: 12px; margin-bottom: 14px; }
+.bulk-actions-bar.show { display: flex; }
+.bulk-count { font-size: 13px; font-weight: 600; color: var(--text-2); margin-right: auto; }
+.pill-btn { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 22px; border-radius: 999px; border: none; font-size: 13.5px; font-weight: 600; color: #fff; cursor: pointer; font-family: inherit; transition: opacity 0.12s; }
+.pill-btn:hover { opacity: 0.88; }
+.pill-hold { background: #2563eb; }
+.pill-approve { background: #1447e6; }
+.pill-reject { background: #e11d48; }
+
 /* ─── TABLE / SEARCH-IN-HEADER CARD ─── */
 .tbl-wrap { border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff; }
 .tbl-scroll { overflow-x: auto; }
@@ -461,6 +471,13 @@ table.balance-tbl td { padding: 10px 12px; border-bottom: 1px solid #f1f3f5; }
     <!-- Page Content -->
     <div class="page-content">
       <div class="page-content-inner">
+
+        <div class="bulk-actions-bar" id="bulkActionsBar">
+          <span class="bulk-count" id="bulkCount">0 selected</span>
+          <button class="pill-btn pill-hold" onclick="bulkAction('Hold')">Hold</button>
+          <button class="pill-btn pill-approve" onclick="bulkAction('Approve')">Approve</button>
+          <button class="pill-btn pill-reject" onclick="bulkAction('Reject')">Reject</button>
+        </div>
 
         <div class="tbl-wrap">
           <div class="tbl-scroll">
@@ -780,10 +797,18 @@ function renderPayoutTable(){
   document.getElementById('psPrevBtn').classList.toggle('active',psPage>1);
   document.getElementById('psNextBtn').classList.toggle('active',psPage<totalPages);
   document.getElementById('psSelectAll').checked=false;
+  updateBulkBar();
+}
+
+function updateBulkBar(){
+  const n=selectedRows.size;
+  document.getElementById('bulkActionsBar').classList.toggle('show',n>0);
+  document.getElementById('bulkCount').textContent=n===1?'1 selected':`${n} selected`;
 }
 
 function toggleRowSelect(id,checked){
   if(checked) selectedRows.add(id); else selectedRows.delete(id);
+  updateBulkBar();
 }
 function toggleSelectAll(checked){
   const start=(psPage-1)*psPageSize;
@@ -791,6 +816,22 @@ function toggleSelectAll(checked){
   rows.forEach(r=>{ if(checked) selectedRows.add(r.payoutId); else selectedRows.delete(r.payoutId); });
   renderPayoutTable();
   document.getElementById('psSelectAll').checked=checked;
+  updateBulkBar();
+}
+
+function bulkAction(action){
+  const statusMap={Hold:'Hold',Approve:'Approved',Reject:'Rejected'};
+  const reasonMap={Hold:'Placed on hold',Approve:'Approved by BC',Reject:'Rejected by BC'};
+  const newStatus=statusMap[action];
+  selectedRows.forEach(id=>{
+    const r=PAYOUTS.find(p=>p.payoutId===id);
+    if(!r) return;
+    r.status=newStatus;
+    r.history.push({status:newStatus,reason:reasonMap[action],user:'you@verifone.com',date:`${r.payoutDate} 00:00:00`,color:STATUS_META[newStatus].color});
+  });
+  selectedRows.clear();
+  updateBulkBar();
+  applyAllFilters();
 }
 
 function sortPayouts(field){
