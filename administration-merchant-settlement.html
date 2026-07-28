@@ -205,49 +205,6 @@ body {
 .btn-secondary:hover { border-color: #9ca3af; background: var(--hover-bg); }
 .btn-sm { height: 30px; padding: 0 14px; font-size: 12.5px; }
 
-/* ─── FILTER BAR ─── */
-.filter-bar { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-.filter-pills-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.filter-pill { position: relative; }
-.fp-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  height: 34px; padding: 0 14px; border-radius: 20px;
-  border: 1.5px solid var(--border); background: #fff;
-  font-size: 12.5px; font-weight: 500; color: var(--text-2);
-  cursor: pointer; font-family: inherit; white-space: nowrap;
-  transition: border-color 0.12s, background 0.12s, color 0.12s;
-}
-.fp-btn:hover { border-color: #9ca3af; background: var(--hover-bg); }
-.fp-btn.has-value { border-color: var(--accent); color: var(--accent); background: #eff6ff; }
-.fp-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
-.fp-clear-link {
-  background: none; border: none; color: var(--text-3);
-  font-size: 12.5px; font-weight: 500; cursor: pointer; font-family: inherit; padding: 0 4px;
-}
-.fp-clear-link:hover { color: var(--text); text-decoration: underline; }
-.fp-panel {
-  display: none; position: absolute; top: calc(100% + 6px); left: 0;
-  min-width: 240px; max-height: 320px; overflow-y: auto;
-  background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.12); z-index: 50; padding: 12px;
-}
-.fp-panel.open { display: block; }
-.fp-check-row {
-  display: flex; align-items: center; gap: 8px; padding: 5px 2px;
-  font-size: 13px; color: var(--text-2); cursor: pointer;
-}
-.fp-check-row input { cursor: pointer; }
-.fp-date-row { display: flex; flex-direction: column; gap: 8px; }
-.fp-date-row label { font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.05em; }
-.fp-date-row input {
-  height: 32px; border: 1.5px solid var(--border); border-radius: 7px;
-  padding: 0 8px; font-size: 12.5px; font-family: inherit; width: 100%;
-}
-.fp-panel-actions {
-  display: flex; justify-content: flex-end; gap: 8px;
-  margin-top: 10px; padding-top: 10px; border-top: 1px solid #f1f3f5;
-}
-
 /* ─── TABLE / SEARCH-IN-HEADER CARD ─── */
 .tbl-wrap { border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff; }
 .tbl-scroll { overflow-x: auto; }
@@ -505,75 +462,6 @@ table.balance-tbl td { padding: 10px 12px; border-bottom: 1px solid #f1f3f5; }
     <div class="page-content">
       <div class="page-content-inner">
 
-        <!-- Filters -->
-        <div class="filter-bar">
-          <div class="filter-pills-row">
-
-            <div class="filter-pill">
-              <button class="fp-btn" id="fpDateBtn" onclick="toggleFilterPanel('fpDate',event)">Payout date <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-              <div class="fp-panel" id="fpDatePanel" onclick="event.stopPropagation()">
-                <div class="fp-date-row">
-                  <label>From</label>
-                  <input type="date" id="fpDateFrom">
-                  <label>To</label>
-                  <input type="date" id="fpDateTo">
-                </div>
-                <div class="fp-panel-actions">
-                  <button class="fp-clear-link" onclick="clearDateFilter()">Clear</button>
-                  <button class="btn btn-primary btn-sm" onclick="applyDateFilter()">Apply</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="filter-pill">
-              <button class="fp-btn" id="fpStatusBtn" onclick="toggleFilterPanel('fpStatus',event)">Status <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-              <div class="fp-panel" id="fpStatusPanel" onclick="event.stopPropagation()">
-                <div id="fpStatusChecks"></div>
-                <div class="fp-panel-actions">
-                  <button class="fp-clear-link" onclick="clearGroupFilter('status')">Clear</button>
-                  <button class="btn btn-primary btn-sm" onclick="applyGroupFilter('status')">Apply</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="filter-pill">
-              <button class="fp-btn" id="fpCountryBtn" onclick="toggleFilterPanel('fpCountry',event)">Country <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-              <div class="fp-panel" id="fpCountryPanel" onclick="event.stopPropagation()">
-                <div id="fpCountryChecks"></div>
-                <div class="fp-panel-actions">
-                  <button class="fp-clear-link" onclick="clearGroupFilter('country')">Clear</button>
-                  <button class="btn btn-primary btn-sm" onclick="applyGroupFilter('country')">Apply</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="filter-pill">
-              <button class="fp-btn" id="fpCurrencyBtn" onclick="toggleFilterPanel('fpCurrency',event)">Currency <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-              <div class="fp-panel" id="fpCurrencyPanel" onclick="event.stopPropagation()">
-                <div id="fpCurrencyChecks"></div>
-                <div class="fp-panel-actions">
-                  <button class="fp-clear-link" onclick="clearGroupFilter('currency')">Clear</button>
-                  <button class="btn btn-primary btn-sm" onclick="applyGroupFilter('currency')">Apply</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="filter-pill">
-              <button class="fp-btn" id="fpAcquirerBtn" onclick="toggleFilterPanel('fpAcquirer',event)">Acquirer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-              <div class="fp-panel" id="fpAcquirerPanel" onclick="event.stopPropagation()">
-                <div id="fpAcquirerChecks"></div>
-                <div class="fp-panel-actions">
-                  <button class="fp-clear-link" onclick="clearGroupFilter('acquirer')">Clear</button>
-                  <button class="btn btn-primary btn-sm" onclick="applyGroupFilter('acquirer')">Apply</button>
-                </div>
-              </div>
-            </div>
-
-            <button class="fp-clear-link" onclick="clearAllFilters()">Clear filters</button>
-
-          </div>
-        </div>
-
         <div class="tbl-wrap">
           <div class="tbl-scroll">
           <table class="dt ps-tbl">
@@ -758,7 +646,6 @@ const STATUS_META={
   Created:{color:'#94a3b8'},Pending:{color:'#f59e0b'},Hold:{color:'#f59e0b'},Approved:{color:'#2563eb'},
   Closed:{color:'#16a34a'},Rejected:{color:'#ef4444'},Failed:{color:'#ef4444'},Cancelled:{color:'#94a3b8'},
 };
-const STATUS_LIST=Object.keys(STATUS_META);
 const USERS=['Alexandra.Leonte@VERIFONE.com','Stefania.Sandu@VERIFONE.com','irina.pop@verifone.com','Mihaela.Radu@VERIFONE.com'];
 
 function pad2(n){return n<10?'0'+n:''+n;}
@@ -826,103 +713,14 @@ let PAYOUTS=[];
 })();
 
 let columnFilters={};
-let dateFrom='', dateTo='';
-const FILTER_GROUPS={status:new Set(),country:new Set(),currency:new Set(),acquirer:new Set()};
 
 let psFiltered=PAYOUTS.slice();
 let psPage=1, psPageSize=10;
 let psSortField=null, psSortDir=1;
 let selectedRows=new Set();
 
-function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
-function checkboxRow(value,label,group){
-  return `<label class="fp-check-row"><input type="checkbox" value="${value}" onchange="onGroupCheck('${group}',this)"> ${label}</label>`;
-}
-
-function populateFilterPanels(){
-  const countries=[...new Set(PAYOUTS.map(p=>p.countryCode))].sort();
-  const currencies=[...new Set(PAYOUTS.map(p=>p.currency))].sort();
-  const acquirers=[...new Set(PAYOUTS.map(p=>p.acquirer))].sort();
-  document.getElementById('fpStatusChecks').innerHTML=STATUS_LIST.map(s=>checkboxRow(s,s,'status')).join('');
-  document.getElementById('fpCountryChecks').innerHTML=countries.map(c=>checkboxRow(c,c,'country')).join('');
-  document.getElementById('fpCurrencyChecks').innerHTML=currencies.map(c=>checkboxRow(c,c,'currency')).join('');
-  document.getElementById('fpAcquirerChecks').innerHTML=acquirers.map(a=>checkboxRow(a,a,'acquirer')).join('');
-}
-
-function onGroupCheck(group,cb){
-  if(cb.checked) FILTER_GROUPS[group].add(cb.value); else FILTER_GROUPS[group].delete(cb.value);
-}
-
-function updatePillLabel(group){
-  const labelMap={status:'Status',country:'Country',currency:'Currency',acquirer:'Acquirer'};
-  const n=FILTER_GROUPS[group].size;
-  const btn=document.getElementById('fp'+cap(group)+'Btn');
-  btn.classList.toggle('has-value',n>0);
-  btn.childNodes[0].textContent=n>0?`${labelMap[group]} (${n}) `:`${labelMap[group]} `;
-}
-
-function toggleFilterPanel(id,ev){
-  ev.stopPropagation();
-  document.querySelectorAll('.fp-panel').forEach(p=>{ if(p.id!==id+'Panel') p.classList.remove('open'); });
-  document.getElementById(id+'Panel').classList.toggle('open');
-}
-document.addEventListener('click',()=>document.querySelectorAll('.fp-panel').forEach(p=>p.classList.remove('open')));
-
-function applyGroupFilter(group){
-  updatePillLabel(group);
-  document.getElementById('fp'+cap(group)+'Panel').classList.remove('open');
-  applyAllFilters();
-}
-function clearGroupFilter(group){
-  FILTER_GROUPS[group].clear();
-  document.querySelectorAll(`#fp${cap(group)}Checks input`).forEach(cb=>cb.checked=false);
-  updatePillLabel(group);
-  applyAllFilters();
-}
-
-function applyDateFilter(){
-  dateFrom=document.getElementById('fpDateFrom').value;
-  dateTo=document.getElementById('fpDateTo').value;
-  const btn=document.getElementById('fpDateBtn');
-  if(dateFrom||dateTo){
-    btn.classList.add('has-value');
-    btn.childNodes[0].textContent=`Payout date: ${dateFrom||'…'} — ${dateTo||'…'} `;
-  } else {
-    btn.classList.remove('has-value');
-    btn.childNodes[0].textContent='Payout date ';
-  }
-  document.getElementById('fpDatePanel').classList.remove('open');
-  applyAllFilters();
-}
-function clearDateFilter(){
-  dateFrom='';dateTo='';
-  document.getElementById('fpDateFrom').value='';
-  document.getElementById('fpDateTo').value='';
-  const btn=document.getElementById('fpDateBtn');
-  btn.classList.remove('has-value');
-  btn.childNodes[0].textContent='Payout date ';
-  applyAllFilters();
-}
-
 function applyColumnFilter(field,value){
   columnFilters[field]=value.trim().toLowerCase();
-  applyAllFilters();
-}
-
-function clearAllFilters(){
-  Object.keys(FILTER_GROUPS).forEach(g=>{
-    FILTER_GROUPS[g].clear();
-    document.querySelectorAll(`#fp${cap(g)}Checks input`).forEach(cb=>cb.checked=false);
-    updatePillLabel(g);
-  });
-  dateFrom='';dateTo='';
-  document.getElementById('fpDateFrom').value='';
-  document.getElementById('fpDateTo').value='';
-  const dBtn=document.getElementById('fpDateBtn');
-  dBtn.classList.remove('has-value');
-  dBtn.childNodes[0].textContent='Payout date ';
-  columnFilters={};
-  document.querySelectorAll('.col-filter').forEach(inp=>inp.value='');
   applyAllFilters();
 }
 
@@ -932,12 +730,6 @@ function applyAllFilters(){
       const q=columnFilters[field];
       if(q && !String(r[field]||'').toLowerCase().includes(q)) return false;
     }
-    if(dateFrom && r.payoutDate<dateFrom) return false;
-    if(dateTo && r.payoutDate>dateTo) return false;
-    if(FILTER_GROUPS.status.size && !FILTER_GROUPS.status.has(r.status)) return false;
-    if(FILTER_GROUPS.country.size && !FILTER_GROUPS.country.has(r.countryCode)) return false;
-    if(FILTER_GROUPS.currency.size && !FILTER_GROUPS.currency.has(r.currency)) return false;
-    if(FILTER_GROUPS.acquirer.size && !FILTER_GROUPS.acquirer.has(r.acquirer)) return false;
     return true;
   });
   psPage=1;
@@ -1070,7 +862,6 @@ function toggleBalanceDetail(){
   document.getElementById('balanceExpandBtn').classList.toggle('open');
 }
 
-populateFilterPanels();
 renderPayoutTable();
 </script>
 
