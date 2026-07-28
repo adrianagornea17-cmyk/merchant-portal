@@ -233,15 +233,6 @@
   .link-copy-full button.copied{background:var(--success-text);border-color:var(--success-text);}
   .done-quick-actions{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
 
-  .checkout-preview{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
-  .preview-frame{border:1px solid var(--border-strong);border-radius:10px;padding:20px;text-align:center;background:#FAFBFC;margin-bottom:8px;}
-  .preview-header{font-weight:700;font-size:12px;display:flex;justify-content:space-between;color:var(--text-soft);margin-bottom:16px;text-transform:lowercase;}
-  .preview-header span{font-weight:500;color:var(--text-faint);text-transform:none;}
-  .preview-merchant{font-size:12px;color:var(--text-faint);margin-bottom:4px;}
-  .preview-amount{font-size:26px;font-weight:700;margin-bottom:14px;font-family:'IBM Plex Mono',monospace;}
-  .preview-methods{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
-  .preview-btn{background:var(--primary);color:#fff;border-radius:8px;padding:10px;font-weight:700;font-size:13px;}
-
   /* send-link modal */
   .send-modal-overlay{position:fixed;inset:0;background:rgba(12,18,32,.45);display:none;align-items:center;justify-content:center;z-index:60;}
   .send-modal-overlay.open{display:flex;}
@@ -657,20 +648,7 @@
               </div>
               <div class="done-quick-actions">
                 <button class="btn" onclick="openSendModal()">Send via email or SMS</button>
-                <button class="btn" id="previewBtn" onclick="togglePreview()">👁 Preview customer checkout</button>
-              </div>
-
-              <div class="checkout-preview" id="checkoutPreview" style="display:none">
-                <div class="preview-frame">
-                  <div class="preview-header">verifone <span>Secure checkout</span></div>
-                  <div class="preview-merchant">Parent Organization</div>
-                  <div class="preview-amount">EUR 0.00</div>
-                  <div class="preview-methods">
-                    <span class="pm-badge">Card</span><span class="pm-badge">PayPal</span><span class="pm-badge">Google Pay</span><span class="pm-badge">Vipps</span>
-                  </div>
-                  <div class="preview-btn">Pay now</div>
-                </div>
-                <div class="hint">This is a simplified preview — your customer will see your checkout theme and branding.</div>
+                <button class="btn" onclick="resetCreateFlow()">+ Create another payment link</button>
               </div>
 
               <div class="divider-label">Link details</div>
@@ -679,8 +657,6 @@
               <div class="success-row"><span>Merchant reference</span><span>—</span></div>
               <div class="success-row"><span>Product(s)</span><span>—</span></div>
               <div class="success-row"><span>Customer name</span><span>—</span></div>
-
-              <button class="btn" style="width:100%;margin-top:16px" onclick="resetCreateFlow()">+ Create another payment link</button>
             </div>
           </div>
         </div>
@@ -820,14 +796,6 @@
     showToast('Link copied to clipboard');
     setTimeout(()=>{ btn.textContent = original; btn.classList.remove('copied'); }, 1600);
   }
-  function togglePreview(){
-    const el = document.getElementById('checkoutPreview');
-    const btn = document.getElementById('previewBtn');
-    const willShow = el.style.display === 'none';
-    el.style.display = willShow ? 'block' : 'none';
-    btn.textContent = willShow ? '🙈 Hide preview' : '👁 Preview customer checkout';
-  }
-
   // ---------- send payment link modal ----------
   function openSendModal(){
     document.getElementById('sendModalEmailInput').value = document.getElementById('deliveryEmailInput').value.trim();
