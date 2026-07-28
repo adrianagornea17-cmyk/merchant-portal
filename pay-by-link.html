@@ -1709,23 +1709,23 @@
                 <tr>
                   <th class="col-th" style="width:170px;">
                     <div class="col-th-inner">Created <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;"><polyline points="7 10 12 5 17 10"/><polyline points="7 14 12 19 17 14"/></svg></div>
-                    <input class="col-search" type="text" placeholder="Search...">
+                    <input class="col-search" type="text" placeholder="Search..." data-col="1">
                   </th>
                   <th class="col-th" style="width:120px;">
                     <div class="col-th-inner">Amount</div>
-                    <input class="col-search" type="text" placeholder="Search...">
+                    <input class="col-search" type="text" placeholder="Search..." data-col="2">
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Email (Recipient)</div>
-                    <input class="col-search" type="text" placeholder="Search...">
+                    <div style="height:28px;"></div>
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Email (Customer)</div>
-                    <input class="col-search" type="text" placeholder="Search...">
+                    <input class="col-search" type="text" placeholder="Search..." data-col="4">
                   </th>
                   <th class="col-th">
                     <div class="col-th-inner">Merchant Reference</div>
-                    <input class="col-search" type="text" placeholder="Search...">
+                    <input class="col-search" type="text" placeholder="Search..." data-col="5">
                   </th>
                   <th class="col-th" style="width:130px;">
                     <div class="col-th-inner">Status</div>
@@ -2867,12 +2867,13 @@
   }
 
   /* ─── PER-COLUMN SEARCH ─── */
-  const colFilters = [];
+  const colFilters = {};
 
   function initColSearch() {
-    document.querySelectorAll('.col-search').forEach((input, i) => {
-      colFilters[i] = '';
-      input.addEventListener('input', () => { colFilters[i] = input.value.toLowerCase().trim(); applyFilters(); });
+    document.querySelectorAll('.col-search').forEach(input => {
+      const col = input.dataset.col;
+      colFilters[col] = '';
+      input.addEventListener('input', () => { colFilters[col] = input.value.toLowerCase().trim(); applyFilters(); });
     });
     const statusSel = document.getElementById('col-status-select');
     if (statusSel) statusSel.addEventListener('change', () => applyFilters());
@@ -2911,9 +2912,9 @@
     rows.forEach(tr => {
       let match = true;
       // per-column text filters
-      if (match) match = colFilters.every((cq, i) => {
+      if (match) match = Object.entries(colFilters).every(([col, cq]) => {
         if (!cq) return true;
-        const cell = tr.querySelector(`td:nth-child(${i + 1})`);
+        const cell = tr.querySelector(`td:nth-child(${col})`);
         return cell ? cell.textContent.toLowerCase().includes(cq) : true;
       });
       // column status select
