@@ -95,6 +95,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,san
 select.f-edit{cursor:pointer}
 textarea.f-edit{resize:vertical;min-height:80px}
 
+/* ── Multi-select dropdown (Business identifier types) ── */
+.ms-wrap{position:relative}
+.ms-control{width:100%;min-height:34px;padding:6px 10px;border:1.5px solid #d4d8de;border-radius:7px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ms-control:hover{border-color:#b7bdc6}
+.ms-control.open{border-color:#185FA5}
+.ms-chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.ms-placeholder{font-size:13px;color:#aaa}
+.ms-chip{display:flex;align-items:center;gap:6px;background:#e8f0fb;color:#185FA5;font-size:12px;font-weight:600;padding:3px 8px;border-radius:12px}
+.ms-chip-x{cursor:pointer;font-size:12px;line-height:1;color:#5b84b8}
+.ms-chip-x:hover{color:#185FA5}
+.ms-chevron{width:10px;height:7px;stroke:#888;fill:none;stroke-width:1.6;flex-shrink:0;transition:transform .15s}
+.ms-control.open .ms-chevron{transform:rotate(180deg)}
+.ms-list{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:20;background:#fff;border:1.5px solid #d4d8de;border-radius:7px;max-height:280px;overflow-y:auto;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+#bizIdCard{overflow:visible}
+.ms-opt{display:flex;align-items:center;gap:8px;padding:10px 12px;font-size:13px;color:#333;cursor:pointer}
+.ms-opt:hover{background:#f2f6fb}
+.ms-opt.sel{background:#e8f0fb;color:#185FA5;font-weight:600}
+.ms-opt input{margin:0;pointer-events:none}
+.ms-value-row{margin-top:12px}
+
+/* ── Contact panel labels + row icon buttons ── */
+.cf-label{font-size:12.5px;font-weight:700;color:#1a1a2e}
+.cf-label small{font-weight:400;color:#999;font-size:11px}
+.icon-btn{background:none;border:none;cursor:pointer;color:#185FA5;padding:5px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center}
+.icon-btn:hover{background:#eef4fb}
+.icon-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn-danger{color:#c0392b}
+.icon-btn-danger:hover{background:#fdeaea}
+
 /* ── Tags ── */
 .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
 .tag-blue{background:#e8f0fb;color:#1a4fa5}
@@ -146,6 +175,8 @@ textarea.f-edit{resize:vertical;min-height:80px}
 .tbl-actions{display:flex;gap:8px;align-items:center}
 .view-all{font-size:12px;color:#185FA5;font-weight:500;cursor:pointer;background:none;border:none;padding:0}
 .view-all:hover{text-decoration:underline}
+.addr-remove-link{font-size:13px;color:#185FA5;font-weight:500;cursor:pointer;text-decoration:none}
+.addr-remove-link:hover{text-decoration:underline}
 .tbl-wrap{border:1.5px solid #dde1e8;border-radius:10px;overflow:hidden;background:#fff}
 table.dt{width:100%;border-collapse:collapse;font-size:13px}
 table.dt th{text-align:left;padding:9px 14px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em;background:#f6f7f9;border-bottom:1.5px solid #dde1e8}
@@ -479,7 +510,7 @@ table.dt td a:hover{text-decoration:underline}
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="bizIdCard">
           <div class="card-title">Reference identifiers</div>
           <div class="card-body">
             <div class="fields single" style="gap:12px">
@@ -487,7 +518,17 @@ table.dt td a:hover{text-decoration:underline}
                 <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Site reference <small>(optional)</small></div><input class="f-edit" value="" placeholder="0/256"></div>
                 <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Company group ref. identifier <small>(optional)</small></div><input class="f-edit" value="" placeholder="0/256"></div>
               </div>
-              <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Business identifier type <small>(optional)</small></div><select class="f-edit"><option value="">— Select —</option><option>VHQ Customer ID</option><option>VHQ Customer UID</option></select></div>
+              <div class="f" data-edit="vf_admin" style="opacity: 1;">
+                <div class="f-label">Business identifier types <small>(optional)</small></div>
+                <div class="ms-wrap" id="bizIdWrap">
+                  <div class="ms-control" id="bizIdControl" onclick="toggleBizIdDropdown(event)">
+                    <div class="ms-chips" id="bizIdChips"><span class="ms-placeholder">— Select —</span></div>
+                    <svg class="ms-chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"></path></svg>
+                  </div>
+                  <div class="ms-list" id="bizIdList" style="display:none"></div>
+                </div>
+                <div id="bizIdValues"></div>
+              </div>
               <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Label <small>(optional — free-form tags)</small></div><input class="f-edit" value="" placeholder="Add tags for grouping"></div>
             </div>
           </div>
@@ -538,7 +579,6 @@ table.dt td a:hover{text-decoration:underline}
         <div class="flag-pill" onclick="switchFlagPill(&#39;appmarket&#39;,this)">App Market</div>
         <div class="flag-pill" onclick="switchFlagPill(&#39;petro&#39;,this)">Petro</div>
         <div class="flag-pill" onclick="switchFlagPill(&#39;orders&#39;,this)">Orders</div>
-        <div class="flag-pill" onclick="switchFlagPill(&#39;admin&#39;,this)">Administration</div>
       </div>
       <div class="flag-info-bar">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -838,7 +878,6 @@ table.dt td a:hover{text-decoration:underline}
       <div id="flag-content-appmarket" style="display:none"></div>
       <div id="flag-content-petro" style="display:none"></div>
       <div id="flag-content-orders" style="display:none"></div>
-      <div id="flag-content-admin" style="display:none"><div class="card"><div style="padding:24px;text-align:center;color:#aaa;font-size:13px">No flags defined for Administration yet — TBD pending PM confirmation.</div></div></div>
     </div>
 
     <!-- Merchant Admin / Merchant User: read-only enabled flags list -->
@@ -875,29 +914,45 @@ table.dt td a:hover{text-decoration:underline}
         </div>
 
         <div style="display:flex;flex-direction:column;gap:16px">
-          <div class="card">
-            <div class="card-title">Shipping address</div>
-            <div class="card-body">
-              <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="shipSame" checked="" onchange="document.getElementById(&#39;shipFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="shipSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
-              <div id="shipFields" style="display:none;margin-top:12px">
-                <div class="fields" style="gap:10px">
-                  <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+          <div>
+            <div id="shipRemoveLink" style="display:none;margin-bottom:6px"><a href="javascript:void(0)" onclick="document.getElementById(&#39;shipSame&#39;).checked=true;document.getElementById(&#39;shipFields&#39;).style.display=&#39;none&#39;;document.getElementById(&#39;shipRemoveLink&#39;).style.display=&#39;none&#39;" class="addr-remove-link">− Remove Shipping Address</a></div>
+            <div class="card">
+              <div class="card-title">Shipping address</div>
+              <div class="card-body">
+                <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="shipSame" checked="" onchange="document.getElementById(&#39;shipFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;;document.getElementById(&#39;shipRemoveLink&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="shipSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
+                <div id="shipFields" style="display:none;margin-top:12px">
+                  <div class="fields" style="gap:10px">
+                    <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
+                    <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 2 <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Zip code</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Province / State</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Latitude <small>(optional)</small></div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Longitude <small>(optional)</small></div><input class="f-edit" value=""></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-title">Trading address</div>
-            <div class="card-body">
-              <div style="background:#fff8e6;border:1px solid #f0d080;border-radius:7px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#7a5c00">⚠ Time zone is derived from the trading address. If not provided, some payment types will fail.</div>
-              <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tradeSame" checked="" onchange="document.getElementById(&#39;tradeFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="tradeSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
-              <div id="tradeFields" style="display:none;margin-top:12px">
-                <div class="fields" style="gap:10px">
-                  <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+          <div>
+            <div id="tradeRemoveLink" style="display:none;margin-bottom:6px"><a href="javascript:void(0)" onclick="document.getElementById(&#39;tradeSame&#39;).checked=true;document.getElementById(&#39;tradeFields&#39;).style.display=&#39;none&#39;;document.getElementById(&#39;tradeRemoveLink&#39;).style.display=&#39;none&#39;" class="addr-remove-link">− Remove Trading Address</a></div>
+            <div class="card">
+              <div class="card-title">Trading address</div>
+              <div class="card-body">
+                <div style="background:#fff8e6;border:1px solid #f0d080;border-radius:7px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#7a5c00">⚠ Time zone is derived from the trading address. If not provided, some payment types will fail.</div>
+                <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tradeSame" checked="" onchange="document.getElementById(&#39;tradeFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;;document.getElementById(&#39;tradeRemoveLink&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="tradeSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
+                <div id="tradeFields" style="display:none;margin-top:12px">
+                  <div class="fields" style="gap:10px">
+                    <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
+                    <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 2 <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Zip code</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Province / State</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Latitude <small>(optional)</small></div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Longitude <small>(optional)</small></div><input class="f-edit" value=""></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -937,13 +992,10 @@ table.dt td a:hover{text-decoration:underline}
           <div class="card-title">Contacts</div>
           <div class="card-body" style="padding:0">
             <table class="dt">
-              <thead><tr><th>Name</th><th>Type</th><th>Email</th><th></th></tr></thead>
-              <tbody>
-                <tr><td><strong>Admin User</strong></td><td><span class="tag tag-blue">Owner</span></td><td>admin@testorg.com</td><td><button class="btn btn-secondary btn-sm contact-action-btn" style="display: inline-flex;">Edit</button></td></tr>
-                <tr><td><strong>Support Contact</strong></td><td><span class="tag tag-gray">Business</span></td><td>support@testorg.com</td><td><button class="btn btn-secondary btn-sm contact-action-btn" style="display: inline-flex;">Edit</button></td></tr>
-              </tbody>
+              <thead><tr><th>Name</th><th>Type</th><th></th></tr></thead>
+              <tbody id="contactsTbody"></tbody>
             </table>
-            <div style="padding:10px 14px"><button class="btn btn-secondary btn-sm contact-action-btn" style="display: inline-flex;">+ Add new contact</button></div>
+            <div style="padding:10px 14px"><button class="btn btn-secondary btn-sm contact-action-btn" style="display: inline-flex;" onclick="openContactPanel()">+ Add new contact</button></div>
           </div>
         </div>
       </div>
@@ -1453,6 +1505,71 @@ table.dt td a:hover{text-decoration:underline}
   </div>
 </div>
 
+<!-- ═══ ADD/EDIT CONTACT SIDE PANEL ═══ -->
+<div class="cp-backdrop" id="contactPanelBackdrop" onclick="if(event.target===this)closeContactPanel()">
+  <div class="cp-panel">
+    <div class="cp-header">
+      <div class="cp-title" id="contactPanelTitle">Add New Contact</div>
+      <button class="cp-close" onclick="closeContactPanel()" aria-label="Close">✕</button>
+    </div>
+    <div class="cp-body">
+      <div class="fields single" style="gap:14px">
+        <div class="f">
+          <div class="cf-label">Contact type</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="radio" name="contactType" value="Business" checked> Business</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="radio" name="contactType" value="Manage Disputes"> Manage Disputes</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="radio" name="contactType" value="Owner"> Owner</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="radio" name="contactType" value="Personal"> Personal</label>
+          </div>
+        </div>
+        <div class="fields" style="gap:12px">
+          <div class="f"><div class="cf-label">First name</div><input class="f-edit" id="cfFirstName" placeholder=""></div>
+          <div class="f"><div class="cf-label">Last name</div><input class="f-edit" id="cfLastName" placeholder=""></div>
+        </div>
+        <div class="f">
+          <div class="cf-label">Phone number</div>
+          <div style="display:flex;gap:8px">
+            <select class="f-edit" id="cfPhoneCode" style="max-width:100px;flex-shrink:0">
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+358">🇫🇮 +358</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+49">🇩🇪 +49</option>
+            </select>
+            <input class="f-edit" id="cfPhone" placeholder="(201) 555-0123">
+          </div>
+        </div>
+        <div class="f"><div class="cf-label">Email address</div><input class="f-edit" id="cfEmail" type="email" placeholder=""></div>
+        <div class="f"><div class="cf-label">Address line 1</div><input class="f-edit" id="cfAddr1" placeholder=""></div>
+        <div class="f"><div class="cf-label">Address line 2 <small>(Optional)</small></div><input class="f-edit" id="cfAddr2" placeholder=""></div>
+        <div class="fields" style="gap:12px">
+          <div class="f"><div class="cf-label">Zip code</div><input class="f-edit" id="cfZip" placeholder=""></div>
+          <div class="f"><div class="cf-label">City</div><input class="f-edit" id="cfCity" placeholder=""></div>
+        </div>
+        <div class="f">
+          <div class="cf-label">Country</div>
+          <select class="f-edit" id="cfCountry">
+            <option value="">— Select —</option>
+            <option>Finland</option>
+            <option>United States of America</option>
+          </select>
+        </div>
+        <div class="f">
+          <div class="cf-label">Province / State</div>
+          <select class="f-edit" id="cfProvince">
+            <option value="">— Select —</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="cp-footer" style="justify-content:space-between">
+      <button class="btn" style="background:none;border:none;color:#c0392b;font-weight:600" onclick="closeContactPanel()">Discard</button>
+      <button class="btn btn-primary" onclick="saveContact()">Save Contact</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ COMMISSION CONFIG ADD/EDIT — FULL MODAL PAGE ═══ -->
 <div class="cm-overlay" id="commModal">
   <div class="cm-topbar">
@@ -1552,6 +1669,8 @@ const FLAGS={
       {id:'PARTNER_COMMISSION_REPORT',name:'Partner commission report',desc:'Enable Partner Commission Report type in Generated Reports',on:false,sub:false,inh:false},
       {id:'REPORTING_GROUP',name:'Reporting group',desc:'Controls the visibility of reporting group feature',on:false,sub:false,inh:false},
       {id:'SETTLEMENT_DATE_FILTER',name:'Settlement date filter',desc:'Enables Settlement Date filter on Transactions, Orders, and Report Scheduler pages',on:false,sub:false,inh:false},
+      {id:'SETTLEMENTS',name:'Settlements',desc:'View Settlement Reports page',on:false,sub:false,inh:false},
+      {id:'PROCESSOR_SETTLEMENT',name:'Processor settlement',desc:'Controls the visibility of Processor Settlement Batches reports in Verifone Central',on:false,sub:false,inh:false},
     ]},
     {id:'payments',label:'Payments & checkout',flags:[
       {id:'VIRTUAL_TERMINAL',name:'Virtual terminal',desc:'Payment Tool: Virtual Terminal',on:true,sub:true,inh:true},
@@ -1562,20 +1681,23 @@ const FLAGS={
       {id:'PBL_TIP',name:'Pay by link — tip',desc:'Enables tip option for Pay By Link transactions',on:false,sub:false,inh:false},
       {id:'PAYMENT_ACTIONS',name:'Payment actions',desc:'Option to execute payment actions on transactions',on:true,sub:true,inh:true},
       {id:'PRE_AUTH_MANUAL_CAPTURE',name:'Pre-auth manual capture',desc:'Enables pre-auth transactions with manual capture for supervisors',on:false,sub:false,inh:false},
-      {id:'SETTLEMENTS',name:'Settlements',desc:'View Settlement Reports page',on:false,sub:false,inh:false},
       {id:'SURCHARGE',name:'Surcharge',desc:'Enables surcharge option on the virtual terminal page',on:false,sub:false,inh:false},
       {id:'TAX_INPUTS',name:'Tax inputs',desc:'Enables tax input fields on the virtual terminal page',on:false,sub:false,inh:false},
     ]},
     {id:'merchant',label:'Merchant account & acquiring',flags:[
       {id:'MERCHANT_CONFIGURATION',name:'Merchant configuration',desc:'Enables management of acquiring configuration at merchant level',on:true,sub:false,inh:false},
+      {id:'MERCHANT_COUNTRY_CONFIGURATION',name:'Merchant country configuration',desc:'Enables management of acquiring configuration at the merchant-country level',on:false,sub:false,inh:false},
       {id:'MERCHANT_SETTLEMENT',name:'Merchant settlement',desc:'Enables creation and tracking of merchant payouts',on:true,sub:false,inh:false},
       {id:'MERCHANT_BALANCE',name:'Merchant balance',desc:'Enables balance calculation for merchants with Verifone Acquiring Services',on:true,sub:false,inh:false},
+      {id:'MERCHANT_CHOICE_ROUTING',name:'Merchant choice routing',desc:'Enables the Merchant Choice Routing section on the Organization page',on:false,sub:false,inh:false},
       {id:'INVOICE',name:'Invoice',desc:'Enables monthly invoice summaries and fee details',on:false,sub:false,inh:false},
       {id:'VAS_LIQUIDITY_OVERVIEW',name:'VAS liquidity overview',desc:'Dashboard showing actual liquidity before submitting payouts',on:false,sub:false,inh:false},
       {id:'DISPUTE_MANAGEMENT_CARD_SCHEMES',name:'Dispute management',desc:'Provides the ability to see disputes and their details',on:false,sub:false,inh:false},
-      {id:'CUSTOMER_CATALOG',name:'Customer catalog',desc:'Enables management of the customer catalog for the organization',on:false,sub:false,inh:false},
-      {id:'PRODUCT_CATALOG',name:'Product catalog',desc:'Enables management of the product catalog for the organization',on:false,sub:false,inh:false},
-      {id:'GROUP_ENTITIES',name:'Group entities',desc:'Enables grouping of entities within the organization',on:false,sub:false,inh:false},
+    ]},
+    {id:'catalog',label:'Catalogues & products',flags:[
+      {id:'CUSTOMER_CATALOG',name:'Customer catalog',desc:'Enables Customer Catalog tab and customer search on Pay by Link page',on:false,sub:false,inh:false},
+      {id:'PRODUCT_CATALOG',name:'Product catalog',desc:'Enables Product Catalog tab and product search on Pay by Link page',on:false,sub:false,inh:false},
+      {id:'GROUP_ENTITIES',name:'Group entities',desc:'Controls the visibility of group entity feature of Verifone Central',on:false,sub:false,inh:false},
     ]},
     {id:'security',label:'Security & compliance',flags:[
       {id:'API_KEYS_AUTHENTICATION',name:'API keys authentication',desc:'Enable API-key generation functionality for users in Portal',on:true,sub:true,inh:true},
@@ -1599,7 +1721,7 @@ const FLAGS={
     ]},
   ],
   devices:[
-    {id:'vhq',label:'VHQ foundation',flags:[{id:'VHO_CORE',name:'VHQ Core',desc:'The basic features of VHQ available for any VHQ user',on:true,sub:true,inh:true}]},
+    {id:'vhq',label:'VHQ foundation',flags:[{id:'VHQ_CORE',name:'VHQ Core',desc:'The basic features of VHQ available for any VHQ user',on:true,sub:true,inh:true}]},
     {id:'devops',label:'Device operations',flags:[
       {id:'DEVICE_MANAGEMENT',name:'Device management',desc:'Provides ability to manage devices and their software',on:true,sub:true,inh:true},
       {id:'DEVICE_CARE',name:'Device care',desc:'Provides ability to analyze the health of estate and provide pro-active alerting',on:true,sub:true,inh:true},
@@ -1688,7 +1810,7 @@ function fRow(f){
 function togF(id,v,isSftp){FS[id]=v;const r=document.getElementById('fr-'+id);if(r){v?r.classList.add('on'):r.classList.remove('on');}if(isSftp)renderFlagGroups(curPill,null);}
 function tgGrp(id){const b=document.getElementById('gb-'+id),cv=document.getElementById('cv-'+id);const h=b.style.display==='none';b.style.display=h?'':'none';if(cv)cv.style.transform=h?'':'rotate(-90deg)';}
 function filterFlags(v){renderFlagGroups(curPill,v.toLowerCase().trim()||null);}
-function switchFlagPill(key,el){curPill=key;['commerce','devices','appmarket','petro','orders','admin'].forEach(k=>{const e=document.getElementById('flag-content-'+k);if(e)e.style.display='none';});const t=document.getElementById('flag-content-'+key);if(t)t.style.display='';document.querySelectorAll('#flagPillBar .flag-pill').forEach(e=>e.classList.remove('active'));if(el)el.classList.add('active');renderFlagGroups(key,null);}
+function switchFlagPill(key,el){curPill=key;['commerce','devices','appmarket','petro','orders'].forEach(k=>{const e=document.getElementById('flag-content-'+k);if(e)e.style.display='none';});const t=document.getElementById('flag-content-'+key);if(t)t.style.display='';document.querySelectorAll('#flagPillBar .flag-pill').forEach(e=>e.classList.remove('active'));if(el)el.classList.add('active');renderFlagGroups(key,null);}
 renderFlagGroups('commerce',null);
 
 // ── Tab navigation ──
@@ -2011,6 +2133,141 @@ function saveCommissionConfig(){
   closeCommissionModal();
   renderCommTable(document.getElementById('commSearch').value);
 }
+
+// ── Business identifier types (multi-select) ──
+const BIZ_ID_OPTIONS=['ABN','EIN','Kennitala','SIRET','Chamber of Commerce number','VHQ Customer ID','VHQ Customer UID','VHQ REST API URL','VHQ REST API Customer ID'];
+let bizIdSelected=[];
+
+function escBizId(s){return s.replace(/'/g,"\\'");}
+
+function renderBizIdOptions(){
+  document.getElementById('bizIdList').innerHTML=BIZ_ID_OPTIONS.map(opt=>{
+    const checked=bizIdSelected.includes(opt);
+    return `<div class="ms-opt${checked?' sel':''}" onclick="toggleBizId('${escBizId(opt)}')"><input type="checkbox" ${checked?'checked':''}>${opt}</div>`;
+  }).join('');
+}
+
+function renderBizIdChips(){
+  const wrap=document.getElementById('bizIdChips');
+  if(!bizIdSelected.length){wrap.innerHTML='<span class="ms-placeholder">— Select —</span>';return;}
+  wrap.innerHTML=bizIdSelected.map(opt=>`<span class="ms-chip">${opt}<span class="ms-chip-x" onclick="event.stopPropagation();toggleBizId('${escBizId(opt)}')">✕</span></span>`).join('');
+}
+
+function renderBizIdValues(){
+  document.getElementById('bizIdValues').innerHTML=bizIdSelected.map(opt=>`
+    <div class="f ms-value-row"><div class="f-label">${opt} Value</div><input class="f-edit" placeholder="Enter ${opt}"></div>`).join('');
+}
+
+function toggleBizId(opt){
+  const idx=bizIdSelected.indexOf(opt);
+  if(idx>-1){bizIdSelected.splice(idx,1);}
+  else{bizIdSelected.unshift(opt);}
+  renderBizIdOptions();
+  renderBizIdChips();
+  renderBizIdValues();
+}
+
+function toggleBizIdDropdown(e){
+  e.stopPropagation();
+  const list=document.getElementById('bizIdList');
+  const isOpen=list.style.display!=='none';
+  list.style.display=isOpen?'none':'block';
+  document.getElementById('bizIdControl').classList.toggle('open',!isOpen);
+}
+
+document.addEventListener('click',function(e){
+  const wrap=document.getElementById('bizIdWrap');
+  if(wrap && !wrap.contains(e.target)){
+    document.getElementById('bizIdList').style.display='none';
+    document.getElementById('bizIdControl').classList.remove('open');
+  }
+});
+
+renderBizIdOptions();
+renderBizIdChips();
+renderBizIdValues();
+
+// ── Contacts (Add/Edit side panel) ──
+let CONTACTS=[
+  {type:'Owner',firstName:'Admin',lastName:'User',phoneCode:'+1',phone:'',email:'admin@testorg.com',addr1:'',addr2:'',zip:'',city:'',country:'',province:''},
+  {type:'Business',firstName:'Support',lastName:'Contact',phoneCode:'+1',phone:'',email:'support@testorg.com',addr1:'',addr2:'',zip:'',city:'',country:'',province:''},
+];
+let editingContactIdx=null;
+const CONTACT_TAG_CLASS={Owner:'tag-blue'};
+
+function renderContactsTable(){
+  const tbody=document.getElementById('contactsTbody');
+  if(!CONTACTS.length){
+    tbody.innerHTML='<tr><td colspan="3" style="text-align:center;color:#aaa;padding:16px;font-size:13px">No contact information available.</td></tr>';
+  } else {
+    tbody.innerHTML=CONTACTS.map((c,i)=>`
+      <tr>
+        <td><strong>${c.firstName} ${c.lastName}</strong></td>
+        <td><span class="tag ${CONTACT_TAG_CLASS[c.type]||'tag-gray'}">${c.type.toUpperCase()}</span></td>
+        <td style="text-align:right;white-space:nowrap">
+          <button class="icon-btn contact-action-btn" onclick="openContactPanel(${i})" aria-label="Edit contact" title="Edit"><svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button>
+          <button class="icon-btn icon-btn-danger contact-action-btn" onclick="deleteContact(${i})" aria-label="Delete contact" title="Delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>
+        </td>
+      </tr>`).join('');
+  }
+  applyRole(document.getElementById('roleSelect').value);
+}
+
+function openContactPanel(idx){
+  editingContactIdx=(idx===undefined)?null:idx;
+  const c=editingContactIdx!==null?CONTACTS[editingContactIdx]:null;
+  document.getElementById('contactPanelTitle').textContent=c?'Edit Contact':'Add New Contact';
+  document.querySelectorAll('input[name="contactType"]').forEach(r=>{r.checked=(r.value===(c?c.type:'Business'));});
+  document.getElementById('cfFirstName').value=c?c.firstName:'';
+  document.getElementById('cfLastName').value=c?c.lastName:'';
+  document.getElementById('cfPhoneCode').value=c?c.phoneCode:'+1';
+  document.getElementById('cfPhone').value=c?c.phone:'';
+  document.getElementById('cfEmail').value=c?c.email:'';
+  document.getElementById('cfAddr1').value=c?c.addr1:'';
+  document.getElementById('cfAddr2').value=c?c.addr2:'';
+  document.getElementById('cfZip').value=c?c.zip:'';
+  document.getElementById('cfCity').value=c?c.city:'';
+  document.getElementById('cfCountry').value=c?c.country:'';
+  document.getElementById('cfProvince').value=c?c.province:'';
+  document.getElementById('contactPanelBackdrop').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeContactPanel(){
+  document.getElementById('contactPanelBackdrop').classList.remove('open');
+  document.body.style.overflow='';
+  editingContactIdx=null;
+}
+
+function saveContact(){
+  const type=(document.querySelector('input[name="contactType"]:checked')||{value:'Business'}).value;
+  const contact={
+    type,
+    firstName:document.getElementById('cfFirstName').value.trim(),
+    lastName:document.getElementById('cfLastName').value.trim(),
+    phoneCode:document.getElementById('cfPhoneCode').value,
+    phone:document.getElementById('cfPhone').value.trim(),
+    email:document.getElementById('cfEmail').value.trim(),
+    addr1:document.getElementById('cfAddr1').value.trim(),
+    addr2:document.getElementById('cfAddr2').value.trim(),
+    zip:document.getElementById('cfZip').value.trim(),
+    city:document.getElementById('cfCity').value.trim(),
+    country:document.getElementById('cfCountry').value,
+    province:document.getElementById('cfProvince').value,
+  };
+  if(editingContactIdx!==null){CONTACTS[editingContactIdx]=contact;}
+  else{CONTACTS.push(contact);}
+  closeContactPanel();
+  renderContactsTable();
+}
+
+function deleteContact(idx){
+  if(!confirm('Remove this contact?'))return;
+  CONTACTS.splice(idx,1);
+  renderContactsTable();
+}
+
+renderContactsTable();
 </script>
 
 
