@@ -175,6 +175,8 @@ textarea.f-edit{resize:vertical;min-height:80px}
 .tbl-actions{display:flex;gap:8px;align-items:center}
 .view-all{font-size:12px;color:#185FA5;font-weight:500;cursor:pointer;background:none;border:none;padding:0}
 .view-all:hover{text-decoration:underline}
+.addr-remove-link{font-size:13px;color:#185FA5;font-weight:500;cursor:pointer;text-decoration:none}
+.addr-remove-link:hover{text-decoration:underline}
 .tbl-wrap{border:1.5px solid #dde1e8;border-radius:10px;overflow:hidden;background:#fff}
 table.dt{width:100%;border-collapse:collapse;font-size:13px}
 table.dt th{text-align:left;padding:9px 14px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em;background:#f6f7f9;border-bottom:1.5px solid #dde1e8}
@@ -912,29 +914,45 @@ table.dt td a:hover{text-decoration:underline}
         </div>
 
         <div style="display:flex;flex-direction:column;gap:16px">
-          <div class="card">
-            <div class="card-title">Shipping address</div>
-            <div class="card-body">
-              <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="shipSame" checked="" onchange="document.getElementById(&#39;shipFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="shipSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
-              <div id="shipFields" style="display:none;margin-top:12px">
-                <div class="fields" style="gap:10px">
-                  <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+          <div>
+            <div id="shipRemoveLink" style="display:none;margin-bottom:6px"><a href="javascript:void(0)" onclick="document.getElementById(&#39;shipSame&#39;).checked=true;document.getElementById(&#39;shipFields&#39;).style.display=&#39;none&#39;;document.getElementById(&#39;shipRemoveLink&#39;).style.display=&#39;none&#39;" class="addr-remove-link">− Remove Shipping Address</a></div>
+            <div class="card">
+              <div class="card-title">Shipping address</div>
+              <div class="card-body">
+                <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="shipSame" checked="" onchange="document.getElementById(&#39;shipFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;;document.getElementById(&#39;shipRemoveLink&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="shipSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
+                <div id="shipFields" style="display:none;margin-top:12px">
+                  <div class="fields" style="gap:10px">
+                    <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
+                    <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 2 <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Zip code</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Province / State</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Latitude <small>(optional)</small></div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Longitude <small>(optional)</small></div><input class="f-edit" value=""></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-title">Trading address</div>
-            <div class="card-body">
-              <div style="background:#fff8e6;border:1px solid #f0d080;border-radius:7px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#7a5c00">⚠ Time zone is derived from the trading address. If not provided, some payment types will fail.</div>
-              <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tradeSame" checked="" onchange="document.getElementById(&#39;tradeFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="tradeSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
-              <div id="tradeFields" style="display:none;margin-top:12px">
-                <div class="fields" style="gap:10px">
-                  <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
-                  <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+          <div>
+            <div id="tradeRemoveLink" style="display:none;margin-bottom:6px"><a href="javascript:void(0)" onclick="document.getElementById(&#39;tradeSame&#39;).checked=true;document.getElementById(&#39;tradeFields&#39;).style.display=&#39;none&#39;;document.getElementById(&#39;tradeRemoveLink&#39;).style.display=&#39;none&#39;" class="addr-remove-link">− Remove Trading Address</a></div>
+            <div class="card">
+              <div class="card-title">Trading address</div>
+              <div class="card-body">
+                <div style="background:#fff8e6;border:1px solid #f0d080;border-radius:7px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#7a5c00">⚠ Time zone is derived from the trading address. If not provided, some payment types will fail.</div>
+                <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="tradeSame" checked="" onchange="document.getElementById(&#39;tradeFields&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;;document.getElementById(&#39;tradeRemoveLink&#39;).style.display=this.checked?&#39;none&#39;:&#39;&#39;"><label for="tradeSame" style="font-size:13px;cursor:pointer">Same as billing address</label></div>
+                <div id="tradeFields" style="display:none;margin-top:12px">
+                  <div class="fields" style="gap:10px">
+                    <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 1</div><input class="f-edit" value=""></div>
+                    <div class="f span2" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Address line 2 <small>(optional)</small></div><input class="f-edit" value="" placeholder="Optional"></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Zip code</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">City</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Country</div><select class="f-edit"><option>— Select —</option><option>Finland</option></select></div>
+                    <div class="f" data-edit="vf_admin,merchant_admin" style="opacity: 1;"><div class="f-label">Province / State</div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Latitude <small>(optional)</small></div><input class="f-edit" value=""></div>
+                    <div class="f" data-edit="vf_admin" style="opacity: 1;"><div class="f-label">Longitude <small>(optional)</small></div><input class="f-edit" value=""></div>
+                  </div>
                 </div>
               </div>
             </div>
