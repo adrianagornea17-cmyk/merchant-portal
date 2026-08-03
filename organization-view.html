@@ -53,6 +53,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,san
 .btn-primary:hover{background:#104d8a}
 .btn-secondary{border:1.5px solid #d4d8de;background:#fff;color:#444}
 .btn-secondary:hover{background:#f5f6f8}
+.btn-sm{padding:5px 11px;font-size:12px}
 
 /* ── Primary tabs ── */
 .primary-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
@@ -74,9 +75,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,san
 .fields.single{grid-template-columns:1fr}
 @media(max-width:540px){.fields{grid-template-columns:1fr}}
 .f{display:flex;flex-direction:column;gap:3px}
+.f.span2{grid-column:span 2}
 .f-label{font-size:11px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.05em}
+.f-label small{font-weight:400;text-transform:none;letter-spacing:0;color:#bbb;font-size:10px}
 .f-view{font-size:13px;font-weight:500;color:#1a1a2e;word-break:break-word}
 .f-view.empty{color:#ccc;font-style:italic;font-weight:400}
+
+/* ── Section label / separators ── */
+.section-label{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;padding:0 0 8px 2px}
+.same-as-note{font-size:13px;color:#777;font-style:italic;display:flex;align-items:center;gap:6px;padding:4px 0}
+.same-as-note svg{width:16px;height:16px;stroke:#1a7a47;fill:none;stroke-width:2;flex-shrink:0}
+
+/* ── Tags / chips ── */
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
+.tag-blue{background:#e8f0fb;color:#1a4fa5}
+.tag-gray{background:#eef0f4;color:#555}
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px}
+.chip-g{background:#e4f5ec;color:#1a7a47}
+.chip-gr{background:#eef0f4;color:#666}
+
+/* ── Tables ── */
+.tbl-section{margin-bottom:20px}
+.tbl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.tbl-hdr-title{font-size:14px;font-weight:700;color:#1a1a2e}
+.view-all{font-size:12px;color:#185FA5;font-weight:500;cursor:pointer;background:none;border:none;padding:0}
+.view-all:hover{text-decoration:underline}
+.tbl-wrap{border:1.5px solid #dde1e8;border-radius:10px;overflow:hidden;background:#fff}
+table.dt{width:100%;border-collapse:collapse;font-size:13px}
+table.dt th{text-align:left;padding:9px 14px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em;background:#f6f7f9;border-bottom:1.5px solid #dde1e8}
+table.dt td{padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1a1a2e;vertical-align:middle}
+table.dt tr:last-child td{border-bottom:none}
+table.dt tr:hover td{background:#fafbfc}
+table.dt td a{color:#185FA5;text-decoration:none;font-weight:500}
+table.dt td a:hover{text-decoration:underline}
+.tbl-foot{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-top:1.5px solid #dde1e8;background:#f8f9fb;font-size:12px;color:#888}
+
+/* ── Read-only feature flags ── */
+.feature-ro-group{margin-bottom:14px}
+.feature-ro-group-title{font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em;padding:0 0 8px 0}
+.feature-ro-flags{display:flex;flex-wrap:wrap;gap:6px}
+.feature-ro-flag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:4px 10px;background:#e4f5ec;color:#1a7a47;border-radius:20px;border:1px solid #b8e6cc}
+.feature-ro-flag svg{width:11px;height:11px;stroke:#1a7a47;fill:none;stroke-width:2.5;stroke-linecap:round}
 
 /* ── Empty state ── */
 .empty-state-card{background:#fff;border:1.5px solid #dde1e8;border-radius:16px;padding:36px 40px;max-width:480px;width:100%;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);margin:24px auto}
@@ -175,67 +214,335 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,san
 
   <!-- ═══ TAB: ORGANIZATION DETAILS ═══ -->
   <div id="tab-org">
-    <div class="two-col" style="margin-bottom:16px">
-      <div class="card">
-        <div class="card-title">Identity details</div>
-        <div class="card-body">
-          <div class="fields single">
-            <div class="f"><div class="f-label">Organization name</div><div class="f-view" id="f-name"></div></div>
-            <div class="f"><div class="f-label">Organization ID</div><div class="f-view" id="f-id" style="font-family:monospace"></div></div>
-            <div class="f"><div class="f-label">Organization type</div><div class="f-view" id="f-type"></div></div>
-            <div class="f"><div class="f-label">Parent organization</div><div class="f-view" id="f-parent"></div></div>
-            <div class="f"><div class="f-label">Friendly name</div><div class="f-view" id="f-friendly"></div></div>
-            <div class="fields" style="gap:14px 16px">
-              <div class="f"><div class="f-label">Country</div><div class="f-view" id="f-country"></div></div>
-              <div class="f"><div class="f-label">Status</div><div class="f-view" id="f-status"></div></div>
+    <div class="section-gap" style="display:flex;flex-direction:column;gap:16px">
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Identity details</div>
+          <div class="card-body">
+            <div class="fields single">
+              <div class="f"><div class="f-label">Organization name</div><div class="f-view" id="f-name"></div></div>
+              <div class="f"><div class="f-label">Organization ID</div><div class="f-view" id="f-id" style="font-family:monospace"></div></div>
+              <div class="f"><div class="f-label">Organization type</div><div class="f-view" id="f-type"></div></div>
+              <div class="f"><div class="f-label">Parent organization</div><div class="f-view" id="f-parent"></div></div>
+              <div class="f"><div class="f-label">Friendly name</div><div class="f-view" id="f-friendly"></div></div>
+              <div class="fields" style="gap:14px 16px">
+                <div class="f"><div class="f-label">Country</div><div class="f-view" id="f-country"></div></div>
+                <div class="f"><div class="f-label">Status</div><div class="f-view" id="f-status"></div></div>
+              </div>
+              <div class="f"><div class="f-label">Cross entity access</div><div class="f-view">Disabled</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Legal &amp; structural</div>
+          <div class="card-body">
+            <div class="fields single">
+              <div class="f"><div class="f-label">Legal name</div><div class="f-view">Not set</div></div>
+              <div class="f"><div class="f-label">Legal entity type</div><div class="f-view">Private Limited Company</div></div>
+              <div class="fields" style="gap:14px 16px">
+                <div class="f"><div class="f-label">Tax registration number</div><div class="f-view" id="f-tax"></div></div>
+                <div class="f"><div class="f-label">Verifone ID</div><div class="f-view" id="f-verifoneId"></div></div>
+              </div>
+              <div class="fields" style="gap:14px 16px">
+                <div class="f"><div class="f-label">Token entity ID</div><div class="f-view empty">Not set</div></div>
+                <div class="f"><div class="f-label">Merchant category code</div><div class="f-view">5411</div></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">Legal &amp; structural</div>
-        <div class="card-body">
-          <div class="fields single">
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Financial &amp; regulatory</div>
+          <div class="card-body">
             <div class="fields" style="gap:14px 16px">
-              <div class="f"><div class="f-label">Tax registration number</div><div class="f-view" id="f-tax"></div></div>
-              <div class="f"><div class="f-label">Verifone ID</div><div class="f-view" id="f-verifoneId"></div></div>
+              <div class="f"><div class="f-label">Billing currency</div><div class="f-view">Euro (EUR)</div></div>
+              <div class="f"><div class="f-label">Industry</div><div class="f-view">Retail</div></div>
+              <div class="f"><div class="f-label">POI cutover strategy ID</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">FNS number</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">Creditor reference type</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">Creditor reference custom specifier</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">Batch theme ID</div><div class="f-view empty">Not set</div></div>
             </div>
-            <div class="f"><div class="f-label">Legal name <small style="font-weight:400;color:#bbb">(optional)</small></div><div class="f-view empty">Not set</div></div>
-            <div class="f"><div class="f-label">Cross entity access</div><div class="f-view">Disabled</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Reference identifiers</div>
+          <div class="card-body">
+            <div class="fields single">
+              <div class="fields" style="gap:14px 16px">
+                <div class="f"><div class="f-label">Site reference</div><div class="f-view empty">Not set</div></div>
+                <div class="f"><div class="f-label">Company group ref. identifier</div><div class="f-view empty">Not set</div></div>
+              </div>
+              <div class="f"><div class="f-label">Business identifier types</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">Label</div><div class="f-view empty">Not set</div></div>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Platform &amp; access</div>
+          <div class="card-body">
+            <div class="fields single">
+              <div class="f"><div class="f-label">Federation login</div><div class="f-view">Not set</div></div>
+              <div class="f"><div class="f-label">API key</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">SFTP connection <small>(shown when SFTP_DELIVERY flag is on)</small></div><div class="f-view empty">Not set</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Token scopes</div>
+          <div class="card-body">
+            <div style="font-size:13px;color:#aaa;margin-bottom:12px">No token scopes created for this organization.</div>
+            <div style="font-size:13px;font-weight:600;color:#555;margin-bottom:8px">Linked token scopes</div>
+            <div style="font-size:13px;color:#aaa">No token scopes linked to this organization.</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- ═══ OTHER TABS (sample view — no data wired up) ═══ -->
+  <!-- ═══ TAB: FEATURE ACCESS ═══ -->
   <div id="tab-feature" style="display:none">
-    <div class="empty-state-card">
-      <div class="empty-state-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="10"></circle></svg></div>
-      <div class="empty-state-title">Feature access</div>
-      <div class="empty-state-desc">Not part of this sample view. Open “Edit organization” to see the full feature-flag editor.</div>
+    <div class="card">
+      <div class="card-title">Enabled features</div>
+      <div class="card-body" id="feature-read-content"></div>
     </div>
   </div>
+
+  <!-- ═══ TAB: CONTACTS & ADDRESSES ═══ -->
   <div id="tab-contacts" style="display:none">
-    <div class="empty-state-card">
-      <div class="empty-state-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="10"></circle></svg></div>
-      <div class="empty-state-title">Contacts &amp; addresses</div>
-      <div class="empty-state-desc">Not part of this sample view.</div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Billing address</div>
+          <div class="card-body">
+            <div class="fields" style="gap:14px 16px">
+              <div class="f span2"><div class="f-label">Address line 1</div><div class="f-view">123 Main Street</div></div>
+              <div class="f span2"><div class="f-label">Address line 2</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">City</div><div class="f-view">Helsinki</div></div>
+              <div class="f"><div class="f-label">Zip code</div><div class="f-view">00100</div></div>
+              <div class="f"><div class="f-label">Country</div><div class="f-view">Finland</div></div>
+              <div class="f"><div class="f-label">Province / State</div><div class="f-view">Uusimaa</div></div>
+              <div class="f"><div class="f-label">Latitude</div><div class="f-view">60.18104930000001</div></div>
+              <div class="f"><div class="f-label">Longitude</div><div class="f-view">24.9272885</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card">
+            <div class="card-title">Shipping address</div>
+            <div class="card-body">
+              <div class="same-as-note"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Same as billing address</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Trading address</div>
+            <div class="card-body">
+              <div style="background:#fff8e6;border:1px solid #f0d080;border-radius:7px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#7a5c00">⚠ Time zone is derived from the trading address. If not provided, some payment types will fail.</div>
+              <div class="same-as-note"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Same as billing address</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">AML &amp; opening hours <span style="font-size:11px;color:#aaa;font-weight:400">(Merchant Site only)</span></div>
+          <div class="card-body">
+            <div class="f" style="margin-bottom:14px">
+              <div class="f-label">AML timeout</div>
+              <div class="f-view">Allow</div>
+            </div>
+            <div>
+              <div class="f-label" style="margin-bottom:8px">Opening hours</div>
+              <table style="width:100%;font-size:13px;border-collapse:collapse">
+                <tbody>
+                <tr style="background:#f6f7f9"><th style="text-align:left;padding:6px 8px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase">Day</th><th style="text-align:right;padding:6px 8px;font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase">Hours</th></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px">Monday</td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px">Tuesday</td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px">Wednesday</td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px">Thursday</td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px">Friday</td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">00:00 – 23:59</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px">Saturday</td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">Closed</td></tr>
+                <tr style="border-top:1px solid #f0f2f5"><td style="padding:7px 8px">Sunday</td><td style="text-align:right;padding:7px 8px;color:#888;font-size:12px">Closed</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Contacts</div>
+          <div class="card-body" style="padding:0">
+            <table class="dt">
+              <thead><tr><th>Name</th><th>Type</th><th>Email</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Admin User</strong></td><td><span class="tag tag-blue">Owner</span></td><td>admin@testorg.com</td></tr>
+                <tr><td><strong>Support Contact</strong></td><td><span class="tag tag-gray">Business</span></td><td>support@testorg.com</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bank accounts</div>
+        <div class="card-body">
+          <div style="font-size:13px;color:#aaa">No bank accounts added.</div>
+        </div>
+      </div>
+
     </div>
   </div>
+
+  <!-- ═══ TAB: LINKED RECORDS ═══ -->
   <div id="tab-linked" style="display:none">
-    <div class="empty-state-card">
-      <div class="empty-state-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="10"></circle></svg></div>
-      <div class="empty-state-title">Linked records</div>
-      <div class="empty-state-desc">Not part of this sample view.</div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+
+      <div class="tbl-section">
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated payment provider contracts</div><div><button class="view-all">View all →</button></div></div>
+        <div class="tbl-wrap">
+          <table class="dt"><thead><tr><th>Name</th><th>Payment types</th><th>Currencies</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><a href="#">TEST-CONTRACT-VISA-001</a></td><td>Visa, Mastercard</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">TEST-CONTRACT-AMEX-002</a></td><td>American Express</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">TEST-CONTRACT-PAYPAL-003</a></td><td>PayPal QR</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">TEST-CONTRACT-CRYPTO-004</a></td><td>Crypto</td><td>EUR</td><td><span class="chip chip-gr">Inactive</span></td></tr>
+            <tr><td><a href="#">TEST-CONTRACT-APPLE-005</a></td><td>Apple Pay</td><td>EUR</td><td><span class="chip chip-g">Active</span></td></tr>
+          </tbody></table>
+          <div class="tbl-foot"><span>5 of 8 records</span></div>
+        </div>
+      </div>
+
+      <div class="tbl-section">
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated 3DS contracts</div><div><button class="view-all">View all →</button></div></div>
+        <div class="tbl-wrap">
+          <table class="dt"><thead><tr><th>Name</th><th>Provider</th><th>Protocol version</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><a href="#">TEST-3DS-STRIPE-001</a></td><td>Stripe</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">TEST-3DS-ADYEN-002</a></td><td>Adyen</td><td>2.1.0</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">TEST-3DS-WORLDPAY-003</a></td><td>Worldpay</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">TEST-3DS-PAYMENTSENSE-004</a></td><td>Paymentsense</td><td>2.1.0</td><td><span class="chip chip-gr">Inactive</span></td></tr>
+            <tr><td><a href="#">TEST-3DS-BLUESNAP-005</a></td><td>BlueSnap</td><td>2.2.0</td><td><span class="chip chip-g">Active</span></td></tr>
+          </tbody></table>
+          <div class="tbl-foot"><span>5 of 6 records</span></div>
+        </div>
+      </div>
+
+      <div class="tbl-section">
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated points of interaction</div><div><button class="view-all">View all →</button></div></div>
+        <div class="tbl-wrap">
+          <table class="dt"><thead><tr><th>Name</th><th>Terminal ID</th><th>Type</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><a href="#">E280-TEST-001</a></td><td>50003361</td><td>Point of Sale</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">E285-TEST-002</a></td><td>50003362</td><td>Point of Sale</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">VIRTUAL-TEST-001</a></td><td>50003363</td><td>Virtual</td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">E280-TEST-003</a></td><td>50003364</td><td>Point of Sale</td><td><span class="chip chip-gr">Inactive</span></td></tr>
+            <tr><td><a href="#">MOBILE-TEST-001</a></td><td>50003365</td><td>Mobile</td><td><span class="chip chip-g">Active</span></td></tr>
+          </tbody></table>
+          <div class="tbl-foot"><span>5 of 12 records</span></div>
+        </div>
+      </div>
+
+      <div class="tbl-section">
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated organizations</div><div><button class="view-all">View all →</button></div></div>
+        <div class="tbl-wrap">
+          <table class="dt"><thead><tr><th>Name</th><th>Type</th><th>Country</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><a href="#">Test Org Site 1</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
+            <tr><td><a href="#">Test Org Site 2</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
+            <tr><td><a href="#">Test Org Site 3</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
+            <tr><td><a href="#">Test Org Site 4</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-gr">Disabled</span></td></tr>
+            <tr><td><a href="#">Test Org Site 5</a></td><td><span class="tag tag-blue">Merchant Site</span></td><td>Finland</td><td><span class="chip chip-g">Enabled</span></td></tr>
+          </tbody></table>
+          <div class="tbl-foot"><span>5 of 23 records</span></div>
+        </div>
+      </div>
+
+      <div class="tbl-section">
+        <div class="tbl-hdr"><div class="tbl-hdr-title">Associated users</div><div><button class="view-all">View all →</button></div></div>
+        <div class="tbl-wrap">
+          <table class="dt"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><a href="#">John Smith</a></td><td>john.smith@testorg.com</td><td><span class="tag tag-blue">Admin</span></td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">Sarah Jones</a></td><td>sarah.jones@testorg.com</td><td><span class="tag tag-gray">Supervisor</span></td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">Mike Johnson</a></td><td>mike.johnson@testorg.com</td><td><span class="tag tag-gray">User</span></td><td><span class="chip chip-g">Active</span></td></tr>
+            <tr><td><a href="#">Anna Williams</a></td><td>anna.williams@testorg.com</td><td><span class="tag tag-gray">Reviewer</span></td><td><span class="chip chip-gr">Inactive</span></td></tr>
+            <tr><td><a href="#">David Brown</a></td><td>david.brown@testorg.com</td><td><span class="tag tag-gray">Cashier</span></td><td><span class="chip chip-g">Active</span></td></tr>
+          </tbody></table>
+          <div class="tbl-foot"><span>5 of 7 records</span></div>
+        </div>
+      </div>
+
     </div>
   </div>
+
+  <!-- ═══ TAB: CUSTOM CONFIGURATION ═══ -->
   <div id="tab-custom" style="display:none">
-    <div class="empty-state-card">
-      <div class="empty-state-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="10"></circle></svg></div>
-      <div class="empty-state-title">Custom configuration</div>
-      <div class="empty-state-desc">Not part of this sample view.</div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+
+      <div>
+        <div class="section-label">Payment documents</div>
+        <div class="card">
+          <div class="card-title">Payment documents</div>
+          <div class="card-body">
+            <div class="fields" style="gap:14px 16px">
+              <div class="f"><div class="f-label">Provider</div><div class="f-view">Verifone</div></div>
+              <div class="f"><div class="f-label">Attachment type</div><div class="f-view">PDF</div></div>
+              <div class="f"><div class="f-label">Allow child reuse</div><div class="f-view">No</div></div>
+              <div class="f"><div class="f-label">API token</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">Merchant logo</div><div class="f-view empty">Not set</div></div>
+              <div class="f"><div class="f-label">Default receipt template</div><div class="f-view empty">None</div></div>
+              <div class="f span2"><div class="f-label">Custom receipt templates</div><div class="f-view empty">None added</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Whitelabeling configurations</div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title">Branding &amp; domain</div>
+            <div class="card-body">
+              <div class="fields single">
+                <div class="f"><div class="f-label">Domain name</div><div class="f-view">emea.live.verifone.com</div></div>
+                <div class="f"><div class="f-label">Login domain name</div><div class="f-view">emea.verifone.com</div></div>
+                <div class="f"><div class="f-label">Email sender</div><div class="f-view">verifone.com</div></div>
+                <div class="f"><div class="f-label">Brand name</div><div class="f-view">Verifone</div></div>
+                <div class="f"><div class="f-label">Privacy policy URL</div><div class="f-view empty">Not set</div></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="card">
+              <div class="card-title">Support information</div>
+              <div class="card-body" style="padding:0">
+                <table class="dt"><thead><tr><th>Name</th><th>Contact info</th><th>Description</th></tr></thead>
+                <tbody><tr><td colspan="3" style="text-align:center;color:#aaa;padding:16px;font-size:13px">No support contacts added.</td></tr></tbody></table>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Branding styles</div>
+              <div class="card-body">
+                <div style="font-size:13px;color:#aaa">No custom styles created.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -309,6 +616,150 @@ function switchTab(name, el) {
     document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
   });
 }
+
+// ── FLAG DATA (mirrors NEW organization-page-ui.html) ──
+const FLAGS={
+  commerce:[
+    {id:'portal',label:'Portal & dashboard access',flags:[
+      {id:'PAYMENTS_PORTAL_CORE',name:'Payments Portal Core',desc:'Verifone Central (Common Portal) core functionality',on:true},
+      {id:'PLATFORM_CORE',name:'Platform Core',desc:'Associated with core permissions such as entity service and RMS',on:true},
+      {id:'COMMERCE_CARD_WIDGET',name:'Commerce card widget',desc:'Enables Commerce card section and time range filters on the landing page',on:true},
+      {id:'COMMERCE_KPI',name:'Commerce KPI',desc:'Enables KPI pills on the Commerce card on the landing page',on:true},
+      {id:'NOTIFICATIONS',name:'Notifications',desc:'Manage Notifications',on:true},
+      {id:'TERMS_AND_CONDITIONS',name:'Terms and conditions',desc:'Enable Terms & Conditions modal before using Verifone Central',on:false},
+    ]},
+    {id:'analytics',label:'Reporting & analytics',flags:[
+      {id:'PORTAL_ANALYTIC',name:'Portal analytics',desc:'Analytics Dashboard',on:true},
+      {id:'REPORT_ENGINE',name:'Report engine',desc:'Report Scheduler and Generated Reports',on:true},
+      {id:'REPORT_SCHEDULER',name:'Report scheduler',desc:'Make Report Scheduler page accessible and enable Schedule Report functionality',on:false},
+      {id:'SFTP_DELIVERY',name:'SFTP delivery',desc:'Make delivery of reports to SFTP site accessible.',on:false},
+      {id:'WIC_OFFLINE_REPORTING',name:'WIC offline reporting',desc:'Enable WIC reconciliation reports in Generated Reports page',on:false},
+      {id:'PARTNER_COMMISSION_REPORT',name:'Partner commission report',desc:'Enable Partner Commission Report type in Generated Reports',on:false},
+      {id:'REPORTING_GROUP',name:'Reporting group',desc:'Controls the visibility of reporting group feature',on:false},
+      {id:'SETTLEMENT_DATE_FILTER',name:'Settlement date filter',desc:'Enables Settlement Date filter on Transactions, Orders, and Report Scheduler pages',on:false},
+      {id:'SETTLEMENTS',name:'Settlements',desc:'View Settlement Reports page',on:false},
+      {id:'PROCESSOR_SETTLEMENT',name:'Processor settlement',desc:'Controls the visibility of Processor Settlement Batches reports in Verifone Central',on:false},
+    ]},
+    {id:'payments',label:'Payments & checkout',flags:[
+      {id:'VIRTUAL_TERMINAL',name:'Virtual terminal',desc:'Payment Tool: Virtual Terminal',on:true},
+      {id:'VIRTUAL_TERMINAL_TRANSACTION_TYPE',name:'Virtual terminal transaction type',desc:'Enables displaying the transaction type in Virtual Terminal',on:true},
+      {id:'PAY_BY_LINK',name:'Pay by link',desc:'Payment Tool: Pay By Link',on:true},
+      {id:'PBL_SMS_DELIVERY',name:'Pay by link — SMS delivery',desc:'Pay By Link: Option to send payment link in SMS',on:false},
+      {id:'PBL_EMAIL_DELIVERY',name:'Pay by link — email delivery',desc:'Pay By Link: Option to send payment link in e-mail',on:false},
+      {id:'PBL_TIP',name:'Pay by link — tip',desc:'Enables tip option for Pay By Link transactions',on:false},
+      {id:'PAYMENT_ACTIONS',name:'Payment actions',desc:'Option to execute payment actions on transactions',on:true},
+      {id:'PRE_AUTH_MANUAL_CAPTURE',name:'Pre-auth manual capture',desc:'Enables pre-auth transactions with manual capture for supervisors',on:false},
+      {id:'SURCHARGE',name:'Surcharge',desc:'Enables surcharge option on the virtual terminal page',on:false},
+      {id:'TAX_INPUTS',name:'Tax inputs',desc:'Enables tax input fields on the virtual terminal page',on:false},
+    ]},
+    {id:'merchant',label:'Merchant account & acquiring',flags:[
+      {id:'MERCHANT_CONFIGURATION',name:'Merchant configuration',desc:'Enables management of acquiring configuration at merchant level',on:true},
+      {id:'MERCHANT_COUNTRY_CONFIGURATION',name:'Merchant country configuration',desc:'Enables management of acquiring configuration at the merchant-country level',on:false},
+      {id:'MERCHANT_SETTLEMENT',name:'Merchant settlement',desc:'Enables creation and tracking of merchant payouts',on:true},
+      {id:'MERCHANT_BALANCE',name:'Merchant balance',desc:'Enables balance calculation for merchants with Verifone Acquiring Services',on:true},
+      {id:'MERCHANT_CHOICE_ROUTING',name:'Merchant choice routing',desc:'Enables the Merchant Choice Routing section on the Organization page',on:false},
+      {id:'INVOICE',name:'Invoice',desc:'Enables monthly invoice summaries and fee details',on:false},
+      {id:'VAS_LIQUIDITY_OVERVIEW',name:'VAS liquidity overview',desc:'Dashboard showing actual liquidity before submitting payouts',on:false},
+      {id:'DISPUTE_MANAGEMENT_CARD_SCHEMES',name:'Dispute management',desc:'Provides the ability to see disputes and their details',on:false},
+    ]},
+    {id:'catalog',label:'Catalogues & products',flags:[
+      {id:'CUSTOMER_CATALOG',name:'Customer catalog',desc:'Enables Customer Catalog tab and customer search on Pay by Link page',on:false},
+      {id:'PRODUCT_CATALOG',name:'Product catalog',desc:'Enables Product Catalog tab and product search on Pay by Link page',on:false},
+      {id:'GROUP_ENTITIES',name:'Group entities',desc:'Controls the visibility of group entity feature of Verifone Central',on:false},
+    ]},
+    {id:'security',label:'Security & compliance',flags:[
+      {id:'API_KEYS_AUTHENTICATION',name:'API keys authentication',desc:'Enable API-key generation functionality for users in Portal',on:true},
+      {id:'BLOCKING_RULESETS',name:'Blocking rulesets',desc:'Enable the Blocking Rulesets page in Portal Administration',on:true},
+      {id:'FRAUD_PREVENTION_SERVICE',name:'Fraud prevention service',desc:'Administer Fraud Prevention Services (Added Value Service)',on:false},
+      {id:'AUDIT_LOG',name:'Audit log',desc:'Enables Audit Log page for Admin users',on:false},
+      {id:'MFA_MANDATORY',name:'MFA mandatory',desc:'Make multi-factor authentication mandatory for the organization',on:false},
+    ]},
+    {id:'checkout',label:'Checkout & branding',flags:[
+      {id:'CHECKOUT_THEMES',name:'Checkout themes',desc:'Theme editor for the Checkout screen',on:true},
+      {id:'PORTAL_WHITELABELING',name:'Portal white-labeling',desc:'Enables white-label editor to customize portal and email layouts',on:false},
+      {id:'PAYMENT_DOCUMENTS',name:'Payment documents',desc:'Enable Document tab in Transaction Details panel',on:false},
+    ]},
+    {id:'integrations',label:'Payment methods & integrations',flags:[
+      {id:'3DS_PROVIDER_CONTRACTS',name:'3DS provider contracts',desc:'Manage 3-D Secure Provider Contracts',on:true},
+      {id:'ONBOARDING_PAYPAL',name:'PayPal onboarding',desc:'Enable onboarding of PayPal PPC',on:true},
+      {id:'MOBILEPAY',name:'MobilePay',desc:'Support MobilePay payment type',on:true},
+      {id:'CRYPTO',name:'Crypto',desc:'Support onboarding Crypto PPC and reporting Crypto transactions',on:false},
+      {id:'TOKEN_SCOPES',name:'Token scopes',desc:'Create/edit token scopes for organizations',on:true},
+      {id:'OMNICHANNEL_ACTION_TOGGLE_PPC',name:'Omnichannel action toggle (PPC)',desc:'Enables toggling omnichannel actions for Payment Provider Contracts',on:false},
+    ]},
+  ],
+  devices:[
+    {id:'vhq',label:'VHQ foundation',flags:[{id:'VHQ_CORE',name:'VHQ Core',desc:'The basic features of VHQ available for any VHQ user',on:true}]},
+    {id:'devops',label:'Device operations',flags:[
+      {id:'DEVICE_MANAGEMENT',name:'Device management',desc:'Provides ability to manage devices and their software',on:true},
+      {id:'DEVICE_CARE',name:'Device care',desc:'Provides ability to analyze the health of estate and provide pro-active alerting',on:true},
+      {id:'DEVICE_SUPPORT',name:'Device support',desc:'Provides ability to perform Device support functions for Helpdesk users',on:true},
+      {id:'BASIC_DIAGNOSTICS',name:'Basic diagnostics',desc:'Provides ability to perform basic diagnostics actions on devices',on:true},
+      {id:'ADVANCED_DIAGNOSTICS',name:'Advanced diagnostics',desc:'Provides ability to perform advanced diagnostics and alerting',on:false},
+    ]},
+    {id:'software',label:'Software & content',flags:[
+      {id:'SOFTWARE_MANAGEMENT',name:'Software management',desc:'Provides ability to manage the device software',on:true},
+      {id:'CONTENT_MANAGEMENT',name:'Content management',desc:'Provides ability to manage content on devices',on:true},
+      {id:'AUTOMATED_DOWNLOADS',name:'Automated downloads',desc:'Provides ability to automatically detect device state and push updates',on:true},
+      {id:'MANUAL_DOWNLOADS',name:'Manual downloads',desc:'Provides ability to manually download software and parameters',on:true},
+      {id:'DEVICE_INITIATED_DOWNLOADS',name:'Device initiated downloads',desc:'Provides ability to initiate download of specific software from the device',on:false},
+    ]},
+    {id:'keys',label:'Keys & security',flags:[
+      {id:'ONLINE_KEY_MANAGEMENT',name:'Online key management',desc:'Provides ability to manage Keys on devices remotely via HSM (CRIA)',on:true},
+      {id:'OFFLINE_KEY_MANAGEMENT',name:'Offline key management',desc:'Provides ability to download Key bundles to devices',on:true},
+      {id:'SKIMDETECT_MANAGEMENT',name:'Skimdetect management',desc:'Provides ability to skimmer detection features',on:false},
+    ]},
+    {id:'config',label:'Configuration & parameters',flags:[
+      {id:'PARAMETER_MANAGEMENT',name:'Parameter management',desc:'Provides ability to manage the device parameters',on:true},
+      {id:'BASIC_INTEGRATION_PLATFORM',name:'Basic integration platform',desc:'Provides ability for external services to integrate via VHQ APIs',on:false},
+      {id:'NOTIFICATION_MANAGEMENT',name:'Notification management',desc:'Provides ability to manage email notifications of device Alerts',on:false},
+      {id:'MESSAGE_MANAGEMENT',name:'Message management',desc:'Provides ability to configure and send messages to compatible devices',on:false},
+      {id:'ALERT_MANAGEMENT',name:'Alert management',desc:'Provides ability to configure and manage the Alerts',on:false},
+    ]},
+    {id:'hierarchy',label:'Organization & hierarchy',flags:[
+      {id:'ASSET_TRACKING',name:'Asset tracking',desc:'Provides ability to track device life cycle from shipping to return',on:true},
+      {id:'HIERARCHY_MANAGEMENT',name:'Hierarchy management',desc:'Provides ability to manage hierarchies — parent/child device tree',on:false},
+      {id:'GROUPS_MANAGEMENT',name:'Groups management',desc:'Provides ability to manage Groups for organizing devices',on:false},
+      {id:'TENANT_MANAGEMENT',name:'Tenant management',desc:'Provides ability to manage sub tenants in an Estate',on:true},
+      {id:'REPORTS_MANAGEMENT',name:'Reports management',desc:'Provides ability to configure and manage the Reports',on:false},
+    ]},
+  ],
+  appmarket:[{id:'mkt',label:'Marketplace',flags:[
+    {id:'MARKETPLACE_CORE',name:'Marketplace Core',desc:'Marketplace core functionality',on:true},
+    {id:'MARKETPLACE_EO',name:'Marketplace EO',desc:'Allows estate-owner application access',on:false},
+    {id:'MARKETPLACE_DEV',name:'Marketplace Dev',desc:'Allows developer application access',on:false},
+  ]}],
+  petro:[{id:'petro',label:'Petro',flags:[{id:'PETRO_CORE',name:'Petro Core',desc:'The Petro application',on:false}]}],
+  orders:[{id:'orders',label:'Orders',flags:[{id:'MOP_CORE',name:'Orders Core',desc:'The MOP application',on:false}]}],
+};
+
+function renderFeatureReadView(){
+  const cont=document.getElementById('feature-read-content');
+  if(!cont)return;
+  const allGroups=Object.values(FLAGS).flat();
+  let html='';
+  const grouped={};
+  allGroups.forEach(g=>{
+    const onFlags=g.flags.filter(f=>f.on);
+    if(onFlags.length){
+      grouped[g.label]=onFlags;
+    }
+  });
+  if(Object.keys(grouped).length===0){
+    html='<div style="color:#aaa;font-size:13px">No features are currently enabled for this organization.</div>';
+  } else {
+    Object.entries(grouped).forEach(([label,flags])=>{
+      html+=`<div class="feature-ro-group">
+        <div class="feature-ro-group-title">${label}</div>
+        <div class="feature-ro-flags">
+          ${flags.map(f=>`<span class="feature-ro-flag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>${f.name}</span>`).join('')}
+        </div>
+      </div>`;
+    });
+  }
+  cont.innerHTML=html;
+}
+renderFeatureReadView();
 </script>
 
 </body>
