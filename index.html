@@ -438,6 +438,112 @@
     }
 
     .btn-primary:hover { background: #1d4ed8; }
+
+    /* ── Footer link ── */
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .cookie-policy-link {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      color: #5eead4;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      padding: 0;
+    }
+
+    .cookie-policy-link:hover { color: #99f6e4; }
+
+    /* ── Cookie Policy Modal ── */
+    .policy-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,5,15,0.55);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .policy-overlay.open { display: flex; }
+
+    .policy-modal {
+      background: #fff;
+      border-radius: 14px;
+      width: 720px;
+      max-width: calc(100vw - 40px);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    .policy-header {
+      padding: 22px 28px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .policy-header h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .policy-effective {
+      font-size: 11.5px;
+      color: #94a3b8;
+    }
+
+    .policy-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 28px 28px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #374151;
+    }
+
+    .policy-body a {
+      color: #2563eb;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .policy-view-prefs {
+      display: inline-block;
+      margin-bottom: 18px;
+      font-size: 12.5px;
+    }
+
+    .policy-body h3 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 22px 0 8px;
+    }
+
+    .policy-body h3:first-of-type { margin-top: 0; }
+
+    .policy-body p { margin-bottom: 10px; }
+
+    .policy-body ul {
+      margin: 8px 0 10px 20px;
+    }
+
+    .policy-body li { margin-bottom: 8px; }
+
+    .policy-body li strong { color: #0f172a; }
   </style>
 </head>
 <body>
@@ -801,11 +907,71 @@
   <!-- ── Persistent footer ── -->
   <footer class="site-footer">
     <span class="footer-copy">© 2026 VeriFone &nbsp;·&nbsp; Privacy and Compliance Policies &nbsp;·&nbsp; Terms and conditions</span>
-    <button class="cookie-settings-btn" onclick="openCookieModal()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="7" r="1" fill="currentColor"/><circle cx="16" cy="14" r="1" fill="currentColor"/><circle cx="10" cy="16" r="1" fill="currentColor"/></svg>
-      Cookie settings
-    </button>
+    <div class="footer-links">
+      <button class="cookie-policy-link" onclick="openPolicyModal()">Cookie Policy</button>
+      <button class="cookie-settings-btn" onclick="openCookieModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="7" r="1" fill="currentColor"/><circle cx="16" cy="14" r="1" fill="currentColor"/><circle cx="10" cy="16" r="1" fill="currentColor"/></svg>
+        Cookie settings
+      </button>
+    </div>
   </footer>
+
+  <!-- ── Cookie Policy Modal ── -->
+  <div class="policy-overlay" id="policyOverlay" onclick="policyOverlayClick(event)">
+    <div class="policy-modal" role="dialog" aria-modal="true" aria-label="Cookie Policy">
+
+      <div class="policy-header">
+        <div>
+          <h2>Cookie Policy</h2>
+          <div class="policy-effective">Effective April 27, 2026</div>
+        </div>
+        <button class="cm-close-btn" onclick="closePolicyModal()" aria-label="Close">✕</button>
+      </div>
+
+      <div class="policy-body">
+        <a class="policy-view-prefs" onclick="switchToPreferences()">View and change your current cookie preferences.</a>
+
+        <h3>Introduction</h3>
+        <p>This Cookie Policy describes how Verifone, Inc. ("Verifone", "we", "us", "our") uses cookies and similar technologies to improve your experience on our websites. Our commitment to your privacy is paramount, and we aim to be transparent in our data practices.</p>
+
+        <h3>What are cookies?</h3>
+        <p>Cookies are small text files placed on your device when you visit websites, essential for improving functionality and user experience.</p>
+        <p>There are two main types of cookies that can be placed on your device when you visit our websites:</p>
+        <p>First-party cookies: these cookies are placed and read by Verifone directly when you use our websites. Third-party cookies: these cookies are not set by us, but by third-party providers, including Pendo (Pendo.io, Inc.), Google Analytics, Hotjar, New Relic, and others, for purposes such as product analytics, site performance monitoring, and advertising.</p>
+
+        <h3>Types of Cookies We Use</h3>
+        <p>We use various cookies on our website, categorized as follows:</p>
+        <ul>
+          <li><strong>Essential Cookies:</strong> Necessary for website functionality and enable basic functions like page navigation and access to secure areas.</li>
+          <li><strong>Performance and Functionality Cookies:</strong> Improve website performance. They help in remembering your preferences and enable personalized features.</li>
+          <li><strong>Analytics and Customization Cookies:</strong> to help us understand website usage. These types of cookies collect information in an aggregate form to help us understand how people reach and use our websites and give us insights into improvements or enhancements we need to make to our websites. We also use technologies like web beacons on our websites and in some of our emails. Web beacons (also known as Pixel tags and clear GIFs) are tiny graphics files that contain a unique identifier enabling us to recognize when someone has visited our websites or opened an email that we have sent. For a full list of the analytics and product analytics cookies we use, including details of the data collected and retention periods, please see our <a href="cookie-declaration.html" target="_blank">Cookie Declaration</a>.</li>
+          <li><strong>Advertising Cookies:</strong> We and our service providers use cookies and similar technologies on our websites to direct Verifone ads to you through targeted advertisements for Verifone services on other sites you visit and to measure your engagement with those ads.</li>
+          <li><strong>Third-Party Cookies:</strong> We partner with third-party services, which may also use cookies. These are used for various purposes, such as analytics or advertising.</li>
+        </ul>
+        <p>For a complete list of cookies, please visit our <a onclick="switchToPreferences()">Cookie Preference tool</a>.</p>
+
+        <h3>Managing Your Cookie Preferences</h3>
+        <p>You can manage your preferences through our website's <a onclick="switchToPreferences()">cookie management tool</a>, with the exception of those cookies that are necessary to provide you with our services, or through your browser settings.</p>
+        <p>If you choose to disable cookies, some features of our websites may not operate as intended.</p>
+
+        <h3>Consent and Adjusting Preferences</h3>
+        <p>We require your consent for non-essential cookies. You can adjust your preferences at any time through our <a onclick="switchToPreferences()">cookie management tool</a>.</p>
+
+        <h3>Updates to This Policy</h3>
+        <p>We may update this policy to reflect changes in our practices or legal requirements. Please review this policy periodically for any changes.</p>
+
+        <h3>International Considerations</h3>
+        <p>Our website is accessed globally, and we adhere to various international privacy laws. This may involve different cookie practices in different regions.</p>
+
+        <h3>Contact Information</h3>
+        <p>For any questions or concerns regarding our cookie policy, please contact us at <a href="mailto:privacy@verifone.com">privacy@verifone.com</a>.</p>
+
+        <h3>More Information</h3>
+        <p>For more detailed information about our data practices, please refer to our Privacy Policy.</p>
+      </div>
+
+    </div>
+  </div>
 
   <!-- ── Cookie Preferences Modal ── -->
   <div class="cookie-overlay" id="cookieOverlay" onclick="overlayClick(event)">
@@ -1104,8 +1270,30 @@
       closeCookieModal();
     }
 
+    function openPolicyModal() {
+      document.getElementById('policyOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePolicyModal() {
+      document.getElementById('policyOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function policyOverlayClick(e) {
+      if (e.target === document.getElementById('policyOverlay')) closePolicyModal();
+    }
+
+    function switchToPreferences() {
+      closePolicyModal();
+      openCookieModal();
+    }
+
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeCookieModal();
+      if (e.key === 'Escape') {
+        closeCookieModal();
+        closePolicyModal();
+      }
     });
   </script>
 

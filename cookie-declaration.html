@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cookie Declaration | Verifone</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    color: #1f2937;
+    background: #fff;
+  }
+
+  a { color: #2563eb; }
+
+  /* ── Top header ── */
+  .top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    border-bottom: 1px solid #eef0f2;
+  }
+
+  .top-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 19px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .top-logo svg { flex-shrink: 0; }
+
+  .lang-select {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ── Layout ── */
+  .layout {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  /* ── Main content ── */
+  .content { flex: 1; min-width: 0; }
+
+  .eyebrow {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #2563eb;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 34px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 10px;
+  }
+
+  .effective {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 18px;
+  }
+
+  .view-prefs {
+    display: inline-block;
+    font-size: 14px;
+    margin-bottom: 22px;
+    text-decoration: underline;
+  }
+
+  .content p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #374151;
+    margin-bottom: 14px;
+  }
+
+  .updated-line {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 22px 0 28px;
+  }
+
+  .updated-line a { color: #2563eb; }
+
+  /* ── Category sections ── */
+  .category-block {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .category-head {
+    padding: 14px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .category-consent {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .consent-no { background: #f0fdf4; color: #166534; }
+  .consent-yes { background: #fff7ed; color: #c2410c; }
+
+  .category-desc {
+    padding: 12px 20px;
+    font-size: 12.5px;
+    color: #6b7280;
+    line-height: 1.6;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .cookie-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .cookie-table thead th {
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6b7280;
+    background: #fbfcfe;
+    padding: 8px 20px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .cookie-table tbody td {
+    font-size: 12.5px;
+    color: #374151;
+    padding: 10px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+  }
+
+  .cookie-table tbody tr:last-child td { border-bottom: none; }
+
+  .cookie-table td.name {
+    font-weight: 700;
+    color: #2563eb;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 11.5px;
+    white-space: nowrap;
+  }
+
+  .cookie-table td.type {
+    white-space: nowrap;
+    font-size: 11.5px;
+  }
+
+  .cookie-table td.duration {
+    white-space: nowrap;
+  }
+
+  /* ── Footer ── */
+  .site-footer-full {
+    background: #0f172a;
+    color: #cbd5e1;
+    padding: 40px 40px 24px;
+  }
+
+  .footer-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .footer-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 22px 28px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-cta h3 { font-size: 18px; color: #fff; line-height: 1.3; }
+
+  .footer-cta-input {
+    display: flex;
+    gap: 8px;
+  }
+
+  .footer-cta-input input {
+    border-radius: 8px;
+    border: none;
+    padding: 10px 14px;
+    font-size: 13px;
+    width: 220px;
+  }
+
+  .footer-cta-input button {
+    background: #2dd4bf;
+    color: #0f172a;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .footer-cols {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    margin-bottom: 28px;
+  }
+
+  .footer-cols div { min-width: 140px; }
+
+  .footer-cols h5 {
+    color: #fff;
+    font-size: 12.5px;
+    margin-bottom: 10px;
+  }
+
+  .footer-cols a {
+    display: block;
+    color: #94a3b8;
+    text-decoration: none;
+    margin-bottom: 8px;
+  }
+
+  .footer-cols a:hover { color: #cbd5e1; }
+
+  .footer-bottom {
+    border-top: 1px solid #1e293b;
+    padding-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: #64748b;
+  }
+</style>
+</head>
+<body>
+
+  <div class="top-header">
+    <div class="top-logo">
+      <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+        <circle cx="10" cy="10" r="3" fill="#111827"/>
+        <circle cx="22" cy="10" r="3" fill="#111827"/>
+        <circle cx="10" cy="22" r="3" fill="#111827"/>
+        <circle cx="22" cy="22" r="3" fill="#111827"/>
+      </svg>
+      verifone
+    </div>
+    <div class="lang-select">English ▾</div>
+  </div>
+
+  <div class="layout">
+
+    <!-- Main content -->
+    <main class="content">
+      <div class="eyebrow">LEGAL &amp; PRIVACY POLICIES</div>
+      <h1>Cookie Declaration</h1>
+      <div class="effective">Effective April 27, 2026 &nbsp;·&nbsp; Scan date: 17 April 2026</div>
+
+      <a class="view-prefs" href="index.html">View and change your current cookie preferences.</a>
+
+      <p>This website uses cookies. We use cookies to personalize content and ads, to provide social media features and to analyze our traffic. We also share information about your use of our site with our social media, advertising and analytics partners who may combine it with other information that you've provided to them or that they've collected from your use of their services. For your convenience, you can set your cookie preferences directly below. By using this site, you agree to our Privacy Notice and Terms of Use.</p>
+
+      <p>Cookies are small text files that can be used by websites to make a user's experience more efficient.</p>
+
+      <p>The law states that we can store cookies on your device if they are strictly necessary for the operation of this site. For all other types of cookies we need your permission.</p>
+
+      <p>This site uses different types of cookies. Some cookies are placed by third party services that appear on our pages.</p>
+
+      <p>You can at any time change or withdraw your consent from the Cookie Declaration on our website.</p>
+
+      <p>Learn more about who we are, how you can contact us and how we process personal data in our Privacy Policy.</p>
+
+      <div class="updated-line">
+        Cookie declaration last updated on 7/18/26 by <a href="#">Cookiebot</a>. Underlying inventory sourced from <em>verifone_central_cookie_audit_v3.xlsx</em> — "Full inventory" tab (45 tracked items across 3 tracker types, scanned on an authenticated session at us.live.verifone.cloud).
+      </div>
+
+      <!-- Necessary -->
+      <div class="category-block">
+        <div class="category-head">
+          Necessary (23)
+          <span class="category-consent consent-no">No consent required</span>
+        </div>
+        <div class="category-desc">Strictly necessary under the GDPR ePrivacy Art. 5(3) exemption: authentication tokens, OAuth PKCE values, session timers, tenant context, CDN/WAF routing, and the consent record itself.</div>
+        <table class="cookie-table">
+          <thead>
+            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Max Storage Duration</th><th>Type</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="name">amlbcookie</td><td>ForgeRock AM</td><td>Load-balancer stickiness for the ForgeRock AM authentication service. Ensures the user stays on the same AM node during login.</td><td class="duration">Session</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">dd&lt;hash&gt;</td><td>ForgeRock AM</td><td>ForgeRock AM session cookie. Name is a dynamic hash that rotates per environment/deployment.</td><td class="duration">Session</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">incap_ses_&lt;sid&gt;_&lt;aid&gt;</td><td>Imperva (Incapsula)</td><td>Imperva WAF/CDN session identifier. Required for DDoS protection and request validation.</td><td class="duration">Session</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">nlbi_&lt;aid&gt;</td><td>Imperva (Incapsula)</td><td>Imperva load-balancing identifier for failover handling.</td><td class="duration">Session</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">visid_incap_&lt;aid&gt;</td><td>Imperva (Incapsula)</td><td>Imperva persistent visitor identifier used for bot detection and WAF rules.</td><td class="duration">~1 year</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">CookieConsent</td><td>Cookiebot (Usercentrics)</td><td>Stores the user's consent state for each cookie category. Required for the CMP itself to function.</td><td class="duration">1 year</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">access_token</td><td>Verifone Central</td><td>OAuth2 bearer token used to authenticate API calls to protected backend routes.</td><td class="duration">Session (cleared on logout)</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">access_token_expires_at</td><td>Verifone Central</td><td>Absolute expiry timestamp used by the SPA to decide when to trigger silent refresh.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">access_token_iat</td><td>Verifone Central</td><td>Token issued-at timestamp used to compute token age for refresh logic.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">id_token</td><td>Verifone Central</td><td>OIDC identity token carrying user identity claims for SSO/federation.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">id_token_expires_at</td><td>Verifone Central</td><td>Identity token expiry timestamp.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">id_token_iat</td><td>Verifone Central</td><td>Identity token issued-at timestamp.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">expires_in</td><td>Verifone Central</td><td>OAuth2 standard field — token lifetime in seconds.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">token_type</td><td>Verifone Central</td><td>OAuth2 token type — typically "Bearer".</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">scope</td><td>Verifone Central</td><td>OAuth2 scopes granted to the current session.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">pkce_code_verifier</td><td>Verifone Central</td><td>PKCE verifier used in the OAuth2 Authorization Code + PKCE flow.</td><td class="duration">Session (cleared after code exchange)</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">pkce_state</td><td>Verifone Central</td><td>OAuth2 state parameter to correlate request/response and prevent CSRF.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">session_start_time</td><td>Verifone Central</td><td>Used by the SPA to enforce idle/absolute session timeouts.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">entityUid</td><td>Verifone Central</td><td>Identifies the currently selected entity/tenant context driving authorisation and data scoping.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">entityName</td><td>Verifone Central</td><td>Human-readable name of the selected entity shown in the UI header.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">hash</td><td>Verifone Central</td><td>Deploy build hash used for cache-busting MFE config fetches.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">organisationData</td><td>Verifone Central</td><td>(Last year) Required for authorization and scoping across the application. Missing from this scan — verify whether superseded by entityUid/entityName.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">eoEntityUid</td><td>Verifone Central</td><td>(Last year) Estate-owner entity identifier for access control. Missing from this scan — re-capture with an EO user.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Preferences -->
+      <div class="category-block">
+        <div class="category-head">
+          Preferences (10)
+          <span class="category-consent consent-yes">Consent required</span>
+        </div>
+        <div class="category-desc">Non-critical UI state: role visibility toggles, survey dismissal, pagination limits, navigation history, and build tag.</div>
+        <table class="cookie-table">
+          <thead>
+            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Max Storage Duration</th><th>Type</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="name">allEntitiesCountLimit</td><td>Verifone Central</td><td>Stores the entity count available to the user for UI pagination defaults.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">hideDeveloperRoles</td><td>Verifone Central</td><td>UI flag to hide developer-only roles from the role selector.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">navigationFromOrgGroup</td><td>Verifone Central</td><td>Retains the originating org-group context for breadcrumb/back-navigation behaviour.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">survey_shown</td><td>Verifone Central</td><td>Prevents the in-app survey modal from being shown repeatedly to the same user.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">tag</td><td>Verifone Central</td><td>Application version/release tag used for UI feature gating and cache invalidation.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">previous_page_loads</td><td>Verifone Central</td><td>In-tab navigation history used for back-button and breadcrumb logic.</td><td class="duration">Tab lifetime</td><td class="type">HTML Session Storage</td></tr>
+            <tr><td class="name">AllowedUrls</td><td>Verifone Central</td><td>(Last year) List of route URLs the current user is permitted to access. Missing from this scan — likely MFE-specific.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">isSelected</td><td>Verifone Central</td><td>(Last year) Stores UI selection state for entity/view. Missing from this scan.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">version</td><td>Verifone Central</td><td>(Last year) Application version for feature control/caching. Possibly duplicated by "tag" — confirm which is canonical.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">supported_processor_settings</td><td>Verifone Central</td><td>(Last year) Supported processor settings for the logged-in entity. Missing from this scan — likely payment-portal-specific.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Statistics -->
+      <div class="category-block">
+        <div class="category-head">
+          Statistics (12)
+          <span class="category-consent consent-yes">Consent required</span>
+        </div>
+        <div class="category-desc">Product analytics and performance monitoring: Google Analytics (UA + GA4), Hotjar, Pendo, and New Relic Browser Agent.</div>
+        <table class="cookie-table">
+          <thead>
+            <tr><th>Name</th><th>Provider</th><th>Purpose</th><th>Max Storage Duration</th><th>Type</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="name">_ga</td><td>Google Analytics</td><td>Distinguishes unique users by assigning a randomly generated client ID.</td><td class="duration">13 months</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">_ga_&lt;container&gt;</td><td>Google Analytics 4</td><td>GA4 session state and user distinction per GA4 property.</td><td class="duration">13 months</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">_hjSessionUser_&lt;siteid&gt;</td><td>Hotjar</td><td>Hotjar persistent user ID for heatmap and session recording attribution.</td><td class="duration">1 year</td><td class="type">HTTP Cookie</td></tr>
+            <tr><td class="name">NRBA_SESSION</td><td>New Relic Browser Agent</td><td>Browser performance monitoring: groups page views, AJAX timings, and JS errors into a session.</td><td class="duration">Session (~30 min inactivity)</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">_pendo___sg__.&lt;apikey&gt;</td><td>Pendo</td><td>Pendo visitor metadata including roles and feature flags sent with each analytics event.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">_pendo_accountId.&lt;apikey&gt;</td><td>Pendo</td><td>Associates the visitor with a Pendo account for segmentation.</td><td class="duration">100 days</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">_pendo_guides_blocked.&lt;apikey&gt;</td><td>Pendo</td><td>Tracks whether in-app Pendo guides/tours are currently suppressed.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">_pendo_meta.&lt;apikey&gt;</td><td>Pendo</td><td>Pendo metadata timestamp used to decide when to refresh visitor attributes.</td><td class="duration">100 days</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">_pendo_sessionId.&lt;apikey&gt;</td><td>Pendo</td><td>Groups Pendo events into a single analytics session.</td><td class="duration">Session</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">_pendo_utm.&lt;apikey&gt;</td><td>Pendo</td><td>Stores the marketing-attribution channel and referrer for the current visitor.</td><td class="duration">Persistent</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">_pendo_visitorId.&lt;apikey&gt;</td><td>Pendo</td><td>Pendo persistent visitor identifier used across sessions.</td><td class="duration">100 days</td><td class="type">HTML Local Storage</td></tr>
+            <tr><td class="name">pendo_tabId</td><td>Pendo</td><td>Differentiates events originating from different browser tabs.</td><td class="duration">Tab lifetime</td><td class="type">HTML Session Storage</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer-full">
+    <div class="footer-inner">
+      <div class="footer-cta">
+        <h3>Commerce Insights<br/>you can't do without</h3>
+        <div class="footer-cta-input">
+          <input type="text" placeholder="Enter your email" />
+          <button>Subscribe</button>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <h5>Products &amp; Services</h5>
+          <a href="#">Payment Devices</a>
+          <a href="#">Software &amp; Services</a>
+          <a href="#">Payment Processing</a>
+          <a href="#">Petro &amp; Convenience</a>
+        </div>
+        <div>
+          <h5>Solutions</h5>
+          <a href="#">By Industry</a>
+          <a href="#">By Size</a>
+          <a href="#">By Use Case</a>
+          <a href="#">For Partners</a>
+        </div>
+        <div>
+          <h5>About Us</h5>
+          <a href="#">About Verifone</a>
+          <a href="#">Careers</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Legal &amp; Privacy</a>
+        </div>
+        <div>
+          <h5>Resources &amp; Support</h5>
+          <a href="#">Developer Portal &amp; API</a>
+          <a href="#">Knowledge Hub</a>
+          <a href="#">Get Support</a>
+        </div>
+        <div>
+          <h5>Partner Resources</h5>
+          <a href="#">Partner With Us</a>
+          <a href="#">Partner Resources</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>Copyright © 2026 VeriFone, Inc., New York, NY USA. All rights reserved.</span>
+        <span><a href="index.html" style="color:#94a3b8;">← Back to portal prototypes</a></span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
