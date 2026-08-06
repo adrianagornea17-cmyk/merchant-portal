@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home | Coffee Corner</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    background: #f2f2f3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 20px;
+  }
+
+  .page-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  /* ── Phone frame ── */
+  .phone {
+    width: 300px;
+    height: 632px;
+    background: #0f172a;
+    border-radius: 42px;
+    padding: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  }
+
+  .phone-screen {
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 22px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .notch {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 18px;
+    background: #0f172a;
+    border-radius: 12px;
+  }
+
+  .status-icons { display: flex; align-items: center; gap: 4px; }
+
+  .app-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px 6px;
+  }
+
+  .app-header h1 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .kebab-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #334155;
+    padding: 4px;
+  }
+
+  .app-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 18px 14px;
+  }
+
+  .greeting {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    margin: 8px 0 14px;
+  }
+
+  /* ── Tap-to-Pay banner ── */
+  .tap-banner {
+    background: #eff6ff;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .tap-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #dbeafe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tap-text .tap-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 2px;
+  }
+
+  .tap-text .tap-sub {
+    font-size: 11px;
+    color: #3b82f6;
+    line-height: 1.4;
+  }
+
+  .tap-chevron {
+    margin-left: auto;
+    color: #93c5fd;
+    flex-shrink: 0;
+  }
+
+  /* ── Info cards ── */
+  .info-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .info-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .info-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .info-card-title svg { color: #2563eb; }
+
+  .info-card-period {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    color: #6b7280;
+  }
+
+  .info-card-desc {
+    font-size: 11.5px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 78px;
+    background: #1f2937;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .toast button {
+    background: none;
+    border: none;
+    color: #fff;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    padding: 0 0 0 10px;
+  }
+
+  .toast button:hover { opacity: 1; }
+
+  /* ── Bottom nav ── */
+  .bottom-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-top: 1px solid #e5e7eb;
+    padding: 8px 4px 10px;
+    background: #fff;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: #94a3b8;
+    font-size: 9.5px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .nav-item.active { color: #2563eb; }
+
+  .home-indicator {
+    width: 110px;
+    height: 4px;
+    background: #0f172a;
+    border-radius: 4px;
+    opacity: 0.25;
+    margin: 6px auto 4px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-title">Home Dashboard — Coffee Corner (after sign in)</div>
+
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>9:30</span>
+        <div class="status-icons">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="7" width="3" height="4" fill="#0f172a"/><rect x="4.5" y="4.5" width="3" height="6.5" fill="#0f172a"/><rect x="9" y="2" width="3" height="9" fill="#0f172a"/><rect x="13.5" y="0" width="3" height="11" fill="#0f172a"/></svg>
+          <svg width="15" height="11" viewBox="0 0 24 18" fill="none"><path d="M12 17c-3.9 0-7.4-1.5-10-4 3-3.6 6.9-5.5 10-5.5s7 1.9 10 5.5c-2.6 2.5-6.1 4-10 4z" fill="#0f172a"/></svg>
+          <svg width="22" height="11" viewBox="0 0 24 12" fill="none"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="#0f172a"/><rect x="2" y="2" width="17" height="8" rx="1.5" fill="#0f172a"/><rect x="21.5" y="4" width="1.5" height="4" fill="#0f172a"/></svg>
+        </div>
+      </div>
+
+      <div class="app-body">
+        <div class="app-header">
+          <h1>Coffee Corner</h1>
+          <button class="kebab-btn" aria-label="More options">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
+          </button>
+        </div>
+
+        <div class="app-scroll">
+          <div class="greeting">Hello Julie!</div>
+
+          <div class="tap-banner">
+            <div class="tap-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M5.5 13.5a9 9 0 0 1 13 0"/><path d="M2.5 10.5a13 13 0 0 1 19 0"/><line x1="12" y1="20" x2="12" y2="20.01"/></svg>
+            </div>
+            <div class="tap-text">
+              <div class="tap-title">Tap-to-Pay is available</div>
+              <div class="tap-sub">Activate tap-to-pay from the "Charge" page or set it up right now</div>
+            </div>
+            <div class="tap-chevron">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-head">
+              <div class="info-card-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>
+                Sales
+              </div>
+              <div class="info-card-period">Today
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="info-card-desc">Take your first payment and your total, transactions, average sale, and refunds will appear here.</div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-head">
+              <div class="info-card-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/></svg>
+                Payouts
+              </div>
+              <div class="info-card-period">This week
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="info-card-desc">Once funds are deposited to your bank, your payout totals and transfer count will show up here.</div>
+          </div>
+        </div>
+
+        <div class="toast" id="readyToast">
+          <span>Your app is ready to use.</span>
+          <button onclick="document.getElementById('readyToast').style.display='none'" aria-label="Dismiss">✕</button>
+        </div>
+
+        <div class="bottom-nav">
+          <button class="nav-item active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/></svg>
+            Home
+          </button>
+          <button class="nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>
+            Sales
+          </button>
+          <button class="nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/></svg>
+            Payouts
+          </button>
+          <button class="nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Charge
+          </button>
+          <button class="nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Devices
+          </button>
+        </div>
+
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
