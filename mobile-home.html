@@ -207,37 +207,6 @@
     line-height: 1.5;
   }
 
-  /* ── Toast ── */
-  .toast {
-    position: absolute;
-    left: 14px;
-    right: 14px;
-    bottom: 78px;
-    background: #1f2937;
-    color: #fff;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  }
-
-  .toast button {
-    background: none;
-    border: none;
-    color: #fff;
-    opacity: 0.7;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1;
-    padding: 0 0 0 10px;
-  }
-
-  .toast button:hover { opacity: 1; }
-
   /* ── Bottom nav ── */
   .bottom-nav {
     display: flex;
@@ -340,11 +309,6 @@
             </div>
             <div class="info-card-desc">Once funds are deposited to your bank, your payout totals and transfer count will show up here.</div>
           </div>
-        </div>
-
-        <div class="toast" id="readyToast">
-          <span>Your app is ready to use.</span>
-          <button onclick="document.getElementById('readyToast').style.display='none'" aria-label="Dismiss">✕</button>
         </div>
 
         <div class="bottom-nav">
