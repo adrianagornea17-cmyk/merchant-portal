@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Activate Tap-to-Pay | Coffee Corner</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    background: #f2f2f3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 20px;
+  }
+
+  .page-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .top-actions {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+  }
+
+  .figma-link {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    background: #2563eb;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(37,99,235,0.35);
+    transition: background 0.15s;
+  }
+
+  .figma-link:hover { background: #1d4ed8; }
+
+  .preview-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e11d48;
+    background: #fff;
+    border: 1px solid #fecdd3;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+  }
+
+  .preview-btn:hover { background: #fef2f4; }
+
+  /* ── Phone frame ── */
+  .phone {
+    width: 300px;
+    height: 632px;
+    background: #0f172a;
+    border-radius: 42px;
+    padding: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  }
+
+  .phone-screen {
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 22px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .notch {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 18px;
+    background: #0f172a;
+    border-radius: 12px;
+    z-index: 20;
+  }
+
+  .status-icons { display: flex; align-items: center; gap: 4px; }
+
+  .app-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: filter 0.2s;
+  }
+
+  .app-body.dimmed { filter: brightness(0.55); }
+
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px 6px;
+  }
+
+  .app-header h1 {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #334155;
+    padding: 4px;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .app-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 20px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .app-scroll h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #111827;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .app-scroll .subtitle {
+    font-size: 12px;
+    color: #6b7280;
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+
+  .checklist-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    width: 100%;
+    padding: 6px 0;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: #9ca3af;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .checklist-item:last-child { border-bottom: none; }
+
+  .checklist-item.done { color: #374151; }
+
+  .checklist-item.active { color: #111827; font-weight: 700; }
+
+  .check-icon {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .check-icon.pending { border: 2px solid #d1d5db; }
+
+  .check-icon.done { background: #16a34a; color: #fff; }
+
+  .check-icon.active {
+    border: 2px solid #cbd5e1;
+    border-top-color: #2563eb;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .app-footer-action {
+    padding: 14px 20px 18px;
+  }
+
+  .ready-btn {
+    width: 100%;
+    background: #d1d5db;
+    color: #9ca3af;
+    border: none;
+    border-radius: 999px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: not-allowed;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .ready-btn.enabled {
+    background: #2563eb;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .ready-btn.enabled:hover { background: #1d4ed8; }
+
+  .home-indicator {
+    width: 110px;
+    height: 4px;
+    background: #0f172a;
+    border-radius: 4px;
+    opacity: 0.25;
+    margin: 6px auto 4px;
+  }
+
+  /* ── Error modal ── */
+  .modal-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 30;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .error-modal {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    padding: 26px 22px 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    text-align: center;
+  }
+
+  .error-modal .error-icon {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: #e11d48;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .error-modal h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+
+  .error-modal p {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .error-modal a { color: #2563eb; text-decoration: underline; }
+
+  .modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-cancel {
+    background: none;
+    border: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+  }
+
+  .modal-retry {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 9px 22px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .modal-retry:hover { background: #1d4ed8; }
+
+  .hint {
+    max-width: 300px;
+    text-align: center;
+    font-size: 12.5px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+  <div class="top-actions">
+    <button class="preview-btn" onclick="toggleDidError()">Preview: No DID available</button>
+    <a class="figma-link" href="https://www.figma.com/design/6Ody6cbR49u1S2d5UG70Hg/UXDUI-1485-%7C-Mobile-App-Device-Activation?node-id=2846-25689&p=f&t=5T6IMERzA6Dx7iZd-0" target="_blank" rel="noopener">See Figma design</a>
+  </div>
+
+  <div class="page-title">Activate Tap-to-Pay — Pairing Device</div>
+
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>9:30</span>
+        <div class="status-icons">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="7" width="3" height="4" fill="#0f172a"/><rect x="4.5" y="4.5" width="3" height="6.5" fill="#0f172a"/><rect x="9" y="2" width="3" height="9" fill="#0f172a"/><rect x="13.5" y="0" width="3" height="11" fill="#0f172a"/></svg>
+          <svg width="15" height="11" viewBox="0 0 24 18" fill="none"><path d="M12 17c-3.9 0-7.4-1.5-10-4 3-3.6 6.9-5.5 10-5.5s7 1.9 10 5.5c-2.6 2.5-6.1 4-10 4z" fill="#0f172a"/></svg>
+          <svg width="22" height="11" viewBox="0 0 24 12" fill="none"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="#0f172a"/><rect x="2" y="2" width="17" height="8" rx="1.5" fill="#0f172a"/><rect x="21.5" y="4" width="1.5" height="4" fill="#0f172a"/></svg>
+        </div>
+      </div>
+
+      <div class="app-body" id="appBody">
+        <div class="app-header">
+          <h1>Activate Tap-to-Pay</h1>
+          <button class="close-btn" onclick="window.location.href='mobile-home.html';" aria-label="Close">✕</button>
+        </div>
+
+        <div class="app-scroll">
+          <h2>Pairing your device</h2>
+          <div class="subtitle">First-time setup takes a few minutes. We're getting everything in place.</div>
+
+          <div class="checklist-card" id="checklist">
+            <div class="checklist-item done" data-step="0">
+              <span class="check-icon done">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Connecting to our servers
+            </div>
+            <div class="checklist-item active" data-step="1">
+              <span class="check-icon active"></span>
+              Checking app version
+            </div>
+            <div class="checklist-item" data-step="2">
+              <span class="check-icon pending"></span>
+              Setting up secure access
+            </div>
+            <div class="checklist-item" data-step="3">
+              <span class="check-icon pending"></span>
+              Finalizing your account
+            </div>
+          </div>
+        </div>
+
+        <div class="app-footer-action">
+          <button class="ready-btn" id="readyBtn" disabled onclick="if(!this.disabled) window.location.href='mobile-home.html';">Ready to Use</button>
+        </div>
+
+        <div class="home-indicator"></div>
+      </div>
+
+      <div class="modal-overlay" id="didModal">
+        <div class="error-modal">
+          <div class="error-icon">!</div>
+          <h3>No DID available</h3>
+          <p>We couldn't find an available phone number (DID) to activate Tap-to-Pay for this account. If the problem persists contact <a href="#" onclick="return false;">support</a>.</p>
+          <div class="modal-actions">
+            <button class="modal-cancel" onclick="toggleDidError()">Cancel</button>
+            <button class="modal-retry" onclick="toggleDidError()">Try again</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">Simulates the pairing checklist finishing and enabling "Ready to Use". Use "Preview: No DID available" (top right) to see the failure state instead.</div>
+
+  <script>
+    const steps = document.querySelectorAll('.checklist-item');
+    const readyBtn = document.getElementById('readyBtn');
+    let current = 1;
+
+    function advance() {
+      if (current >= steps.length) {
+        readyBtn.disabled = false;
+        readyBtn.classList.add('enabled');
+        return;
+      }
+      const item = steps[current];
+      const icon = item.querySelector('.check-icon');
+      item.classList.remove('active');
+      item.classList.add('done');
+      icon.classList.remove('active', 'pending');
+      icon.classList.add('done');
+      icon.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+      current++;
+      if (current < steps.length) {
+        const next = steps[current];
+        next.classList.add('active');
+        next.querySelector('.check-icon').classList.remove('pending');
+        next.querySelector('.check-icon').classList.add('active');
+      }
+      setTimeout(advance, 1100);
+    }
+
+    setTimeout(advance, 1100);
+
+    function toggleDidError() {
+      document.getElementById('didModal').classList.toggle('open');
+      document.getElementById('appBody').classList.toggle('dimmed');
+    }
+  </script>
+
+</body>
+</html>
