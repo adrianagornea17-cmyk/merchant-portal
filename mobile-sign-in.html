@@ -25,10 +25,17 @@
     color: #111827;
   }
 
-  .figma-link {
+  .top-actions {
     position: fixed;
     top: 20px;
     right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+  }
+
+  .figma-link {
     font-size: 16px;
     font-weight: 700;
     color: #fff;
@@ -49,7 +56,7 @@
     background: #fff;
     border: 1px solid #fecdd3;
     border-radius: 8px;
-    padding: 8px 16px;
+    padding: 10px 16px;
     cursor: pointer;
   }
 
@@ -363,7 +370,10 @@
 </head>
 <body>
 
-  <a class="figma-link" href="https://www.figma.com/design/6Ody6cbR49u1S2d5UG70Hg/UXDUI-1485-%7C-Mobile-App-Device-Activation?node-id=2846-25689&p=f&t=5T6IMERzA6Dx7iZd-0" target="_blank" rel="noopener">See Figma design</a>
+  <div class="top-actions">
+    <button class="preview-btn" onclick="toggleErrorPreview()">Preview error state</button>
+    <a class="figma-link" href="https://www.figma.com/design/6Ody6cbR49u1S2d5UG70Hg/UXDUI-1485-%7C-Mobile-App-Device-Activation?node-id=2846-25689&p=f&t=5T6IMERzA6Dx7iZd-0" target="_blank" rel="noopener">See Figma design</a>
+  </div>
 
   <div class="page-title">Mobile Sign In — Verifone Pay</div>
 
@@ -444,9 +454,7 @@
     </div>
   </div>
 
-  <div class="hint">Type in both fields to see it move from Step 1 (empty, disabled) to Step 2 (filled, enabled) — the two screenshots connected into one live flow. Sign In always continues to the Home Dashboard; use the link below to preview the invalid-credentials error banner instead.</div>
-
-  <button class="preview-btn" onclick="toggleErrorPreview()">Preview error state</button>
+  <div class="hint">Type in both fields to see it move from Step 1 (empty, disabled) to Step 2 (filled, enabled) — the two screenshots connected into one live flow. Sign In always continues to the Home Dashboard; use "Preview error state" (top right) to see the invalid-credentials banner instead.</div>
 
   <script>
     function togglePassword() {
