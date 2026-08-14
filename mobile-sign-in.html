@@ -462,7 +462,6 @@
   }
 
   .tap-banner.activated { background: #f0fdf4; cursor: default; }
-  .tap-banner.locked { background: #f8fafc; cursor: default; }
   .tap-banner.hidden { display: none; }
 
   .tap-icon {
@@ -476,7 +475,6 @@
   }
 
   .tap-banner.activated .tap-icon { background: #dcfce7; }
-  .tap-banner.locked .tap-icon { background: #e2e8f0; }
 
   .tap-text .tap-title {
     font-size: 11.5px;
@@ -486,15 +484,12 @@
   }
 
   .tap-banner.activated .tap-text .tap-title { color: #166534; }
-  .tap-banner.locked .tap-text .tap-title { color: #475569; }
 
   .tap-text .tap-sub { font-size: 10px; color: #3b82f6; line-height: 1.4; }
   .tap-banner.activated .tap-text .tap-sub { color: #16a34a; }
-  .tap-banner.locked .tap-text .tap-sub { color: #94a3b8; }
 
   .tap-chevron { margin-left: auto; color: #93c5fd; flex-shrink: 0; }
   .tap-banner.activated .tap-chevron { color: #86efac; }
-  .tap-banner.locked .tap-chevron { display: none; }
 
   .info-card {
     border: 1px solid #e5e7eb;
@@ -1483,15 +1478,6 @@
               </div>
               <div class="app-scroll">
                 <div class="greeting">Hello Alex!</div>
-                <div class="tap-banner locked">
-                  <div class="tap-icon">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-                  </div>
-                  <div class="tap-text">
-                    <div class="tap-title">Tap-to-Pay activation restricted</div>
-                    <div class="tap-sub">Only a Merchant Admin or Supervisor can activate this device</div>
-                  </div>
-                </div>
                 <div class="info-card">
                   <div class="info-card-head">
                     <div class="info-card-title">
