@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mobile Sign In | Verifone Pay</title>
+<title>Mobile App — Onboarding & Activation Journeys | Verifone Pay</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -11,18 +11,6 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     min-height: 100vh;
     background: #f2f2f3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    gap: 20px;
-  }
-
-  .page-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #111827;
   }
 
   .top-actions {
@@ -32,7 +20,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    z-index: 10;
+    z-index: 50;
   }
 
   .figma-link {
@@ -49,28 +37,138 @@
 
   .figma-link:hover { background: #1d4ed8; }
 
-  .preview-btn {
-    font-size: 13px;
-    font-weight: 600;
-    color: #e11d48;
-    background: #fff;
-    border: 1px solid #fecdd3;
-    border-radius: 8px;
-    padding: 10px 16px;
-    cursor: pointer;
+  .page-wrap {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
   }
 
-  .preview-btn:hover { background: #fef2f4; }
+  .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+
+  .page-sub {
+    font-size: 13.5px;
+    color: #6b7280;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .uc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+  }
+
+  @media (max-width: 900px) {
+    .uc-grid { grid-template-columns: 1fr; }
+  }
+
+  .uc-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .uc-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 22px 24px;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+
+  .role-badge.admin { background: #eff6ff; color: #1d4ed8; }
+  .role-badge.cashier { background: #fff7ed; color: #c2410c; }
+
+  .uc-card h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 14px;
+  }
+
+  .uc-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .uc-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .uc-steps .step-num {
+    flex-shrink: 0;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 10.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .uc-steps li.emphasis { font-weight: 700; color: #111827; }
+  .uc-steps li.emphasis .step-num { background: #dbeafe; color: #1d4ed8; }
+  .cashier-steps li.emphasis .step-num { background: #ffedd5; color: #c2410c; }
+
+  .mockup-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  .step-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
 
   .step-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     background: #fff;
     border: 1px solid #e5e7eb;
     border-radius: 999px;
-    padding: 6px 16px;
-    font-size: 13px;
+    padding: 5px 13px;
+    font-size: 12px;
     font-weight: 600;
     color: #6b7280;
     transition: all 0.25s ease;
@@ -83,7 +181,7 @@
   }
 
   .step-dot {
-    width: 7px; height: 7px;
+    width: 6px; height: 6px;
     border-radius: 50%;
     background: #d1d5db;
     transition: background 0.25s ease;
@@ -93,19 +191,19 @@
 
   /* ── Phone frame ── */
   .phone {
-    width: 300px;
-    height: 632px;
+    width: 280px;
+    height: 590px;
     background: #0f172a;
-    border-radius: 42px;
-    padding: 12px;
+    border-radius: 40px;
+    padding: 11px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.25);
   }
 
   .phone-screen {
-    background: #f4f4f6;
+    background: #fff;
     width: 100%;
     height: 100%;
-    border-radius: 32px;
+    border-radius: 30px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -116,8 +214,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 22px 4px;
-    font-size: 12px;
+    padding: 9px 20px 3px;
+    font-size: 11.5px;
     font-weight: 600;
     color: #0f172a;
   }
@@ -127,149 +225,111 @@
     top: 6px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90px;
-    height: 18px;
+    width: 84px;
+    height: 16px;
     background: #0f172a;
     border-radius: 12px;
+    z-index: 20;
   }
 
   .status-icons { display: flex; align-items: center; gap: 4px; }
 
-  .app-content {
+  .screen {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .screen.active { display: flex; }
+
+  /* -- sign in screen -- */
+  .signin-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 26px 20px 14px;
+    padding: 20px 18px 12px;
   }
-
-  .error-banner {
-    display: none;
-    width: 100%;
-    align-items: flex-start;
-    gap: 8px;
-    background: #fce7f0;
-    border-bottom: 1px solid #fbcfe1;
-    margin: -26px -20px 18px;
-    padding: 12px 36px 12px 16px;
-    position: relative;
-  }
-
-  .error-banner.visible { display: flex; }
-
-  .error-banner .warn-icon {
-    flex-shrink: 0;
-    color: #e11d48;
-    margin-top: 1px;
-  }
-
-  .error-banner .error-text {
-    font-size: 11.5px;
-    line-height: 1.4;
-    color: #9f1239;
-    font-weight: 600;
-  }
-
-  .error-banner .error-close {
-    position: absolute;
-    top: 10px;
-    right: 12px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #9f1239;
-    opacity: 0.7;
-    padding: 0;
-    font-size: 13px;
-    line-height: 1;
-  }
-
-  .error-banner .error-close:hover { opacity: 1; }
 
   .brand {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
   }
 
   .brand-logo {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
     color: #111827;
   }
 
   .brand-sub {
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 600;
     color: #94a3b8;
     letter-spacing: 0.5px;
-    margin-left: 30px;
+    margin-left: 28px;
     margin-top: -2px;
   }
 
   .signin-card {
-    background: #fff;
-    border-radius: 18px;
+    background: #f8fafc;
+    border-radius: 16px;
     width: 100%;
-    padding: 22px 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    padding: 18px 16px;
   }
 
   .signin-card h1 {
-    font-size: 17px;
+    font-size: 15.5px;
     font-weight: 700;
     color: #111827;
     text-align: center;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .signin-card .subtitle {
-    font-size: 12px;
+    font-size: 11px;
     color: #6b7280;
     text-align: center;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
 
   .field-label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: #374151;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     display: block;
   }
 
   .field-wrap {
     position: relative;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
 
   .field-wrap input {
     width: 100%;
     background: #fff;
     border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 13px;
+    border-radius: 9px;
+    padding: 9px 13px;
+    font-size: 12px;
     color: #1e293b;
     outline: none;
     transition: border-color 0.15s;
   }
 
-  .field-wrap input:focus {
-    border-color: #93c5fd;
-  }
-
-  .field-wrap input.filled {
-    border-color: #cbd5e1;
-  }
+  .field-wrap input:focus { border-color: #93c5fd; }
+  .field-wrap input.filled { border-color: #cbd5e1; }
 
   .eye-toggle {
     position: absolute;
-    right: 12px;
+    right: 11px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
@@ -280,209 +340,788 @@
     align-items: center;
   }
 
-  .row-between {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
-
-  .remember-me {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11.5px;
-    color: #374151;
-  }
-
-  .remember-me input {
-    width: 14px; height: 14px;
-    accent-color: #2563eb;
-  }
-
-  .forgot-link {
-    font-size: 11.5px;
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 600;
-  }
-
   .signin-btn {
     width: 100%;
     background: #d1d5db;
     color: #9ca3af;
     border: none;
-    border-radius: 10px;
+    border-radius: 9px;
+    padding: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: not-allowed;
+    transition: background 0.2s, color 0.2s;
+    margin-top: 4px;
+  }
+
+  .signin-btn.enabled { background: #2563eb; color: #fff; cursor: pointer; }
+  .signin-btn.enabled:hover { background: #1d4ed8; }
+
+  .signin-hint {
+    margin-top: 14px;
+    font-size: 10.5px;
+    color: #9ca3af;
+    text-align: center;
+  }
+
+  /* -- home screen -- */
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px 4px;
+  }
+
+  .app-header h1 { font-size: 16px; font-weight: 700; color: #111827; }
+
+  .app-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 16px 10px;
+  }
+
+  .greeting {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #111827;
+    margin: 6px 0 12px;
+  }
+
+  .tap-banner {
+    background: #eff6ff;
+    border-radius: 12px;
+    padding: 11px 12px;
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    cursor: pointer;
+  }
+
+  .tap-banner.activated { background: #f0fdf4; cursor: default; }
+  .tap-banner.locked { background: #f8fafc; cursor: default; }
+
+  .tap-icon {
+    width: 27px; height: 27px;
+    border-radius: 50%;
+    background: #dbeafe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tap-banner.activated .tap-icon { background: #dcfce7; }
+  .tap-banner.locked .tap-icon { background: #e2e8f0; }
+
+  .tap-text .tap-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 2px;
+  }
+
+  .tap-banner.activated .tap-text .tap-title { color: #166534; }
+  .tap-banner.locked .tap-text .tap-title { color: #475569; }
+
+  .tap-text .tap-sub { font-size: 10px; color: #3b82f6; line-height: 1.4; }
+  .tap-banner.activated .tap-text .tap-sub { color: #16a34a; }
+  .tap-banner.locked .tap-text .tap-sub { color: #94a3b8; }
+
+  .tap-chevron { margin-left: auto; color: #93c5fd; flex-shrink: 0; }
+  .tap-banner.activated .tap-chevron { color: #86efac; }
+  .tap-banner.locked .tap-chevron { display: none; }
+
+  .info-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
     padding: 12px;
-    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .info-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .info-card-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .info-card-title svg { color: #2563eb; }
+
+  .info-card-period {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10.5px;
+    color: #6b7280;
+  }
+
+  .info-card-desc { font-size: 10.5px; color: #6b7280; line-height: 1.4; }
+
+  .bottom-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-top: 1px solid #e5e7eb;
+    padding: 7px 4px 9px;
+    background: #fff;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    color: #94a3b8;
+    font-size: 8.5px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .nav-item.active { color: #2563eb; }
+  .nav-item.charge-nav { color: #94a3b8; }
+
+  .home-indicator {
+    width: 100px;
+    height: 4px;
+    background: #0f172a;
+    border-radius: 4px;
+    opacity: 0.25;
+    margin: 6px auto 4px;
+  }
+
+  /* -- activation screen -- */
+  .activate-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px 4px;
+  }
+
+  .activate-header h1 { font-size: 14px; font-weight: 700; color: #111827; }
+
+  .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #334155;
+    padding: 4px;
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  .activate-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 18px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .activate-scroll h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .activate-scroll .subtitle {
+    font-size: 11px;
+    color: #6b7280;
+    text-align: center;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+
+  .checklist-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    width: 100%;
+    padding: 4px 0;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 14px;
+    font-size: 11px;
+    color: #9ca3af;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .checklist-item:last-child { border-bottom: none; }
+  .checklist-item.done { color: #374151; }
+  .checklist-item.active { color: #111827; font-weight: 700; }
+
+  .check-icon {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .check-icon.pending { border: 2px solid #d1d5db; }
+  .check-icon.done { background: #16a34a; color: #fff; }
+  .check-icon.active {
+    border: 2px solid #cbd5e1;
+    border-top-color: #2563eb;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .activate-footer { padding: 12px 18px 16px; }
+
+  .ready-btn {
+    width: 100%;
+    background: #d1d5db;
+    color: #9ca3af;
+    border: none;
+    border-radius: 999px;
+    padding: 11px;
+    font-size: 13px;
     font-weight: 700;
     cursor: not-allowed;
     transition: background 0.2s, color 0.2s;
   }
 
-  .signin-btn.enabled {
+  .ready-btn.enabled { background: #2563eb; color: #fff; cursor: pointer; }
+  .ready-btn.enabled:hover { background: #1d4ed8; }
+
+  /* -- modals -- */
+  .modal-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    z-index: 30;
+    background: rgba(15,23,42,0.35);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .result-modal {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    padding: 24px 20px 18px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    text-align: center;
+  }
+
+  .result-modal .result-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .result-modal.success .result-icon { background: #16a34a; }
+  .result-modal.error .result-icon { background: #e11d48; }
+
+  .result-modal h3 { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 7px; }
+  .result-modal p { font-size: 11.5px; color: #6b7280; line-height: 1.45; margin-bottom: 18px; }
+  .result-modal a { color: #2563eb; text-decoration: underline; }
+
+  .modal-close-btn {
     background: #2563eb;
     color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 9px 22px;
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
   }
 
-  .signin-btn.enabled:hover { background: #1d4ed8; }
+  .modal-close-btn:hover { background: #1d4ed8; }
+  .result-modal.error .modal-close-btn { background: #e11d48; }
+  .result-modal.error .modal-close-btn:hover { background: #be123c; }
 
-  .app-footer {
-    margin-top: auto;
-    text-align: center;
-    padding-top: 16px;
-  }
-
-  .app-footer .links {
-    font-size: 10px;
-    color: #64748b;
-    margin-bottom: 6px;
-  }
-
-  .app-footer .links a {
-    color: #64748b;
-    text-decoration: none;
-  }
-
-  .app-footer .copyright {
-    font-size: 9.5px;
-    color: #9ca3af;
-  }
-
-  .home-indicator {
-    width: 110px;
-    height: 4px;
-    background: #0f172a;
-    border-radius: 4px;
-    opacity: 0.25;
-    margin: 8px auto 4px;
-  }
-
-  .hint {
-    max-width: 300px;
-    text-align: center;
-    font-size: 12.5px;
+  .reset-btn {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
     color: #6b7280;
-    line-height: 1.5;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
   }
+
+  .reset-btn:hover { color: #2563eb; }
 </style>
 </head>
 <body>
 
   <div class="top-actions">
-    <button class="preview-btn" onclick="toggleErrorPreview()">Preview error state</button>
     <a class="figma-link" href="https://www.figma.com/design/6Ody6cbR49u1S2d5UG70Hg/UXDUI-1485-%7C-Mobile-App-Device-Activation?node-id=2846-25689&p=f&t=5T6IMERzA6Dx7iZd-0" target="_blank" rel="noopener">See Figma design</a>
   </div>
 
-  <div class="page-title">Mobile Sign In — Verifone Pay</div>
+  <div class="page-wrap">
+    <div class="page-header">
+      <div class="page-title">Mobile App — Onboarding &amp; Activation Journeys</div>
+      <div class="page-sub">Both journeys start after onboarding, once the merchant's user account and password already exist. Play through each phone below to see how the two roles diverge at device activation.</div>
+    </div>
 
-  <div style="display:flex; gap:10px;">
-    <div class="step-badge active" id="badgeStep1"><span class="step-dot"></span>Step 1 · Empty</div>
-    <div class="step-badge" id="badgeStep2"><span class="step-dot"></span>Step 2 · Validated</div>
-  </div>
+    <div class="uc-grid">
 
-  <div class="phone">
-    <div class="phone-screen">
-      <div class="notch"></div>
-      <div class="status-bar">
-        <span>9:30</span>
-        <div class="status-icons">
-          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="7" width="3" height="4" fill="#0f172a"/><rect x="4.5" y="4.5" width="3" height="6.5" fill="#0f172a"/><rect x="9" y="2" width="3" height="9" fill="#0f172a"/><rect x="13.5" y="0" width="3" height="11" fill="#0f172a"/></svg>
-          <svg width="15" height="11" viewBox="0 0 24 18" fill="none"><path d="M12 17c-3.9 0-7.4-1.5-10-4 3-3.6 6.9-5.5 10-5.5s7 1.9 10 5.5c-2.6 2.5-6.1 4-10 4z" fill="#0f172a"/></svg>
-          <svg width="22" height="11" viewBox="0 0 24 12" fill="none"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="#0f172a"/><rect x="2" y="2" width="17" height="8" rx="1.5" fill="#0f172a"/><rect x="21.5" y="4" width="1.5" height="4" fill="#0f172a"/></svg>
+      <!-- ══════════ USE CASE 1 ══════════ -->
+      <div class="uc-column" id="uc1">
+        <div class="uc-card">
+          <span class="role-badge admin">Merchant Admin / Merchant Supervisor</span>
+          <h2>Use case 1 — Full activation &amp; charge</h2>
+          <ol class="uc-steps">
+            <li><span class="step-num">1</span> Account created via onboarding (username &amp; password available)</li>
+            <li><span class="step-num">2</span> User receives an email with the link to install the app</li>
+            <li><span class="step-num">3</span> User accesses the link / downloads and installs the app</li>
+            <li><span class="step-num">4</span> User logs into the app</li>
+            <li class="emphasis"><span class="step-num">5</span> User is able to activate the device (DID available)</li>
+            <li class="emphasis"><span class="step-num">6</span> User can take a charge</li>
+          </ol>
         </div>
+
+        <div class="mockup-label">Interactive mockup</div>
+
+        <div class="step-row">
+          <span class="step-badge active" data-badge="signin"><span class="step-dot"></span>Sign in</span>
+          <span class="step-badge" data-badge="home"><span class="step-dot"></span>Home</span>
+          <span class="step-badge" data-badge="activate"><span class="step-dot"></span>Activate</span>
+          <span class="step-badge" data-badge="charge"><span class="step-dot"></span>Charge</span>
+        </div>
+
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="notch"></div>
+            <div class="status-bar">
+              <span>9:30</span>
+              <div class="status-icons">
+                <svg width="15" height="10" viewBox="0 0 16 11" fill="none"><rect x="0" y="7" width="3" height="4" fill="#0f172a"/><rect x="4.5" y="4.5" width="3" height="6.5" fill="#0f172a"/><rect x="9" y="2" width="3" height="9" fill="#0f172a"/><rect x="13.5" y="0" width="3" height="11" fill="#0f172a"/></svg>
+                <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M12 17c-3.9 0-7.4-1.5-10-4 3-3.6 6.9-5.5 10-5.5s7 1.9 10 5.5c-2.6 2.5-6.1 4-10 4z" fill="#0f172a"/></svg>
+                <svg width="20" height="10" viewBox="0 0 24 12" fill="none"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="#0f172a"/><rect x="2" y="2" width="17" height="8" rx="1.5" fill="#0f172a"/><rect x="21.5" y="4" width="1.5" height="4" fill="#0f172a"/></svg>
+              </div>
+            </div>
+
+            <!-- Sign in -->
+            <div class="screen active" data-screen="signin">
+              <div class="signin-content">
+                <div class="brand">
+                  <div class="brand-logo">
+                    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+                      <circle cx="10" cy="10" r="3" fill="#111827"/><circle cx="22" cy="10" r="3" fill="#111827"/>
+                      <circle cx="10" cy="22" r="3" fill="#111827"/><circle cx="22" cy="22" r="3" fill="#111827"/>
+                    </svg>
+                    verifone
+                  </div>
+                  <div class="brand-sub">pay</div>
+                </div>
+                <div class="signin-card">
+                  <h1>Welcome</h1>
+                  <div class="subtitle">Sign in to your account to continue</div>
+                  <label class="field-label">Email</label>
+                  <div class="field-wrap">
+                    <input class="email-input" type="email" placeholder="admin@coffeecorner.com" oninput="handleInput('uc1')" />
+                  </div>
+                  <label class="field-label">Password</label>
+                  <div class="field-wrap">
+                    <input class="password-input" type="password" placeholder="••••••••••" oninput="handleInput('uc1')" />
+                    <button class="eye-toggle" type="button" onclick="togglePassword('uc1')" aria-label="Show password">
+                      <svg class="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                  <button class="signin-btn" disabled onclick="signIn('uc1')">Sign In</button>
+                </div>
+                <div class="signin-hint">Role: Merchant Admin</div>
+              </div>
+            </div>
+
+            <!-- Home -->
+            <div class="screen" data-screen="home">
+              <div class="app-header">
+                <h1>Coffee Corner</h1>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" color="#334155"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
+              </div>
+              <div class="app-scroll">
+                <div class="greeting">Hello Julie!</div>
+                <div class="tap-banner" onclick="openActivate('uc1')">
+                  <div class="tap-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M5.5 13.5a9 9 0 0 1 13 0"/><path d="M2.5 10.5a13 13 0 0 1 19 0"/><line x1="12" y1="20" x2="12" y2="20.01"/></svg>
+                  </div>
+                  <div class="tap-text">
+                    <div class="tap-title">Tap-to-Pay is available</div>
+                    <div class="tap-sub">Activate tap-to-pay from the "Charge" page or set it up right now</div>
+                  </div>
+                  <div class="tap-chevron">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </div>
+                <div class="info-card">
+                  <div class="info-card-head">
+                    <div class="info-card-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>
+                      Sales
+                    </div>
+                    <div class="info-card-period">Today
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+                  <div class="info-card-desc">Take your first payment and your total, transactions, average sale, and refunds will appear here.</div>
+                </div>
+              </div>
+              <div class="bottom-nav">
+                <button class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/></svg>Home</button>
+                <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>Sales</button>
+                <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/></svg>Payouts</button>
+                <button class="nav-item charge-nav" onclick="tapCharge('uc1')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Charge</button>
+                <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Devices</button>
+              </div>
+              <div class="home-indicator"></div>
+            </div>
+
+            <!-- Activate -->
+            <div class="screen" data-screen="activate">
+              <div class="activate-header">
+                <h1>Activate Tap-to-Pay</h1>
+                <button class="close-btn" onclick="showScreen('uc1','home')" aria-label="Close">✕</button>
+              </div>
+              <div class="activate-scroll">
+                <h2>Pairing your device</h2>
+                <div class="subtitle">First-time setup takes a few minutes. We're getting everything in place.</div>
+                <div class="checklist-card">
+                  <div class="checklist-item" data-step="0"><span class="check-icon pending"></span>Connecting to our servers</div>
+                  <div class="checklist-item" data-step="1"><span class="check-icon pending"></span>Checking app version</div>
+                  <div class="checklist-item" data-step="2"><span class="check-icon pending"></span>Setting up secure access</div>
+                  <div class="checklist-item" data-step="3"><span class="check-icon pending"></span>Finalizing your account</div>
+                </div>
+              </div>
+              <div class="activate-footer">
+                <button class="ready-btn" disabled onclick="completeActivation('uc1')">Ready to Use</button>
+              </div>
+              <div class="home-indicator"></div>
+            </div>
+
+            <!-- Charge success modal -->
+            <div class="modal-overlay charge-modal">
+              <div class="result-modal success">
+                <div class="result-icon">✓</div>
+                <h3>Ready to charge</h3>
+                <p>Tap-to-Pay is activated on this device. You can now take a contactless payment from your customer.</p>
+                <button class="modal-close-btn" onclick="closeModal('uc1','.charge-modal')">Done</button>
+              </div>
+            </div>
+
+            <!-- Not activated modal -->
+            <div class="modal-overlay blocked-modal">
+              <div class="result-modal error">
+                <div class="result-icon">!</div>
+                <h3>Device is not activated</h3>
+                <p>Activate Tap-to-Pay first from the banner on your Home screen, then you'll be able to take a charge.</p>
+                <button class="modal-close-btn" onclick="closeModal('uc1','.blocked-modal')">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="reset-btn" onclick="resetFlow('uc1')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Restart this flow
+        </button>
       </div>
 
-      <div class="app-content">
-        <div class="error-banner" id="errorBanner">
-          <span class="warn-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          </span>
-          <span class="error-text">The email or password you have entered is invalid</span>
-          <button class="error-close" onclick="document.getElementById('errorBanner').classList.remove('visible')" aria-label="Dismiss">✕</button>
-        </div>
-        <div class="brand">
-          <div class="brand-logo">
-            <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
-              <circle cx="10" cy="10" r="3" fill="#111827"/>
-              <circle cx="22" cy="10" r="3" fill="#111827"/>
-              <circle cx="10" cy="22" r="3" fill="#111827"/>
-              <circle cx="22" cy="22" r="3" fill="#111827"/>
-            </svg>
-            verifone
-          </div>
-          <div class="brand-sub">pay</div>
+      <!-- ══════════ USE CASE 2 ══════════ -->
+      <div class="uc-column" id="uc2">
+        <div class="uc-card">
+          <span class="role-badge cashier">Merchant Cashier (not able to activate)</span>
+          <h2>Use case 2 — Blocked at activation</h2>
+          <ol class="uc-steps cashier-steps">
+            <li><span class="step-num">1</span> Account created via onboarding (username &amp; password available)</li>
+            <li><span class="step-num">2</span> User receives an email with the link to install the app</li>
+            <li><span class="step-num">3</span> User accesses the link / downloads and installs the app</li>
+            <li><span class="step-num">4</span> User logs into the app</li>
+            <li class="emphasis"><span class="step-num">5</span> User is not able to activate</li>
+            <li class="emphasis"><span class="step-num">6</span> On clicking "Charge" — message: "Device is not activated"</li>
+          </ol>
         </div>
 
-        <div class="signin-card">
-          <h1>Welcome</h1>
-          <div class="subtitle">Sign in to your account to continue</div>
+        <div class="mockup-label">Interactive mockup</div>
 
-          <label class="field-label" for="email">Email</label>
-          <div class="field-wrap">
-            <input type="email" id="email" placeholder="example.user@domain.com" oninput="handleInput()" />
-          </div>
-
-          <label class="field-label" for="password">Password</label>
-          <div class="field-wrap">
-            <input type="password" id="password" placeholder="••••••••••" oninput="handleInput()" />
-            <button class="eye-toggle" onclick="togglePassword()" aria-label="Show password" type="button">
-              <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-          </div>
-
-          <div class="row-between">
-            <label class="remember-me">
-              <input type="checkbox" />
-              Remember me
-            </label>
-            <a class="forgot-link" href="#" onclick="return false;">Forgot password?</a>
-          </div>
-
-          <button class="signin-btn" id="signinBtn" disabled onclick="if(!this.disabled) window.location.href='mobile-home.html';">Sign In</button>
+        <div class="step-row">
+          <span class="step-badge active" data-badge="signin"><span class="step-dot"></span>Sign in</span>
+          <span class="step-badge" data-badge="home"><span class="step-dot"></span>Home</span>
+          <span class="step-badge" data-badge="blocked"><span class="step-dot"></span>Charge blocked</span>
         </div>
 
-        <div class="app-footer">
-          <div class="links">
-            <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a> | <a href="#">Contact Sales</a>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="notch"></div>
+            <div class="status-bar">
+              <span>9:30</span>
+              <div class="status-icons">
+                <svg width="15" height="10" viewBox="0 0 16 11" fill="none"><rect x="0" y="7" width="3" height="4" fill="#0f172a"/><rect x="4.5" y="4.5" width="3" height="6.5" fill="#0f172a"/><rect x="9" y="2" width="3" height="9" fill="#0f172a"/><rect x="13.5" y="0" width="3" height="11" fill="#0f172a"/></svg>
+                <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M12 17c-3.9 0-7.4-1.5-10-4 3-3.6 6.9-5.5 10-5.5s7 1.9 10 5.5c-2.6 2.5-6.1 4-10 4z" fill="#0f172a"/></svg>
+                <svg width="20" height="10" viewBox="0 0 24 12" fill="none"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="#0f172a"/><rect x="2" y="2" width="17" height="8" rx="1.5" fill="#0f172a"/><rect x="21.5" y="4" width="1.5" height="4" fill="#0f172a"/></svg>
+              </div>
+            </div>
+
+            <!-- Sign in -->
+            <div class="screen active" data-screen="signin">
+              <div class="signin-content">
+                <div class="brand">
+                  <div class="brand-logo">
+                    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+                      <circle cx="10" cy="10" r="3" fill="#111827"/><circle cx="22" cy="10" r="3" fill="#111827"/>
+                      <circle cx="10" cy="22" r="3" fill="#111827"/><circle cx="22" cy="22" r="3" fill="#111827"/>
+                    </svg>
+                    verifone
+                  </div>
+                  <div class="brand-sub">pay</div>
+                </div>
+                <div class="signin-card">
+                  <h1>Welcome</h1>
+                  <div class="subtitle">Sign in to your account to continue</div>
+                  <label class="field-label">Email</label>
+                  <div class="field-wrap">
+                    <input class="email-input" type="email" placeholder="cashier@coffeecorner.com" oninput="handleInput('uc2')" />
+                  </div>
+                  <label class="field-label">Password</label>
+                  <div class="field-wrap">
+                    <input class="password-input" type="password" placeholder="••••••••••" oninput="handleInput('uc2')" />
+                    <button class="eye-toggle" type="button" onclick="togglePassword('uc2')" aria-label="Show password">
+                      <svg class="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                  <button class="signin-btn" disabled onclick="signIn('uc2')">Sign In</button>
+                </div>
+                <div class="signin-hint">Role: Merchant Cashier</div>
+              </div>
+            </div>
+
+            <!-- Home -->
+            <div class="screen" data-screen="home">
+              <div class="app-header">
+                <h1>Coffee Corner</h1>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" color="#334155"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
+              </div>
+              <div class="app-scroll">
+                <div class="greeting">Hello Alex!</div>
+                <div class="tap-banner locked">
+                  <div class="tap-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                  </div>
+                  <div class="tap-text">
+                    <div class="tap-title">Tap-to-Pay activation restricted</div>
+                    <div class="tap-sub">Only a Merchant Admin or Supervisor can activate this device</div>
+                  </div>
+                </div>
+                <div class="info-card">
+                  <div class="info-card-head">
+                    <div class="info-card-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>
+                      Sales
+                    </div>
+                    <div class="info-card-period">Today
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+                  <div class="info-card-desc">Take your first payment and your total, transactions, average sale, and refunds will appear here.</div>
+                </div>
+              </div>
+              <div class="bottom-nav">
+                <button class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/></svg>Home</button>
+                <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="0.5"/><rect x="12" y="7" width="3" height="10" rx="0.5"/><rect x="17" y="9" width="3" height="8" rx="0.5"/></svg>Sales</button>
+                <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/></svg>Payouts</button>
+                <button class="nav-item charge-nav" onclick="tapCharge('uc2')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Charge</button>
+                <button class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Devices</button>
+              </div>
+              <div class="home-indicator"></div>
+            </div>
+
+            <!-- Not activated modal -->
+            <div class="modal-overlay blocked-modal">
+              <div class="result-modal error">
+                <div class="result-icon">!</div>
+                <h3>Device is not activated</h3>
+                <p>This device hasn't been activated for Tap-to-Pay. Ask a Merchant Admin or Supervisor to activate it before you can take a charge.</p>
+                <button class="modal-close-btn" onclick="closeModal('uc2','.blocked-modal')">OK</button>
+              </div>
+            </div>
           </div>
-          <div class="copyright">Copyright © 2026 Verifone, Inc.</div>
         </div>
-        <div class="home-indicator"></div>
+
+        <button class="reset-btn" onclick="resetFlow('uc2')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Restart this flow
+        </button>
       </div>
+
     </div>
   </div>
 
-  <div class="hint">Type in both fields to see it move from Step 1 (empty, disabled) to Step 2 (filled, enabled) — the two screenshots connected into one live flow. Sign In always continues to the Home Dashboard; use "Preview error state" (top right) to see the invalid-credentials banner instead.</div>
-
   <script>
-    function togglePassword() {
-      const input = document.getElementById('password');
+    const CHECK_SVG = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+    function ucRoot(ucId) { return document.getElementById(ucId); }
+
+    function setBadge(ucId, name) {
+      ucRoot(ucId).querySelectorAll('.step-badge').forEach(b => b.classList.toggle('active', b.dataset.badge === name));
+    }
+
+    function showScreen(ucId, name) {
+      const root = ucRoot(ucId);
+      root.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.dataset.screen === name));
+      setBadge(ucId, name);
+    }
+
+    function handleInput(ucId) {
+      const root = ucRoot(ucId);
+      const email = root.querySelector('.email-input');
+      const password = root.querySelector('.password-input');
+      const btn = root.querySelector('.signin-btn');
+      const filled = email.value.trim().length > 0 && password.value.trim().length > 0;
+      email.classList.toggle('filled', email.value.length > 0);
+      password.classList.toggle('filled', password.value.length > 0);
+      btn.disabled = !filled;
+      btn.classList.toggle('enabled', filled);
+    }
+
+    function togglePassword(ucId) {
+      const input = ucRoot(ucId).querySelector('.password-input');
       input.type = input.type === 'password' ? 'text' : 'password';
     }
 
-    function toggleErrorPreview() {
-      document.getElementById('errorBanner').classList.toggle('visible');
+    function signIn(ucId) {
+      const btn = ucRoot(ucId).querySelector('.signin-btn');
+      if (btn.disabled) return;
+      showScreen(ucId, 'home');
     }
 
-    function handleInput() {
-      const email = document.getElementById('email');
-      const password = document.getElementById('password');
-      const btn = document.getElementById('signinBtn');
-      const badge1 = document.getElementById('badgeStep1');
-      const badge2 = document.getElementById('badgeStep2');
+    function openActivate(ucId) {
+      showScreen(ucId, 'activate');
+      startChecklist(ucId);
+    }
 
-      const filled = email.value.trim().length > 0 && password.value.trim().length > 0;
+    function startChecklist(ucId) {
+      const root = ucRoot(ucId);
+      const items = root.querySelectorAll('.checklist-item');
+      const readyBtn = root.querySelector('.ready-btn');
 
-      email.classList.toggle('filled', email.value.length > 0);
-      password.classList.toggle('filled', password.value.length > 0);
+      items.forEach((item, i) => {
+        item.classList.remove('done', 'active');
+        const icon = item.querySelector('.check-icon');
+        icon.classList.remove('done', 'active', 'pending');
+        icon.innerHTML = '';
+        if (i === 0) { item.classList.add('done'); icon.classList.add('done'); icon.innerHTML = CHECK_SVG; }
+        else if (i === 1) { item.classList.add('active'); icon.classList.add('active'); }
+        else { icon.classList.add('pending'); }
+      });
 
-      btn.disabled = !filled;
-      btn.classList.toggle('enabled', filled);
+      readyBtn.disabled = true;
+      readyBtn.classList.remove('enabled');
 
-      badge1.classList.toggle('active', !filled);
-      badge2.classList.toggle('active', filled);
+      let current = 1;
+      function advance() {
+        if (current >= items.length) {
+          readyBtn.disabled = false;
+          readyBtn.classList.add('enabled');
+          return;
+        }
+        const item = items[current];
+        const icon = item.querySelector('.check-icon');
+        item.classList.remove('active');
+        item.classList.add('done');
+        icon.classList.remove('active', 'pending');
+        icon.classList.add('done');
+        icon.innerHTML = CHECK_SVG;
+
+        current++;
+        if (current < items.length) {
+          const next = items[current];
+          next.classList.add('active');
+          next.querySelector('.check-icon').classList.remove('pending');
+          next.querySelector('.check-icon').classList.add('active');
+        }
+        setTimeout(advance, 850);
+      }
+      setTimeout(advance, 850);
+    }
+
+    function completeActivation(ucId) {
+      const root = ucRoot(ucId);
+      const readyBtn = root.querySelector('.ready-btn');
+      if (readyBtn.disabled) return;
+      root.dataset.activated = 'true';
+      const banner = root.querySelector('.tap-banner');
+      banner.classList.add('activated');
+      banner.querySelector('.tap-title').textContent = '✓ Tap-to-Pay activated';
+      banner.querySelector('.tap-sub').textContent = 'This device is ready to accept contactless payments.';
+      banner.onclick = null;
+      showScreen(ucId, 'home');
+    }
+
+    function tapCharge(ucId) {
+      const root = ucRoot(ucId);
+      if (root.dataset.activated === 'true') {
+        root.querySelector('.charge-modal').classList.add('open');
+        setBadge(ucId, 'charge');
+      } else {
+        root.querySelector('.blocked-modal').classList.add('open');
+        setBadge(ucId, 'blocked');
+      }
+    }
+
+    function closeModal(ucId, selector) {
+      ucRoot(ucId).querySelector(selector).classList.remove('open');
+    }
+
+    function resetFlow(ucId) {
+      const root = ucRoot(ucId);
+      root.dataset.activated = 'false';
+
+      const email = root.querySelector('.email-input');
+      const password = root.querySelector('.password-input');
+      email.value = ''; password.value = '';
+      email.classList.remove('filled'); password.classList.remove('filled');
+      password.type = 'password';
+
+      const btn = root.querySelector('.signin-btn');
+      btn.disabled = true;
+      btn.classList.remove('enabled');
+
+      const banner = root.querySelector('.tap-banner');
+      if (banner && ucId === 'uc1') {
+        banner.classList.remove('activated');
+        banner.querySelector('.tap-title').textContent = 'Tap-to-Pay is available';
+        banner.querySelector('.tap-sub').textContent = 'Activate tap-to-pay from the "Charge" page or set it up right now';
+        banner.onclick = () => openActivate(ucId);
+      }
+
+      root.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+      showScreen(ucId, 'signin');
     }
   </script>
 
