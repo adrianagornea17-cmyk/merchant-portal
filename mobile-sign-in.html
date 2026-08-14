@@ -51,6 +51,23 @@
 
   .preview-btn:hover { background: #fef2f4; }
 
+  .top-actions-left {
+    position: fixed;
+    top: 20px;
+    left: 24px;
+    z-index: 50;
+    display: none;
+  }
+
+  .top-actions-left.visible { display: block; }
+
+  .top-actions-lower {
+    position: fixed;
+    top: 300px;
+    right: 24px;
+    z-index: 50;
+  }
+
   .page-wrap {
     max-width: 1160px;
     margin: 0 auto;
@@ -1039,10 +1056,16 @@
 </head>
 <body>
 
+  <div class="top-actions-left" id="activationErrorTrigger">
+    <button class="preview-btn" onclick="previewActivationError('uc1')">Preview: activation error</button>
+  </div>
+
   <div class="top-actions">
     <a class="figma-link" href="https://www.figma.com/design/6Ody6cbR49u1S2d5UG70Hg/UXDUI-1485-%7C-Mobile-App-Device-Activation?node-id=2846-25689&p=f&t=5T6IMERzA6Dx7iZd-0" target="_blank" rel="noopener">See Figma design</a>
+  </div>
+
+  <div class="top-actions-lower">
     <button class="preview-btn" onclick="toggleLoginError()">Preview: invalid login</button>
-    <button class="preview-btn" onclick="previewActivationError('uc1')">Preview: activation error</button>
   </div>
 
   <div class="page-wrap">
@@ -1489,6 +1512,9 @@
       const root = ucRoot(ucId);
       root.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.dataset.screen === name));
       setBadge(ucId, name);
+      if (ucId === 'uc1') {
+        document.getElementById('activationErrorTrigger').classList.toggle('visible', name === 'activate');
+      }
     }
 
     function handleInput(ucId) {
