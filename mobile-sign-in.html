@@ -51,24 +51,17 @@
 
   .preview-btn:hover { background: #fef2f4; }
 
-  .top-actions-left {
-    position: fixed;
-    top: 20px;
-    left: 24px;
-    z-index: 50;
-    display: none;
+  .phone-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
   }
 
+  .top-actions-left { display: none; }
   .top-actions-left.visible { display: block; }
 
-  .top-actions-lower {
-    position: fixed;
-    top: 300px;
-    right: 24px;
-    z-index: 50;
-  }
-
-  .page-wrap {
+.page-wrap {
     max-width: 1160px;
     margin: 0 auto;
     padding: 56px 24px 80px;
@@ -537,6 +530,29 @@
   }
 
   .info-card-desc { font-size: 10.5px; color: #6b7280; line-height: 1.4; }
+
+  .devices-stats {
+    display: flex;
+    gap: 24px;
+    margin: 2px 0 10px;
+  }
+
+  .devices-stat-label { font-size: 10px; color: #6b7280; margin-bottom: 2px; }
+  .devices-stat-value { font-size: 16px; font-weight: 700; color: #111827; }
+
+  .devices-all-btn {
+    width: 100%;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .devices-all-btn:hover { background: #1d4ed8; }
 
   .bottom-nav {
     display: flex;
@@ -1056,16 +1072,8 @@
 </head>
 <body>
 
-  <div class="top-actions-left" id="activationErrorTrigger">
-    <button class="preview-btn" onclick="previewActivationError('uc1')">Preview: activation error</button>
-  </div>
-
   <div class="top-actions">
     <a class="figma-link" href="https://www.figma.com/design/6Ody6cbR49u1S2d5UG70Hg/UXDUI-1485-%7C-Mobile-App-Device-Activation?node-id=2846-25689&p=f&t=5T6IMERzA6Dx7iZd-0" target="_blank" rel="noopener">See Figma design</a>
-  </div>
-
-  <div class="top-actions-lower">
-    <button class="preview-btn" onclick="toggleLoginError()">Preview: invalid login</button>
   </div>
 
   <div class="page-wrap">
@@ -1100,7 +1108,15 @@
           <span class="step-badge" data-badge="charge"><span class="step-dot"></span>Charge</span>
         </div>
 
-        <div class="phone">
+        <div class="phone-row">
+          <div class="top-actions-left visible" id="loginErrorTrigger-uc1">
+            <button class="preview-btn" onclick="toggleLoginError('uc1')">Preview: invalid login</button>
+          </div>
+          <div class="top-actions-left" id="activationErrorTrigger">
+            <button class="preview-btn" onclick="previewActivationError('uc1')">Preview: activation error</button>
+          </div>
+
+          <div class="phone">
           <div class="phone-screen">
             <div class="notch"></div>
             <div class="status-bar">
@@ -1183,6 +1199,25 @@
                     </div>
                   </div>
                   <div class="info-card-desc">Take your first payment and your total, transactions, average sale, and refunds will appear here.</div>
+                </div>
+                <div class="info-card">
+                  <div class="info-card-head">
+                    <div class="info-card-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                      Devices
+                    </div>
+                  </div>
+                  <div class="devices-stats">
+                    <div>
+                      <div class="devices-stat-label">Activated</div>
+                      <div class="devices-stat-value">5</div>
+                    </div>
+                    <div>
+                      <div class="devices-stat-label">Not Activated</div>
+                      <div class="devices-stat-value">0</div>
+                    </div>
+                  </div>
+                  <button class="devices-all-btn">All Devices</button>
                 </div>
               </div>
               <div class="bottom-nav">
@@ -1351,6 +1386,7 @@
               </div>
             </div>
           </div>
+          </div>
         </div>
 
         <button class="reset-btn" onclick="resetFlow('uc1')">
@@ -1382,7 +1418,12 @@
           <span class="step-badge" data-badge="blocked"><span class="step-dot"></span>Charge blocked</span>
         </div>
 
-        <div class="phone">
+        <div class="phone-row">
+          <div class="top-actions-left visible" id="loginErrorTrigger-uc2">
+            <button class="preview-btn" onclick="toggleLoginError('uc2')">Preview: invalid login</button>
+          </div>
+
+          <div class="phone">
           <div class="phone-screen">
             <div class="notch"></div>
             <div class="status-bar">
@@ -1463,6 +1504,25 @@
                   </div>
                   <div class="info-card-desc">Take your first payment and your total, transactions, average sale, and refunds will appear here.</div>
                 </div>
+                <div class="info-card">
+                  <div class="info-card-head">
+                    <div class="info-card-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                      Devices
+                    </div>
+                  </div>
+                  <div class="devices-stats">
+                    <div>
+                      <div class="devices-stat-label">Activated</div>
+                      <div class="devices-stat-value">5</div>
+                    </div>
+                    <div>
+                      <div class="devices-stat-label">Not Activated</div>
+                      <div class="devices-stat-value">0</div>
+                    </div>
+                  </div>
+                  <button class="devices-all-btn">All Devices</button>
+                </div>
               </div>
               <div class="bottom-nav">
                 <button class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/></svg>Home</button>
@@ -1484,6 +1544,7 @@
               </div>
             </div>
           </div>
+          </div>
         </div>
 
         <button class="reset-btn" onclick="resetFlow('uc2')">
@@ -1500,8 +1561,8 @@
 
     function ucRoot(ucId) { return document.getElementById(ucId); }
 
-    function toggleLoginError() {
-      document.querySelectorAll('.error-banner').forEach(b => b.classList.toggle('visible'));
+    function toggleLoginError(ucId) {
+      ucRoot(ucId).querySelector('.error-banner').classList.toggle('visible');
     }
 
     function setBadge(ucId, name) {
@@ -1515,6 +1576,7 @@
       if (ucId === 'uc1') {
         document.getElementById('activationErrorTrigger').classList.toggle('visible', name === 'activate');
       }
+      document.getElementById('loginErrorTrigger-' + ucId).classList.toggle('visible', name === 'signin');
     }
 
     function handleInput(ucId) {
