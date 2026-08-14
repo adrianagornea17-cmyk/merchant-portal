@@ -18,7 +18,8 @@
     top: 20px;
     right: 24px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
     gap: 10px;
     z-index: 50;
   }
@@ -36,6 +37,19 @@
   }
 
   .figma-link:hover { background: #1d4ed8; }
+
+  .preview-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e11d48;
+    background: #fff;
+    border: 1px solid #fecdd3;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+  }
+
+  .preview-btn:hover { background: #fef2f4; }
 
   .page-wrap {
     max-width: 1160px;
@@ -364,6 +378,45 @@
     text-align: center;
   }
 
+  .error-banner {
+    display: none;
+    width: 100%;
+    align-items: flex-start;
+    gap: 8px;
+    background: #fce7f0;
+    border-bottom: 1px solid #fbcfe1;
+    margin: -20px -18px 16px;
+    padding: 12px 34px 12px 16px;
+    position: relative;
+  }
+
+  .error-banner.visible { display: flex; }
+
+  .error-banner .warn-icon { flex-shrink: 0; color: #e11d48; margin-top: 1px; }
+
+  .error-banner .error-text {
+    font-size: 11px;
+    line-height: 1.4;
+    color: #9f1239;
+    font-weight: 600;
+  }
+
+  .error-banner .error-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9f1239;
+    opacity: 0.7;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .error-banner .error-close:hover { opacity: 1; }
+
   /* -- home screen -- */
   .app-header {
     display: flex;
@@ -400,6 +453,7 @@
 
   .tap-banner.activated { background: #f0fdf4; cursor: default; }
   .tap-banner.locked { background: #f8fafc; cursor: default; }
+  .tap-banner.hidden { display: none; }
 
   .tap-icon {
     width: 27px; height: 27px;
@@ -584,6 +638,7 @@
     border-top-color: #2563eb;
     animation: spin 0.8s linear infinite;
   }
+  .screen.dimmed { filter: brightness(0.55); }
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -939,6 +994,34 @@
   .result-modal.error .modal-close-btn { background: #e11d48; }
   .result-modal.error .modal-close-btn:hover { background: #be123c; }
 
+  .modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-cancel {
+    background: none;
+    border: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+  }
+
+  .modal-retry {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 9px 22px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .modal-retry:hover { background: #1d4ed8; }
+
   .reset-btn {
     background: none;
     border: none;
@@ -958,6 +1041,8 @@
 
   <div class="top-actions">
     <a class="figma-link" href="https://www.figma.com/design/6Ody6cbR49u1S2d5UG70Hg/UXDUI-1485-%7C-Mobile-App-Device-Activation?node-id=2846-25689&p=f&t=5T6IMERzA6Dx7iZd-0" target="_blank" rel="noopener">See Figma design</a>
+    <button class="preview-btn" onclick="toggleLoginError()">Preview: invalid login</button>
+    <button class="preview-btn" onclick="previewActivationError('uc1')">Preview: activation error</button>
   </div>
 
   <div class="page-wrap">
@@ -1007,6 +1092,13 @@
             <!-- Sign in -->
             <div class="screen active" data-screen="signin">
               <div class="signin-content">
+                <div class="error-banner">
+                  <span class="warn-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  </span>
+                  <span class="error-text">The email or password you have entered is invalid</span>
+                  <button class="error-close" onclick="event.stopPropagation(); this.closest('.error-banner').classList.remove('visible')" aria-label="Dismiss">✕</button>
+                </div>
                 <div class="brand">
                   <div class="brand-logo">
                     <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
@@ -1100,6 +1192,19 @@
                 <button class="ready-btn" disabled onclick="completeActivation('uc1')">Ready to Use</button>
               </div>
               <div class="home-indicator"></div>
+            </div>
+
+            <!-- Activation error modal -->
+            <div class="modal-overlay activation-error-modal">
+              <div class="result-modal error">
+                <div class="result-icon">!</div>
+                <h3>Unable to complete</h3>
+                <p>Check your internet connection and try again. If problem persists contact <a href="#" onclick="return false;">support</a>.</p>
+                <div class="modal-actions">
+                  <button class="modal-cancel" onclick="closeActivationError('uc1')">Cancel</button>
+                  <button class="modal-retry" onclick="retryActivationFromError('uc1')">Try again</button>
+                </div>
+              </div>
             </div>
 
             <!-- Charge -->
@@ -1269,6 +1374,13 @@
             <!-- Sign in -->
             <div class="screen active" data-screen="signin">
               <div class="signin-content">
+                <div class="error-banner">
+                  <span class="warn-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  </span>
+                  <span class="error-text">The email or password you have entered is invalid</span>
+                  <button class="error-close" onclick="event.stopPropagation(); this.closest('.error-banner').classList.remove('visible')" aria-label="Dismiss">✕</button>
+                </div>
                 <div class="brand">
                   <div class="brand-logo">
                     <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
@@ -1365,6 +1477,10 @@
 
     function ucRoot(ucId) { return document.getElementById(ucId); }
 
+    function toggleLoginError() {
+      document.querySelectorAll('.error-banner').forEach(b => b.classList.toggle('visible'));
+    }
+
     function setBadge(ucId, name) {
       ucRoot(ucId).querySelectorAll('.step-badge').forEach(b => b.classList.toggle('active', b.dataset.badge === name));
     }
@@ -1403,15 +1519,20 @@
       startChecklist(ucId);
     }
 
+    const activationToken = {};
+
     function startChecklist(ucId) {
       const root = ucRoot(ucId);
       const items = root.querySelectorAll('.checklist-item');
       const readyBtn = root.querySelector('.ready-btn');
 
+      activationToken[ucId] = (activationToken[ucId] || 0) + 1;
+      const myToken = activationToken[ucId];
+
       items.forEach((item, i) => {
-        item.classList.remove('done', 'active');
+        item.classList.remove('done', 'active', 'error');
         const icon = item.querySelector('.check-icon');
-        icon.classList.remove('done', 'active', 'pending');
+        icon.classList.remove('done', 'active', 'pending', 'error');
         icon.innerHTML = '';
         if (i === 0) { item.classList.add('done'); icon.classList.add('done'); icon.innerHTML = CHECK_SVG; }
         else if (i === 1) { item.classList.add('active'); icon.classList.add('active'); }
@@ -1420,9 +1541,12 @@
 
       readyBtn.disabled = true;
       readyBtn.classList.remove('enabled');
+      readyBtn.textContent = 'Ready to Use';
+      readyBtn.onclick = () => completeActivation(ucId);
 
       let current = 1;
       function advance() {
+        if (activationToken[ucId] !== myToken) return;
         if (current >= items.length) {
           readyBtn.disabled = false;
           readyBtn.classList.add('enabled');
@@ -1446,6 +1570,25 @@
         setTimeout(advance, 850);
       }
       setTimeout(advance, 850);
+    }
+
+    function previewActivationError(ucId) {
+      const root = ucRoot(ucId);
+      activationToken[ucId] = (activationToken[ucId] || 0) + 1;
+      showScreen(ucId, 'activate');
+      root.querySelector('.screen[data-screen=activate]').classList.add('dimmed');
+      root.querySelector('.activation-error-modal').classList.add('open');
+    }
+
+    function closeActivationError(ucId) {
+      const root = ucRoot(ucId);
+      root.querySelector('.activation-error-modal').classList.remove('open');
+      root.querySelector('.screen[data-screen=activate]').classList.remove('dimmed');
+    }
+
+    function retryActivationFromError(ucId) {
+      closeActivationError(ucId);
+      openActivate(ucId);
     }
 
     function completeActivation(ucId) {
@@ -1562,6 +1705,8 @@
       const root = ucRoot(ucId);
       root.dataset.chargeCents = '0';
       updateChargeDisplay(ucId);
+      const banner = root.querySelector('.tap-banner');
+      if (banner) banner.classList.add('hidden');
       showScreen(ucId, 'home');
     }
 
@@ -1585,7 +1730,7 @@
 
       const banner = root.querySelector('.tap-banner');
       if (banner && ucId === 'uc1') {
-        banner.classList.remove('activated');
+        banner.classList.remove('activated', 'hidden');
         banner.querySelector('.tap-title').textContent = 'Tap-to-Pay is available';
         banner.querySelector('.tap-sub').textContent = 'Activate tap-to-pay from the "Charge" page or set it up right now';
         banner.onclick = () => openActivate(ucId);
@@ -1594,6 +1739,7 @@
       }
 
       root.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+      root.querySelectorAll('.screen').forEach(s => s.classList.remove('dimmed'));
       showScreen(ucId, 'signin');
     }
   </script>
