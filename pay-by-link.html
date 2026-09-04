@@ -490,6 +490,42 @@
       width: 100%;
     }
     .form-select:focus { border-color: var(--accent); }
+    .cpc-box { display:flex; align-items:center; border:1.5px solid var(--border); border-radius:8px; padding:0 10px; height:36px; background:#fff; transition:border-color 0.15s; }
+    .cpc-box:focus-within { border-color: var(--accent); }
+    .cpc-input { flex:1; min-width:0; border:none; outline:none; font-size:13.5px; font-family:inherit; color:var(--text); background:none; padding:0; }
+    .cpc-clear { background:none; border:none; cursor:pointer; color:var(--text-3); padding:2px; display:flex; align-items:center; flex-shrink:0; }
+    .cpc-clear:hover { color:var(--text); }
+    .cpc-chevron { color:var(--text-3); flex-shrink:0; margin-left:6px; }
+
+    /* ─── NEW PRODUCT SIDE PANEL ─── */
+    .np-backdrop { position:fixed; inset:0; background:rgba(15,23,42,0.4); z-index:500; opacity:0; pointer-events:none; transition:opacity 0.25s; }
+    .np-backdrop.open { opacity:1; pointer-events:all; }
+    .np-panel { position:fixed; top:0; right:0; bottom:0; width:480px; background:#fff; box-shadow:-8px 0 48px rgba(0,0,0,0.14); z-index:501; display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.28s cubic-bezier(0.4,0,0.2,1); }
+    .np-backdrop.open .np-panel { transform:translateX(0); }
+    .np-header { padding:24px 24px 20px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .np-title { font-size:20px; font-weight:700; color:var(--text); letter-spacing:-0.3px; }
+    .np-close { width:32px; height:32px; border-radius:50%; border:none; background:#111827; color:#fff; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.12s; flex-shrink:0; font-family:inherit; }
+    .np-close:hover { background:#374151; }
+    .np-body { flex:1; overflow-y:auto; padding:0 24px 24px; display:flex; flex-direction:column; gap:20px; }
+    .np-field { display:flex; flex-direction:column; gap:7px; }
+    .np-label { font-size:13.5px; font-weight:500; color:var(--text-2); }
+    .np-label .optional { font-weight:400; color:var(--text-4); font-size:12.5px; margin-left:4px; }
+    .np-input, .np-select, .np-textarea { border:1.5px solid var(--border); border-radius:999px; padding:0 16px; height:44px; font-size:14px; color:var(--text); background:#fff; outline:none; font-family:inherit; transition:border-color 0.15s; width:100%; appearance:none; }
+    .np-input:disabled, .np-select:disabled { background:#f3f4f6; color:#9ca3af; cursor:not-allowed; }
+    .np-input::placeholder { color:#d1d5db; }
+    .np-input:focus, .np-select:focus, .np-textarea:focus { border-color:var(--accent); }
+    .np-select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 16px center; padding-right:40px; cursor:pointer; }
+    .np-textarea { border-radius:16px; height:100px; padding:12px 16px; resize:none; }
+    .np-error { font-size:12px; color:#e11d48; margin-top:-2px; }
+    .np-currency-wrap { display:flex; align-items:stretch; border:1.5px solid var(--border); border-radius:999px; overflow:hidden; height:44px; transition:border-color 0.15s; }
+    .np-currency-wrap:focus-within { border-color:var(--accent); }
+    .np-currency-tab { background:#f3f4f6; border:none; border-right:1.5px solid var(--border); padding:0 14px; font-size:13.5px; font-weight:600; color:var(--text-2); cursor:pointer; white-space:nowrap; flex-shrink:0; font-family:inherit; appearance:none; border-radius:0; }
+    .np-currency-input { border:none; outline:none; padding:0 16px; font-size:14px; color:var(--text); font-family:inherit; width:100%; background:transparent; text-align:right; }
+    .np-footer { padding:16px 24px 20px; border-top:1px solid #f3f4f6; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .np-cancel-btn { background:none; border:none; color:#ef4444; font-size:14px; font-weight:500; cursor:pointer; padding:8px 4px; font-family:inherit; transition:color 0.12s; }
+    .np-cancel-btn:hover { color:#dc2626; }
+    .np-save-btn { background:var(--accent); border:none; color:#fff; font-size:14px; font-weight:600; cursor:pointer; padding:0 28px; height:42px; border-radius:999px; font-family:inherit; transition:background 0.12s; }
+    .np-save-btn:hover { background:#1d4ed8; }
 
     .form-hint {
       font-size: 11.5px;
@@ -1301,6 +1337,12 @@
 
     .cs-card { background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,0.05); }
     .cs-card-title { font-size:11.5px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:14px; }
+    .cs-card-title-row { display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
+    .cs-card-title-row .cs-card-title { margin-bottom:0; }
+    .cs-adv-chevron { color:var(--text-3); flex-shrink:0; transition:transform 0.2s; }
+    .cs-adv-chevron.open { transform:rotate(180deg); }
+    .cs-adv-body { display:none; margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+    .cs-adv-body.open { display:block; }
 
     .cs-options { display:flex; flex-direction:column; }
     .cs-option-row { display:flex; align-items:center; gap:10px; padding:9px 0; cursor:pointer; border-bottom:1px solid #f1f5f9; user-select:none; }
@@ -1931,10 +1973,32 @@
             <!-- LEFT: Settings panel -->
             <div class="create-left">
 
+              <!-- Organization + Payment Provider Contract -->
+              <div class="cs-card">
+                <div class="form-group" style="margin-bottom:14px;">
+                  <label class="form-label">Organization</label>
+                  <select class="form-select">
+                    <option>Parent</option>
+                    <option>Child Org 1</option>
+                    <option>Child Org 2</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label">Payment Provider Contract</label>
+                  <div class="cpc-box">
+                    <input class="cpc-input" type="text" value="Contract 1">
+                    <button class="cpc-clear" type="button" title="Clear" onclick="this.previousElementSibling.value='';this.previousElementSibling.focus();">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                    <svg class="cpc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                </div>
+              </div>
+
               <!-- Amount + Description -->
               <div class="cs-card">
                 <div class="cs-card-title">Amount</div>
-                <div style="display:flex;gap:8px;margin-bottom:14px;">
+                <div id="cs-amount-row" style="display:flex;gap:8px;margin-bottom:14px;">
                   <select id="cs-currency" class="form-select" style="width:96px;flex-shrink:0;" onchange="updatePreview()">
                     <option>AUD</option><option>GBP</option><option>USD</option><option>EUR</option><option>SEK</option><option>NZD</option>
                   </select>
@@ -1944,10 +2008,18 @@
                   <label class="form-label">Product name <span style="color:var(--text-3);font-weight:400;">(optional)</span></label>
                   <div class="pn-wrap" id="pn-wrap">
                     <div class="pn-box" id="pn-box" onclick="togglePnDropdown()">
-                      <input class="pn-input" id="pn-input" type="text" placeholder="Search by product name" autocomplete="off" oninput="updatePreview()">
+                      <input class="pn-input" id="pn-input" type="text" placeholder="Search by product name" autocomplete="off" oninput="pnInputChanged();updatePreview()">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--text-4);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
                     <div class="pn-dropdown" id="pn-dropdown">
+                      <div class="pn-option" style="display:flex;justify-content:space-between;align-items:center;" onclick="pnSelectExisting('Coffee Mug','AUD 12.00')">
+                        <span>Coffee Mug</span>
+                        <span style="color:var(--text-4);">AUD 12.00</span>
+                      </div>
+                      <div class="pn-option" style="display:flex;justify-content:space-between;align-items:center;" onclick="pnSelectExisting('T-Shirt','AUD 25.00')">
+                        <span>T-Shirt</span>
+                        <span style="color:var(--text-4);">AUD 25.00</span>
+                      </div>
                       <div class="pn-option pn-action" onclick="pnSelect('add-catalog')">
                         <span class="pn-plus">+</span> Add to product catalog
                       </div>
@@ -1959,28 +2031,15 @@
                   </div>
                 </div>
 
-                <!-- Manual product section (hidden until selected) -->
-                <div id="pn-manual-form" style="display:none;margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
-
-                  <!-- Section header with close -->
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-                    <span style="font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;">Products</span>
-                    <button onclick="pnCloseManual()" style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:18px;line-height:1;padding:2px 4px;border-radius:6px;font-family:inherit;" title="Remove">×</button>
+                <!-- Manual products summary (hidden until products are added) -->
+                <div id="pn-manual-summary" style="display:none;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;">
+                  <div>
+                    <div id="pn-manual-summary-count" style="font-size:13px;font-weight:600;color:#0f172a;"></div>
+                    <div style="font-size:12px;color:var(--text-4);">Total: <span id="pn-manual-summary-total" style="font-weight:600;color:#0f172a;"></span></div>
                   </div>
-
-                  <!-- Product list -->
-                  <div id="pn-product-list"></div>
-
-                  <!-- Add another product -->
-                  <button onclick="pnAddProduct()" style="display:flex;align-items:center;gap:6px;background:none;border:1.5px dashed var(--border);border-radius:10px;width:100%;padding:10px 14px;font-size:13px;font-weight:500;color:var(--accent);cursor:pointer;font-family:inherit;transition:background 0.1s;margin-top:4px;" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='none'">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Add another product
-                  </button>
-
-                  <!-- Total -->
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:12px;border-top:1.5px solid var(--border);">
-                    <span style="font-size:14px;font-weight:700;color:#0f172a;">Total Price</span>
-                    <span id="pn-total" style="font-size:15px;font-weight:700;color:#0f172a;">GBP 0.00</span>
+                  <div style="display:flex;gap:6px;flex-shrink:0;">
+                    <button onclick="openManualProductsPanel()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:500;color:var(--text-2);cursor:pointer;font-family:inherit;">Edit</button>
+                    <button onclick="pnCloseManual()" title="Remove" style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:18px;line-height:1;padding:2px 6px;border-radius:6px;font-family:inherit;">×</button>
                   </div>
                 </div>
               </div>
@@ -2108,6 +2167,37 @@
                     <span class="cs-opt-hint">customer can add gratuity at checkout</span>
                   </div>
 
+                </div>
+              </div>
+
+              <!-- Advanced options -->
+              <div class="cs-card">
+                <div class="cs-card-title-row" onclick="toggleAdvOptions()">
+                  <div class="cs-card-title">Advanced options</div>
+                  <svg id="adv-opts-chevron" class="cs-adv-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="cs-adv-body" id="adv-opts-body">
+                  <div class="cs-options">
+
+                    <div class="cs-option-row" onclick="toggleOption(this,'opt-invoice')">
+                      <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                      <span class="cs-opt-label">Invoice Number</span>
+                      <span class="cs-opt-hint">optional</span>
+                    </div>
+                    <div class="cs-opt-fields" id="opt-invoice">
+                      <input class="form-input" type="text" placeholder="">
+                    </div>
+
+                    <div class="cs-option-row" onclick="toggleOption(this,'opt-sales-id')">
+                      <div class="cb-box"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                      <span class="cs-opt-label">Sales Identifier</span>
+                      <span class="cs-opt-hint">optional</span>
+                    </div>
+                    <div class="cs-opt-fields" id="opt-sales-id">
+                      <input class="form-input" type="text" placeholder="">
+                    </div>
+
+                  </div>
                 </div>
               </div>
 
@@ -2375,6 +2465,81 @@
 
           </div><!-- /create-modal-body -->
 
+          <!-- ══════════════ NEW PRODUCT SIDE PANEL ══════════════ -->
+          <div class="np-backdrop" id="np-backdrop" onclick="if(event.target===this)closeNewProduct()">
+            <div class="np-panel" role="dialog" aria-modal="true" aria-label="New Product">
+              <div class="np-header">
+                <span class="np-title">New Product</span>
+                <button class="np-close" onclick="closeNewProduct()" aria-label="Close">✕</button>
+              </div>
+              <div class="np-body">
+                <div class="np-field">
+                  <label class="np-label">Organization</label>
+                  <select class="np-select" disabled>
+                    <option>ALLFresh eCom_site</option>
+                  </select>
+                </div>
+                <div class="np-field">
+                  <label class="np-label">Product Name</label>
+                  <input class="np-input" id="np-name" type="text" placeholder="Enter a name" style="border-color:var(--accent);">
+                  <div class="np-error">Please fill up the required field</div>
+                </div>
+                <div class="np-field">
+                  <label class="np-label">Product Description <span class="optional">(Optional)</span></label>
+                  <textarea class="np-textarea" placeholder="Enter a description"></textarea>
+                </div>
+                <div class="np-field">
+                  <label class="np-label">Product Currency/Price</label>
+                  <div class="np-currency-wrap">
+                    <select class="np-currency-tab">
+                      <option>AUD</option><option>GBP</option><option>USD</option><option>EUR</option>
+                    </select>
+                    <input class="np-currency-input" type="number" min="0" step="0.01" value="15.00">
+                  </div>
+                </div>
+                <div class="np-field">
+                  <label class="np-label">Product ID/SKU</label>
+                  <input class="np-input" type="text" placeholder="Enter an id/sku">
+                </div>
+                <div class="np-field">
+                  <label class="np-label">Product URL <span class="optional">(Optional)</span></label>
+                  <input class="np-input" type="url" placeholder="Insert product url">
+                </div>
+              </div>
+              <div class="np-footer">
+                <button class="np-cancel-btn" onclick="closeNewProduct()">Cancel</button>
+                <button class="np-save-btn" onclick="saveNewProduct()">Save &amp; Close</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ ADD PRODUCTS MANUALLY SIDE PANEL ══════════════ -->
+          <div class="np-backdrop" id="mp-backdrop" onclick="if(event.target===this)cancelManualProductsPanel()">
+            <div class="np-panel" style="width:560px;" role="dialog" aria-modal="true" aria-label="Add products manually">
+              <div class="np-header">
+                <span class="np-title">Add products manually</span>
+                <button class="np-close" onclick="cancelManualProductsPanel()" aria-label="Close">✕</button>
+              </div>
+              <div class="np-body">
+                <div id="pn-product-list"></div>
+
+                <button onclick="pnAddProduct()" style="display:flex;align-items:center;gap:6px;background:none;border:1.5px dashed var(--border);border-radius:10px;width:100%;padding:10px 14px;font-size:13px;font-weight:500;color:var(--accent);cursor:pointer;font-family:inherit;transition:background 0.1s;" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='none'">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Add another product
+                </button>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1.5px solid var(--border);">
+                  <span style="font-size:14px;font-weight:700;color:#0f172a;">Total Price</span>
+                  <span id="pn-total" style="font-size:15px;font-weight:700;color:#0f172a;">GBP 0.00</span>
+                </div>
+              </div>
+              <div class="np-footer">
+                <button class="np-cancel-btn" onclick="cancelManualProductsPanel()">Cancel</button>
+                <button class="np-save-btn" onclick="doneManualProductsPanel()">Done</button>
+              </div>
+            </div>
+          </div>
+
           <!-- SUCCESS FOOTER BAR -->
           <div class="success-footer-bar" id="success-footer-bar">
             <a class="sfb-left" onclick="closeCreateModal()">
@@ -2604,6 +2769,11 @@
     if (fields) fields.classList.toggle('open');
   }
 
+  function toggleAdvOptions() {
+    document.getElementById('adv-opts-body').classList.toggle('open');
+    document.getElementById('adv-opts-chevron').classList.toggle('open');
+  }
+
   function createLink() {
     const amountEl = document.getElementById('cs-amount');
     const amount = parseFloat(amountEl?.value) || 22;
@@ -2662,24 +2832,116 @@
 
   let pnProductCount = 0;
 
+  function setAmountRowVisible(visible) {
+    const amount = document.getElementById('cs-amount');
+    if (amount) amount.style.display = visible ? 'block' : 'none';
+  }
+
+  function pnInputChanged() {
+    const input = document.getElementById('pn-input');
+    if (input && input.value.trim() === '') setAmountRowVisible(true);
+  }
+
+  function pnSelectExisting(name, priceLabel) {
+    document.getElementById('pn-box').classList.remove('open');
+    document.getElementById('pn-dropdown').classList.remove('open');
+    document.getElementById('pn-input').value = name;
+    setAmountRowVisible(false);
+    updatePreview();
+  }
+
+  let pnActiveNewProductRow = null;
+
+  function toggleRowPnDropdown(idx) {
+    document.getElementById('pn-box-' + idx).classList.toggle('open');
+    document.getElementById('pn-dropdown-' + idx).classList.toggle('open');
+  }
+
+  function pnRowSelectExisting(idx, name, price) {
+    document.getElementById('pn-box-' + idx).classList.remove('open');
+    document.getElementById('pn-dropdown-' + idx).classList.remove('open');
+    document.getElementById('pn-input-' + idx).value = name;
+    const priceInput = document.querySelector('#pn-prod-' + idx + ' .pn-price-inp');
+    if (priceInput) { priceInput.value = price; updatePnTotal(); }
+  }
+
+  function pnRowAddCatalog(idx) {
+    document.getElementById('pn-box-' + idx).classList.remove('open');
+    document.getElementById('pn-dropdown-' + idx).classList.remove('open');
+    pnActiveNewProductRow = idx;
+    openNewProduct();
+  }
+
   function pnSelect(action) {
     document.getElementById('pn-box').classList.remove('open');
     document.getElementById('pn-dropdown').classList.remove('open');
     if (action === 'manual') {
       document.getElementById('pn-input').value = '';
-      document.getElementById('pn-manual-form').style.display = 'block';
       document.getElementById('pn-product-list').innerHTML = '';
       pnProductCount = 0;
       pnAddProduct();
-    } else {
-      document.getElementById('pn-manual-form').style.display = 'none';
+      openManualProductsPanel();
+    } else if (action === 'add-catalog') {
+      pnActiveNewProductRow = null;
+      openNewProduct();
     }
   }
 
-  function pnCloseManual() {
-    document.getElementById('pn-manual-form').style.display = 'none';
+  function openNewProduct() {
+    document.getElementById('np-backdrop').classList.add('open');
+  }
+
+  function openManualProductsPanel() {
+    document.getElementById('mp-backdrop').classList.add('open');
+  }
+
+  function closeManualProductsPanel() {
+    document.getElementById('mp-backdrop').classList.remove('open');
+  }
+
+  function cancelManualProductsPanel() {
     document.getElementById('pn-product-list').innerHTML = '';
     pnProductCount = 0;
+    closeManualProductsPanel();
+    setAmountRowVisible(true);
+    document.getElementById('pn-manual-summary').style.display = 'none';
+  }
+
+  function doneManualProductsPanel() {
+    closeManualProductsPanel();
+    if (pnProductCount > 0) {
+      setAmountRowVisible(false);
+      document.getElementById('pn-manual-summary-count').textContent = pnProductCount + (pnProductCount === 1 ? ' product added' : ' products added');
+      document.getElementById('pn-manual-summary-total').textContent = document.getElementById('pn-total')?.textContent || '';
+      document.getElementById('pn-manual-summary').style.display = 'flex';
+    } else {
+      cancelManualProductsPanel();
+    }
+  }
+
+  function closeNewProduct() {
+    document.getElementById('np-backdrop').classList.remove('open');
+  }
+
+  function saveNewProduct() {
+    const name = document.getElementById('np-name')?.value.trim() || 'New product';
+    if (pnActiveNewProductRow) {
+      const input = document.getElementById('pn-input-' + pnActiveNewProductRow);
+      if (input) input.value = name;
+      pnActiveNewProductRow = null;
+    } else {
+      document.getElementById('pn-input').value = name;
+      setAmountRowVisible(false);
+    }
+    closeNewProduct();
+    updatePreview();
+  }
+
+  function pnCloseManual() {
+    document.getElementById('pn-product-list').innerHTML = '';
+    pnProductCount = 0;
+    document.getElementById('pn-manual-summary').style.display = 'none';
+    setAmountRowVisible(true);
   }
 
   function pnAddProduct() {
@@ -2695,7 +2957,26 @@
       </div>
       <div class="form-group" style="margin-bottom:12px;">
         <label class="form-label">Product Name <span style="color:#e11d48;">*</span></label>
-        <input class="form-input" type="text" placeholder="Enter product name">
+        <div class="pn-wrap" id="pn-wrap-${idx}">
+          <div class="pn-box" id="pn-box-${idx}" onclick="toggleRowPnDropdown(${idx})">
+            <input class="pn-input" id="pn-input-${idx}" type="text" placeholder="Search or enter product name" autocomplete="off">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--text-4);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="pn-dropdown" id="pn-dropdown-${idx}">
+            <div class="pn-option" style="display:flex;justify-content:space-between;align-items:center;" onclick="pnRowSelectExisting(${idx},'Coffee Mug',12.00)">
+              <span>Coffee Mug</span>
+              <span style="color:var(--text-4);">${cur} 12.00</span>
+            </div>
+            <div class="pn-option" style="display:flex;justify-content:space-between;align-items:center;" onclick="pnRowSelectExisting(${idx},'T-Shirt',25.00)">
+              <span>T-Shirt</span>
+              <span style="color:var(--text-4);">${cur} 25.00</span>
+            </div>
+            <div class="pn-option pn-action" onclick="pnRowAddCatalog(${idx})">
+              <span class="pn-plus">+</span> Add to product catalog
+            </div>
+            <div class="pn-hint">Type to search...</div>
+          </div>
+        </div>
       </div>
       <div class="form-group" style="margin-bottom:12px;">
         <label class="form-label">Product Description <span class="optional">(Optional)</span></label>
@@ -2747,6 +3028,12 @@
       document.getElementById('pn-box')?.classList.remove('open');
       document.getElementById('pn-dropdown')?.classList.remove('open');
     }
+    document.querySelectorAll('[id^="pn-wrap-"]').forEach(rowWrap => {
+      if (!rowWrap.contains(e.target)) {
+        rowWrap.querySelector('.pn-box')?.classList.remove('open');
+        rowWrap.querySelector('.pn-dropdown')?.classList.remove('open');
+      }
+    });
   });
 
   /* ─── PAYMENT METHOD MULTI-SELECT ─── */
