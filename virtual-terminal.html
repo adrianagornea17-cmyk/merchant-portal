@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifone Central — Virtual Terminal</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --nav-w: 208px;
+      --nav-collapsed-w: 64px;
+      --nav-bg: #ffffff;
+      --border: #e5e7eb;
+      --bg: #f4f5f7;
+      --text: #111827;
+      --text-2: #374151;
+      --text-3: #6b7280;
+      --text-4: #9ca3af;
+      --active-bg: #2563eb;
+      --active-text: #ffffff;
+      --hover-bg: #f3f4f6;
+      --accent: #2563eb;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ─── NAV RAIL ─── */
+    #nav-rail {
+      width: var(--nav-w);
+      min-width: var(--nav-w);
+      background: var(--nav-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      transition: width 0.22s ease, min-width 0.22s ease;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 20;
+    }
+    #nav-rail.collapsed { width: var(--nav-collapsed-w); min-width: var(--nav-collapsed-w); }
+
+    .nav-logo {
+      padding: 16px 14px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 9px;
+      flex-shrink: 0; overflow: hidden; white-space: nowrap;
+    }
+    .nav-logo-icon { flex-shrink: 0; }
+    .nav-logo-text { font-size: 16px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; transition: opacity 0.15s; }
+    #nav-rail.collapsed .nav-logo-text { opacity: 0; pointer-events: none; }
+
+    .nav-collapse-btn {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px; border-radius: 7px;
+      color: var(--text-3); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; background: none; border: none;
+      margin: 8px 8px 2px; text-align: left;
+      transition: background 0.1s, color 0.1s;
+      overflow: hidden; white-space: nowrap; width: calc(100% - 16px);
+    }
+    .nav-collapse-btn:hover { background: var(--hover-bg); color: var(--text); }
+    .nav-collapse-btn .nc-icon { flex-shrink: 0; transition: transform 0.22s; }
+    #nav-rail.collapsed .nav-collapse-btn .nc-icon { transform: scaleX(-1); }
+    .nav-collapse-btn .nc-label { transition: opacity 0.15s; }
+    #nav-rail.collapsed .nav-collapse-btn .nc-label { opacity: 0; pointer-events: none; }
+
+    .nav-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 4px 8px; }
+    .nav-scroll::-webkit-scrollbar { width: 3px; }
+    .nav-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 7px;
+      color: var(--text-2); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; background: none; border: none;
+      width: 100%; text-align: left;
+      transition: background 0.1s, color 0.1s;
+      text-decoration: none; overflow: hidden; white-space: nowrap; position: relative;
+    }
+    .nav-item:hover { background: var(--hover-bg); color: var(--text); }
+    .nav-item.active { background: var(--active-bg); color: var(--active-text); font-weight: 600; }
+    .nav-item .ni-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .nav-item .ni-label { flex: 1; transition: opacity 0.15s; }
+    #nav-rail.collapsed .nav-item .ni-label { opacity: 0; }
+    .nav-item .ni-arrow { flex-shrink: 0; transition: transform 0.22s, opacity 0.15s; display: flex; align-items: center; }
+    .nav-item.open .ni-arrow { transform: rotate(90deg); }
+    #nav-rail.collapsed .nav-item .ni-arrow { opacity: 0; }
+
+    #nav-rail.collapsed .nav-item::after {
+      content: attr(data-tooltip);
+      position: absolute; left: calc(var(--nav-collapsed-w) + 8px); top: 50%; transform: translateY(-50%);
+      background: #1e293b; color: #fff; font-size: 12px; font-weight: 500;
+      padding: 5px 10px; border-radius: 6px; white-space: nowrap;
+      pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 100;
+    }
+    #nav-rail.collapsed .nav-item:hover::after { opacity: 1; }
+
+    .nav-sub { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
+    .nav-sub.open { max-height: 600px; }
+    #nav-rail.collapsed .nav-sub { display: none; }
+
+    .nav-sub-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px 6px 34px; border-radius: 7px;
+      color: var(--text-3); font-size: 13px; font-weight: 400;
+      cursor: pointer; background: none; border: none; width: 100%; text-align: left;
+      transition: background 0.1s, color 0.1s; text-decoration: none; white-space: nowrap; overflow: hidden;
+    }
+    .nav-sub-item:hover { background: var(--hover-bg); color: var(--text-2); }
+    .nav-sub-item.active { color: var(--accent); font-weight: 500; }
+    .nav-sub-dot { width: 5px; height: 5px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; }
+    .nav-sub-item.active .nav-sub-dot { background: var(--accent); }
+
+    .nav-divider { margin: 6px 8px; border: none; border-top: 1px solid var(--border); }
+
+    .nav-bottom { padding: 8px 8px 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .nav-copyright { font-size: 10px; color: var(--text-4); padding: 4px 12px 0; white-space: nowrap; transition: opacity 0.15s; }
+    #nav-rail.collapsed .nav-copyright { opacity: 0; }
+
+    .portal-home-link {
+      display: flex; align-items: center; gap: 5px; padding: 9px 12px; border-radius: 7px;
+      font-size: 12px; font-weight: 500; color: var(--text-4);
+      text-decoration: none; border: none; background: none; cursor: pointer;
+      width: 100%; text-align: left; transition: background 0.1s, color 0.1s;
+      white-space: nowrap; overflow: hidden;
+    }
+    .portal-home-link:hover { background: var(--hover-bg); color: var(--text-3); }
+    .portal-home-link .phi { flex-shrink: 0; }
+    .portal-home-link .phl { transition: opacity 0.15s; }
+    #nav-rail.collapsed .portal-home-link .phl { opacity: 0; }
+
+    /* ─── MAIN ─── */
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+    .topbar {
+      background: #fff; border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 52px;
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 6px; font-size: 13.5px; }
+    .topbar-bc-root { color: var(--text-3); }
+    .topbar-bc-sep  { color: var(--text-4); }
+    .topbar-bc-cur  { color: var(--text); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 8px; }
+    .topbar-icon-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: none; border: none; color: var(--text-3); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s, color 0.1s;
+    }
+    .topbar-icon-btn:hover { background: var(--hover-bg); color: var(--text); }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: #1d4ed8;
+      color: #fff; font-size: 11.5px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    }
+
+    .page-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+    .page-scroll::-webkit-scrollbar { width: 4px; }
+    .page-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+    .page-content { padding: 28px 32px 48px; flex: 1; }
+
+    .page-title { font-size: 22px; font-weight: 700; color: #0f172a; letter-spacing: -0.3px; margin-bottom: 24px; }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 16px; height: 36px; border-radius: 8px;
+      font-size: 13.5px; font-weight: 500; cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+      white-space: nowrap; text-decoration: none; font-family: inherit;
+    }
+    .btn-ghost { background: none; border-color: var(--border); color: var(--text-2); }
+    .btn-ghost:hover { border-color: #9ca3af; background: var(--hover-bg); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+
+    /* ─── STEPPER ─── */
+    .stepper { display: flex; align-items: center; justify-content: center; margin-bottom: 28px; gap: 0; }
+    .step-item { display: flex; align-items: center; gap: 10px; }
+    .step-circle {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .step-circle.inactive { background: #fff; border: 2px solid #d1d5db; color: var(--text-4); }
+    .step-circle.active { background: var(--accent); border: 2px solid var(--accent); color: #fff; }
+    .step-circle.done { background: var(--accent); border: 2px solid var(--accent); color: #fff; }
+    .step-label { font-size: 13px; font-weight: 500; color: var(--text-3); transition: color 0.2s; }
+    .step-label.active { color: var(--text); font-weight: 600; }
+    .step-label.done { color: var(--accent); }
+    .step-connector { width: 64px; height: 2px; background: #e5e7eb; margin: 0 12px; flex-shrink: 0; transition: background 0.2s; }
+    .step-connector.done { background: var(--accent); }
+
+    /* ─── FLOW CARD ─── */
+    .flow-card {
+      background: #fff; border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 24px 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 2px 12px rgba(0,0,0,0.04);
+      max-width: 760px; margin: 0 auto;
+    }
+    .flow-card.wide { max-width: 900px; }
+
+    .flow-section-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* ─── FORM ─── */
+    .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    .form-label { font-size: 12.5px; font-weight: 500; color: var(--text-2); }
+    .form-label .optional { color: var(--text-4); font-weight: 400; }
+
+    .form-control { position: relative; }
+    .form-input, .form-select {
+      height: 36px; width: 100%;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 0 12px; font-size: 13.5px; color: var(--text);
+      font-family: inherit; background: #fff; outline: none;
+      transition: border-color 0.15s; appearance: none; -webkit-appearance: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--accent); }
+    .form-input::placeholder { color: var(--text-4); }
+    .form-input.prefilled, .form-select.prefilled { background: #eff6ff; border-color: #bfdbfe; }
+    .form-select.disabled { background: #f3f4f6; color: var(--text-4); cursor: not-allowed; }
+    .form-select { padding-right: 30px; cursor: pointer; }
+
+    .fc-chevron { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-3); pointer-events: none; }
+    .fc-clear { position: absolute; right: 30px; top: 50%; transform: translateY(-50%); color: var(--text-4); pointer-events: none; }
+
+    .amount-row { display: flex; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; height: 36px; }
+    .amount-currency {
+      background: #f3f4f6; color: var(--text-3); font-size: 13.5px; font-weight: 500;
+      display: flex; align-items: center; padding: 0 12px; border-right: 1.5px solid var(--border); flex-shrink: 0;
+    }
+    .amount-input { border: none; outline: none; font-size: 13.5px; text-align: right; padding: 0 12px; flex: 1; font-family: inherit; color: var(--text); }
+
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .check-row { display: flex; flex-direction: column; align-items: flex-start; flex-wrap: wrap; }
+    .check-label { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-2); cursor: pointer; font-weight: 500; }
+    .check-label input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+
+    .radio-group { display: flex; flex-direction: column; gap: 10px; }
+    .radio-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-2); cursor: pointer; font-weight: 500; }
+    .radio-row input[type="radio"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+
+    .optional-field-box { margin-top: 8px; }
+
+    /* ─── STEP 2 : TWO SECTIONS ─── */
+    .vt-two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; }
+    .vt-col-title { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .vt-col-title .cti { font-size: 13.5px; font-weight: 700; color: #0f172a; }
+    .card-icon-sm { width: 28px; height: 28px; border-radius: 7px; background: #fff7ed; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    /* ─── FOOTER ─── */
+    .vt-footer { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 6px; }
+
+    .secure-footnote { text-align: center; font-size: 12px; color: var(--text-4); margin-top: 18px; }
+
+    /* ─── SUCCESS ─── */
+    .txn-success-card { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; max-width: 620px; margin: 0 auto; box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 2px 12px rgba(0,0,0,0.04); }
+    .txn-success-top { text-align: center; padding: 28px 24px 22px; }
+    .txn-check-circle { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #16a34a; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+    .txn-success-title { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+
+    .txn-detail-list { border-top: 1px solid var(--border); }
+    .txn-detail-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; border-bottom: 1px solid var(--border); }
+    .txn-detail-row:last-child { border-bottom: none; }
+    .txn-detail-label { font-size: 13px; color: var(--text-3); }
+    .txn-detail-value { font-size: 13px; color: var(--text); font-weight: 600; }
+    .txn-detail-value.txn-amount { font-weight: 700; }
+    .txn-detail-value.txn-card-number { font-family: 'SFMono-Regular', Consolas, monospace; letter-spacing: 0.5px; }
+
+    .success-page-footer { max-width: 620px; margin: 20px auto 0; display: flex; }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV RAIL ─── -->
+<nav id="nav-rail" aria-label="Main navigation">
+
+  <div class="nav-logo">
+    <svg class="nav-logo-icon" width="28" height="28" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="#0f172a"/>
+      <circle cx="10" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="22" cy="10" r="3" fill="#38bdf8"/>
+      <circle cx="10" cy="22" r="3" fill="#60a5fa"/>
+      <circle cx="22" cy="22" r="3" fill="#60a5fa"/>
+    </svg>
+    <span class="nav-logo-text">Verifone</span>
+  </div>
+
+  <button class="nav-collapse-btn" onclick="toggleCollapse()" title="Collapse sidebar">
+    <svg class="nc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>
+    </svg>
+    <span class="nc-label">Collapse</span>
+  </button>
+
+  <div class="nav-scroll">
+
+    <button class="nav-item" data-tooltip="Home" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="ni-label">Home</span>
+    </button>
+
+    <button class="nav-item" data-tooltip="Reporting tools" onclick="toggleSection(this,'sub-reporting')">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+      <span class="ni-label">Reporting tools</span>
+      <span class="ni-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </button>
+    <div class="nav-sub" id="sub-reporting">
+      <a class="nav-sub-item" href="payments-dashboard.html"><span class="nav-sub-dot"></span>Payments Dashboard</a>
+      <a class="nav-sub-item" href="verifone-transactions.html"><span class="nav-sub-dot"></span>Orders / Transactions</a>
+      <a class="nav-sub-item" href="3ds-authentications.html"><span class="nav-sub-dot"></span>3D Secure Authentications</a>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Settlements</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Report Scheduler</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Generated Reports</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Audit Log</button>
+    </div>
+
+    <button class="nav-item open active" data-tooltip="Payment tools" onclick="toggleSection(this,'sub-payment')">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+      <span class="ni-label">Payment tools</span>
+      <span class="ni-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </button>
+    <div class="nav-sub open" id="sub-payment">
+      <button class="nav-sub-item active" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Virtual Terminal</button>
+      <a class="nav-sub-item" href="pay-by-link.html"><span class="nav-sub-dot"></span>Pay by Link</a>
+      <a class="nav-sub-item" href="customer-catalog.html"><span class="nav-sub-dot"></span>Customer Catalog</a>
+      <a class="nav-sub-item" href="product-catalog.html"><span class="nav-sub-dot"></span>Product Catalog</a>
+    </div>
+
+    <button class="nav-item" data-tooltip="Devices" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg></span>
+      <span class="ni-label">Devices</span>
+    </button>
+
+    <button class="nav-item" data-tooltip="Admin" onclick="toggleSection(this,'sub-admin')">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+      <span class="ni-label">Admin</span>
+      <span class="ni-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </button>
+    <div class="nav-sub" id="sub-admin">
+      <a class="nav-sub-item" href="administration-organizations.html"><span class="nav-sub-dot"></span>Organizations</a>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Payment Provider Contracts</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Users</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Checkout Themes</button>
+      <button class="nav-sub-item" onclick="setSubActive(this)"><span class="nav-sub-dot"></span>Notifications</button>
+    </div>
+
+    <button class="nav-item" data-tooltip="Boarding" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg></span>
+      <span class="ni-label">Boarding</span>
+    </button>
+
+    <hr class="nav-divider">
+
+    <button class="nav-item" data-tooltip="Org. filter" onclick="setActive(this)">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+      <span class="ni-label">Org. filter</span>
+    </button>
+
+    <a class="nav-item" href="support.html" data-tooltip="Support">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+      <span class="ni-label">Support</span>
+    </a>
+
+  </div>
+
+  <div class="nav-bottom">
+    <a href="index.html" class="portal-home-link" data-tooltip="Portal Home">
+      <svg class="phi" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <span class="phl">Portal Home</span>
+    </a>
+    <button class="nav-item" data-tooltip="Logout" style="color:#6b7280;">
+      <span class="ni-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+      <span class="ni-label">Logout</span>
+    </button>
+    <div class="nav-copyright">© 2026 Verifone</div>
+  </div>
+
+</nav>
+
+
+<!-- ─── MAIN ─── -->
+<div id="main">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-bc-root">Payment tools</span>
+      <span class="topbar-bc-sep">/</span>
+      <span class="topbar-bc-cur">Virtual Terminal</span>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </button>
+      <div class="avatar" title="Adriana Gornea">AG</div>
+    </div>
+  </header>
+
+  <div class="page-scroll">
+    <div class="page-content">
+
+      <div class="page-title">Virtual Terminal</div>
+
+      <!-- Stepper -->
+      <div class="stepper">
+        <div class="step-item">
+          <div class="step-circle active" id="circle-1">1</div>
+          <div class="step-label active" id="label-1">Payment Details</div>
+        </div>
+        <div class="step-connector" id="conn-1"></div>
+        <div class="step-item">
+          <div class="step-circle inactive" id="circle-2">2</div>
+          <div class="step-label" id="label-2">Payment Status</div>
+        </div>
+      </div>
+
+      <div class="flow-card wide" id="settings-card">
+
+        <!-- STEP 1 — Payment Settings + Payment Details (left / right) -->
+        <div class="step-panel active" id="panel-1">
+
+          <div class="vt-two-col">
+
+            <!-- LEFT: Payment Settings -->
+            <div class="settings-form-section">
+              <div class="flow-section-title">Payment Settings</div>
+
+              <div class="form-group">
+                <label class="form-label">Organization</label>
+                <div class="form-control">
+                  <select class="form-select" id="input-org">
+                    <option>Parent</option>
+                    <option>Capital Arches Group</option>
+                  </select>
+                  <svg class="fc-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Payment Provider Contract</label>
+                <div class="form-control">
+                  <select class="form-select">
+                    <option>contract 1</option>
+                    <option>contract 2</option>
+                  </select>
+                  <svg class="fc-clear" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  <svg class="fc-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Transaction Type</label>
+                <div class="form-control">
+                  <select class="form-select" id="input-txn-type" onchange="toggleRecurringOptions()">
+                    <option>Sale</option>
+                    <option>Recurring</option>
+                  </select>
+                  <svg class="fc-clear" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  <svg class="fc-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+
+              <div id="recurring-options" style="display:none;">
+                <div class="form-group check-row">
+                  <label class="check-label">
+                    <input type="checkbox" id="chk-signup-txn" onchange="toggleOptionalField('signup-txn')">
+                    <span>Sign-up Transaction</span>
+                  </label>
+                  <div class="optional-field-box" id="box-signup-txn" style="display:none;width:100%;">
+                    <label class="form-label" style="margin-top:10px;display:block;margin-bottom:5px;">Sign Up Reference</label>
+                    <input class="form-input" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Processing Model</label>
+                  <div class="radio-group">
+                    <label class="radio-row"><input type="radio" name="processing-model"><span>Credential on File</span></label>
+                    <label class="radio-row"><input type="radio" name="processing-model" checked><span>Recurring</span></label>
+                    <label class="radio-row"><input type="radio" name="processing-model"><span>Unscheduled Credential on File</span></label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Channel</label>
+                  <div class="radio-group">
+                    <label class="radio-row"><input type="radio" name="channel" checked><span>Mail</span></label>
+                    <label class="radio-row"><input type="radio" name="channel"><span>Telephone</span></label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Authorization Type</label>
+                <div class="form-control">
+                  <select class="form-select" id="input-auth-type">
+                    <option>Authorization</option>
+                    <option>Authorization + Capture</option>
+                  </select>
+                  <svg class="fc-clear" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  <svg class="fc-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Amount</label>
+                <div class="amount-row">
+                  <div class="amount-currency">AWG</div>
+                  <input class="amount-input" id="input-amount" type="text" value="20.00">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="check-label">
+                  <input type="checkbox" id="chk-merchant-ref" checked onchange="toggleOptionalField('merchant-ref')">
+                  <span>Merchant Reference <span class="optional">(Optional)</span></span>
+                </label>
+                <div class="optional-field-box" id="box-merchant-ref">
+                  <input class="form-input prefilled" id="input-ref" type="text" value="1234567">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="check-label">
+                  <input type="checkbox" id="chk-txn-desc" onchange="toggleOptionalField('txn-desc')">
+                  <span>Transaction Description <span class="optional">(Optional)</span></span>
+                </label>
+                <div class="optional-field-box" id="box-txn-desc" style="display:none;">
+                  <input class="form-input" type="text">
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="check-label">
+                  <input type="checkbox" id="chk-promo-code" onchange="toggleOptionalField('promo-code')">
+                  <span>Promo Code <span class="optional">(Optional)</span></span>
+                </label>
+                <div class="optional-field-box" id="box-promo-code" style="display:none;">
+                  <input class="form-input" type="text">
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: Payment Details (card entry) -->
+            <div class="payment-form-section">
+              <div class="flow-section-title">Payment Details</div>
+              <div class="vt-col-title">
+                <div class="card-icon-sm">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+                <div class="cti">Pay with card</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Card number</label>
+                <input class="form-input" type="text" id="input-card-number" placeholder="Your card number">
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label class="form-label">Expiration date</label>
+                  <input class="form-input" type="text" placeholder="MM/YY">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">CVV</label>
+                  <input class="form-input" type="text" placeholder="CVV">
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom:4px;">
+                <label class="form-label">Personal ID</label>
+                <input class="form-input" type="text" placeholder="Personal ID">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="vt-footer" style="margin-top:18px;">
+            <button class="btn btn-primary" onclick="createPayment()">Create</button>
+          </div>
+
+          <div class="secure-footnote">
+            Secure payments provided by Verifone
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STEP 2 — Payment Status (success) -->
+      <div class="step-panel" id="panel-2">
+        <div class="txn-success-card">
+          <div class="txn-success-top">
+            <div class="txn-check-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="txn-success-title">Transaction Processed</div>
+            <button class="btn btn-primary" onclick="toggleMoreDetails()">More Details</button>
+          </div>
+
+          <div class="txn-detail-list" id="txn-detail-list">
+            <div class="txn-detail-row"><span class="txn-detail-label">Transaction Type</span><span class="txn-detail-value" id="txn-type-3">Sale</span></div>
+            <div class="txn-detail-row"><span class="txn-detail-label">Authorization Type</span><span class="txn-detail-value" id="txn-auth-type-3">Authorization</span></div>
+            <div class="txn-detail-row"><span class="txn-detail-label">Organization</span><span class="txn-detail-value" id="txn-org-3">Parent</span></div>
+            <div class="txn-detail-row"><span class="txn-detail-label">Merchant Reference</span><span class="txn-detail-value" id="txn-ref-3">1234567</span></div>
+            <div class="txn-detail-row"><span class="txn-detail-label">Amount</span><span class="txn-detail-value txn-amount" id="txn-amount-3">AWG 20.00</span></div>
+            <div class="txn-detail-row"><span class="txn-detail-label">Card Number</span><span class="txn-detail-value txn-card-number" id="txn-card-3">4111********1111</span></div>
+            <div class="txn-detail-row"><span class="txn-detail-label">Date and Time</span><span class="txn-detail-value" id="txn-time-3">—</span></div>
+          </div>
+        </div>
+
+        <div class="success-page-footer">
+          <button class="btn btn-primary" onclick="resetTerminal()">New transaction</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const nav = document.getElementById('nav-rail');
+
+  function toggleCollapse() {
+    nav.classList.toggle('collapsed');
+    localStorage.setItem('navCollapsed', nav.classList.contains('collapsed'));
+  }
+  (function() {
+    if (localStorage.getItem('navCollapsed') === 'true') nav.classList.add('collapsed');
+  })();
+
+  function setActive(el) {
+    document.querySelectorAll('#nav-rail .nav-item').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function toggleSection(btn, subId) {
+    const sub = document.getElementById(subId || btn.nextElementSibling.id);
+    if (!sub) return;
+    const isOpen = sub.classList.contains('open');
+    sub.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+    document.querySelectorAll('#nav-rail .nav-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function setSubActive(el) {
+    const parent = el.closest('.nav-sub');
+    parent.querySelectorAll('.nav-sub-item').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function toggleRecurringOptions() {
+    const isRecurring = document.getElementById('input-txn-type').value === 'Recurring';
+    document.getElementById('recurring-options').style.display = isRecurring ? 'block' : 'none';
+  }
+
+  function toggleOptionalField(key) {
+    const checked = document.getElementById('chk-' + key).checked;
+    document.getElementById('box-' + key).style.display = checked ? 'block' : 'none';
+  }
+
+  function getMerchantRef() {
+    return document.getElementById('chk-merchant-ref').checked
+      ? (document.getElementById('input-ref').value || '—')
+      : '—';
+  }
+
+  function maskCardNumber() {
+    const raw = (document.getElementById('input-card-number').value || '4111111111111111').replace(/\s+/g, '');
+    if (raw.length < 8) return raw;
+    return raw.slice(0, 4) + '*'.repeat(raw.length - 8) + raw.slice(-4);
+  }
+
+  function setStepper(step) {
+    for (let i = 1; i <= 2; i++) {
+      const circle = document.getElementById('circle-' + i);
+      const label = document.getElementById('label-' + i);
+      const conn = document.getElementById('conn-' + i);
+      circle.classList.remove('active', 'inactive', 'done');
+      label.classList.remove('active', 'done');
+      circle.textContent = i;
+      if (conn) conn.classList.remove('done');
+
+      if (i < step) {
+        circle.classList.add('done');
+        label.classList.add('done');
+        circle.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        if (conn) conn.classList.add('done');
+      } else if (i === step) {
+        circle.classList.add('active');
+        label.classList.add('active');
+      } else {
+        circle.classList.add('inactive');
+      }
+    }
+  }
+
+  function goToStep(step) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + step).classList.add('active');
+    document.getElementById('settings-card').style.display = (step === 2) ? 'none' : 'block';
+    setStepper(step);
+    document.querySelector('.page-scroll').scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function createPayment() {
+    const amount = document.getElementById('input-amount').value || '0.00';
+    document.getElementById('txn-type-3').textContent = document.getElementById('input-txn-type').value;
+    document.getElementById('txn-auth-type-3').textContent = document.getElementById('input-auth-type').value;
+    document.getElementById('txn-org-3').textContent = document.getElementById('input-org').value;
+    document.getElementById('txn-ref-3').textContent = getMerchantRef();
+    document.getElementById('txn-amount-3').textContent = 'AWG ' + amount;
+    document.getElementById('txn-card-3').textContent = maskCardNumber();
+    document.getElementById('txn-time-3').textContent = new Date().toLocaleString();
+    document.getElementById('txn-detail-list').style.display = 'block';
+    goToStep(2);
+  }
+
+  function toggleMoreDetails() {
+    const el = document.getElementById('txn-detail-list');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function resetTerminal() {
+    document.getElementById('input-amount').value = '20.00';
+    document.getElementById('input-ref').value = '1234567';
+    document.getElementById('input-card-number').value = '';
+    goToStep(1);
+  }
+
+  setStepper(1);
+</script>
+
+</body>
+</html>
