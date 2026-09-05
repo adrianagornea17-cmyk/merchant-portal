@@ -187,47 +187,29 @@
     .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
     .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
 
-    /* ─── STEPPER ─── */
-    .stepper { display: flex; align-items: center; justify-content: center; margin-bottom: 28px; gap: 0; }
-    .step-item { display: flex; align-items: center; gap: 10px; }
-    .step-circle {
-      width: 30px; height: 30px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700; flex-shrink: 0;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .step-circle.inactive { background: #fff; border: 2px solid #d1d5db; color: var(--text-4); }
-    .step-circle.active { background: var(--accent); border: 2px solid var(--accent); color: #fff; }
-    .step-circle.done { background: var(--accent); border: 2px solid var(--accent); color: #fff; }
-    .step-label { font-size: 13px; font-weight: 500; color: var(--text-3); transition: color 0.2s; }
-    .step-label.active { color: var(--text); font-weight: 600; }
-    .step-label.done { color: var(--accent); }
-    .step-connector { width: 64px; height: 2px; background: #e5e7eb; margin: 0 12px; flex-shrink: 0; transition: background 0.2s; }
-    .step-connector.done { background: var(--accent); }
-
     /* ─── FLOW CARD ─── */
     .flow-card {
-      background: #fff; border: 1.5px solid var(--border); border-radius: 12px;
-      padding: 24px 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 2px 12px rgba(0,0,0,0.04);
-      max-width: 760px; margin: 0 auto;
+      background: #fff; border: 1.5px solid var(--border); border-radius: 14px;
+      padding: 36px 40px; box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 2px 12px rgba(0,0,0,0.04);
+      max-width: 900px; margin: 0 auto;
     }
-    .flow-card.wide { max-width: 900px; }
+    .flow-card.wide { max-width: 1240px; }
 
-    .flow-section-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+    .flow-section-title { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 20px; }
 
     .step-panel { display: none; }
     .step-panel.active { display: block; }
 
     /* ─── FORM ─── */
-    .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
-    .form-label { font-size: 12.5px; font-weight: 500; color: var(--text-2); }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+    .form-label { font-size: 13.5px; font-weight: 500; color: var(--text-2); }
     .form-label .optional { color: var(--text-4); font-weight: 400; }
 
     .form-control { position: relative; }
     .form-input, .form-select {
-      height: 36px; width: 100%;
+      height: 42px; width: 100%;
       border: 1.5px solid var(--border); border-radius: 8px;
-      padding: 0 12px; font-size: 13.5px; color: var(--text);
+      padding: 0 14px; font-size: 14.5px; color: var(--text);
       font-family: inherit; background: #fff; outline: none;
       transition: border-color 0.15s; appearance: none; -webkit-appearance: none;
     }
@@ -240,30 +222,30 @@
     .fc-chevron { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-3); pointer-events: none; }
     .fc-clear { position: absolute; right: 30px; top: 50%; transform: translateY(-50%); color: var(--text-4); pointer-events: none; }
 
-    .amount-row { display: flex; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; height: 36px; }
+    .amount-row { display: flex; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; height: 42px; }
     .amount-currency {
-      background: #f3f4f6; color: var(--text-3); font-size: 13.5px; font-weight: 500;
-      display: flex; align-items: center; padding: 0 12px; border-right: 1.5px solid var(--border); flex-shrink: 0;
+      background: #f3f4f6; color: var(--text-3); font-size: 14.5px; font-weight: 500;
+      display: flex; align-items: center; padding: 0 14px; border-right: 1.5px solid var(--border); flex-shrink: 0;
     }
-    .amount-input { border: none; outline: none; font-size: 13.5px; text-align: right; padding: 0 12px; flex: 1; font-family: inherit; color: var(--text); }
+    .amount-input { border: none; outline: none; font-size: 14.5px; text-align: right; padding: 0 14px; flex: 1; font-family: inherit; color: var(--text); }
 
-    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
     .check-row { display: flex; flex-direction: column; align-items: flex-start; flex-wrap: wrap; }
-    .check-label { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-2); cursor: pointer; font-weight: 500; }
-    .check-label input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+    .check-label { display: flex; align-items: center; gap: 9px; font-size: 14.5px; color: var(--text-2); cursor: pointer; font-weight: 500; }
+    .check-label input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
 
-    .radio-group { display: flex; flex-direction: column; gap: 10px; }
-    .radio-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text-2); cursor: pointer; font-weight: 500; }
-    .radio-row input[type="radio"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+    .radio-group { display: flex; flex-direction: column; gap: 12px; }
+    .radio-row { display: flex; align-items: center; gap: 9px; font-size: 14.5px; color: var(--text-2); cursor: pointer; font-weight: 500; }
+    .radio-row input[type="radio"] { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
 
-    .optional-field-box { margin-top: 8px; }
+    .optional-field-box { margin-top: 10px; }
 
     /* ─── STEP 2 : TWO SECTIONS ─── */
-    .vt-two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; }
-    .vt-col-title { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-    .vt-col-title .cti { font-size: 13.5px; font-weight: 700; color: #0f172a; }
-    .card-icon-sm { width: 28px; height: 28px; border-radius: 7px; background: #fff7ed; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .vt-two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 48px; }
+    .vt-col-title { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .vt-col-title .cti { font-size: 14.5px; font-weight: 700; color: #0f172a; }
+    .card-icon-sm { width: 32px; height: 32px; border-radius: 8px; background: #fff7ed; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
     /* ─── FOOTER ─── */
     .vt-footer { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 6px; }
@@ -417,19 +399,6 @@
     <div class="page-content">
 
       <div class="page-title">Virtual Terminal</div>
-
-      <!-- Stepper -->
-      <div class="stepper">
-        <div class="step-item">
-          <div class="step-circle active" id="circle-1">1</div>
-          <div class="step-label active" id="label-1">Payment Details</div>
-        </div>
-        <div class="step-connector" id="conn-1"></div>
-        <div class="step-item">
-          <div class="step-circle inactive" id="circle-2">2</div>
-          <div class="step-label" id="label-2">Payment Status</div>
-        </div>
-      </div>
 
       <div class="flow-card wide" id="settings-card">
 
@@ -689,35 +658,10 @@
     return raw.slice(0, 4) + '*'.repeat(raw.length - 8) + raw.slice(-4);
   }
 
-  function setStepper(step) {
-    for (let i = 1; i <= 2; i++) {
-      const circle = document.getElementById('circle-' + i);
-      const label = document.getElementById('label-' + i);
-      const conn = document.getElementById('conn-' + i);
-      circle.classList.remove('active', 'inactive', 'done');
-      label.classList.remove('active', 'done');
-      circle.textContent = i;
-      if (conn) conn.classList.remove('done');
-
-      if (i < step) {
-        circle.classList.add('done');
-        label.classList.add('done');
-        circle.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-        if (conn) conn.classList.add('done');
-      } else if (i === step) {
-        circle.classList.add('active');
-        label.classList.add('active');
-      } else {
-        circle.classList.add('inactive');
-      }
-    }
-  }
-
   function goToStep(step) {
     document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
     document.getElementById('panel-' + step).classList.add('active');
     document.getElementById('settings-card').style.display = (step === 2) ? 'none' : 'block';
-    setStepper(step);
     document.querySelector('.page-scroll').scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -746,7 +690,6 @@
     goToStep(1);
   }
 
-  setStepper(1);
 </script>
 
 </body>
