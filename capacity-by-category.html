@@ -188,6 +188,34 @@
     .notes-box h3 { font-size: 13px; font-weight: 700; color: #92400e; margin-bottom: 8px; }
     .notes-box ul { padding-left: 18px; }
     .notes-box li { font-size: 12.5px; color: #78350f; line-height: 1.6; margin-bottom: 4px; }
+
+    /* Stacked % bars */
+    .stack-legend { display: flex; flex-wrap: wrap; gap: 14px 18px; margin-bottom: 18px; }
+    .stack-legend .legend-item i { border-radius: 2px; }
+    .stack-rows { display: flex; flex-direction: column; gap: 16px; }
+    .stack-row { display: grid; grid-template-columns: 64px 1fr; align-items: center; column-gap: 14px; }
+    .stack-row-label { font-size: 12.5px; font-weight: 600; color: #374151; }
+    .stack-bar { display: flex; height: 30px; border-radius: 5px; overflow: hidden; background: #f1f0ec; }
+    .stack-seg { display: flex; align-items: center; justify-content: center; height: 100%; position: relative; cursor: default; margin-right: 2px; }
+    .stack-seg:last-child { margin-right: 0; }
+    .stack-seg-label { font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .stack-seg[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: #fff;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 5px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
 </style>
 </head>
 <body>
@@ -436,6 +464,48 @@
       </div>
     </div>
 
+    <!-- ─── CHART 3: SHARE OF CAPACITY — CAPITALIZATION ─── -->
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">Share of Capacity — Software Capitalization</div>
+          <div class="chart-sub">Each quarter's roster hours as % of that quarter's total</div>
+        </div>
+      </div>
+      <div class="stack-legend" id="legend-cap"></div>
+      <div class="stack-rows" id="stack-cap"></div>
+      <div class="chart-foot">
+        <button class="table-toggle" onclick="toggleTable('table-cap-pct', this)">View data table ▾</button>
+      </div>
+      <div class="data-table" id="table-cap-pct">
+        <table>
+          <thead><tr><th>Capitalization</th><th>Q2 2026 %</th><th>Q3 2026 %</th></tr></thead>
+          <tbody id="table-cap-pct-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── CHART 4: SHARE OF CAPACITY — SERVICE ─── -->
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">Share of Capacity — Service</div>
+          <div class="chart-sub">Each quarter's roster hours as % of that quarter's total</div>
+        </div>
+      </div>
+      <div class="stack-legend" id="legend-svc"></div>
+      <div class="stack-rows" id="stack-svc"></div>
+      <div class="chart-foot">
+        <button class="table-toggle" onclick="toggleTable('table-svc-pct', this)">View data table ▾</button>
+      </div>
+      <div class="data-table" id="table-svc-pct">
+        <table>
+          <thead><tr><th>Service</th><th>Q2 2026 %</th><th>Q3 2026 %</th></tr></thead>
+          <tbody id="table-svc-pct-body"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="notes-box">
       <h3>Data notes</h3>
       <ul>
@@ -549,6 +619,67 @@
   renderChart('chart-svc', svcData);
   renderTable('table-cap-body', capData);
   renderTable('table-svc-body', svcData);
+
+  /* ─── STACKED % CHARTS ─── */
+  // Fixed categorical order (validated adjacent-pair palette, slots assigned once per category — never re-cycled)
+  const SLOT_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7'];
+  const SLOT_TEXT   = ['#fff',    '#fff',    '#fff',    '#0b0b0b', '#0b0b0b', '#fff',    '#fff'];
+
+  function withColors(data) {
+    return data.map((row, i) => ({ ...row, color: SLOT_COLORS[i], textColor: SLOT_TEXT[i] }));
+  }
+
+  function renderLegend(id, data) {
+    const el = document.getElementById(id);
+    el.innerHTML = data.map(row => `
+      <span class="legend-item"><i style="background:${row.color};"></i>${row.label}</span>
+    `).join('');
+  }
+
+  function renderStack(containerId, data, quarterKey, quarterName) {
+    const el = document.getElementById(containerId);
+    const total = data.reduce((s, r) => s + r[quarterKey], 0);
+    el.innerHTML = data.map(row => {
+      const pct = total > 0 ? (row[quarterKey] / total * 100) : 0;
+      if (pct <= 0) return '';
+      const showLabel = pct >= 6; // narrow segments skip the inline label — legend/tooltip/table carry it
+      return `<div class="stack-seg" style="flex-basis:${pct}%;background:${row.color};" data-tip="${row.label} · ${pct.toFixed(1)}% (${fmt(row[quarterKey])}h)">${showLabel ? `<span class="stack-seg-label" style="color:${row.textColor};">${pct.toFixed(0)}%</span>` : ''}</div>`;
+    }).join('');
+    return { total };
+  }
+
+  function renderStackChart(rowsContainerId, legendId, data) {
+    const colored = withColors(data);
+    renderLegend(legendId, colored);
+    const wrap = document.getElementById(rowsContainerId);
+    wrap.innerHTML = `
+      <div class="stack-row">
+        <div class="stack-row-label">Q2 2026</div>
+        <div class="stack-bar" id="${rowsContainerId}-q2"></div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-row-label">Q3 2026</div>
+        <div class="stack-bar" id="${rowsContainerId}-q3"></div>
+      </div>`;
+    renderStack(`${rowsContainerId}-q2`, colored, 'q2', 'Q2 2026');
+    renderStack(`${rowsContainerId}-q3`, colored, 'q3', 'Q3 2026');
+  }
+
+  function renderPctTable(bodyId, data, quarterA, quarterB) {
+    const el = document.getElementById(bodyId);
+    const totalA = data.reduce((s, r) => s + r[quarterA], 0);
+    const totalB = data.reduce((s, r) => s + r[quarterB], 0);
+    el.innerHTML = data.map(row => {
+      const pctA = totalA > 0 ? (row[quarterA] / totalA * 100) : 0;
+      const pctB = totalB > 0 ? (row[quarterB] / totalB * 100) : 0;
+      return `<tr><td>${row.label}</td><td>${pctA.toFixed(1)}%</td><td>${pctB.toFixed(1)}%</td></tr>`;
+    }).join('');
+  }
+
+  renderStackChart('stack-cap', 'legend-cap', capData);
+  renderStackChart('stack-svc', 'legend-svc', svcData);
+  renderPctTable('table-cap-pct-body', capData, 'q2', 'q3');
+  renderPctTable('table-svc-pct-body', svcData, 'q2', 'q3');
 </script>
 
 </body>
