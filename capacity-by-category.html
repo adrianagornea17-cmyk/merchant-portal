@@ -189,33 +189,19 @@
     .notes-box ul { padding-left: 18px; }
     .notes-box li { font-size: 12.5px; color: #78350f; line-height: 1.6; margin-bottom: 4px; }
 
-    /* Stacked % bars */
-    .stack-legend { display: flex; flex-wrap: wrap; gap: 14px 18px; margin-bottom: 18px; }
+    /* Pie / donut % charts */
+    .stack-legend { display: flex; flex-wrap: wrap; gap: 14px 18px; margin-bottom: 8px; justify-content: center; }
     .stack-legend .legend-item i { border-radius: 2px; }
-    .stack-rows { display: flex; flex-direction: column; gap: 16px; }
-    .stack-row { display: grid; grid-template-columns: 64px 1fr; align-items: center; column-gap: 14px; }
-    .stack-row-label { font-size: 12.5px; font-weight: 600; color: #374151; }
-    .stack-bar { display: flex; height: 30px; border-radius: 5px; overflow: hidden; background: #f1f0ec; }
-    .stack-seg { display: flex; align-items: center; justify-content: center; height: 100%; position: relative; cursor: default; margin-right: 2px; }
-    .stack-seg:last-child { margin-right: 0; }
-    .stack-seg-label { font-size: 11px; font-weight: 700; white-space: nowrap; }
-    .stack-seg[data-tip]:hover::after {
-      content: attr(data-tip);
-      position: absolute;
-      bottom: calc(100% + 6px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1e293b;
-      color: #fff;
-      font-size: 11.5px;
-      font-weight: 500;
-      padding: 5px 9px;
-      border-radius: 6px;
-      white-space: nowrap;
-      pointer-events: none;
-      z-index: 50;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    }
+    .donut-pair { display: flex; gap: 48px; justify-content: center; align-items: flex-start; flex-wrap: wrap; padding: 12px 0 4px; }
+    .donut-block { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .donut-block svg { width: 190px; height: 190px; overflow: visible; }
+    .donut-caption { font-size: 12.5px; font-weight: 700; color: #374151; }
+    .donut-caption .donut-caption-sub { font-weight: 400; color: #898781; margin-left: 4px; }
+    .donut-slice { cursor: default; transition: opacity 0.12s; }
+    .donut-slice:hover { opacity: 0.85; }
+    .donut-slice-label { font-size: 9.5px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+    .donut-center-total { font-size: 15px; font-weight: 700; fill: #0b0b0b; text-anchor: middle; dominant-baseline: middle; }
+    .donut-center-unit { font-size: 8.5px; font-weight: 500; fill: #898781; text-anchor: middle; dominant-baseline: middle; }
 </style>
 </head>
 <body>
@@ -473,7 +459,7 @@
         </div>
       </div>
       <div class="stack-legend" id="legend-cap"></div>
-      <div class="stack-rows" id="stack-cap"></div>
+      <div class="donut-pair" id="stack-cap"></div>
       <div class="chart-foot">
         <button class="table-toggle" onclick="toggleTable('table-cap-pct', this)">View data table ▾</button>
       </div>
@@ -494,7 +480,7 @@
         </div>
       </div>
       <div class="stack-legend" id="legend-svc"></div>
-      <div class="stack-rows" id="stack-svc"></div>
+      <div class="donut-pair" id="stack-svc"></div>
       <div class="chart-foot">
         <button class="table-toggle" onclick="toggleTable('table-svc-pct', this)">View data table ▾</button>
       </div>
@@ -636,33 +622,54 @@
     `).join('');
   }
 
-  function renderStack(containerId, data, quarterKey, quarterName) {
-    const el = document.getElementById(containerId);
+  // SVG donut: viewBox 0-120, ring centered at (60,60), radius 45, stroke-width 30
+  // (outer edge 60, inner hole 30 — a donut rather than a solid pie so the
+  // center can carry the quarter's total-hours figure).
+  const R = 45, CX = 60, CY = 60;
+  const CIRC = 2 * Math.PI * R;
+
+  function renderDonut(svgId, data, quarterKey, quarterLabel) {
     const total = data.reduce((s, r) => s + r[quarterKey], 0);
-    el.innerHTML = data.map(row => {
+    let cumPct = 0;
+    const slices = data.map(row => {
       const pct = total > 0 ? (row[quarterKey] / total * 100) : 0;
       if (pct <= 0) return '';
-      const showLabel = pct >= 6; // narrow segments skip the inline label — legend/tooltip/table carry it
-      return `<div class="stack-seg" style="flex-basis:${pct}%;background:${row.color};" data-tip="${row.label} · ${pct.toFixed(1)}% (${fmt(row[quarterKey])}h)">${showLabel ? `<span class="stack-seg-label" style="color:${row.textColor};">${pct.toFixed(0)}%</span>` : ''}</div>`;
+      const dash = (pct / 100) * CIRC;
+      const offset = -((cumPct / 100) * CIRC);
+      const midAngleDeg = -90 + (cumPct + pct / 2) * 3.6;
+      const midAngleRad = midAngleDeg * Math.PI / 180;
+      const showLabel = pct >= 6; // narrow slices skip the inline label — legend/tooltip/table carry it
+      const labelX = CX + R * Math.cos(midAngleRad);
+      const labelY = CY + R * Math.sin(midAngleRad);
+      cumPct += pct;
+      const tip = `${row.label} · ${pct.toFixed(1)}% (${fmt(row[quarterKey])}h)`;
+      return `
+        <circle class="donut-slice" cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="${row.color}"
+          stroke-width="30" stroke-dasharray="${dash} ${CIRC - dash}" stroke-dashoffset="${offset}"
+          transform="rotate(-90 ${CX} ${CY})"><title>${tip}</title></circle>
+        ${showLabel ? `<text class="donut-slice-label" x="${labelX}" y="${labelY}" fill="${row.textColor}">${pct.toFixed(0)}%</text>` : ''}`;
     }).join('');
-    return { total };
+    document.getElementById(svgId).innerHTML = `
+      ${slices}
+      <text class="donut-center-total" x="${CX}" y="${CY - 6}">${fmt(total)}</text>
+      <text class="donut-center-unit" x="${CX}" y="${CY + 9}">hours · ${quarterLabel}</text>`;
   }
 
-  function renderStackChart(rowsContainerId, legendId, data) {
+  function renderDonutChart(pairContainerId, legendId, data) {
     const colored = withColors(data);
     renderLegend(legendId, colored);
-    const wrap = document.getElementById(rowsContainerId);
+    const wrap = document.getElementById(pairContainerId);
     wrap.innerHTML = `
-      <div class="stack-row">
-        <div class="stack-row-label">Q2 2026</div>
-        <div class="stack-bar" id="${rowsContainerId}-q2"></div>
+      <div class="donut-block">
+        <svg viewBox="0 0 120 120" id="${pairContainerId}-q2"></svg>
+        <div class="donut-caption">Q2 2026</div>
       </div>
-      <div class="stack-row">
-        <div class="stack-row-label">Q3 2026</div>
-        <div class="stack-bar" id="${rowsContainerId}-q3"></div>
+      <div class="donut-block">
+        <svg viewBox="0 0 120 120" id="${pairContainerId}-q3"></svg>
+        <div class="donut-caption">Q3 2026</div>
       </div>`;
-    renderStack(`${rowsContainerId}-q2`, colored, 'q2', 'Q2 2026');
-    renderStack(`${rowsContainerId}-q3`, colored, 'q3', 'Q3 2026');
+    renderDonut(`${pairContainerId}-q2`, colored, 'q2', 'Q2');
+    renderDonut(`${pairContainerId}-q3`, colored, 'q3', 'Q3');
   }
 
   function renderPctTable(bodyId, data, quarterA, quarterB) {
@@ -676,8 +683,8 @@
     }).join('');
   }
 
-  renderStackChart('stack-cap', 'legend-cap', capData);
-  renderStackChart('stack-svc', 'legend-svc', svcData);
+  renderDonutChart('stack-cap', 'legend-cap', capData);
+  renderDonutChart('stack-svc', 'legend-svc', svcData);
   renderPctTable('table-cap-pct-body', capData, 'q2', 'q3');
   renderPctTable('table-svc-pct-body', svcData, 'q2', 'q3');
 </script>
