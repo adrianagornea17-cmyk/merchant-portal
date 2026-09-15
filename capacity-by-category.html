@@ -455,7 +455,7 @@
       <div class="chart-head">
         <div>
           <div class="chart-title">Share of Capacity — Software Capitalization</div>
-          <div class="chart-sub">Each quarter's roster hours as % of that quarter's total</div>
+          <div class="chart-sub">Each quarter's roster hours as % of that quarter's total, plus an overall Q2+Q3 combined split</div>
         </div>
       </div>
       <div class="stack-legend" id="legend-cap"></div>
@@ -465,7 +465,7 @@
       </div>
       <div class="data-table" id="table-cap-pct">
         <table>
-          <thead><tr><th>Capitalization</th><th>Q2 2026 %</th><th>Q3 2026 %</th></tr></thead>
+          <thead><tr><th>Capitalization</th><th>Q2 2026 %</th><th>Q3 2026 %</th><th>Overall (Q2+Q3) %</th></tr></thead>
           <tbody id="table-cap-pct-body"></tbody>
         </table>
       </div>
@@ -655,37 +655,44 @@
       <text class="donut-center-unit" x="${CX}" y="${CY + 9}">hours · ${quarterLabel}</text>`;
   }
 
-  function renderDonutChart(pairContainerId, legendId, data) {
+  function renderDonutChart(pairContainerId, legendId, data, opts) {
     const colored = withColors(data);
     renderLegend(legendId, colored);
     const wrap = document.getElementById(pairContainerId);
-    wrap.innerHTML = `
+    const blocks = [
+      { key: 'q2', label: 'Q2' },
+      { key: 'q3', label: 'Q3' },
+    ];
+    if (opts && opts.includeCombined) {
+      blocks.push({ key: 'combined', label: 'Q2+Q3' });
+    }
+    wrap.innerHTML = blocks.map(b => `
       <div class="donut-block">
-        <svg viewBox="0 0 120 120" id="${pairContainerId}-q2"></svg>
-        <div class="donut-caption">Q2 2026</div>
-      </div>
-      <div class="donut-block">
-        <svg viewBox="0 0 120 120" id="${pairContainerId}-q3"></svg>
-        <div class="donut-caption">Q3 2026</div>
-      </div>`;
-    renderDonut(`${pairContainerId}-q2`, colored, 'q2', 'Q2');
-    renderDonut(`${pairContainerId}-q3`, colored, 'q3', 'Q3');
+        <svg viewBox="0 0 120 120" id="${pairContainerId}-${b.key}"></svg>
+        <div class="donut-caption">${b.key === 'combined' ? 'Overall (Q2+Q3)' : b.label + ' 2026'}</div>
+      </div>`).join('');
+    const withCombined = colored.map(row => ({ ...row, combined: row.q2 + row.q3 }));
+    blocks.forEach(b => renderDonut(`${pairContainerId}-${b.key}`, withCombined, b.key, b.label));
   }
 
-  function renderPctTable(bodyId, data, quarterA, quarterB) {
+  function renderPctTable(bodyId, data, quarterA, quarterB, includeCombined) {
     const el = document.getElementById(bodyId);
     const totalA = data.reduce((s, r) => s + r[quarterA], 0);
     const totalB = data.reduce((s, r) => s + r[quarterB], 0);
+    const totalCombined = totalA + totalB;
     el.innerHTML = data.map(row => {
       const pctA = totalA > 0 ? (row[quarterA] / totalA * 100) : 0;
       const pctB = totalB > 0 ? (row[quarterB] / totalB * 100) : 0;
-      return `<tr><td>${row.label}</td><td>${pctA.toFixed(1)}%</td><td>${pctB.toFixed(1)}%</td></tr>`;
+      const combinedCell = includeCombined
+        ? `<td>${(totalCombined > 0 ? ((row[quarterA] + row[quarterB]) / totalCombined * 100) : 0).toFixed(1)}%</td>`
+        : '';
+      return `<tr><td>${row.label}</td><td>${pctA.toFixed(1)}%</td><td>${pctB.toFixed(1)}%</td>${combinedCell}</tr>`;
     }).join('');
   }
 
-  renderDonutChart('stack-cap', 'legend-cap', capData);
+  renderDonutChart('stack-cap', 'legend-cap', capData, { includeCombined: true });
   renderDonutChart('stack-svc', 'legend-svc', svcData);
-  renderPctTable('table-cap-pct-body', capData, 'q2', 'q3');
+  renderPctTable('table-cap-pct-body', capData, 'q2', 'q3', true);
   renderPctTable('table-svc-pct-body', svcData, 'q2', 'q3');
 </script>
 
