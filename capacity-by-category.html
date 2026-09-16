@@ -201,7 +201,6 @@
     .donut-leader-line { fill: none; stroke: #b6b3ac; stroke-width: 1; }
     .donut-leader-dot { fill: #b6b3ac; }
     .donut-slice-label { font-size: 11px; font-weight: 600; dominant-baseline: middle; pointer-events: none; }
-    .donut-center-total { font-size: 15px; font-weight: 700; fill: #0b0b0b; text-anchor: middle; dominant-baseline: middle; }
 </style>
 </head>
 <body>
@@ -691,8 +690,7 @@
 
     document.getElementById(svgId).innerHTML = `
       ${slices.join('')}
-      ${leaders.join('')}
-      <text class="donut-center-total" x="${CX}" y="${CY}">${fmt(total)}</text>`;
+      ${leaders.join('')}`;
   }
 
   function renderDonutChart(pairContainerId, data, opts) {
