@@ -191,16 +191,16 @@
     .notes-box li { font-size: 12.5px; color: #78350f; line-height: 1.6; margin-bottom: 4px; }
 
     /* Pie / donut % charts */
-    .stack-legend { display: flex; flex-wrap: wrap; gap: 14px 18px; margin-bottom: 8px; justify-content: center; }
-    .stack-legend .legend-item i { border-radius: 2px; }
-    .donut-pair { display: flex; gap: 48px; justify-content: center; align-items: flex-start; flex-wrap: wrap; padding: 12px 0 4px; }
+    .donut-pair { display: flex; gap: 24px; justify-content: center; align-items: flex-start; flex-wrap: wrap; padding: 12px 0 4px; }
     .donut-block { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-    .donut-block svg { width: 190px; height: 190px; overflow: visible; }
+    .donut-block svg { width: 420px; height: 250px; overflow: visible; }
     .donut-caption { font-size: 12.5px; font-weight: 700; color: #374151; }
     .donut-caption .donut-caption-sub { font-weight: 400; color: #898781; margin-left: 4px; }
     .donut-slice { cursor: default; transition: opacity 0.12s; }
     .donut-slice:hover { opacity: 0.85; }
-    .donut-slice-label { font-size: 9.5px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+    .donut-leader-line { fill: none; stroke: #b6b3ac; stroke-width: 1; }
+    .donut-leader-dot { fill: #b6b3ac; }
+    .donut-slice-label { font-size: 11px; font-weight: 600; dominant-baseline: middle; pointer-events: none; }
     .donut-center-total { font-size: 15px; font-weight: 700; fill: #0b0b0b; text-anchor: middle; dominant-baseline: middle; }
     .donut-center-unit { font-size: 8.5px; font-weight: 500; fill: #898781; text-anchor: middle; dominant-baseline: middle; }
 </style>
@@ -466,7 +466,6 @@
           <div class="chart-sub">Each quarter's roster hours as % of that quarter's total, plus an overall Q2+Q3+Q4 combined split</div>
         </div>
       </div>
-      <div class="stack-legend" id="legend-cap"></div>
       <div class="donut-pair" id="stack-cap"></div>
       <div class="chart-foot">
         <button class="table-toggle" onclick="toggleTable('table-cap-pct', this)">View data table ▾</button>
@@ -487,7 +486,6 @@
           <div class="chart-sub">Each quarter's roster hours as % of that quarter's total, plus an overall Q2+Q3+Q4 combined split</div>
         </div>
       </div>
-      <div class="stack-legend" id="legend-svc"></div>
       <div class="donut-pair" id="stack-svc"></div>
       <div class="chart-foot">
         <button class="table-toggle" onclick="toggleTable('table-svc-pct', this)">View data table ▾</button>
@@ -632,49 +630,56 @@
     return data.map((row, i) => ({ ...row, color: SLOT_COLORS[i], textColor: SLOT_TEXT[i] }));
   }
 
-  function renderLegend(id, data) {
-    const el = document.getElementById(id);
-    el.innerHTML = data.map(row => `
-      <span class="legend-item"><i style="background:${row.color};"></i>${row.label}</span>
-    `).join('');
-  }
-
-  // SVG donut: viewBox 0-120, ring centered at (60,60), radius 45, stroke-width 30
-  // (outer edge 60, inner hole 30 — a donut rather than a solid pie so the
-  // center can carry the quarter's total-hours figure).
-  const R = 45, CX = 60, CY = 60;
+  // SVG donut: viewBox 0-420x250, ring centered at (210,125), radius 44, stroke-width 22
+  // (outer edge 55, inner hole 33 — a donut rather than a solid pie so the
+  // center can carry the quarter's total-hours figure). Labels sit outside the
+  // ring on a leader line, "Category: pct%" — plenty of margin on both sides
+  // since only 2 donuts share a row.
+  const R = 44, CX = 210, CY = 125, STROKE = 22;
   const CIRC = 2 * Math.PI * R;
+  const LINE_START_R = R + STROKE / 2 + 2;
+  const LINE_BEND_R = LINE_START_R + 14;
+  const LABEL_OFFSET_X = 145;
 
   function renderDonut(svgId, data, quarterKey, quarterLabel) {
     const total = data.reduce((s, r) => s + r[quarterKey], 0);
     let cumPct = 0;
-    const slices = data.map(row => {
+    const slices = [];
+    const leaders = [];
+    data.forEach(row => {
       const pct = total > 0 ? (row[quarterKey] / total * 100) : 0;
-      if (pct <= 0) return '';
+      if (pct <= 0) return;
       const dash = (pct / 100) * CIRC;
       const offset = -((cumPct / 100) * CIRC);
       const midAngleDeg = -90 + (cumPct + pct / 2) * 3.6;
       const midAngleRad = midAngleDeg * Math.PI / 180;
-      const showLabel = pct >= 6; // narrow slices skip the inline label — legend/tooltip/table carry it
-      const labelX = CX + R * Math.cos(midAngleRad);
-      const labelY = CY + R * Math.sin(midAngleRad);
       cumPct += pct;
       const tip = `${row.label} · ${pct.toFixed(1)}% (${fmt(row[quarterKey])}h)`;
-      return `
+      slices.push(`
         <circle class="donut-slice" cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="${row.color}"
-          stroke-width="30" stroke-dasharray="${dash} ${CIRC - dash}" stroke-dashoffset="${offset}"
-          transform="rotate(-90 ${CX} ${CY})"><title>${tip}</title></circle>
-        ${showLabel ? `<text class="donut-slice-label" x="${labelX}" y="${labelY}" fill="${row.textColor}">${pct.toFixed(0)}%</text>` : ''}`;
-    }).join('');
+          stroke-width="${STROKE}" stroke-dasharray="${dash} ${CIRC - dash}" stroke-dashoffset="${offset}"
+          transform="rotate(-90 ${CX} ${CY})"><title>${tip}</title></circle>`);
+      if (pct < 3) return; // sliver slices skip the leader label — table carries the exact number
+      const side = Math.cos(midAngleRad) >= 0 ? 1 : -1;
+      const startX = CX + LINE_START_R * Math.cos(midAngleRad);
+      const startY = CY + LINE_START_R * Math.sin(midAngleRad);
+      const bendX = CX + LINE_BEND_R * Math.cos(midAngleRad);
+      const bendY = CY + LINE_BEND_R * Math.sin(midAngleRad);
+      const endX = CX + side * LABEL_OFFSET_X;
+      const labelX = endX + side * 4;
+      leaders.push(`
+        <polyline class="donut-leader-line" points="${startX.toFixed(1)},${startY.toFixed(1)} ${bendX.toFixed(1)},${bendY.toFixed(1)} ${endX.toFixed(1)},${bendY.toFixed(1)}"></polyline>
+        <text class="donut-slice-label" x="${labelX.toFixed(1)}" y="${bendY.toFixed(1)}" fill="${row.color}" text-anchor="${side === 1 ? 'start' : 'end'}">${row.label}: ${pct.toFixed(1)}%</text>`);
+    });
     document.getElementById(svgId).innerHTML = `
-      ${slices}
+      ${slices.join('')}
+      ${leaders.join('')}
       <text class="donut-center-total" x="${CX}" y="${CY - 6}">${fmt(total)}</text>
       <text class="donut-center-unit" x="${CX}" y="${CY + 9}">hours · ${quarterLabel}</text>`;
   }
 
-  function renderDonutChart(pairContainerId, legendId, data, opts) {
+  function renderDonutChart(pairContainerId, data, opts) {
     const colored = withColors(data);
-    renderLegend(legendId, colored);
     const wrap = document.getElementById(pairContainerId);
     const blocks = [
       { key: 'q2', label: 'Q2' },
@@ -686,7 +691,7 @@
     }
     wrap.innerHTML = blocks.map(b => `
       <div class="donut-block">
-        <svg viewBox="0 0 120 120" id="${pairContainerId}-${b.key}"></svg>
+        <svg viewBox="0 0 420 250" id="${pairContainerId}-${b.key}"></svg>
         <div class="donut-caption">${b.key === 'combined' ? 'Overall (Q2+Q3+Q4)' : b.label + ' 2026'}</div>
       </div>`).join('');
     const withCombined = colored.map(row => ({ ...row, combined: row.q2 + row.q3 + row.q4 }));
@@ -710,8 +715,8 @@
     }).join('');
   }
 
-  renderDonutChart('stack-cap', 'legend-cap', capData, { includeCombined: true });
-  renderDonutChart('stack-svc', 'legend-svc', svcData, { includeCombined: true });
+  renderDonutChart('stack-cap', capData, { includeCombined: true });
+  renderDonutChart('stack-svc', svcData, { includeCombined: true });
   renderPctTable('table-cap-pct-body', capData, 'q2', 'q3', 'q4', true);
   renderPctTable('table-svc-pct-body', svcData, 'q2', 'q3', 'q4', true);
 </script>
