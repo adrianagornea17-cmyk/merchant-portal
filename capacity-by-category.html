@@ -641,7 +641,7 @@
   const LINE_BEND_R = LINE_START_R + 4;
   const LABEL_OFFSET_X = 68;
 
-  function renderDonut(svgId, data, quarterKey, quarterLabel) {
+  function renderDonut(svgId, data, quarterKey) {
     const total = data.reduce((s, r) => s + r[quarterKey], 0);
     let cumPct = 0;
     const slices = [];
@@ -675,7 +675,7 @@
       ${slices.join('')}
       ${leaders.join('')}
       <text class="donut-center-total" x="${CX}" y="${CY - 6}">${fmt(total)}</text>
-      <text class="donut-center-unit" x="${CX}" y="${CY + 9}">hours · ${quarterLabel}</text>`;
+      <text class="donut-center-unit" x="${CX}" y="${CY + 9}">hours</text>`;
   }
 
   function renderDonutChart(pairContainerId, data, opts) {
@@ -695,7 +695,7 @@
         <div class="donut-caption">${b.key === 'combined' ? 'Overall (Q2+Q3+Q4)' : b.label + ' 2026'}</div>
       </div>`).join('');
     const withCombined = colored.map(row => ({ ...row, combined: row.q2 + row.q3 + row.q4 }));
-    blocks.forEach(b => renderDonut(`${pairContainerId}-${b.key}`, withCombined, b.key, b.label));
+    blocks.forEach(b => renderDonut(`${pairContainerId}-${b.key}`, withCombined, b.key));
   }
 
   function renderPctTable(bodyId, data, quarterA, quarterB, quarterC, includeCombined) {
