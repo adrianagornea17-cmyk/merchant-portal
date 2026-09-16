@@ -641,11 +641,13 @@
   const LINE_BEND_R = LINE_START_R + 4;
   const LABEL_OFFSET_X = 68;
 
+  const MIN_LABEL_GAP = 15; // minimum vertical spacing between labels on the same side, to avoid overlap
+
   function renderDonut(svgId, data, quarterKey) {
     const total = data.reduce((s, r) => s + r[quarterKey], 0);
     let cumPct = 0;
     const slices = [];
-    const leaders = [];
+    const labelCandidates = [];
     data.forEach(row => {
       const pct = total > 0 ? (row[quarterKey] / total * 100) : 0;
       if (pct <= 0) return;
@@ -661,16 +663,33 @@
           transform="rotate(-90 ${CX} ${CY})"><title>${tip}</title></circle>`);
       if (pct < 3) return; // sliver slices skip the leader label — table carries the exact number
       const side = Math.cos(midAngleRad) >= 0 ? 1 : -1;
-      const startX = CX + LINE_START_R * Math.cos(midAngleRad);
-      const startY = CY + LINE_START_R * Math.sin(midAngleRad);
-      const bendX = CX + LINE_BEND_R * Math.cos(midAngleRad);
-      const bendY = CY + LINE_BEND_R * Math.sin(midAngleRad);
-      const endX = CX + side * LABEL_OFFSET_X;
-      const labelX = endX + side * 4;
-      leaders.push(`
-        <polyline class="donut-leader-line" points="${startX.toFixed(1)},${startY.toFixed(1)} ${bendX.toFixed(1)},${bendY.toFixed(1)} ${endX.toFixed(1)},${bendY.toFixed(1)}"></polyline>
-        <text class="donut-slice-label" x="${labelX.toFixed(1)}" y="${bendY.toFixed(1)}" fill="${row.color}" text-anchor="${side === 1 ? 'start' : 'end'}">${row.label}: ${pct.toFixed(1)}%</text>`);
+      labelCandidates.push({
+        side, color: row.color, text: `${row.label}: ${pct.toFixed(1)}%`,
+        startX: CX + LINE_START_R * Math.cos(midAngleRad),
+        startY: CY + LINE_START_R * Math.sin(midAngleRad),
+        bendX: CX + LINE_BEND_R * Math.cos(midAngleRad),
+        bendY: CY + LINE_BEND_R * Math.sin(midAngleRad),
+      });
     });
+
+    // De-collide labels on each side: sort by vertical position, then push
+    // apart any pair closer than MIN_LABEL_GAP so text never overlaps.
+    [-1, 1].forEach(side => {
+      const onSide = labelCandidates.filter(l => l.side === side).sort((a, b) => a.bendY - b.bendY);
+      for (let i = 1; i < onSide.length; i++) {
+        const minY = onSide[i - 1].bendY + MIN_LABEL_GAP;
+        if (onSide[i].bendY < minY) onSide[i].bendY = minY;
+      }
+    });
+
+    const leaders = labelCandidates.map(l => {
+      const endX = CX + l.side * LABEL_OFFSET_X;
+      const labelX = endX + l.side * 4;
+      return `
+        <polyline class="donut-leader-line" points="${l.startX.toFixed(1)},${l.startY.toFixed(1)} ${l.bendX.toFixed(1)},${l.bendY.toFixed(1)} ${endX.toFixed(1)},${l.bendY.toFixed(1)}"></polyline>
+        <text class="donut-slice-label" x="${labelX.toFixed(1)}" y="${l.bendY.toFixed(1)}" fill="${l.color}" text-anchor="${l.side === 1 ? 'start' : 'end'}">${l.text}</text>`;
+    });
+
     document.getElementById(svgId).innerHTML = `
       ${slices.join('')}
       ${leaders.join('')}
