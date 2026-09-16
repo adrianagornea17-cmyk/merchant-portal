@@ -638,8 +638,8 @@
   const R = 44, CX = 210, CY = 125, STROKE = 22;
   const CIRC = 2 * Math.PI * R;
   const LINE_START_R = R + STROKE / 2 + 1;
-  const LINE_BEND_R = LINE_START_R + 6;
-  const LABEL_OFFSET_X = 90;
+  const LINE_BEND_R = LINE_START_R + 4;
+  const LABEL_OFFSET_X = 68;
 
   function renderDonut(svgId, data, quarterKey, quarterLabel) {
     const total = data.reduce((s, r) => s + r[quarterKey], 0);
