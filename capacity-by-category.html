@@ -637,9 +637,9 @@
   // since only 2 donuts share a row.
   const R = 44, CX = 210, CY = 125, STROKE = 22;
   const CIRC = 2 * Math.PI * R;
-  const LINE_START_R = R + STROKE / 2 + 2;
-  const LINE_BEND_R = LINE_START_R + 14;
-  const LABEL_OFFSET_X = 145;
+  const LINE_START_R = R + STROKE / 2 + 1;
+  const LINE_BEND_R = LINE_START_R + 6;
+  const LABEL_OFFSET_X = 90;
 
   function renderDonut(svgId, data, quarterKey, quarterLabel) {
     const total = data.reduce((s, r) => s + r[quarterKey], 0);
