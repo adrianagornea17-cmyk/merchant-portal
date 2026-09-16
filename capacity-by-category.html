@@ -476,7 +476,7 @@
       <div class="chart-head">
         <div>
           <div class="chart-title">Share of Capacity — Service</div>
-          <div class="chart-sub">Each quarter's roster hours as % of that quarter's total</div>
+          <div class="chart-sub">Each quarter's roster hours as % of that quarter's total, plus an overall Q2+Q3 combined split</div>
         </div>
       </div>
       <div class="stack-legend" id="legend-svc"></div>
@@ -486,7 +486,7 @@
       </div>
       <div class="data-table" id="table-svc-pct">
         <table>
-          <thead><tr><th>Service</th><th>Q2 2026 %</th><th>Q3 2026 %</th></tr></thead>
+          <thead><tr><th>Service</th><th>Q2 2026 %</th><th>Q3 2026 %</th><th>Overall (Q2+Q3) %</th></tr></thead>
           <tbody id="table-svc-pct-body"></tbody>
         </table>
       </div>
@@ -691,9 +691,9 @@
   }
 
   renderDonutChart('stack-cap', 'legend-cap', capData, { includeCombined: true });
-  renderDonutChart('stack-svc', 'legend-svc', svcData);
+  renderDonutChart('stack-svc', 'legend-svc', svcData, { includeCombined: true });
   renderPctTable('table-cap-pct-body', capData, 'q2', 'q3', true);
-  renderPctTable('table-svc-pct-body', svcData, 'q2', 'q3');
+  renderPctTable('table-svc-pct-body', svcData, 'q2', 'q3', true);
 </script>
 
 </body>
