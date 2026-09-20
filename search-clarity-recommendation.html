@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Search Results — Clarity Recommendation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #f9fafb;
+    color: #111827;
+    padding: 40px 24px 80px;
+  }
+
+  .wrap {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  a.back {
+    display: inline-block;
+    font-size: 13px;
+    color: #2563eb;
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+  a.back:hover { text-decoration: underline; }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 32px;
+    max-width: 720px;
+    line-height: 1.5;
+  }
+
+  .verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #c2410c;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 10px;
+    margin-bottom: 36px;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .compare { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: #fff;
+    border-radius: 16px;
+    border: 1.5px solid #e5e7eb;
+    padding: 22px;
+  }
+
+  .panel-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+  }
+
+  .panel-label.bad { color: #dc2626; }
+  .panel-label.good { color: #16a34a; }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .dot.bad { background: #dc2626; }
+  .dot.good { background: #16a34a; }
+
+  /* --- mock search box --- */
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid #2563eb;
+    border-radius: 30px;
+    padding: 10px 18px;
+    margin-bottom: 2px;
+  }
+
+  .search-box input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #111827;
+    flex: 1;
+    font-family: inherit;
+  }
+
+  .search-box svg { flex-shrink: 0; color: #6b7280; }
+  .search-box .clear { color: #6b7280; cursor: pointer; font-size: 14px; }
+
+  .results {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    margin-top: 8px;
+    padding: 6px 0;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+  }
+
+  /* BEFORE styles */
+  .group-label-bad {
+    color: #2563eb;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 10px 16px 6px;
+  }
+
+  .item-bad {
+    padding: 9px 16px;
+    font-size: 14px;
+    color: #111827;
+  }
+
+  .item-bad.hover {
+    background: #f3f4f6;
+  }
+
+  .divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 4px 0;
+  }
+
+  /* AFTER styles */
+  .group-label-good {
+    color: #9ca3af;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px 16px 6px;
+    cursor: default;
+  }
+
+  .item-good {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 16px;
+    font-size: 14px;
+    color: #111827;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 0 6px;
+  }
+
+  .item-good .arrow {
+    opacity: 0;
+    color: #2563eb;
+    font-size: 13px;
+    transition: opacity 0.1s;
+  }
+
+  .item-good:hover,
+  .item-good.hover {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+
+  .item-good:hover .arrow,
+  .item-good.hover .arrow {
+    opacity: 1;
+  }
+
+  .callouts {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .callout {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #374151;
+  }
+
+  .callout .mark {
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .callout.bad .mark { color: #dc2626; }
+  .callout.good .mark { color: #16a34a; }
+
+  .legend {
+    margin-top: 40px;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px 24px;
+  }
+
+  .legend h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+  }
+
+  .legend ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .legend li {
+    font-size: 13px;
+    color: #374151;
+    display: flex;
+    gap: 8px;
+  }
+
+  .legend li b { color: #0f172a; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">← Back to all mockups</a>
+    <h1>Search Results Dropdown — Clarity Recommendation</h1>
+    <p class="subtitle">Review of whether the current search dropdown communicates what's clickable vs. what's a category label — with a recommended fix applied side by side.</p>
+
+    <div class="verdict">⚠ Not clear today — blue is used for the non-clickable labels, and the clickable rows have no default affordance.</div>
+
+    <div class="compare">
+      <!-- BEFORE -->
+      <div class="panel">
+        <div class="panel-label bad"><span class="dot bad"></span> Current — ambiguous</div>
+
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input value="sett" readonly />
+          <span class="clear">✕</span>
+        </div>
+
+        <div class="results">
+          <div class="group-label-bad">Transactions &amp; Reports</div>
+          <div class="item-bad">POI Settlements</div>
+          <div class="item-bad">Processor Settlements</div>
+          <div class="divider"></div>
+          <div class="group-label-bad">Administration › Advanced Settings</div>
+          <div class="item-bad hover">3DS Contracts</div>
+          <div class="item-bad">Blocking Rulesets</div>
+          <div class="item-bad">Checkout Themes</div>
+          <div class="item-bad">Notifications</div>
+          <div class="item-bad">Wallets</div>
+        </div>
+
+        <div class="callouts">
+          <div class="callout bad"><span class="mark">✕</span> Section labels are bold blue with a "›" — reads as a clickable breadcrumb link, but does nothing.</div>
+          <div class="callout bad"><span class="mark">✕</span> Result rows are plain black with no default affordance — nothing tells the eye they're actionable until you hover each one.</div>
+          <div class="callout bad"><span class="mark">✕</span> Only one row shows a hover state, inconsistently, making it look like a selection glitch rather than a pattern.</div>
+        </div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="panel">
+        <div class="panel-label good"><span class="dot good"></span> Recommended — clear</div>
+
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input value="sett" readonly />
+          <span class="clear">✕</span>
+        </div>
+
+        <div class="results">
+          <div class="group-label-good">Transactions &amp; Reports</div>
+          <div class="item-good"><span>POI Settlements</span><span class="arrow">→</span></div>
+          <div class="item-good"><span>Processor Settlements</span><span class="arrow">→</span></div>
+          <div class="divider"></div>
+          <div class="group-label-good">Administration · Advanced Settings</div>
+          <div class="item-good hover"><span>3DS Contracts</span><span class="arrow">→</span></div>
+          <div class="item-good"><span>Blocking Rulesets</span><span class="arrow">→</span></div>
+          <div class="item-good"><span>Checkout Themes</span><span class="arrow">→</span></div>
+          <div class="item-good"><span>Notifications</span><span class="arrow">→</span></div>
+          <div class="item-good"><span>Wallets</span><span class="arrow">→</span></div>
+        </div>
+
+        <div class="callouts">
+          <div class="callout good"><span class="mark">✓</span> Section labels are now neutral gray, no "›" — reads as an inert group header, not a link.</div>
+          <div class="callout good"><span class="mark">✓</span> Every result row gets the same hover treatment: light blue background, blue text, trailing arrow — consistent and unmistakable.</div>
+          <div class="callout good"><span class="mark">✓</span> Blue is now reserved for exactly one meaning across the component: "this is clickable."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <h2>Rule of thumb applied</h2>
+      <ul>
+        <li><b>Gray, non-bold caps, no hover</b> — category / section label (not interactive).</li>
+        <li><b>Black text → blue on hover/focus + arrow</b> — clickable result row.</li>
+        <li>Blue never appears on static text. If it's blue, it does something when clicked.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
