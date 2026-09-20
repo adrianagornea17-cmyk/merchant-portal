@@ -155,45 +155,30 @@
     margin: 4px 0;
   }
 
-  /* AFTER styles */
+  /* AFTER styles — matches the app's existing nav flyout convention */
   .group-label-good {
-    color: #9ca3af;
+    color: #111827;
     font-weight: 700;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 10px 16px 6px;
+    font-size: 13px;
+    padding: 10px 16px 8px;
     cursor: default;
   }
 
   .item-good {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 9px 16px;
     font-size: 14px;
-    color: #111827;
+    color: #b45309;
     cursor: pointer;
     border-radius: 8px;
     margin: 0 6px;
   }
 
-  .item-good .arrow {
-    opacity: 0;
-    color: #2563eb;
-    font-size: 13px;
-    transition: opacity 0.1s;
-  }
-
   .item-good:hover,
   .item-good.hover {
-    background: #eff6ff;
-    color: #2563eb;
-  }
-
-  .item-good:hover .arrow,
-  .item-good.hover .arrow {
-    opacity: 1;
+    background: #f3f4f6;
+    color: #111827;
   }
 
   .callouts {
@@ -255,7 +240,7 @@
   <div class="wrap">
     <a class="back" href="index.html">← Back to all mockups</a>
     <h1>Search Results Dropdown — Clarity Recommendation</h1>
-    <p class="subtitle">Review of whether the current search dropdown communicates what's clickable vs. what's a category label — with a recommended fix applied side by side.</p>
+    <p class="subtitle">Review of whether the current search dropdown communicates what's clickable vs. what's a category label — with a recommended fix that aligns to the amber/black convention already used in the app's nav flyout menus.</p>
 
     <div class="verdict">⚠ Not clear today — blue is used for the non-clickable labels, and the clickable rows have no default affordance.</div>
 
@@ -302,31 +287,31 @@
 
         <div class="results">
           <div class="group-label-good">Transactions &amp; Reports</div>
-          <div class="item-good"><span>POI Settlements</span><span class="arrow">→</span></div>
-          <div class="item-good"><span>Processor Settlements</span><span class="arrow">→</span></div>
+          <div class="item-good">POI Settlements</div>
+          <div class="item-good">Processor Settlements</div>
           <div class="divider"></div>
           <div class="group-label-good">Administration · Advanced Settings</div>
-          <div class="item-good hover"><span>3DS Contracts</span><span class="arrow">→</span></div>
-          <div class="item-good"><span>Blocking Rulesets</span><span class="arrow">→</span></div>
-          <div class="item-good"><span>Checkout Themes</span><span class="arrow">→</span></div>
-          <div class="item-good"><span>Notifications</span><span class="arrow">→</span></div>
-          <div class="item-good"><span>Wallets</span><span class="arrow">→</span></div>
+          <div class="item-good hover">3DS Contracts</div>
+          <div class="item-good">Blocking Rulesets</div>
+          <div class="item-good">Checkout Themes</div>
+          <div class="item-good">Notifications</div>
+          <div class="item-good">Wallets</div>
         </div>
 
         <div class="callouts">
-          <div class="callout good"><span class="mark">✓</span> Section labels are now neutral gray, no "›" — reads as an inert group header, not a link.</div>
-          <div class="callout good"><span class="mark">✓</span> Every result row gets the same hover treatment: light blue background, blue text, trailing arrow — consistent and unmistakable.</div>
-          <div class="callout good"><span class="mark">✓</span> Blue is now reserved for exactly one meaning across the component: "this is clickable."</div>
+          <div class="callout good"><span class="mark">✓</span> Section labels are now bold black, plain case, no "›" — reads as an inert group header, matching the app's existing nav flyout.</div>
+          <div class="callout good"><span class="mark">✓</span> Result rows use the same amber accent already used for links elsewhere in the app — the affordance is visible immediately, not just on hover.</div>
+          <div class="callout good"><span class="mark">✓</span> Hover adds a neutral gray background and turns text black — a focus cue, not a second meaning for a color.</div>
         </div>
       </div>
     </div>
 
     <div class="legend">
-      <h2>Rule of thumb applied</h2>
+      <h2>Rule of thumb applied — matches the app's nav flyout</h2>
       <ul>
-        <li><b>Gray, non-bold caps, no hover</b> — category / section label (not interactive).</li>
-        <li><b>Black text → blue on hover/focus + arrow</b> — clickable result row.</li>
-        <li>Blue never appears on static text. If it's blue, it does something when clicked.</li>
+        <li><b>Bold black, plain case, no hover</b> — category / section label (not interactive).</li>
+        <li><b>Amber text, always-on</b> — clickable result row; color itself signals "link," no hover needed to discover it.</li>
+        <li><b>Gray background + black text on hover/focus</b> — indicates the currently focused row, same pattern as the Transactions &amp; Reports flyout menu.</li>
       </ul>
     </div>
   </div>
