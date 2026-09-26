@@ -186,22 +186,22 @@
     <div class="stat-row">
       <div class="stat-tile">
         <div class="stat-label">Q2 2026 total</div>
-        <div class="stat-value">1,064.1h</div>
+        <div class="stat-value">1,122.1h</div>
         <div class="stat-sub">39 tickets with roster worklogs</div>
       </div>
       <div class="stat-tile">
         <div class="stat-label">Q3 2026 total</div>
-        <div class="stat-value">1,838.6h</div>
-        <div class="stat-sub">94 tickets with roster worklogs</div>
+        <div class="stat-value">1,898.6h</div>
+        <div class="stat-sub">96 tickets with roster worklogs</div>
       </div>
       <div class="stat-tile">
         <div class="stat-label">Q4 2026 total</div>
-        <div class="stat-value">1,355.0h</div>
-        <div class="stat-sub">37 of ~160 pool tickets with roster worklogs · quarter in progress</div>
+        <div class="stat-value">1,566.0h</div>
+        <div class="stat-sub">41 of ~160 pool tickets with roster worklogs · quarter in progress</div>
       </div>
       <div class="stat-tile">
         <div class="stat-label">Combined Q2+Q3+Q4</div>
-        <div class="stat-value">4,257.7h</div>
+        <div class="stat-value">4,586.7h</div>
         <div class="stat-sub">Q1 2026 excluded — no worklogs exist</div>
       </div>
     </div>
@@ -396,11 +396,11 @@
             <tr><td>Q2 2026</td><td>Global Gateway</td><td>57.5h</td><td>ET-1651, ET-2002, ET-2016, ET-2052, ET-738, ET-2908</td></tr>
             <tr><td>Q2 2026</td><td>Global Gateway Maintenance</td><td>5.0h</td><td>ET-2297</td></tr>
             <tr><td>Q2 2026</td><td>Not Set (no parent Epic at all)</td><td>7.0h</td><td>ET-2425</td></tr>
-            <tr><td>Q3 2026</td><td>Verifone Tap</td><td>116.0h</td><td>ET-2033, ET-2069, ET-2070, ET-2236, ET-2262, ET-2309, ET-2319, ET-2413, ET-2555, ET-2561</td></tr>
+            <tr><td>Q3 2026</td><td>Verifone Tap</td><td>112.0h</td><td>ET-2033, ET-2069, ET-2070, ET-2236, ET-2262, ET-2309, ET-2319, ET-2413, ET-2555, ET-2561</td></tr>
             <tr><td>Q3 2026</td><td>eComm</td><td>11.5h</td><td>ET-2064, ET-2356, ET-2991, ET-2995</td></tr>
             <tr><td>Q3 2026</td><td>VHQ</td><td>9.0h</td><td>ET-2374, ET-2546, ET-2634, ET-2897</td></tr>
             <tr><td>Q3 2026</td><td>GPP/TGW/VCH</td><td>5.5h</td><td>ET-552</td></tr>
-            <tr><td>Q3 2026</td><td>EMEA Greenbox</td><td>2.0h</td><td>ET-2963</td></tr>
+            <tr><td>Q3 2026</td><td>EMEA Greenbox</td><td>2.0h</td><td>ET-2963 (parent re-linked to ET-2959 since last refresh, same Program Category value)</td></tr>
             <tr><td>Q3 2026</td><td>Not Set (no parent Epic at all)</td><td>22.0h</td><td>ET-2695, ET-2907, ET-3274</td></tr>
             <tr><td>Q4 2026</td><td>Verifone Tap</td><td>5.0h</td><td>ET-2262, ET-2284</td></tr>
             <tr><td>Q4 2026</td><td>VHQ</td><td>2.5h</td><td>ET-3173, ET-3174, ET-3224</td></tr>
@@ -414,13 +414,14 @@
       <h3>Data notes</h3>
       <ul>
         <li><strong>Q1 2026 is excluded</strong> — no worklogs exist in Jira for Q1-tagged tickets at all (spot-checked directly); worklog tracking for this team appears to have started around Q2 2026, and there's no Q1-2026 sprint either.</li>
-        <li><strong>Scope:</strong> only Epics with fixVersion "[Q2/Q3/Q4 2026] Verifone Central" and Stories/Defects with a matching Sprint quarter tag, filtered to tickets with at least one worklog from the 7-person tracked roster (Anand BS, Sruthi Nakul Mysore, Senthil Chidambaram, Akshat Aggarwal, Tanya Saxena, Ashish Verma, Sumit Ashish). Q2 = 39 of ~56 pool tickets, Q3 = 94 of ~110, Q4 = 37 of ~160 (sprint "Ready for dev (Q4-26, Aug-Oct)") — tickets nobody on the roster logged time against are excluded, not counted as zero.</li>
-        <li><strong>Every quarter here counts ALL roster hours ever logged on a qualifying ticket, regardless of the worklog's own date</strong> — not just hours logged within that quarter's calendar window. This is a deliberate, consistent choice across Q2/Q3/Q4 (an earlier draft of the Q4 numbers used date-scoping instead, which is why you may see a different Q4 total elsewhere — 1,355.0h here vs. ~1,197.5h under date-scoping).</li>
-        <li><strong>Q4 2026 is a quarter in progress</strong> (runs through Oct 31) — its 1,355.0h total will keep growing as the quarter continues, unlike Q2/Q3 which are closed periods.</li>
+        <li><strong>Scope:</strong> only Epics with fixVersion "[Q2/Q3/Q4 2026] Verifone Central" and Stories/Defects with a matching Sprint quarter tag, filtered to tickets with at least one worklog from the 7-person tracked roster (Anand BS, Sruthi Nakul Mysore, Senthil Chidambaram, Akshat Aggarwal, Tanya Saxena, Ashish Verma, Sumit Ashish). Q2 = 39 of ~56 pool tickets, Q3 = 96 of ~113 (grew from 94 tickets last refresh — one new epic, two new stories picked up worklogs), Q4 = 41 of ~160 (sprint "Ready for dev (Q4-26, Aug-Oct)"; grew from 37 — two new stories, plus two epics that previously only had children with worklogs now have direct worklogs of their own) — tickets nobody on the roster logged time against are excluded, not counted as zero.</li>
+        <li><strong>Every quarter here counts ALL roster hours ever logged on a qualifying ticket, regardless of the worklog's own date</strong> — not just hours logged within that quarter's calendar window. This is a deliberate, consistent choice across Q2/Q3/Q4.</li>
+        <li><strong>Q4 2026 is a quarter in progress</strong> (runs through Oct 31) — its 1,566.0h total will keep growing as the quarter continues, unlike Q2/Q3 which are closed periods. Q2 and Q3 also grew since the last refresh (+58.0h and +60.0h respectively) from backdated/newly-logged worklogs on already-tracked tickets — this is expected and not a data error; nothing here is ever truly "final" until a quarter is well behind us.</li>
         <li><strong>"Not Set"</strong> means the field was genuinely empty on that ticket, or (for Capitalization/Program Category, which only live on Epics) the story had no parent Epic to inherit from. A parent Epic living in a <em>different</em> Jira project (e.g. GGW, SGC, ENT) is NOT automatically "Not Set" — those cross-project epics were queried directly and do carry real values (see ET-738, ET-2908, ET-3196 in the exception table below, all resolved this way).</li>
-        <li>Q2's "BAU Work" total is dominated by one ticket (ET-1098, "Meeting &amp; Collaboration Hours," 271.9h across three people); likewise Q4's "BAU Work" (567.5h) and "Global-UI" (1,038.5h) totals are dominated by a single ticket, ET-2944 "Verifone Central MFE &amp; VDS Workshop" (524.5h, ticket-scoped) — worth a sanity check on whether that ticket is being used as a catch-all.</li>
+        <li>Q2's "BAU Work" total is dominated by two tickets: ET-1098 ("Meeting &amp; Collaboration Hours," ~277h) and ET-1527 (the "Sprint Ceremonies" epic itself, ~250h) — both catch-all-style tickets worth a sanity check. Q4's "BAU Work" (572.5h) and "Global-UI" (1,254.5h) totals are similarly dominated by ET-2944 "Verifone Central MFE &amp; VDS Workshop."</li>
         <li><strong>"Technical Debt"</strong> is a bucket that only appears in Q4 — distinct from "Technical Improvement" (both are separate allowed values on the Software Capitalization field). Only one ticket, ET-3196, whose parent epic (ENT-42389) lives in a different Jira project (ENT, not ET) but does have its own resolvable value.</li>
         <li>Hours normalized from Jira's worklog shorthand using the standard 8h/day, 40h/week convention.</li>
+        <li><em>Last refreshed 2026-09-26.</em></li>
       </ul>
     </div>
 
@@ -440,23 +441,23 @@
   const CHART_MAX = 1250; // shared scale across both charts, for comparability
 
   const capData = [
-    { label: 'Technical Improvement', q2: 16.0,  q3: 1121.1, q4: 100.0 },
-    { label: 'BAU Work',              q2: 679.9, q3: 159.5,  q4: 567.5 },
-    { label: 'Maintenance',           q2: 197.1, q3: 165.0,  q4: 101.5 },
-    { label: 'New Features',          q2: 47.5,  q3: 246.5,  q4: 577.5 },
-    { label: 'Feature Enhancements',  q2: 116.5, q3: 124.5,  q4: 4.5 },
-    { label: 'Not Set',               q2: 7.0,   q3: 22.0,   q4: 0 },
-    { label: 'Technical Debt',        q2: 0,     q3: 0,      q4: 4.0 },
+    { label: 'Technical Improvement', q2: 16.00,  q3: 1149.1, q4: 100.0 },
+    { label: 'BAU Work',              q2: 737.92, q3: 159.5,  q4: 572.5 },
+    { label: 'Maintenance',           q2: 197.13, q3: 165.0,  q4: 101.5 },
+    { label: 'New Features',          q2: 47.50,  q3: 266.5,  q4: 783.5 },
+    { label: 'Feature Enhancements',  q2: 116.50, q3: 136.5,  q4: 4.5 },
+    { label: 'Not Set',               q2: 7.00,   q3: 22.0,   q4: 0 },
+    { label: 'Technical Debt',        q2: 0,      q3: 0,      q4: 4.0 },
   ];
 
   const svcData = [
-    { label: 'Global-UI',     q2: 70.5,  q3: 1158.6, q4: 1038.5 },
-    { label: 'Payments-UI',   q2: 853.6, q3: 172.5,  q4: 183.0 },
-    { label: 'MOP-UI',        q2: 86.0,  q3: 223.0,  q4: 4.5 },
-    { label: 'Not Set',       q2: 53.0,  q3: 190.5,  q4: 0 },
-    { label: 'SMB app - UI',  q2: 0,     q3: 78.0,   q4: 129.0 },
-    { label: 'MP-UI',         q2: 0,     q3: 16.0,   q4: 0 },
-    { label: 'VHQ-UI',        q2: 1.0,   q3: 0,      q4: 0 },
+    { label: 'Global-UI',     q2: 70.50,  q3: 1353.6, q4: 1254.5 },
+    { label: 'Payments-UI',   q2: 911.55, q3: 184.5,  q4: 118.0 },
+    { label: 'MOP-UI',        q2: 86.00,  q3: 117.0,  q4: 4.5 },
+    { label: 'Not Set',       q2: 53.00,  q3: 153.5,  q4: 0 },
+    { label: 'SMB app - UI',  q2: 0,      q3: 74.0,   q4: 189.0 },
+    { label: 'MP-UI',         q2: 0,      q3: 16.0,   q4: 0 },
+    { label: 'VHQ-UI',        q2: 1.00,   q3: 0,      q4: 0 },
   ];
 
   // Requested Program Category values, in the order asked for, plus a catch-all
@@ -464,14 +465,14 @@
   // outside the requested Program Category list" table for the itemized
   // breakdown (real value + issue keys) behind this catch-all.
   const progData = [
-    { label: 'FormForge',                q2: 15.5,   q3: 57.0,   q4: 190.5 },
-    { label: 'Nexus',                    q2: 0,      q3: 0,      q4: 0 },
-    { label: 'Verifone Central',         q2: 942.05, q3: 1516.6, q4: 1148.5 },
-    { label: 'BBX',                      q2: 0,      q3: 0,      q4: 0 },
-    { label: 'MOP',                      q2: 37.0,   q3: 83.0,   q4: 4.5 },
-    { label: 'Marketplace',              q2: 0,      q3: 16.0,   q4: 0 },
-    { label: 'SMB app',                  q2: 0,      q3: 0,      q4: 0 },
-    { label: 'Other / not in this list', q2: 69.5,   q3: 166.0,  q4: 11.5 },
+    { label: 'FormForge',                q2: 15.50,   q3: 57.0,   q4: 190.5 },
+    { label: 'Nexus',                    q2: 0,       q3: 0,      q4: 0 },
+    { label: 'Verifone Central',         q2: 1000.05, q3: 1580.6, q4: 1359.5 },
+    { label: 'BBX',                      q2: 0,       q3: 0,      q4: 0 },
+    { label: 'MOP',                      q2: 37.00,   q3: 83.0,   q4: 4.5 },
+    { label: 'Marketplace',              q2: 0,       q3: 16.0,   q4: 0 },
+    { label: 'SMB app',                  q2: 0,       q3: 0,      q4: 0 },
+    { label: 'Other / not in this list', q2: 69.50,   q3: 162.0,  q4: 11.5 },
   ];
 
   function fmt(n) {
