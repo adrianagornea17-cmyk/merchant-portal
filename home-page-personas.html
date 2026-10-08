@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verifone Central — Home Page by Persona</title>
+<style>
+  :root{--border:#e5e7eb;--bg:#f9fafb;--text:#111827;--muted:#6b7280;--accent:#2563eb;--green:#16a34a;--red:#dc2626;--amber:#d97706}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+  .top{background:#fff;border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;gap:16px;padding:0 24px;position:sticky;top:0;z-index:5}
+  .logo{font-weight:700;font-size:16px;color:var(--accent)}
+  .search{flex:1;max-width:420px;border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--muted);background:var(--bg)}
+  .sw{border:1px solid var(--border);border-radius:8px;padding:7px 12px;background:#fff;cursor:pointer;font-size:13px}
+  .sp{flex:1}
+  .bell{position:relative}.bell b{position:absolute;top:-6px;right:-8px;background:var(--red);color:#fff;border-radius:9px;font-size:10px;padding:1px 5px}
+  .avatar{width:32px;height:32px;border-radius:50%;background:#0f172a;color:#38bdf8;display:grid;place-items:center;font-weight:600;font-size:12px}
+  .persona-bar{background:#0f172a;padding:10px 24px;display:flex;align-items:center;gap:8px}
+  .persona-bar span{color:#94a3b8;font-size:12px;margin-right:6px}
+  .persona-bar button{background:transparent;border:1px solid #334155;color:#cbd5e1;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:13px}
+  .persona-bar button.on{background:#38bdf8;border-color:#38bdf8;color:#0f172a;font-weight:600}
+  main{max-width:1280px;margin:0 auto;padding:24px}
+  .hello{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+  .hello h1{font-size:22px}.hello p{color:var(--muted);margin-top:4px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 12px;font-size:13px}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(12,1fr);margin-bottom:16px}
+  .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
+  .s3{grid-column:span 3}.s4{grid-column:span 4}.s6{grid-column:span 6}.s8{grid-column:span 8}.s12{grid-column:span 12}
+  @media(max-width:900px){.s3,.s4,.s6,.s8{grid-column:span 12}}
+  .card h3{font-size:14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+  .card h3 a{font-size:12px;color:var(--accent);font-weight:500;text-decoration:none}
+  .kpi .l{color:var(--muted);font-size:12px}.kpi .v{font-size:24px;font-weight:700;margin:4px 0}
+  .d{font-size:12px}.up{color:var(--green)}.down{color:var(--red)}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--border);font-size:13px;gap:8px}
+  .row:first-of-type{border-top:0}
+  .row small{color:var(--muted);display:block;margin-top:2px;font-size:12px}
+  .pill{border-radius:10px;padding:2px 9px;font-size:11px;font-weight:600;white-space:nowrap}
+  .g{background:#f0fdf4;color:#166534}.r{background:#fff1f2;color:#9f1239}.a{background:#fff7ed;color:#c2410c}.b{background:#eff6ff;color:#1d4ed8}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{border:1px solid var(--border);background:#fff;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer}
+  .btn.p{background:var(--accent);border-color:var(--accent);color:#fff}
+  .bar{height:8px;background:#eef2f7;border-radius:4px;overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:var(--accent)}
+  .steps{display:flex;gap:6px;margin:6px 0}.steps i{flex:1;height:6px;border-radius:3px;background:#e5e7eb}.steps i.f{background:var(--green)}
+  svg.chart{width:100%;height:150px}
+  .funnel .f{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}
+  .funnel .f div{height:26px;background:#bfdbfe;border-radius:4px;color:#1e3a8a;display:flex;align-items:center;padding-left:8px;font-weight:600;font-size:12px}
+  .status{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .note{font-size:12px;color:var(--muted);margin-top:24px;padding-top:12px;border-top:1px dashed var(--border)}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <span class="logo">Verifone Central</span>
+  <div class="search">🔍 Search transaction ID, merchant, device…</div>
+  <div class="sw" id="switcher">Entity: —  ▾</div>
+  <div class="sp"></div>
+  <span class="bell">🔔<b>3</b></span>
+  <div class="avatar" id="avatar">AG</div>
+</div>
+
+<div class="persona-bar">
+  <span>Preview home page as:</span>
+  <button data-p="smb" class="on">SMB merchant</button>
+  <button data-p="ent">Enterprise merchant</button>
+  <button data-p="bank">Bank / ISO</button>
+  <button data-p="acq">Acquirer</button>
+</div>
+
+<main id="root"></main>
+
+<script>
+const spark = (pts,color='#2563eb')=>{
+  const max=Math.max(...pts),min=Math.min(...pts);
+  const p=pts.map((v,i)=>`${(i/(pts.length-1))*300},${70-((v-min)/(max-min||1))*60}`).join(' ');
+  return `<svg class="chart" viewBox="0 0 300 80" preserveAspectRatio="none"><polyline fill="none" stroke="${color}" stroke-width="2" points="${p}"/></svg>`;
+};
+const kpi=(l,v,d,up=true)=>`<div class="card kpi s3"><div class="l">${l}</div><div class="v">${v}</div><div class="d ${up?'up':'down'}">${up?'▲':'▼'} ${d}</div></div>`;
+const rows=a=>a.map(([t,s,p,c])=>`<div class="row"><div>${t}${s?`<small>${s}</small>`:''}</div>${p?`<span class="pill ${c}">${p}</span>`:''}</div>`).join('');
+const card=(size,title,body,link='View all')=>`<div class="card ${size}"><h3>${title}${link?`<a href="#">${link}</a>`:''}</h3>${body}</div>`;
+const btns=a=>`<div class="actions">${a.map((x,i)=>`<span class="btn ${i==0?'p':''}">${x}</span>`).join('')}</div>`;
+const status=a=>a.map(([c,t,n])=>`<div class="status"><span class="dot" style="background:${c}"></span>${t}<b style="margin-left:auto">${n}</b></div>`).join('');
+const dates=`<div class="filters"><span class="chip">📅 Last 7 days ▾</span><span class="chip">EUR ▾</span><span class="chip">⚙ Customize</span></div>`;
+const G='#16a34a',R='#dc2626',A='#d97706';
+
+const P={
+smb:{avatar:'MR',entity:'Café Rosa — Main Street ▾',
+html:()=>`
+<div class="hello"><div><h1>Good morning, Maria 👋</h1><p>Here's how Café Rosa is doing today.</p></div>${dates}</div>
+<div class="grid">
+${kpi("Today's sales",'€1,284.50','12% vs. yesterday')}
+${kpi('Transactions','86','5% vs. last week')}
+${kpi('Average ticket','€14.94','2% vs. last week',false)}
+${kpi('Approval rate','97.8%','0.4 pts')}
+</div>
+<div class="grid">
+${card('s8','Sales — last 7 days',spark([620,780,710,940,1010,1180,1284]))}
+${card('s4','Next payout',`<div class="kpi"><div class="v">€3,912.20</div><div class="l">Expected Fri, 10 Oct → IBAN •••• 4412</div></div><div class="row"><div>Last payout<small>Fri, 3 Oct</small></div><span class="pill g">Paid</span></div>`,'Payouts')}
+</div>
+<div class="grid">
+${card('s4','Needs your attention',rows([['1 dispute awaiting response','Reply by 14 Oct','Due soon','a'],['Terminal "Counter 2" offline','Since 08:12','Offline','r'],['Declines up 3% today','Mostly insufficient funds','Info','b']]),'')}
+${card('s4','Quick actions',btns(['View transactions','Issue a refund','Download report','Order supplies','Take a payment']),'')}
+${card('s4','My devices',status([[G,'Online',3],[R,'Offline',1],[A,'Update available',1]])+btns(['+ Add a device']),'Manage')}
+</div>
+<div class="grid">
+${card('s6','Finish setting up (3 of 5)',`<div class="steps"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div>`+rows([['Verify business details','','Done','g'],['Add a bank account','','Done','g'],['Activate 2nd location (Harbour St.)','Documents needed','Continue','b'],['Order a countertop terminal','','Start','b']]),'')}
+${card('s6','Help & orders',rows([['Order #VF-20931 — 2× P400 Plus','Shipped · arrives Thu','Track','b'],['Support ticket #48211','Waiting for your reply','Open','a'],['Guide: How to handle a chargeback','','Read','b']]),'Help centre')}
+</div>`},
+
+ent:{avatar:'JK',entity:'All entities (14 brands, 312 locations) ▾',
+html:()=>`
+<div class="hello"><div><h1>Portfolio overview — Northwind Retail Group</h1><p>312 locations · 9 countries · 4 currencies</p></div>
+<div class="filters"><span class="chip">Country: All ▾</span><span class="chip">Brand: All ▾</span><span class="chip">Payment method ▾</span><span class="chip">📅 MTD ▾</span></div></div>
+<div class="grid">
+${kpi('Volume (MTD)','€48.2M','6.1% vs. last month')}
+${kpi('Approval rate','94.6%','0.8 pts',false)}
+${kpi('Refund rate','2.3%','0.2 pts')}
+${kpi('Average ticket','€37.40','1.9%')}
+</div>
+<div class="grid">
+${card('s8','Volume & approval rate by day',spark([40,44,43,51,49,55,53,60,58,66]),'Open dashboard')}
+${card('s4','Alerts',rows([['Approval rate < 95% in DE','Threshold breached 2h ago','Critical','r'],['Volume anomaly — Store #204','−38% vs. baseline','Warning','a'],['Settlement mismatch GBP','€12,480 variance','Review','a']]),'Manage rules')}
+</div>
+<div class="grid">
+${card('s6','Location performance',rows([['▲ Paris — Rivoli','€412k · +14%','Top','g'],['▲ Madrid — Gran Vía','€388k · +9%','Top','g'],['▼ Berlin — Mitte','€201k · −21%','Bottom','r'],['▼ Lyon — Part-Dieu','€176k · −17%','Bottom','r']]),'List / map')}
+${card('s6','Reconciliation & payout calendar',rows([['Unsettled','€2.14M across 6 entities','Pending','b'],['Mismatches','37 items · oldest 4 days','Action','a'],['Next payouts','Mon EUR €3.1M · Tue GBP £1.2M','','']]),'Reconcile')}
+</div>
+<div class="grid">
+${card('s4','Disputes & risk',rows([['Open chargebacks','46 · 9 due within 3 days','Urgent','r'],['Fraud rate','0.07%','Normal','g'],['Top decline reason','Do not honor (31%)','','']]))}
+${card('s4','Fleet health',status([[G,'Devices online','2,481'],[R,'Offline','37'],[A,'Pending software rollout','412']])+`<small style="color:#6b7280">App v4.2 rollout: 78%</small><div class="bar"><i style="width:78%"></i></div>`,'Device manager')}
+${card('s4','Onboarding pipeline',`<div class="funnel"><div class="f"><div style="width:100%">Submitted 18</div></div><div class="f"><div style="width:75%">In review 12</div></div><div class="f"><div style="width:45%">Shipping devices 7</div></div><div class="f"><div style="width:25%">Live this month 4</div></div></div>`+btns(['+ Add location']))}
+</div>
+<div class="grid">
+${card('s6','Scheduled & saved reports',rows([['Daily settlement — all entities','Delivered 06:00 · SFTP','Sent','g'],['Weekly refunds by brand','Next: Mon 07:00','Scheduled','b'],['Monthly KPI pack','Failed delivery','Failed','r']]),'Reports')}
+${card('s6','Access & governance',rows([['4 pending user invitations','','Review','b'],['Role change: M. Dubois → Finance Admin','Yesterday','Audit','b'],['2 users without MFA','','Fix','a']]),'Administration')}
+</div>`},
+
+bank:{avatar:'BN',entity:'Banco Norte — Merchant Services ▾',
+html:()=>`
+<div class="hello"><div><h1>Merchant portfolio — Banco Norte</h1><p>Acquiring partner program · 8,420 merchants</p></div>${dates}</div>
+<div class="grid">
+${kpi('Active merchants','8,420','124 new this month')}
+${kpi('Portfolio volume (MTD)','€212M','4.8% vs. last month')}
+${kpi('Revenue / fees earned','€1.9M','3.2%')}
+${kpi('Churn (90d)','1.4%','0.3 pts',false)}
+</div>
+<div class="grid">
+${card('s6','Merchant boarding funnel',`<div class="funnel"><div class="f"><div style="width:100%">Submitted 312</div></div><div class="f"><div style="width:72%">In review 224</div></div><div class="f"><div style="width:55%">Approved 171</div></div><div class="f"><div style="width:42%">Live 131</div></div></div><div class="d" style="margin-top:8px;color:#6b7280">Avg. time-to-live 6.2 days · <b class="down">19 stuck > 10 days</b></div>`+btns(['+ Onboard merchant','Bulk upload']),'Pipeline')}
+${card('s6','Volume trend',spark([150,158,162,170,168,181,190,201,212]))}
+</div>
+<div class="grid">
+${card('s4','Top merchants',rows([['Fresh Market Chain','€8.2M','▲ 12%','g'],['Lumière Hotels','€6.9M','▲ 5%','g'],['Auto Parts Plus','€5.4M','▲ 1%','g']]),'Ranking')}
+${card('s4','At-risk merchants',rows([['Bike Hub','Volume −46% in 30d','Churn risk','r'],['Pizza Roma','Chargeback ratio 1.2%','Risk','a'],['TechNova','KYB docs expired','Compliance','a']]),'')}
+${card('s4','Risk & compliance',rows([['High chargeback ratio','11 merchants','Review','a'],['KYC/KYB pending','27 merchants','Pending','b'],['Watchlist hits','2 new','Alert','r']]))}
+</div>
+<div class="grid">
+${card('s4','Terminal inventory',status([[G,'Deployed','14,208'],[A,'In transit','312'],[R,'Faulty','86'],['#2563eb','Pending activation','140']]),'Inventory')}
+${card('s4','Commissions & residuals',`<div class="kpi"><div class="v">€184,300</div><div class="l">Next payout Mon, 13 Oct</div></div><div class="row"><div>September statement</div><span class="pill b">Download</span></div>`,'Statements')}
+${card('s4','Shortcuts & announcements',btns(['Search merchant','Reporting hub','Scheduled exports'])+rows([['New: 3DS2 exemption rules','Scheme update, 1 Nov','New','b'],['PSD3 readiness briefing','','Read','b']]),'')}
+</div>`},
+
+acq:{avatar:'OP',entity:'Acquirer Ops — EMEA ▾',
+html:()=>`
+<div class="hello"><div><h1>Operations center — EMEA Acquiring</h1><p>Live view · refreshed 10 sec ago</p></div>
+<div class="filters"><span class="chip">BIN: All ▾</span><span class="chip">Scheme ▾</span><span class="chip">🔴 Live</span></div></div>
+<div class="grid">
+${kpi('Live TPS','412','peak 640 at 12:05')}
+${kpi('Approval rate','92.9%','0.5 pts',false)}
+${kpi('Avg. latency','186 ms','12 ms')}
+${kpi('Open incidents','1','Visa DE host degraded',false)}
+</div>
+<div class="grid">
+${card('s4','Host & scheme connectivity',status([[G,'Visa','Up'],[A,'Mastercard — elevated latency','Degraded'],[G,'Amex','Up'],[G,'Local debit (CB)','Up'],[R,'Scheme X — DE host','Down']]),'Status page')}
+${card('s8','Approval rate & declines (24h)',spark([95,94,95,93,92,93,91,92,93]))}
+</div>
+<div class="grid">
+${card('s4','Settlement & funding',rows([['Batch 08-Oct EUR','12,480 txns · €18.2M','Processing','b'],['Batch 07-Oct GBP','Funding sent','Settled','g'],['Failed payouts','3 merchants','Retry','r']])+`<div class="d" style="margin-top:6px;color:#6b7280">Interchange & scheme fees MTD: €2.3M</div>`,'Settlement')}
+${card('s4','Reconciliation exceptions',rows([['Unmatched transactions','218 · €96k','Open','a'],['Aged > 3 days','41','Escalate','r'],['Awaiting scheme file','2 files','Waiting','b']]),'Work queue')}
+${card('s4','Risk & monitoring programs',rows([['Visa VDMP — Pizza Roma','Ratio 0.82% / 0.9%','Near limit','a'],['Mastercard ECM — Bike Hub','Ratio 1.1%','Breach','r'],['Network fraud rate','0.06%','Normal','g']]),'')}
+</div>
+<div class="grid">
+${card('s4','Boarding & provisioning',rows([['Applications pending','64','Review','b'],['KYC/KYB reviews','19','Due today','a'],['MID/TID provisioning queue','47','Queued','b']]),'Queue')}
+${card('s4','Terminal management',status([['#2563eb','P400 Plus','18,200'],['#2563eb','M450','9,430'],[A,'Pending key injection','86'],[A,'Pending download','1,240']]),'Fleet')}
+${card('s4','Portfolio by channel',rows([['SMB','€1.2B','41%','b'],['Enterprise','€1.5B','52%','b'],['Marketplace','€0.2B','7%','b']])+`<small style="color:#6b7280">Group by country · payment method · BIN/MID</small>`,'Slice')}
+</div>
+<div class="grid">
+${card('s6','Operational alerts',rows([['Scheduled maintenance — Sat 02:00–04:00 UTC','Settlement engine','Planned','b'],['SLA breach: chargeback response','2 cases','Breach','r']]),'')}
+${card('s6','Reports & data export',rows([['Scheme quarterly report','Due 15 Oct','Draft','a'],['Regulatory report — PSD2 fraud','Delivered via API','Sent','g'],['Nightly file export','SFTP · 04:00','Sent','g']]),'Reports')}
+</div>`}
+};
+
+const root=document.getElementById('root');
+function show(k){
+  document.querySelectorAll('.persona-bar button').forEach(b=>b.classList.toggle('on',b.dataset.p===k));
+  document.getElementById('switcher').textContent='Entity: '+P[k].entity;
+  document.getElementById('avatar').textContent=P[k].avatar;
+  root.innerHTML=P[k].html()+`<div class="note">Mockup — sample data. Shared on every home page: greeting, entity/location switcher, date-range & currency, alerts, global search, customizable widgets.</div>`;
+}
+document.querySelectorAll('.persona-bar button').forEach(b=>b.onclick=()=>show(b.dataset.p));
+show('smb');
+</script>
+</body>
+</html>
