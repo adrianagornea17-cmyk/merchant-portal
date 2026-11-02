@@ -27,6 +27,13 @@
   .grid{display:grid;gap:16px;grid-template-columns:repeat(12,1fr);margin-bottom:16px}
   .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
   .s3{grid-column:span 3}.s4{grid-column:span 4}.s6{grid-column:span 6}.s8{grid-column:span 8}.s12{grid-column:span 12}
+  .shell{display:flex;align-items:stretch;min-height:calc(100vh - 49px)}.content{flex:1;min-width:0}
+  .side{width:200px;flex:none;background:#fff;border-right:1px solid var(--border);padding:16px 10px;display:flex;flex-direction:column;gap:2px}
+  .side .sl{text-align:center;margin-bottom:6px}.side .col{text-align:center;font-size:13px;margin-bottom:14px;color:var(--text)}
+  .side hr{border:0;border-top:1px solid var(--border);margin:14px 0}
+  .ni{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;font-size:13.5px;color:var(--text);text-decoration:none}
+  .ni.on{background:var(--accent);color:#fff;font-weight:600}
+  @media(max-width:900px){.side{display:none}}
   .seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
   .seg button{border:0;background:#fff;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--muted)}
   .seg button.on{background:var(--accent);color:#fff}
@@ -74,6 +81,7 @@
   <button data-p="acq">Acquirer</button>
 </div>
 
+<div class="shell"><nav class="side"><div class="sl"><svg width="34" height="34" viewBox="0 0 34 34" fill="#0f172a"><circle cx="6" cy="6" r="4"/><circle cx="28" cy="6" r="4"/><circle cx="17" cy="17" r="4"/><circle cx="6" cy="28" r="4"/><circle cx="28" cy="28" r="4"/></svg></div><div class="col">▢ Collapse</div><a href="#" class="ni on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a><a href="#" class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9a3 3 0 0 0-3-1.5c-1.7 0-3 .8-3 2s1.3 1.7 3 2 3 .8 3 2-1.3 2-3 2a3 3 0 0 1-3-1.5M12 5.5v13"/></svg><span>Transactions &amp; Reports</span></a><a href="#" class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 6h4M10 11h.01M14 11h.01M10 15h.01M14 15h.01"/></svg><span>Devices</span></a><a href="#" class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span>Administration</span></a><a href="#" class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18M4 18l-1-10 5 4 4-7 4 7 5-4-1 10"/></svg><span>Premier Portal</span></a><hr><a href="#" class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z"/></svg><span>Favorites</span></a></nav><div class="content">
 <div class="top">
   <span class="logo">Verifone Central</span>
   <div class="search">🔍 Search transaction ID, merchant, device…</div>
@@ -84,6 +92,7 @@
 </div>
 
 <main id="root"></main>
+</div></div>
 
 <script>
 const spark = (pts,color='#2563eb')=>{
@@ -119,7 +128,7 @@ const btns=a=>`<div class="actions">${a.map((x,i)=>`<span class="btn ${i==0?'p':
 const status=a=>a.map(([c,t,n])=>`<div class="status"><span class="dot" style="background:${c}"></span>${t}<b style="margin-left:auto">${n}</b></div>`).join('');
 const dates=`<div class="filters"><span class="chip">📅 Last 7 days ▾</span><span class="chip">EUR ▾</span><span class="chip">⚙ Customize</span></div>`;
 const G='#16a34a',R='#dc2626',A='#d97706';
-const devOnline=`<div class="card s3 devon"><div class="t">Devices online</div><div class="v">6 / 9</div><div class="sub"><span class="off">1 offline</span> · <span class="na">2 not activated</span></div>${spark([22,22,21,19,16,13,9,8,9,8,7,7,8],'#d97706')}<div class="ft"><span class="tagv">VHQ 2.0</span><a href="#">View ›</a></div></div>`;
+const devOnline=`<div class="card kpi s3"><div class="l">Devices online</div><div class="v">6 / 9</div><div class="d"><span style="color:var(--red)">1 offline</span> · <span style="color:var(--amber,#d97706)">2 not activated</span></div></div>`;
 
 const P={
 smb:{avatar:'MR',entity:'Café Rosa — Main Street ▾',
