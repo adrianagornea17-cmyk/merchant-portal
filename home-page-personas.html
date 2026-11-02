@@ -27,7 +27,15 @@
   .grid{display:grid;gap:16px;grid-template-columns:repeat(12,1fr);margin-bottom:16px}
   .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
   .s3{grid-column:span 3}.s4{grid-column:span 4}.s6{grid-column:span 6}.s8{grid-column:span 8}.s12{grid-column:span 12}
-  @media(max-width:900px){.s3,.s4,.s6,.s8{grid-column:span 12}}
+  .s5{grid-column:span 5}
+  @media(max-width:900px){.s3,.s4,.s5,.s6,.s8{grid-column:span 12}}
+  .devon{border-left:3px solid #d97706;display:flex;flex-direction:column}
+  .devon .t{font-size:14px;font-weight:600}.devon .v{font-size:30px;font-weight:700;margin:10px 0 4px}
+  .devon .sub{font-size:13px}.devon .off{color:#9333ea}.devon .na{color:#be185d}
+  .devon svg.chart{height:60px;margin:8px 0}
+  .devon .ft{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+  .devon .tagv{background:#f1f5f9;color:#475569;border-radius:6px;padding:3px 8px;font-size:12px;font-weight:600}
+  .devon .ft a{color:var(--muted);font-size:13px;text-decoration:none}
   .card h3{font-size:14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
   .card h3 a{font-size:12px;color:var(--accent);font-weight:500;text-decoration:none}
   .kpi .l{color:var(--muted);font-size:12px}.kpi .v{font-size:24px;font-weight:700;margin:4px 0}
@@ -78,6 +86,15 @@ const spark = (pts,color='#2563eb')=>{
   const p=pts.map((v,i)=>`${(i/(pts.length-1))*300},${70-((v-min)/(max-min||1))*60}`).join(' ');
   return `<svg class="chart" viewBox="0 0 300 80" preserveAspectRatio="none"><polyline fill="none" stroke="${color}" stroke-width="2" points="${p}"/></svg>`;
 };
+const multi=series=>{
+  const all=series.flatMap(s=>s[2]),max=Math.max(...all),min=0;
+  const lines=series.map(([n,c,pts])=>{
+    const p=pts.map((v,i)=>`${(i/(pts.length-1))*300},${70-((v-min)/(max-min||1))*60}`).join(' ');
+    return `<polyline fill="none" stroke="${c}" stroke-width="2" points="${p}"/>`;
+  }).join('');
+  const legend=series.map(([n,c])=>`<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px;font-size:12px;color:var(--muted)"><i style="width:10px;height:3px;background:${c};border-radius:2px"></i>${n}</span>`).join('');
+  return `<div>${legend}</div><svg class="chart" viewBox="0 0 300 80" preserveAspectRatio="none">${lines}</svg>`;
+};
 const kpi=(l,v,d,up=true)=>`<div class="card kpi s3"><div class="l">${l}</div><div class="v">${v}</div><div class="d ${up?'up':'down'}">${up?'▲':'▼'} ${d}</div></div>`;
 const rows=a=>a.map(([t,s,p,c])=>`<div class="row"><div>${t}${s?`<small>${s}</small>`:''}</div>${p?`<span class="pill ${c}">${p}</span>`:''}</div>`).join('');
 const card=(size,title,body,link='View all')=>`<div class="card ${size}"><h3>${title}${link?`<a href="#">${link}</a>`:''}</h3>${body}</div>`;
@@ -85,6 +102,7 @@ const btns=a=>`<div class="actions">${a.map((x,i)=>`<span class="btn ${i==0?'p':
 const status=a=>a.map(([c,t,n])=>`<div class="status"><span class="dot" style="background:${c}"></span>${t}<b style="margin-left:auto">${n}</b></div>`).join('');
 const dates=`<div class="filters"><span class="chip">📅 Last 7 days ▾</span><span class="chip">EUR ▾</span><span class="chip">⚙ Customize</span></div>`;
 const G='#16a34a',R='#dc2626',A='#d97706';
+const devOnline=`<div class="card s3 devon"><div class="t">Devices online</div><div class="v">6 / 9</div><div class="sub"><span class="off">1 offline</span> · <span class="na">2 not activated</span></div>${spark([22,22,21,19,16,13,9,8,9,8,7,7,8],'#d97706')}<div class="ft"><span class="tagv">VHQ 2.0</span><a href="#">View ›</a></div></div>`;
 
 const P={
 smb:{avatar:'MR',entity:'Café Rosa — Main Street ▾',
@@ -97,13 +115,14 @@ ${kpi('Refunds','€112.30','8% vs. last week',false)}
 ${kpi('Approval rate','97.8%','0.4 pts')}
 </div>
 <div class="grid">
-${card('s8','Sales — last 7 days',spark([620,780,710,940,1010,1180,1284]))}
-${card('s4','Next payout',`<div class="kpi"><div class="v">€3,912.20</div><div class="l">Expected Fri, 10 Oct → IBAN •••• 4412</div></div><div class="row"><div>Last payout<small>Fri, 3 Oct</small></div><span class="pill g">Paid</span></div>`,'Payouts')}
+${card('s5','Sales & refunds — last 7 days',multi([['Sales','#2563eb',[620,780,710,940,1010,1180,1284]],['Refunds','#dc2626',[48,95,60,82,70,104,112]]]))}
+${devOnline}
+${card('s4','Sales by location <span class="tagv" style="font-weight:600;font-size:11px;background:#f1f5f9;color:#475569;border-radius:6px;padding:2px 8px;margin-left:8px">Payments</span>',[['Main Street',6800,'€6.8K'],['Old Town',3100,'€3.1K'],['Harbour St.',0,'—']].map(([n,v,t])=>`<div style="display:flex;align-items:center;gap:12px;padding:7px 0;font-size:13px"><span style="width:90px">${n}</span><div class="bar" style="flex:1;height:14px;margin:0;border-radius:7px"><i style="width:${v/68}%;border-radius:7px"></i></div><b style="width:44px;text-align:right">${t}</b></div>`).join('')+`<small style="color:var(--muted);font-size:12px">Gross sales · selected period</small>`,'')}
 </div>
 <div class="grid">
 ${card('s4','Needs your attention',rows([['1 dispute awaiting response','Reply by 14 Oct','Due soon','a'],['Terminal "Counter 2" offline','Since 08:12','Offline','r'],['Declines up 3% today','Mostly insufficient funds','Info','b']]),'')}
 ${card('s4','Quick actions',btns(['View transactions','Issue a refund','Download report','Order supplies','Take a payment']),'')}
-${card('s4','My devices',status([[G,'Online',3],[R,'Offline',1],[A,'Update available',1]])+btns(['+ Add a device']),'Manage')}
+${card('s4','My devices',status([[G,'Online',6],[R,'Offline',1],[A,'Not activated',2]])+btns(['+ Add a device']),'Manage')}
 </div>
 <div class="grid">
 ${card('s6','Finish setting up (3 of 5)',`<div class="steps"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div>`+rows([['Verify business details','','Done','g'],['Add a bank account','','Done','g'],['Activate 2nd location (Harbour St.)','Documents needed','Continue','b'],['Order a countertop terminal','','Start','b']]),'')}
