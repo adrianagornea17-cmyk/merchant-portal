@@ -27,6 +27,9 @@
   .grid{display:grid;gap:16px;grid-template-columns:repeat(12,1fr);margin-bottom:16px}
   .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
   .s3{grid-column:span 3}.s4{grid-column:span 4}.s6{grid-column:span 6}.s8{grid-column:span 8}.s12{grid-column:span 12}
+  .seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .seg button{border:0;background:#fff;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--muted)}
+  .seg button.on{background:var(--accent);color:#fff}
   .s5{grid-column:span 5}
   @media(max-width:900px){.s3,.s4,.s5,.s6,.s8{grid-column:span 12}}
   .devon{border-left:3px solid #d97706;display:flex;flex-direction:column}
@@ -95,6 +98,18 @@ const multi=series=>{
   const legend=series.map(([n,c])=>`<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px;font-size:12px;color:var(--muted)"><i style="width:10px;height:3px;background:${c};border-radius:2px"></i>${n}</span>`).join('');
   return `<div>${legend}</div><svg class="chart" viewBox="0 0 300 80" preserveAspectRatio="none">${lines}</svg>`;
 };
+const salesBy=(()=>{
+  const bars=(a,max)=>a.map(([n,v,t])=>`<div style="display:flex;align-items:center;gap:12px;padding:7px 0;font-size:13px"><span style="width:90px">${n}</span><div class="bar" style="flex:1;height:14px;margin:0;border-radius:7px"><i style="width:${v/max*100}%;border-radius:7px"></i></div><b style="width:44px;text-align:right">${t}</b></div>`).join('');
+  const loc=bars([['Main Street',6800,'€6.8K'],['Old Town',3100,'€3.1K'],['Harbour St.',0,'—']],6800);
+  const dev=bars([['Counter 1',3900,'€3.9K'],['Counter 2',1200,'€1.2K'],['Terrace',2100,'€2.1K'],['Mobile 1',1500,'€1.5K'],['Old Town T1',3100,'€3.1K']],3900);
+  return `<div class="card s4 sbl"><h3><span>Sales by <span class="tagv" style="font-weight:600;font-size:11px;background:#f1f5f9;color:#475569;border-radius:6px;padding:2px 8px;margin-left:4px">Payments</span></span><span class="seg"><button class="on" data-v="loc">Locations</button><button data-v="dev">Devices</button></span></h3><div data-pane="loc">${loc}</div><div data-pane="dev" hidden>${dev}</div><small style="color:var(--muted);font-size:12px">Gross sales · selected period</small></div>`;
+})();
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.seg button');if(!b)return;
+  const c=b.closest('.sbl');
+  c.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));
+  c.querySelectorAll('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.v);
+});
 const kpi=(l,v,d,up=true)=>`<div class="card kpi s3"><div class="l">${l}</div><div class="v">${v}</div><div class="d ${up?'up':'down'}">${up?'▲':'▼'} ${d}</div></div>`;
 const rows=a=>a.map(([t,s,p,c])=>`<div class="row"><div>${t}${s?`<small>${s}</small>`:''}</div>${p?`<span class="pill ${c}">${p}</span>`:''}</div>`).join('');
 const card=(size,title,body,link='View all')=>`<div class="card ${size}"><h3>${title}${link?`<a href="#">${link}</a>`:''}</h3>${body}</div>`;
@@ -117,7 +132,7 @@ ${kpi('Approval rate','97.8%','0.4 pts')}
 <div class="grid">
 ${card('s5','Sales & refunds — last 7 days',multi([['Sales','#2563eb',[620,780,710,940,1010,1180,1284]],['Refunds','#dc2626',[48,95,60,82,70,104,112]]]))}
 ${devOnline}
-${card('s4','Sales by location <span class="tagv" style="font-weight:600;font-size:11px;background:#f1f5f9;color:#475569;border-radius:6px;padding:2px 8px;margin-left:8px">Payments</span>',[['Main Street',6800,'€6.8K'],['Old Town',3100,'€3.1K'],['Harbour St.',0,'—']].map(([n,v,t])=>`<div style="display:flex;align-items:center;gap:12px;padding:7px 0;font-size:13px"><span style="width:90px">${n}</span><div class="bar" style="flex:1;height:14px;margin:0;border-radius:7px"><i style="width:${v/68}%;border-radius:7px"></i></div><b style="width:44px;text-align:right">${t}</b></div>`).join('')+`<small style="color:var(--muted);font-size:12px">Gross sales · selected period</small>`,'')}
+${salesBy}
 </div>
 <div class="grid">
 ${card('s4','Needs your attention',rows([['1 dispute awaiting response','Reply by 14 Oct','Due soon','a'],['Terminal "Counter 2" offline','Since 08:12','Offline','r'],['Declines up 3% today','Mostly insufficient funds','Info','b']]),'')}
