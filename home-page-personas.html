@@ -30,6 +30,8 @@
   .seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
   .seg button{border:0;background:#fff;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--muted)}
   .seg button.on{background:var(--accent);color:#fff}
+  .g5{grid-template-columns:repeat(5,1fr)}.g5>.card{grid-column:span 1}
+  @media(max-width:900px){.g5{grid-template-columns:1fr}}
   .s5{grid-column:span 5}
   @media(max-width:900px){.s3,.s4,.s5,.s6,.s8{grid-column:span 12}}
   .devon{border-left:3px solid #d97706;display:flex;flex-direction:column}
@@ -122,16 +124,16 @@ const devOnline=`<div class="card s3 devon"><div class="t">Devices online</div><
 const P={
 smb:{avatar:'MR',entity:'Café Rosa — Main Street ▾',
 html:()=>`
-<div class="hello"><div><h1>Good morning, Maria 👋</h1><p>Here's how Café Rosa is doing today.</p></div>${dates}</div>
-<div class="grid">
+<div class="hello"><div><h1>Good morning, Maria 👋</h1><p>Here's how Café Rosa is doing today.</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="btn p">🔗 Create payment link</span>${dates}</div></div>
+<div class="grid g5">
 ${kpi("Today's sales",'€1,284.50','12% vs. yesterday')}
 ${kpi('Transactions','86','5% vs. last week')}
 ${kpi('Refunds','€112.30','8% vs. last week',false)}
+${devOnline}
 ${kpi('Approval rate','97.8%','0.4 pts')}
 </div>
 <div class="grid">
-${card('s5','Sales & refunds — last 7 days',multi([['Sales','#2563eb',[620,780,710,940,1010,1180,1284]],['Refunds','#dc2626',[48,95,60,82,70,104,112]]]))}
-${devOnline}
+${card('s8','Sales & refunds — last 7 days',multi([['Sales','#2563eb',[620,780,710,940,1010,1180,1284]],['Refunds','#dc2626',[48,95,60,82,70,104,112]]]))}
 ${salesBy}
 </div>
 <div class="grid">
