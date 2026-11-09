@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verifone Central — Unified Merchant Dashboard (Mockup)</title>
+<style>
+  :root {
+    --primary: #1f5bff;
+    --primary-hover: #1848d6;
+    --primary-light: #e8eeff;
+    --text: #141a2b;
+    --text-muted: #5f6678;
+    --text-faint: #9aa0ae;
+    --bg: #ffffff;
+    --bg-page: #f6f7f9;
+    --bg-subtle: #f1f3f6;
+    --border: #e3e6eb;
+    --border-strong: #cfd4dc;
+    --success: #10a37f;
+    --success-light: #e3f6f0;
+    --warning: #e08a00;
+    --warning-light: #fff3dc;
+    --danger: #c8174f;
+    --danger-light: #fde7ee;
+    --neutral-dot: #9aa0ae;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--bg-page);
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; cursor: pointer; }
+  input, select { font: inherit; color: inherit; }
+
+  /* ---------- Shell ---------- */
+  .shell { display: grid; grid-template-columns: 124px 1fr; height: 100vh; }
+  .sidebar {
+    background: var(--bg); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 12px 0;
+  }
+  .logo { display: grid; grid-template-columns: repeat(2, 8px); gap: 4px 10px; justify-content: center; margin: 4px 0 14px; }
+  .logo span { width: 8px; height: 8px; border-radius: 50%; background: var(--text); }
+  .logo span:nth-child(3) { grid-column: 1 / 3; justify-self: center; }
+  .collapse { display: flex; align-items: center; gap: 6px; justify-content: center; color: var(--text); font-size: 12px; margin-bottom: 14px; }
+  .nav { display: flex; flex-direction: column; gap: 2px; padding: 0 4px; }
+  .nav a {
+    display: flex; align-items: center; gap: 8px; padding: 8px 8px; border-radius: 6px;
+    color: var(--text); text-decoration: none; font-size: 11px; line-height: 1.2;
+  }
+  .nav a:hover { background: var(--bg-subtle); }
+  .nav a.active { background: var(--primary); color: #fff; font-weight: 600; }
+  .nav a .new { margin-left: auto; font-size: 9px; background: var(--primary-light); color: var(--primary); padding: 1px 4px; border-radius: 4px; }
+  .nav a.active .new { background: rgba(255,255,255,.25); color: #fff; }
+  .nav-sep { height: 1px; background: var(--border); margin: 8px 6px; }
+  .sidebar .spacer { flex: 1; }
+  .ico { width: 14px; height: 14px; flex: none; }
+
+  .main { display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+  .topbar {
+    height: 30px; flex: none; background: var(--bg); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 20px; gap: 14px;
+  }
+  .topbar .crumb { color: var(--primary); text-decoration: underline; font-size: 12px; }
+  .topbar .grow { flex: 1; }
+  .try-new {
+    display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-strong);
+    border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 11px;
+  }
+  .switch { width: 26px; height: 14px; border-radius: 7px; background: #c5cad3; position: relative; }
+  .switch::after { content: ""; position: absolute; width: 10px; height: 10px; top: 2px; left: 2px; border-radius: 50%; background: #fff; }
+  .content { overflow-y: auto; padding: 18px 28px 48px; }
+  .container { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+  /* ---------- Generic ---------- */
+  .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); }
+  .card-pad { padding: 16px 18px; }
+  .card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .card-head h3 { margin: 0; font-size: 14px; font-weight: 600; }
+  .card-head .sub { color: var(--text-muted); font-size: 12px; }
+  .grow { flex: 1; }
+  .row { display: flex; align-items: center; gap: 8px; }
+  .muted { color: var(--text-muted); }
+  .faint { color: var(--text-faint); }
+  .caption { color: var(--text-faint); font-size: 11px; margin-top: 8px; }
+  h1 { font-size: 20px; margin: 0; font-weight: 600; }
+  h2 { font-size: 15px; margin: 0; font-weight: 600; }
+
+  .btn {
+    border: 1px solid var(--border-strong); background: var(--bg); color: var(--text);
+    border-radius: 999px; padding: 6px 14px; font-size: 12px; font-weight: 500; white-space: nowrap;
+  }
+  .btn:hover { background: var(--bg-subtle); }
+  .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-ghost { border-color: transparent; background: transparent; color: var(--primary); padding: 6px 8px; }
+  .btn-ghost:hover { background: var(--primary-light); }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .btn-sm { padding: 4px 10px; font-size: 11px; }
+
+  .pills { display: flex; gap: 6px; }
+  .pill {
+    border: none; background: var(--bg-subtle); color: var(--text); border-radius: 999px;
+    padding: 6px 12px; font-size: 12px; font-weight: 500; white-space: nowrap;
+  }
+  .pill.active { background: var(--primary); color: #fff; }
+  .seg { display: inline-flex; background: var(--bg-subtle); border-radius: 999px; padding: 2px; }
+  .seg button { border: none; background: transparent; padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 500; color: var(--text-muted); }
+  .seg button.active { background: var(--bg); color: var(--text); box-shadow: 0 0 0 1px var(--border); }
+
+  .src {
+    font-size: 10px; padding: 1px 6px; border-radius: 4px; background: var(--bg-subtle);
+    color: var(--text-muted); white-space: nowrap; font-weight: 500;
+  }
+  .search {
+    display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-strong);
+    border-radius: 999px; padding: 6px 14px; width: 280px; background: var(--bg);
+  }
+  .search input { border: none; outline: none; flex: 1; font-size: 12px; background: transparent; }
+  select.sel {
+    border: 1px solid var(--border-strong); border-radius: 999px; padding: 5px 12px; background: var(--bg); font-size: 12px;
+  }
+
+  /* ---------- Header ---------- */
+  .page-head { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+  .page-head .titles .sub { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+  .sources { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; font-size: 11px; color: var(--text-muted); }
+  .sources .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+
+  /* ---------- KPI ---------- */
+  .kpis { display: grid; gap: 12px; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .kpi {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 14px 10px 18px; position: relative; overflow: hidden; cursor: pointer;
+  }
+  .kpi:hover { border-color: var(--border-strong); }
+  .kpi::before { content: ""; position: absolute; left: 10px; top: 12px; bottom: 12px; width: 3px; border-radius: 2px; background: var(--kpi-color, var(--success)); }
+  .kpi .label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding-left: 4px; }
+  .kpi .value { font-size: 24px; font-weight: 600; margin: 6px 0 2px; padding-left: 4px; letter-spacing: -.3px; }
+  .kpi .delta { font-size: 11px; padding-left: 4px; }
+  .kpi .delta.up { color: var(--success); }
+  .kpi .delta.down { color: var(--danger); }
+  .kpi .delta.flat { color: var(--text-muted); }
+  .kpi svg.spark { display: block; margin-top: 6px; width: 100%; height: 26px; }
+  .kpi-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding-left: 4px; font-size: 11px; }
+
+  /* ---------- Layout grids ---------- */
+  .grid-2-1 { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px; }
+  .grid-map { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+
+  /* ---------- Chart ---------- */
+  .legend { display: flex; gap: 14px; font-size: 11px; color: var(--text-muted); }
+  .legend i { display: inline-block; width: 10px; height: 3px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+  .chart-wrap { position: relative; }
+  .chart-tip {
+    position: absolute; pointer-events: none; background: var(--text); color: #fff; font-size: 11px;
+    padding: 6px 8px; border-radius: 6px; white-space: nowrap; transform: translate(-50%, -110%); display: none;
+  }
+
+  /* ---------- Funnel ---------- */
+  .funnel { display: flex; flex-direction: column; gap: 8px; }
+  .funnel-row { display: grid; grid-template-columns: 130px 1fr 34px; align-items: center; gap: 8px; font-size: 12px; }
+  .funnel-bar { height: 18px; background: var(--bg-subtle); border-radius: 4px; overflow: hidden; }
+  .funnel-bar > div { height: 100%; background: var(--primary); border-radius: 4px; }
+  .funnel-row.ext .funnel-bar > div { background: #6f93ff; }
+  .funnel-row .n { text-align: right; font-weight: 600; }
+  .funnel-note { font-size: 11px; color: var(--text-muted); margin-top: 10px; display: flex; gap: 6px; align-items: center; }
+  .funnel-note i { width: 10px; height: 10px; border-radius: 2px; background: #6f93ff; display: inline-block; }
+
+  /* ---------- Attention ---------- */
+  .alerts { display: flex; flex-direction: column; }
+  .alert { display: grid; grid-template-columns: 4px 1fr auto; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); align-items: start; }
+  .alert:first-child { border-top: none; padding-top: 2px; }
+  .alert .bar { align-self: stretch; border-radius: 2px; }
+  .alert.high .bar { background: var(--danger); }
+  .alert.medium .bar { background: var(--warning); }
+  .alert.low .bar { background: var(--border-strong); }
+  .alert .t { font-weight: 600; font-size: 12.5px; }
+  .alert .d { color: var(--text-muted); font-size: 12px; margin: 3px 0 6px; line-height: 1.45; }
+  .alert .tags { display: flex; gap: 4px; }
+  .count-badge { background: var(--danger-light); color: var(--danger); font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
+
+  /* ---------- Map ---------- */
+  .map-card { display: flex; flex-direction: column; }
+  .map {
+    position: relative; flex: 1; min-height: 290px; border-radius: var(--radius-sm); overflow: hidden;
+    background-color: #eef2f7;
+    background-image: radial-gradient(#d3dae5 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .pin { cursor: pointer; }
+  .pin circle.halo { opacity: .2; }
+  .map-legend { display: flex; gap: 12px; font-size: 11px; color: var(--text-muted); }
+  .map-legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; background: var(--c); vertical-align: middle; }
+  .map-tip {
+    position: absolute; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+    font-size: 11px; pointer-events: none; display: none; min-width: 170px; transform: translate(-50%, calc(-100% - 12px));
+  }
+  .map-tip b { font-size: 12px; }
+
+  /* ---------- Table ---------- */
+  .table-tools { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .3px;
+    padding: 8px 10px; border-bottom: 1px solid var(--border); background: var(--bg-subtle);
+  }
+  th:first-child { border-top-left-radius: 8px; }
+  th:last-child { border-top-right-radius: 8px; }
+  td { padding: 10px; border-bottom: 1px solid var(--border); font-size: 12.5px; vertical-align: middle; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover td { background: #fafbfd; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .merchant-cell { display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 26px; height: 26px; border-radius: 6px; display: grid; place-items: center; font-size: 10px; font-weight: 700; color: var(--primary); background: var(--primary-light); flex: none; }
+  .dev { display: flex; align-items: center; gap: 8px; }
+  .dev .track { width: 60px; height: 6px; border-radius: 3px; background: var(--bg-subtle); overflow: hidden; }
+  .dev .track div { height: 100%; }
+  .status { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
+  .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .s-healthy { color: var(--success); background: var(--success-light); }
+  .s-offline { color: var(--warning); background: var(--warning-light); }
+  .s-drop { color: var(--danger); background: var(--danger-light); }
+  .s-pending { color: var(--text-muted); background: var(--bg-subtle); }
+  .empty { text-align: center; color: var(--text-muted); padding: 24px; }
+
+  /* ---------- Donut / mix ---------- */
+  .donut-wrap { display: flex; align-items: center; gap: 18px; }
+  .donut-legend { display: flex; flex-direction: column; gap: 8px; font-size: 12px; flex: 1; }
+  .donut-legend .li { display: flex; align-items: center; gap: 8px; }
+  .donut-legend .sw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .donut-legend .v { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stack { display: flex; height: 14px; border-radius: 4px; overflow: hidden; margin: 6px 0 14px; }
+  .stack div { height: 100%; }
+  .pipeline { display: flex; flex-direction: column; }
+  .pipe-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 9px 0; border-top: 1px solid var(--border); }
+  .pipe-row:first-child { border-top: none; padding-top: 0; }
+  .pipe-row .name { font-weight: 600; font-size: 12.5px; }
+  .pipe-row .age { color: var(--text-faint); font-size: 11px; text-align: right; }
+  .pipe-row .stage { color: var(--text-muted); font-size: 11.5px; grid-column: 1 / 3; display: flex; align-items: center; gap: 8px; }
+  .steps-mini { display: flex; gap: 3px; }
+  .steps-mini i { width: 14px; height: 4px; border-radius: 2px; background: var(--border); }
+  .steps-mini i.on { background: var(--primary); }
+  .steps-mini i.warn { background: var(--warning); }
+  .big-number { font-size: 26px; font-weight: 600; letter-spacing: -.3px; }
+
+  /* ---------- Apps ---------- */
+  .apps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+  .app { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); cursor: pointer; }
+  .app:hover { border-color: var(--border-strong); }
+  .app .ic { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; flex: none; }
+  .app .n { font-weight: 600; font-size: 12px; }
+  .app .d { color: var(--text-muted); font-size: 11px; }
+
+  /* ---------- Drawer ---------- */
+  .scrim { position: fixed; inset: 0; background: rgba(20, 26, 43, .35); display: none; z-index: 10; }
+  .scrim.open { display: block; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 460px; background: var(--bg); z-index: 11;
+    transform: translateX(100%); transition: transform .2s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border);
+  }
+  .drawer.open { transform: none; }
+  .drawer-head { padding: 18px 20px 14px; border-bottom: 1px solid var(--border); }
+  .drawer-body { padding: 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+  .x-btn { border: none; background: transparent; font-size: 18px; color: var(--text-muted); line-height: 1; padding: 4px; }
+  .mini-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .mini-kpis div { background: var(--bg-subtle); border-radius: 8px; padding: 10px; }
+  .mini-kpis b { display: block; font-size: 16px; }
+  .mini-kpis span { font-size: 11px; color: var(--text-muted); }
+  .sec-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .dev-list { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 8px; }
+  .dev-item { display: grid; grid-template-columns: 1fr auto; padding: 8px 10px; border-top: 1px solid var(--border); font-size: 12px; }
+  .dev-item:first-child { border-top: none; }
+  .dev-item .meta { color: var(--text-muted); font-size: 11px; }
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl { display: grid; grid-template-columns: 16px 1fr auto; gap: 8px; font-size: 12px; position: relative; padding-bottom: 12px; }
+  .tl::before { content: ""; position: absolute; left: 7px; top: 14px; bottom: 0; width: 2px; background: var(--border); }
+  .tl:last-child::before { display: none; }
+  .tl .d { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border-strong); background: var(--bg); margin-top: 1px; }
+  .tl.done .d { background: var(--success); border-color: var(--success); }
+  .tl.cur .d { border-color: var(--primary); }
+  .tl .when { color: var(--text-faint); font-size: 11px; }
+
+  /* ---------- Modal / wizard ---------- */
+  .modal-scrim { position: fixed; inset: 0; background: rgba(20, 26, 43, .45); display: none; align-items: center; justify-content: center; z-index: 20; }
+  .modal-scrim.open { display: flex; }
+  .modal { width: 880px; max-width: calc(100vw - 40px); max-height: calc(100vh - 60px); background: var(--bg); border-radius: 14px; display: flex; flex-direction: column; overflow: hidden; }
+  .modal-head { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .modal-body { display: grid; grid-template-columns: 220px 1fr; min-height: 420px; overflow: hidden; }
+  .stepper { background: var(--bg-subtle); padding: 18px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .step { display: grid; grid-template-columns: 22px 1fr; gap: 2px 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; align-items: center; }
+  .step.active { background: var(--bg); box-shadow: 0 0 0 1px var(--border); }
+  .step .num { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: var(--bg); border: 1px solid var(--border-strong); color: var(--text-muted); }
+  .step.active .num, .step.done .num { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .step .lbl { font-weight: 600; font-size: 12.5px; }
+  .step .sys { grid-column: 2; font-size: 10.5px; color: var(--text-faint); }
+  .step-pane { padding: 20px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+  .writes { background: var(--primary-light); color: #213a8f; border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.45; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field.full { grid-column: 1 / 3; }
+  .field label { font-size: 11.5px; font-weight: 500; color: var(--text-muted); }
+  .field input, .field select { border: 1px solid var(--border-strong); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; background: var(--bg); }
+  .field input:focus, .field select:focus { outline: 2px solid var(--primary-light); border-color: var(--primary); }
+  .loc-block { border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .loc-block .geo { font-size: 11px; color: var(--success); }
+  .check-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .check-row .ok { color: var(--success); font-weight: 700; }
+  .model-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .model { border: 1px solid var(--border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .model .nm { font-weight: 600; }
+  .model .ds { font-size: 11px; color: var(--text-muted); }
+  .qty { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .qty button { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--bg); line-height: 1; }
+  .qty span { min-width: 18px; text-align: center; font-weight: 600; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { border: 1px solid var(--border-strong); background: var(--bg); border-radius: 999px; padding: 5px 12px; font-size: 12px; }
+  .chip.on { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 500; }
+  .review { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 10px; }
+  .review .rr { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; padding: 10px 12px; border-top: 1px solid var(--border); align-items: start; font-size: 12px; }
+  .review .rr:first-child { border-top: none; }
+  .review .rr .n { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-subtle); font-size: 10px; font-weight: 600; }
+  .modal-foot { padding: 12px 22px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: #fff;
+    padding: 10px 16px; border-radius: 10px; font-size: 12.5px; opacity: 0; transition: all .2s ease; z-index: 30; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%); }
+
+  .hidden { display: none !important; }
+  .mock-banner {
+    font-size: 11px; color: var(--text-muted); background: var(--bg); border: 1px dashed var(--border-strong);
+    border-radius: 8px; padding: 6px 12px; display: flex; gap: 10px; align-items: center;
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <!-- ================= Sidebar ================= -->
+  <aside class="sidebar">
+    <div class="logo"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="collapse">
+      <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M6 3v10"/></svg>
+      Collapse
+    </div>
+    <nav class="nav">
+      <a href="#" class="active"><svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 1.5 7v7.5h4.5V10h4v4.5h4.5V7z"/></svg>Home</a>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 6h12l-1-3H3zM3 6v7h10V6M6.5 13V9.5h3V13"/></svg>Merchants<span class="new">New</span></a>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 14s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C3.5 9.8 8 14 8 14z"/><circle cx="8" cy="6.5" r="1.6"/></svg>Locations<span class="new">New</span></a>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M9.8 5.8C9.4 5.3 8.8 5 8 5c-1.1 0-1.9.6-1.9 1.5 0 2 3.8 1 3.8 3 0 .9-.8 1.5-1.9 1.5-.8 0-1.5-.3-1.9-.9M8 3.8V5M8 11v1.2"/></svg>Transactions &amp; Reports</a>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="1.5" width="8" height="13" rx="1.5"/><path d="M6 4.5h4M6 8h1M9 8h1M6 10.5h1M9 10.5h1"/></svg>Devices</a>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 7h6M5 10h4"/></svg>Boarding</a>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"/></svg>Administration</a>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12h12L13 5l-3 3-2-4-2 4-3-3z"/></svg>Premier Portal</a>
+      <div class="nav-sep"></div>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m8 2 1.8 3.8 4.2.5-3.1 2.9.8 4.1L8 11.3l-3.7 2 .8-4.1L2 6.3l4.2-.5z"/></svg>Favorites</a>
+    </nav>
+    <div class="spacer"></div>
+    <nav class="nav">
+      <div class="nav-sep"></div>
+      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 3H3v10h3M10 5l3 3-3 3M13 8H6"/></svg>Logout</a>
+    </nav>
+  </aside>
+
+  <!-- ================= Main ================= -->
+  <div class="main">
+    <header class="topbar">
+      <a class="crumb" href="#">Home</a>
+      <div class="grow"></div>
+      <div class="try-new">Try new Verifone Central <span class="switch"></span></div>
+      <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 4h10v7H8l-3 2.5V11H3z"/></svg>
+      <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 14c.6-2.8 2.6-4 5-4s4.4 1.2 5 4"/></svg>
+    </header>
+
+    <div class="content">
+      <div class="container">
+
+        <div class="row">
+          <div class="search">
+            <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
+            <input placeholder="Search merchants, locations, serials, MIDs…" />
+          </div>
+          <div class="grow"></div>
+          <div class="mock-banner">
+            Mockup preview as
+            <div class="seg" id="personaSeg">
+              <button data-persona="partner" class="active">Partner / ISO</button>
+              <button data-persona="merchant">Merchant</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header -->
+        <div class="page-head">
+          <div class="titles">
+            <h1 id="pageTitle">Good afternoon, Surender</h1>
+            <div class="sub" id="pageSub">Portfolio overview · 48 merchants · 131 locations · 438 devices</div>
+          </div>
+          <div class="grow"></div>
+          <select class="sel" id="scopeSel"></select>
+          <div class="pills" id="rangePills">
+            <button class="pill active" data-range="24h">Last 24 Hours</button>
+            <button class="pill" data-range="7d">Last 7 Days</button>
+            <button class="pill" data-range="30d">Last 30 Days</button>
+          </div>
+          <button class="btn" id="orderBtn">Order devices</button>
+          <button class="btn btn-primary" id="onboardBtn">+ Onboard merchant</button>
+        </div>
+
+        <div class="sources" id="sources"></div>
+
+        <!-- KPIs -->
+        <div class="kpis" id="kpis"></div>
+
+        <!-- Trend + funnel -->
+        <div class="grid-2-1">
+          <div class="card card-pad">
+            <div class="card-head">
+              <h3>Sales vs refunds</h3>
+              <span class="src">Payments</span>
+              <div class="grow"></div>
+              <div class="legend"><span><i style="background:var(--primary)"></i>Sales</span><span><i style="background:var(--danger)"></i>Refunds</span></div>
+            </div>
+            <div class="chart-wrap" id="trendWrap">
+              <svg id="trend" width="100%" height="230"></svg>
+              <div class="chart-tip" id="trendTip"></div>
+            </div>
+            <div class="caption" id="trendCaption"></div>
+          </div>
+
+          <div class="card card-pad" id="funnelCard">
+            <div class="card-head">
+              <h3>Onboarding funnel</h3>
+              <div class="grow"></div>
+              <span class="faint" style="font-size:11px">Last 90 days</span>
+            </div>
+            <div class="funnel" id="funnel"></div>
+            <div class="funnel-note"><i></i>Stages needing VHQ + Payments data. Not visible in Boarding today.</div>
+          </div>
+
+          <div class="card card-pad hidden" id="byLocCard">
+            <div class="card-head">
+              <h3>Sales by location</h3>
+              <span class="src">Payments</span>
+              <div class="grow"></div>
+            </div>
+            <div class="funnel" id="byLoc"></div>
+            <div class="caption">Gross sales · selected period</div>
+          </div>
+        </div>
+
+        <!-- Map + attention -->
+        <div class="grid-map">
+          <div class="card card-pad map-card">
+            <div class="card-head">
+              <h3>Locations</h3>
+              <span class="src">Site registry</span><span class="src">VHQ 2.0</span>
+              <div class="grow"></div>
+              <div class="map-legend">
+                <span style="--c:var(--success)">Healthy</span>
+                <span style="--c:var(--warning)">Device offline</span>
+                <span style="--c:var(--danger)">Approval drop</span>
+                <span style="--c:var(--neutral-dot)">Awaiting go-live</span>
+              </div>
+            </div>
+            <div class="map" id="map">
+              <svg id="mapSvg"></svg>
+              <div class="map-tip" id="mapTip"></div>
+            </div>
+            <div class="caption">Pins placed by geocoded address captured during onboarding · click a pin for the location detail</div>
+          </div>
+
+          <div class="card card-pad">
+            <div class="card-head">
+              <h3>Needs attention</h3>
+              <span class="count-badge" id="alertCount"></span>
+              <div class="grow"></div>
+              <button class="btn-ghost btn btn-sm">View all</button>
+            </div>
+            <div class="alerts" id="alerts"></div>
+          </div>
+        </div>
+
+        <!-- Location table -->
+        <div class="card card-pad">
+          <div class="table-tools">
+            <h3 style="margin:0;font-size:14px">All locations</h3>
+            <span class="muted" style="font-size:12px">One row per site, joined across Boarding, Site registry, VHQ and Payments</span>
+            <div class="grow"></div>
+            <div class="search" style="width:220px;padding:5px 12px">
+              <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
+              <input id="locSearch" placeholder="Filter locations" />
+            </div>
+            <div class="pills" id="locFilter">
+              <button class="pill active" data-f="all">All</button>
+              <button class="pill" data-f="issues">Needs attention</button>
+              <button class="pill" data-f="pending">Awaiting go-live</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr id="locHead"></tr>
+            </thead>
+            <tbody id="locBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Bottom row -->
+        <div class="grid-3">
+          <div class="card card-pad">
+            <div class="card-head"><h3>Device fleet health</h3><span class="src">VHQ 2.0</span></div>
+            <div class="donut-wrap">
+              <svg id="donut" width="130" height="130" viewBox="0 0 130 130"></svg>
+              <div class="donut-legend" id="donutLegend"></div>
+            </div>
+            <div class="caption">Device count by heartbeat status · now</div>
+          </div>
+
+          <div class="card card-pad">
+            <div class="card-head"><h3>How customers pay</h3><span class="src">Payments</span></div>
+            <div class="stack" id="mixStack"></div>
+            <div class="donut-legend" id="mixLegend"></div>
+            <div class="caption">Share of transactions · selected period</div>
+          </div>
+
+          <div class="card card-pad" id="pipelineCard">
+            <div class="card-head"><h3>Onboarding in progress</h3><span class="src">Boarding</span><div class="grow"></div><span class="faint" style="font-size:11px">13 open</span></div>
+            <div class="pipeline" id="pipeline"></div>
+          </div>
+
+          <div class="card card-pad hidden" id="settleCard">
+            <div class="card-head"><h3>Next settlement</h3><span class="src">Payments</span></div>
+            <div class="big-number">$27,614.20</div>
+            <div class="muted" style="margin:4px 0 14px">Deposits tomorrow to •••• 4421</div>
+            <div class="donut-legend">
+              <div class="li"><span>Gross sales</span><span class="v">$28,300.00</span></div>
+              <div class="li"><span>Refunds</span><span class="v">−$73.40</span></div>
+              <div class="li"><span>Processing fees</span><span class="v">−$612.40</span></div>
+              <div class="li"><span>Open chargebacks</span><span class="v" style="color:var(--danger)">2</span></div>
+            </div>
+            <div class="row" style="margin-top:14px"><button class="btn btn-sm">Statements</button><button class="btn btn-sm">Disputes</button></div>
+          </div>
+        </div>
+
+        <!-- Apps -->
+        <div>
+          <div class="row" style="margin-bottom:10px">
+            <h2>Applications</h2>
+            <span class="muted" style="font-size:12px">You're already signed in. Deep links open with the selected merchant and location already applied.</span>
+          </div>
+          <div class="apps">
+            <div class="app"><div class="ic" style="background:#e8eeff"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#1f5bff" stroke-width="1.5"><path d="M2 12 6 7l3 3 5-6"/></svg></div><div><div class="n">Transactions &amp; Reporting</div><div class="d">Search, export, reconcile</div></div></div>
+            <div class="app"><div class="ic" style="background:#fde7ee"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#c8174f" stroke-width="1.5"><rect x="2.5" y="3" width="11" height="8" rx="1"/><path d="M6 14h4M8 11v3"/></svg></div><div><div class="n">VHQ 2.0</div><div class="d">Terminal management</div></div></div>
+            <div class="app"><div class="ic" style="background:#e3f6f0"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#10a37f" stroke-width="1.5"><rect x="3.5" y="2" width="9" height="12" rx="1"/><path d="M6 6h4M6 9h4"/></svg></div><div><div class="n">Boarding &amp; Compliance</div><div class="d">Applications, AML/KYC</div></div></div>
+            <div class="app"><div class="ic" style="background:#fff3dc"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#e08a00" stroke-width="1.5"><rect x="2" y="4" width="12" height="8" rx="1"/><path d="M2 7h12"/></svg></div><div><div class="n">Accept Payments</div><div class="d">Pay by link, virtual terminal</div></div></div>
+            <div class="app"><div class="ic" style="background:#f1f3f6"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#141a2b" stroke-width="1.5"><path d="M2 12h12L13 5l-3 3-2-4-2 4-3-3z"/></svg></div><div><div class="n">Premier Portal</div><div class="d">Self-service support</div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= Location drawer ================= -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="row">
+      <div>
+        <div class="muted" style="font-size:11px" id="dMerchant"></div>
+        <h2 id="dTitle" style="font-size:17px"></h2>
+        <div class="muted" style="font-size:12px;margin-top:2px" id="dAddr"></div>
+      </div>
+      <div class="grow"></div>
+      <button class="x-btn" id="drawerClose">×</button>
+    </div>
+    <div class="row" style="margin-top:10px" id="dStatus"></div>
+  </div>
+  <div class="drawer-body">
+    <div>
+      <div class="sec-title">Last 24 hours <span class="src">Payments</span></div>
+      <div class="mini-kpis" id="dKpis"></div>
+    </div>
+    <div>
+      <div class="sec-title">Devices <span class="src">VHQ 2.0</span></div>
+      <div class="dev-list" id="dDevices"></div>
+    </div>
+    <div>
+      <div class="sec-title">Onboarding history <span class="src">Boarding</span></div>
+      <div class="timeline" id="dTimeline"></div>
+    </div>
+    <div>
+      <div class="sec-title">Identifiers</div>
+      <div class="dev-list" id="dIds"></div>
+    </div>
+    <div class="row">
+      <button class="btn btn-sm">Open in VHQ 2.0</button>
+      <button class="btn btn-sm">View transactions</button>
+      <button class="btn btn-sm">Add device</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ================= Onboarding wizard ================= -->
+<div class="modal-scrim" id="wizScrim">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h2 id="wizTitle">Onboard a new merchant</h2>
+        <div class="muted" style="font-size:12px;margin-top:2px">One flow that provisions the merchant, its locations, devices and payments together</div>
+      </div>
+      <div class="grow"></div>
+      <span class="faint" id="wizCounter" style="font-size:12px"></span>
+      <button class="x-btn" id="wizClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="stepper" id="stepper"></div>
+      <div class="step-pane" id="stepPane"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="wizDraft">Save draft &amp; close</button>
+      <div class="grow"></div>
+      <button class="btn" id="wizBack">Back</button>
+      <button class="btn btn-primary" id="wizNext">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   Sample data (would come from the merchant experience API / BFF)
+   ===================================================================== */
+const SOURCES = [
+  { name: "Payments gateway", sync: "live", live: true },
+  { name: "Boarding & Compliance", sync: "synced 2 min ago" },
+  { name: "VHQ 2.0", sync: "live", live: true },
+  { name: "Site registry", sync: "synced 5 min ago" },
+];
+
+const KPI_DATA = {
+  "24h": [
+    { id: "vol", label: "Gross sales", value: "$167.7K", delta: "▲ 6.2% vs previous 24h", dir: "up", src: "Payments", spark: [3,2,1,4,8,12,16,15,13,18,12,7], color: "var(--success)" },
+    { id: "txn", label: "Transactions", value: "10,806", delta: "▲ 4.1%", dir: "up", src: "Payments", spark: [2,1,1,3,7,11,14,13,12,15,10,5], color: "var(--success)" },
+    { id: "appr", label: "Approval rate", value: "97.4%", delta: "▼ 0.8 pts", dir: "down", src: "Payments", spark: [98,98,98.2,98,97.9,97.6,97.2,97,97.1,97.3,97.4,97.4], color: "var(--danger)" },
+    { id: "mer", label: "Active merchants", value: "48", delta: "▲ 2 went live", dir: "up", src: "Boarding", spark: [44,44,45,45,45,46,46,46,47,47,48,48], color: "var(--success)", partnerOnly: true },
+    { id: "loc", label: "Active locations", value: "131", delta: "3 awaiting go-live", dir: "flat", src: "Site registry", spark: [124,125,125,126,127,128,128,129,130,130,131,131], color: "var(--success)" },
+    { id: "dev", label: "Devices online", value: "412 / 438", delta: "94.1% · 7 offline >24h", dir: "down", src: "VHQ 2.0", spark: [96,96,95.8,95.5,95.1,94.8,94.3,94.1,94.2,94.1,94,94.1], color: "var(--warning)" },
+  ],
+  "7d": [
+    { id: "vol", label: "Gross sales", value: "$1.12M", delta: "▲ 3.4% vs previous 7d", dir: "up", src: "Payments", spark: [148,152,161,187,204,129,142], color: "var(--success)" },
+    { id: "txn", label: "Transactions", value: "72,940", delta: "▲ 2.7%", dir: "up", src: "Payments", spark: [9.8,10.1,10.6,12.1,13.4,8.4,9.2], color: "var(--success)" },
+    { id: "appr", label: "Approval rate", value: "97.9%", delta: "▼ 0.2 pts", dir: "down", src: "Payments", spark: [98.1,98.2,98,98.1,97.9,97.8,97.4], color: "var(--danger)" },
+    { id: "mer", label: "Active merchants", value: "48", delta: "▲ 5 went live", dir: "up", src: "Boarding", spark: [43,44,45,45,46,47,48], color: "var(--success)", partnerOnly: true },
+    { id: "loc", label: "Active locations", value: "131", delta: "▲ 9 this week", dir: "up", src: "Site registry", spark: [122,124,125,127,128,130,131], color: "var(--success)" },
+    { id: "dev", label: "Devices online", value: "412 / 438", delta: "94.1% · 7 offline >24h", dir: "down", src: "VHQ 2.0", spark: [96.4,96.2,95.9,95.6,95.1,94.6,94.1], color: "var(--warning)" },
+  ],
+  "30d": [
+    { id: "vol", label: "Gross sales", value: "$4.68M", delta: "▲ 11.9% vs previous 30d", dir: "up", src: "Payments", spark: [1080,1140,1210,1250], color: "var(--success)" },
+    { id: "txn", label: "Transactions", value: "301,512", delta: "▲ 9.3%", dir: "up", src: "Payments", spark: [70,74,77,80], color: "var(--success)" },
+    { id: "appr", label: "Approval rate", value: "98.0%", delta: "▲ 0.3 pts", dir: "up", src: "Payments", spark: [97.7,97.9,98.1,98.0], color: "var(--success)" },
+    { id: "mer", label: "Active merchants", value: "48", delta: "▲ 14 went live", dir: "up", src: "Boarding", spark: [34,38,43,48], color: "var(--success)", partnerOnly: true },
+    { id: "loc", label: "Active locations", value: "131", delta: "▲ 31 this month", dir: "up", src: "Site registry", spark: [100,110,121,131], color: "var(--success)" },
+    { id: "dev", label: "Devices online", value: "412 / 438", delta: "94.1% · 7 offline >24h", dir: "down", src: "VHQ 2.0", spark: [96.8,96.1,95.2,94.1], color: "var(--warning)" },
+  ],
+};
+
+const TREND = {
+  "24h": { cats: ["00:00","02:00","04:00","06:00","08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00"], sales: [1.2,0.6,0.4,2.1,9.8,16.4,24.1,21.7,19.2,26.8,17.3,6.9], refunds: [0.1,0,0,0.1,0.3,0.5,0.9,0.8,0.6,1.1,0.7,0.3], unit: "K", caption: "Hourly gross sales and refunds in $ thousands · last 24 hours, local time" },
+  "7d": { cats: ["Tue","Wed","Thu","Fri","Sat","Sun","Mon"], sales: [148,152,161,187,204,129,142], refunds: [4.1,3.8,4.4,5.2,6.0,3.1,3.9], unit: "K", caption: "Daily gross sales and refunds in $ thousands · last 7 days" },
+  "30d": { cats: ["Week 1","Week 2","Week 3","Week 4"], sales: [1080,1140,1210,1250], refunds: [29,31,33,34], unit: "K", caption: "Weekly gross sales and refunds in $ thousands · last 30 days" },
+};
+
+const FUNNEL = [
+  { label: "Application started", n: 64 },
+  { label: "Submitted", n: 51 },
+  { label: "KYC / AML passed", n: 42 },
+  { label: "Approved & boarded", n: 38 },
+  { label: "Devices deployed", n: 33, ext: true },
+  { label: "First transaction", n: 29, ext: true },
+];
+
+const LOCATIONS = [
+  { id: "L1", merchant: "Nordic Grocers", site: "Store 112", city: "Minneapolis, MN", addr: "2800 Hennepin Ave S, Minneapolis, MN", lat: 44.95, lon: -93.29, on: 11, total: 12, vol: 64210, txns: 3880, appr: 99.1, status: "healthy", owner: "other", mid: "4451 0092 1180", vhq: "NordicGrocers / MN / Store-112" },
+  { id: "L2", merchant: "Pacific Fuel", site: "Station 7", city: "Portland, OR", addr: "1450 NE Broadway, Portland, OR", lat: 45.53, lon: -122.65, on: 8, total: 8, vol: 41330, txns: 2960, appr: 98.2, status: "healthy", owner: "other", mid: "4451 0092 2207", vhq: "PacificFuel / OR / Station-07" },
+  { id: "L3", merchant: "Nordic Grocers", site: "Store 118", city: "St Paul, MN", addr: "1080 Grand Ave, St Paul, MN", lat: 44.94, lon: -93.13, on: 6, total: 10, vol: 21045, txns: 1410, appr: 92.4, status: "drop", owner: "other", mid: "4451 0092 1186", vhq: "NordicGrocers / MN / Store-118" },
+  { id: "L4", merchant: "Brew & Co. Coffee", site: "Downtown", city: "Austin, TX", addr: "401 Congress Ave, Austin, TX", lat: 30.27, lon: -97.74, on: 4, total: 4, vol: 18420, txns: 1204, appr: 98.6, status: "healthy", owner: "self", mid: "4451 0093 0411", vhq: "BrewCo / TX / Downtown" },
+  { id: "L5", merchant: "Harbor Bistro", site: "Pier 39", city: "San Francisco, CA", addr: "Beach St & The Embarcadero, San Francisco, CA", lat: 37.81, lon: -122.41, on: 3, total: 3, vol: 12775, txns: 640, appr: 96.8, status: "healthy", owner: "other", mid: "4451 0093 1102", vhq: "HarborBistro / CA / Pier39" },
+  { id: "L6", merchant: "Brew & Co. Coffee", site: "South Congress", city: "Austin, TX", addr: "1612 S Congress Ave, Austin, TX", lat: 30.11, lon: -97.95, on: 2, total: 3, vol: 9880, txns: 712, appr: 97.9, status: "offline", owner: "self", mid: "4451 0093 0412", vhq: "BrewCo / TX / SoCo" },
+  { id: "L7", merchant: "Peachtree Pharmacy", site: "Midtown", city: "Atlanta, GA", addr: "950 W Peachtree St NW, Atlanta, GA", lat: 33.78, lon: -84.39, on: 5, total: 5, vol: 15210, txns: 905, appr: 98.9, status: "healthy", owner: "other", mid: "4451 0094 0071", vhq: "Peachtree / GA / Midtown" },
+  { id: "L8", merchant: "Brew & Co. Coffee", site: "Airport T2", city: "Austin, TX", addr: "3600 Presidential Blvd, Austin, TX", lat: 30.4, lon: -97.55, on: 0, total: 2, vol: 0, txns: 0, appr: null, status: "pending", owner: "self", mid: "4451 0093 0413", vhq: "BrewCo / TX / AUS-T2" },
+  { id: "L9", merchant: "Luma Salon", site: "Chelsea", city: "New York, NY", addr: "212 W 18th St, New York, NY", lat: 40.74, lon: -74.0, on: 0, total: 2, vol: 0, txns: 0, appr: null, status: "pending", owner: "other", mid: "4451 0095 0019", vhq: "LumaSalon / NY / Chelsea" },
+  { id: "L10", merchant: "Great Lakes Outfitters", site: "Loop", city: "Chicago, IL", addr: "120 N State St, Chicago, IL", lat: 41.88, lon: -87.63, on: 7, total: 9, vol: 22650, txns: 1188, appr: 97.6, status: "offline", owner: "other", mid: "4451 0096 0230", vhq: "GLO / IL / Loop" },
+];
+
+const STATUS = {
+  healthy: { label: "Healthy", cls: "s-healthy", color: "var(--success)" },
+  offline: { label: "Device offline", cls: "s-offline", color: "var(--warning)" },
+  drop: { label: "Approval drop", cls: "s-drop", color: "var(--danger)" },
+  pending: { label: "Awaiting go-live", cls: "s-pending", color: "var(--neutral-dot)" },
+};
+
+const ALERTS = [
+  { sev: "high", t: "Approval rate fell to 92.4% at Nordic Grocers · Store 118", d: "4 of 10 terminals offline since 09:40. Declines cluster on the 2 remaining lanes, which points to a network issue rather than issuer declines.", tags: ["Payments", "VHQ 2.0"], action: "Investigate", loc: "L3", who: ["partner"] },
+  { sev: "medium", t: "3 applications stuck in KYC for more than 48 hours", d: "Ortega Tire, Bluebird Books, Kettle Diner. Missing documents: beneficial owner ID (2), bank letter (1).", tags: ["Boarding"], action: "Request docs", who: ["partner"] },
+  { sev: "medium", t: "Devices delivered but no first transaction", d: "Luma Salon · Chelsea (5 days), Brew & Co. · Airport T2 (2 days). Devices are registered in VHQ but haven't checked in yet.", tags: ["Boarding", "VHQ 2.0", "Payments"], action: "Schedule activation", loc: "L9", who: ["partner"] },
+  { sev: "medium", t: "Airport T2 devices delivered, not activated", d: "2 × V400m signed for on Oct 10. Power them on and connect to Wi-Fi to start taking payments.", tags: ["VHQ 2.0", "Payments"], action: "Activation guide", loc: "L8", who: ["merchant"] },
+  { sev: "low", t: "Terminal 311-402 offline for 6 hours · South Congress", d: "Last heartbeat 08:12. The other 2 lanes are absorbing its traffic.", tags: ["VHQ 2.0"], action: "Troubleshoot", loc: "L6", who: ["partner", "merchant"] },
+  { sev: "low", t: "Payment app update available for 38 devices", d: "Version 6.12.3 fixes a contactless timeout. Can be scheduled overnight by location.", tags: ["VHQ 2.0"], action: "Schedule", who: ["partner", "merchant"] },
+];
+
+const PIPELINE = [
+  { name: "Ortega Tire", stage: "KYC: owner ID missing", step: 2, warn: true, age: "3d" },
+  { name: "Bluebird Books", stage: "KYC: bank letter missing", step: 2, warn: true, age: "2d" },
+  { name: "Luma Salon", stage: "Waiting for first transaction", step: 5, warn: true, age: "5d" },
+  { name: "Juniper Yoga", stage: "Devices in transit · ETA Oct 14", step: 4, age: "1d" },
+  { name: "Kettle Diner", stage: "Submitted · auto-checks running", step: 1, age: "4h" },
+];
+
+const MIX = [
+  { label: "Contactless card", v: 58, c: "#1f5bff" },
+  { label: "Chip", v: 27, c: "#6f93ff" },
+  { label: "Mobile wallet", v: 11, c: "#10a37f" },
+  { label: "Swipe / keyed", v: 4, c: "#cfd4dc" },
+];
+
+const MODELS = [
+  { id: "v400m", nm: "V400m", ds: "Countertop / handheld, Android", price: "$349" },
+  { id: "p630", nm: "P630", ds: "PIN pad for integrated POS", price: "$279" },
+  { id: "t650p", nm: "T650p", ds: "Portable with printer, 4G", price: "$449" },
+];
+
+/* =====================================================================
+   State
+   ===================================================================== */
+const state = {
+  persona: "partner",
+  range: "24h",
+  scope: "all",
+  locFilter: "all",
+  locQuery: "",
+  wizStep: 0,
+  wiz: null,
+};
+
+const $ = (id) => document.getElementById(id);
+const fmtMoney = (n) => "$" + n.toLocaleString("en-US");
+const fmtNum = (n) => n.toLocaleString("en-US");
+const initials = (s) => s.split(/\s+/).filter(w => /[A-Za-z]/.test(w[0])).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+const isPartner = () => state.persona === "partner";
+
+function visibleLocations() {
+  let rows = isPartner() ? LOCATIONS : LOCATIONS.filter(l => l.owner === "self");
+  if (isPartner() && state.scope !== "all") rows = rows.filter(l => l.merchant === state.scope);
+  return rows;
+}
+
+/* =====================================================================
+   Render: header & sources
+   ===================================================================== */
+function renderHeader() {
+  if (isPartner()) {
+    $("pageTitle").textContent = "Good afternoon, Surender";
+    $("pageSub").textContent = "Portfolio overview · 48 merchants · 131 locations · 438 devices";
+    $("onboardBtn").textContent = "+ Onboard merchant";
+    $("scopeSel").classList.remove("hidden");
+  } else {
+    $("pageTitle").textContent = "Brew & Co. Coffee";
+    $("pageSub").textContent = "Business overview · 3 locations · 9 devices";
+    $("onboardBtn").textContent = "+ Add location";
+    $("scopeSel").classList.add("hidden");
+  }
+  const merchants = [...new Set(LOCATIONS.map(l => l.merchant))].sort();
+  $("scopeSel").innerHTML = `<option value="all">All merchants (48)</option>` + merchants.map(m => `<option ${m === state.scope ? "selected" : ""}>${m}</option>`).join("");
+  $("sources").innerHTML = `<span>Data joined from:</span>` + SOURCES.map(s =>
+    `<span><span class="dot" style="background:${s.live ? "var(--success)" : "var(--text-faint)"}"></span>${s.name} <span class="faint">· ${s.sync}</span></span>`
+  ).join("");
+}
+
+/* =====================================================================
+   Render: KPIs
+   ===================================================================== */
+function sparkPath(values, w, h) {
+  const min = Math.min(...values), max = Math.max(...values);
+  const span = max - min || 1;
+  return values.map((v, i) => {
+    const x = (i / (values.length - 1)) * w;
+    const y = h - 2 - ((v - min) / span) * (h - 4);
+    return (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
+  }).join(" ");
+}
+
+function renderKpis() {
+  let list = KPI_DATA[state.range].filter(k => isPartner() || !k.partnerOnly);
+  if (!isPartner()) {
+    const scaled = { vol: "$28.3K", txn: "1,916", loc: "3", dev: "6 / 9" };
+    const deltas = { vol: "▲ 4.8% vs previous", txn: "▲ 3.2%", loc: "1 awaiting go-live", dev: "1 offline · 2 not activated" };
+    list = list.map(k => scaled[k.id] ? { ...k, value: scaled[k.id], delta: deltas[k.id] } : k);
+  }
+  $("kpis").style.gridTemplateColumns = `repeat(${list.length}, minmax(0, 1fr))`;
+  $("kpis").innerHTML = list.map(k => `
+    <div class="kpi" style="--kpi-color:${k.color}" title="Open ${k.label} detail">
+      <div class="label">${k.label}</div>
+      <div class="value">${k.value}</div>
+      <div class="delta ${k.dir}">${k.delta}</div>
+      <svg class="spark" viewBox="0 0 100 26" preserveAspectRatio="none">
+        <path d="${sparkPath(k.spark, 100, 26)}" fill="none" stroke="${k.color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <div class="kpi-foot"><span class="src">${k.src}</span><span class="faint">View ›</span></div>
+    </div>`).join("");
+}
+
+/* =====================================================================
+   Render: trend chart (inline SVG)
+   ===================================================================== */
+function renderTrend() {
+  const svg = $("trend");
+  const W = svg.clientWidth || 700, H = 230;
+  const pad = { l: 44, r: 12, t: 10, b: 26 };
+  const d = TREND[state.range];
+  const factor = isPartner() ? 1 : 0.17;
+  const sales = d.sales.map(v => +(v * factor).toFixed(2));
+  const refunds = d.refunds.map(v => +(v * factor).toFixed(2));
+  const max = Math.max(...sales) * 1.15;
+  const x = (i) => pad.l + (i / (d.cats.length - 1)) * (W - pad.l - pad.r);
+  const y = (v) => pad.t + (1 - v / max) * (H - pad.t - pad.b);
+  const ticks = 4;
+  let g = "";
+  for (let i = 0; i <= ticks; i++) {
+    const v = (max / ticks) * i;
+    g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="#eceef2"/>`;
+    g += `<text x="${pad.l - 8}" y="${y(v) + 4}" text-anchor="end" font-size="10" fill="#9aa0ae">$${v >= 100 ? Math.round(v) : v.toFixed(v < 10 ? 1 : 0)}${d.unit}</text>`;
+  }
+  const step = d.cats.length > 8 ? 2 : 1;
+  d.cats.forEach((c, i) => {
+    if (i % step === 0) g += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle" font-size="10" fill="#9aa0ae">${c}</text>`;
+  });
+  const line = (arr) => arr.map((v, i) => (i ? "L" : "M") + x(i) + " " + y(v)).join(" ");
+  const area = line(sales) + ` L ${x(sales.length - 1)} ${y(0)} L ${x(0)} ${y(0)} Z`;
+  g += `<path d="${area}" fill="#1f5bff" opacity="0.08"/>`;
+  g += `<path d="${line(sales)}" fill="none" stroke="#1f5bff" stroke-width="2"/>`;
+  g += `<path d="${line(refunds)}" fill="none" stroke="#c8174f" stroke-width="1.6"/>`;
+  sales.forEach((v, i) => { g += `<circle cx="${x(i)}" cy="${y(v)}" r="2.5" fill="#1f5bff"/>`; });
+  g += `<line id="guide" y1="${pad.t}" y2="${H - pad.b}" stroke="#cfd4dc" stroke-dasharray="3 3" style="display:none"/>`;
+  g += `<rect x="${pad.l}" y="${pad.t}" width="${W - pad.l - pad.r}" height="${H - pad.t - pad.b}" fill="transparent" id="hit"/>`;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = g;
+  $("trendCaption").textContent = d.caption + " · sample data";
+
+  const tip = $("trendTip"), guide = svg.querySelector("#guide");
+  svg.querySelector("#hit").addEventListener("mousemove", (e) => {
+    const r = svg.getBoundingClientRect();
+    const px = (e.clientX - r.left) * (W / r.width);
+    const i = Math.max(0, Math.min(d.cats.length - 1, Math.round(((px - pad.l) / (W - pad.l - pad.r)) * (d.cats.length - 1))));
+    guide.setAttribute("x1", x(i)); guide.setAttribute("x2", x(i)); guide.style.display = "";
+    tip.style.display = "block";
+    tip.style.left = (x(i) / W) * r.width + "px";
+    tip.style.top = (y(sales[i]) / H) * r.height + "px";
+    tip.innerHTML = `<b>${d.cats[i]}</b><br>Sales $${sales[i]}${d.unit} · Refunds $${refunds[i]}${d.unit}`;
+  });
+  svg.querySelector("#hit").addEventListener("mouseleave", () => { tip.style.display = "none"; guide.style.display = "none"; });
+}
+
+/* =====================================================================
+   Render: funnel / sales by location
+   ===================================================================== */
+function renderFunnel() {
+  $("funnelCard").classList.toggle("hidden", !isPartner());
+  $("byLocCard").classList.toggle("hidden", isPartner());
+  const max = FUNNEL[0].n;
+  $("funnel").innerHTML = FUNNEL.map((f, i) => {
+    const conv = i ? Math.round((f.n / FUNNEL[i - 1].n) * 100) + "%" : "";
+    return `<div class="funnel-row ${f.ext ? "ext" : ""}">
+      <span>${f.label}</span>
+      <div class="funnel-bar" title="${conv ? conv + " from previous stage" : ""}"><div style="width:${(f.n / max) * 100}%"></div></div>
+      <span class="n">${f.n}</span>
+    </div>`;
+  }).join("");
+  const mine = LOCATIONS.filter(l => l.owner === "self");
+  const mmax = Math.max(...mine.map(l => l.vol)) || 1;
+  $("byLoc").innerHTML = mine.map(l => `<div class="funnel-row">
+      <span>${l.site}</span>
+      <div class="funnel-bar"><div style="width:${(l.vol / mmax) * 100}%"></div></div>
+      <span class="n" style="width:auto">${l.vol ? "$" + (l.vol / 1000).toFixed(1) + "K" : "—"}</span>
+    </div>`).join("");
+}
+
+/* =====================================================================
+   Render: map
+   ===================================================================== */
+function renderMap() {
+  const svg = $("mapSvg");
+  const box = $("map").getBoundingClientRect();
+  const W = box.width || 600, H = box.height || 290;
+  const rows = visibleLocations();
+  const bounds = isPartner()
+    ? { minLon: -126, maxLon: -66, minLat: 24, maxLat: 50 }
+    : { minLon: -98.2, maxLon: -97.3, minLat: 29.95, maxLat: 30.55 };
+  const latStretch = 1.3;
+  const lonSpan = bounds.maxLon - bounds.minLon, latSpan = (bounds.maxLat - bounds.minLat) * latStretch;
+  const scale = Math.min((W - 40) / lonSpan, (H - 50) / latSpan);
+  const ox = (W - lonSpan * scale) / 2, oy = (H - 20 - latSpan * scale) / 2;
+  const px = (lon) => ox + (lon - bounds.minLon) * scale;
+  const py = (lat) => oy + (bounds.maxLat - lat) * latStretch * scale;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  let g = "";
+  if (isPartner()) {
+    const outline = US_OUTLINE.map(([lon, lat], i) => (i ? "L" : "M") + px(lon).toFixed(1) + " " + py(lat).toFixed(1)).join(" ") + " Z";
+    g += `<path d="${outline}" fill="#ffffff" stroke="#c9d1dd" stroke-width="1"/>`;
+  }
+  g += isPartner()
+    ? `<text x="16" y="${H - 14}" font-size="10" fill="#9aa0ae">United States · ${rows.length} locations · production would use Mapbox / Google tiles</text>`
+    : `<text x="16" y="${H - 14}" font-size="10" fill="#9aa0ae">Austin, TX metro · ${rows.length} locations</text>`;
+
+  const severity = { drop: 3, offline: 2, pending: 1, healthy: 0 };
+  const clusters = [];
+  rows.forEach(l => {
+    const x = px(l.lon), y = py(l.lat);
+    const hit = clusters.find(c => Math.hypot(c.x - x, c.y - y) < 30);
+    if (hit) hit.items.push(l); else clusters.push({ x, y, items: [l] });
+  });
+  clusters.forEach((c, ci) => {
+    const worst = c.items.reduce((a, b) => severity[b.status] > severity[a.status] ? b : a);
+    const col = STATUS[worst.status].color;
+    const devices = c.items.reduce((s, l) => s + l.total, 0);
+    const r = 7 + Math.min(10, Math.sqrt(devices) * 2);
+    const multi = c.items.length > 1;
+    g += `<g class="pin" data-c="${ci}" transform="translate(${c.x},${c.y})">
+      <circle class="halo" r="${r + 6}" fill="${col}"/>
+      <circle r="${r}" fill="${col}" stroke="#fff" stroke-width="2"/>
+      <text y="3.5" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">${devices}</text>
+      ${multi ? `<g transform="translate(${r - 2},${-r + 2})"><circle r="7" fill="#141a2b" stroke="#fff" stroke-width="1.5"/><text y="3" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">${c.items.length}</text></g>` : ""}
+    </g>`;
+  });
+  svg.innerHTML = g;
+  const tip = $("mapTip");
+  svg.querySelectorAll(".pin").forEach(p => {
+    const c = clusters[+p.dataset.c];
+    p.addEventListener("mouseenter", () => {
+      tip.style.left = c.x + "px"; tip.style.top = c.y + "px"; tip.style.display = "block";
+      tip.innerHTML = c.items.map(l => `<div style="margin-bottom:4px"><b>${l.merchant} · ${l.site}</b><br>
+        <span class="muted">${l.city} · ${l.on}/${l.total} devices · ${l.vol ? fmtMoney(l.vol) : "no sales yet"}</span><br>
+        <span class="status ${STATUS[l.status].cls}" style="margin-top:3px">${STATUS[l.status].label}</span></div>`).join("")
+        + (c.items.length > 1 ? `<div class="faint">Click to list these ${c.items.length} locations</div>` : "");
+    });
+    p.addEventListener("mouseleave", () => { tip.style.display = "none"; });
+    p.addEventListener("click", () => {
+      if (c.items.length === 1) return openDrawer(c.items[0].id);
+      state.locQuery = c.items[0].city.split(",")[0];
+      $("locSearch").value = state.locQuery;
+      renderTable();
+      $("locBody").closest(".card").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+const US_OUTLINE = [
+  [-124.7,48.4],[-123,49],[-95,49],[-89.5,48],[-84.8,46.5],[-83,46],[-82.5,43],[-79,43.3],[-76,44],[-75,45],[-71.5,45],
+  [-69.2,47.4],[-67.8,47],[-67,44.8],[-70,43.6],[-70.6,41.6],[-74,40.5],[-75.5,38.5],[-76,37],[-75.5,35.2],[-77.9,33.9],
+  [-80.8,32],[-81.4,30.7],[-80,26.8],[-80.4,25.2],[-81.8,26],[-82.8,28],[-82.9,29.8],[-84.3,30],[-86.5,30.4],[-89.6,30.2],
+  [-89.4,29],[-91.3,29.3],[-93.8,29.7],[-95,29.2],[-97.2,27.6],[-97.4,25.9],[-99.1,26.4],[-100.4,28.3],[-101.4,29.8],
+  [-103,29],[-104.5,29.6],[-106.5,31.8],[-108.2,31.3],[-111,31.3],[-114.8,32.5],[-117.1,32.5],[-118.5,34],[-120.6,34.6],
+  [-121.9,36.6],[-122.5,37.8],[-123.8,39.8],[-124.4,42],[-124,46.3],[-124.7,48.4],
+];
+
+/* =====================================================================
+   Render: alerts
+   ===================================================================== */
+function renderAlerts() {
+  const list = ALERTS.filter(a => a.who.includes(state.persona));
+  $("alertCount").textContent = list.filter(a => a.sev !== "low").length + " urgent";
+  $("alerts").innerHTML = list.map((a, i) => `
+    <div class="alert ${a.sev}">
+      <div class="bar"></div>
+      <div>
+        <div class="t">${a.t}</div>
+        <div class="d">${a.d}</div>
+        <div class="tags">${a.tags.map(t => `<span class="src">${t}</span>`).join("")}</div>
+      </div>
+      <button class="btn btn-sm" data-alert="${i}">${a.action}</button>
+    </div>`).join("");
+  $("alerts").querySelectorAll("button[data-alert]").forEach(b => {
+    const a = list[+b.dataset.alert];
+    b.addEventListener("click", () => a.loc ? openDrawer(a.loc) : toast(`${a.action}: would open the relevant workflow`));
+  });
+}
+
+/* =====================================================================
+   Render: locations table
+   ===================================================================== */
+function renderTable() {
+  let rows = visibleLocations();
+  if (state.locFilter === "issues") rows = rows.filter(l => l.status === "offline" || l.status === "drop");
+  if (state.locFilter === "pending") rows = rows.filter(l => l.status === "pending");
+  if (state.locQuery) {
+    const q = state.locQuery.toLowerCase();
+    rows = rows.filter(l => (l.merchant + l.site + l.city + l.mid).toLowerCase().includes(q));
+  }
+  rows = [...rows].sort((a, b) => b.vol - a.vol);
+
+  const cols = [
+    ...(isPartner() ? [["Merchant", ""]] : []),
+    ["Location", ""], ["Devices online", ""], ["Sales", "num"], ["Transactions", "num"], ["Approval", "num"], ["Status", ""], ["", ""],
+  ];
+  $("locHead").innerHTML = cols.map(([c, cls]) => `<th class="${cls}">${c}</th>`).join("");
+
+  if (!rows.length) {
+    $("locBody").innerHTML = `<tr><td colspan="${cols.length}" class="empty">No locations match this filter</td></tr>`;
+    return;
+  }
+  $("locBody").innerHTML = rows.map(l => {
+    const pct = l.total ? l.on / l.total : 0;
+    const devColor = pct === 1 ? "var(--success)" : pct >= 0.6 ? "var(--warning)" : "var(--danger)";
+    const apprColor = l.appr !== null && l.appr < 95 ? "color:var(--danger);font-weight:600" : "";
+    return `<tr data-id="${l.id}">
+      ${isPartner() ? `<td><div class="merchant-cell"><span class="avatar">${initials(l.merchant)}</span><b>${l.merchant}</b></div></td>` : ""}
+      <td><div>${l.site}</div><div class="faint" style="font-size:11px">${l.city}</div></td>
+      <td><div class="dev"><div class="track"><div style="width:${pct * 100}%;background:${devColor}"></div></div><span class="muted">${l.on}/${l.total}</span></div></td>
+      <td class="num">${l.vol ? fmtMoney(l.vol) : "—"}</td>
+      <td class="num">${l.txns ? fmtNum(l.txns) : "—"}</td>
+      <td class="num" style="${apprColor}">${l.appr !== null ? l.appr.toFixed(1) + "%" : "—"}</td>
+      <td><span class="status ${STATUS[l.status].cls}">${STATUS[l.status].label}</span></td>
+      <td class="num faint">›</td>
+    </tr>`;
+  }).join("");
+  $("locBody").querySelectorAll("tr[data-id]").forEach(tr => tr.addEventListener("click", () => openDrawer(tr.dataset.id)));
+}
+
+/* =====================================================================
+   Render: bottom row
+   ===================================================================== */
+function renderBottom() {
+  const fleet = isPartner()
+    ? [{ label: "Online", v: 412, c: "#10a37f" }, { label: "Offline < 24h", v: 15, c: "#e08a00" }, { label: "Offline > 24h", v: 7, c: "#c8174f" }, { label: "Delivered, not activated", v: 4, c: "#cfd4dc" }]
+    : [{ label: "Online", v: 6, c: "#10a37f" }, { label: "Offline < 24h", v: 1, c: "#e08a00" }, { label: "Delivered, not activated", v: 2, c: "#cfd4dc" }];
+  const total = fleet.reduce((s, f) => s + f.v, 0);
+  const R = 50, C = 2 * Math.PI * R;
+  let off = 0, arcs = "";
+  fleet.forEach(f => {
+    const len = (f.v / total) * C;
+    arcs += `<circle cx="65" cy="65" r="${R}" fill="none" stroke="${f.c}" stroke-width="14" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 65 65)"/>`;
+    off += len;
+  });
+  arcs += `<text x="65" y="63" text-anchor="middle" font-size="20" font-weight="600" fill="#141a2b">${total}</text><text x="65" y="80" text-anchor="middle" font-size="10" fill="#9aa0ae">devices</text>`;
+  $("donut").innerHTML = arcs;
+  $("donutLegend").innerHTML = fleet.map(f => `<div class="li"><span class="sw" style="background:${f.c}"></span>${f.label}<span class="v">${f.v}</span></div>`).join("");
+
+  $("mixStack").innerHTML = MIX.map(m => `<div style="width:${m.v}%;background:${m.c}" title="${m.label} ${m.v}%"></div>`).join("");
+  $("mixLegend").innerHTML = MIX.map(m => `<div class="li"><span class="sw" style="background:${m.c}"></span>${m.label}<span class="v">${m.v}%</span></div>`).join("");
+
+  $("pipelineCard").classList.toggle("hidden", !isPartner());
+  $("settleCard").classList.toggle("hidden", isPartner());
+  $("pipeline").innerHTML = PIPELINE.map(p => `
+    <div class="pipe-row">
+      <span class="name">${p.name}</span><span class="age">${p.age}</span>
+      <span class="stage"><span class="steps-mini">${[1,2,3,4,5].map(s => `<i class="${s < p.step ? "on" : s === p.step ? (p.warn ? "warn" : "on") : ""}"></i>`).join("")}</span>${p.stage}</span>
+    </div>`).join("") + `<div style="padding-top:8px"><button class="btn btn-ghost btn-sm" style="padding-left:0">View all 13 in progress →</button></div>`;
+}
+
+/* =====================================================================
+   Drawer
+   ===================================================================== */
+function openDrawer(id) {
+  const l = LOCATIONS.find(x => x.id === id);
+  const st = STATUS[l.status];
+  $("dMerchant").textContent = l.merchant;
+  $("dTitle").textContent = l.site;
+  $("dAddr").textContent = l.addr;
+  $("dStatus").innerHTML = `<span class="status ${st.cls}">${st.label}</span><span class="faint" style="font-size:11px">Last refreshed just now</span>`;
+  $("dKpis").innerHTML = `
+    <div><b>${l.vol ? fmtMoney(l.vol) : "—"}</b><span>Gross sales</span></div>
+    <div><b>${l.txns ? fmtNum(l.txns) : "—"}</b><span>Transactions</span></div>
+    <div><b style="${l.appr !== null && l.appr < 95 ? "color:var(--danger)" : ""}">${l.appr !== null ? l.appr + "%" : "—"}</b><span>Approval rate</span></div>`;
+  const models = ["V400m", "V400m", "P630", "T650p"];
+  const devs = Array.from({ length: Math.min(l.total, 6) }, (_, i) => {
+    const online = i >= l.total - l.on;
+    const serial = `${300 + (l.id.length * 7 + i * 13) % 600}-${100 + i * 37}-${(l.id.charCodeAt(1) * 3 + i * 11) % 900 + 100}`;
+    const pending = l.status === "pending";
+    return `<div class="dev-item">
+      <div><b>${models[i % models.length]}</b> · ${serial}<div class="meta">Lane ${i + 1} · TID ${String(70010000 + i + l.id.length * 100)} · App v6.12.${online ? 3 : 2}</div></div>
+      <span class="status ${pending ? "s-pending" : online ? "s-healthy" : "s-offline"}">${pending ? "Not activated" : online ? "Online" : "Offline 6h"}</span>
+    </div>`;
+  }).join("");
+  $("dDevices").innerHTML = devs + (l.total > 6 ? `<div class="dev-item"><span class="muted">+ ${l.total - 6} more devices</span><span></span></div>` : "");
+  const live = l.status !== "pending";
+  $("dTimeline").innerHTML = [
+    { t: "Application approved (KYC / AML passed)", w: "Sep 02", done: true },
+    { t: "Location created and geocoded", w: "Sep 02", done: true },
+    { t: `${l.total} devices allocated and shipped`, w: "Sep 04", done: true },
+    { t: "Devices checked in to VHQ", w: live ? "Sep 06" : "Pending", done: live, cur: !live },
+    { t: "First transaction", w: live ? "Sep 06" : "Pending", done: live },
+  ].map(s => `<div class="tl ${s.done ? "done" : s.cur ? "cur" : ""}"><span class="d"></span><span>${s.t}</span><span class="when">${s.w}</span></div>`).join("");
+  $("dIds").innerHTML = `
+    <div class="dev-item"><span class="muted">Merchant ID (MID)</span><b>${l.mid}</b></div>
+    <div class="dev-item"><span class="muted">VHQ hierarchy</span><b>${l.vhq}</b></div>
+    <div class="dev-item"><span class="muted">Site ID</span><b>SITE-${l.id.replace("L", "").padStart(5, "0")}</b></div>`;
+  $("scrim").classList.add("open");
+  $("drawer").classList.add("open");
+}
+function closeDrawer() { $("scrim").classList.remove("open"); $("drawer").classList.remove("open"); }
+
+/* =====================================================================
+   Onboarding wizard
+   ===================================================================== */
+function wizSteps() {
+  const all = [
+    { key: "biz", lbl: "Business & KYC", sys: "Boarding & Compliance", writes: "Creates the application and runs AML/KYC and sanctions checks. On approval it returns the <b>Merchant ID</b> that every other system is keyed on." },
+    { key: "loc", lbl: "Locations", sys: "Site registry", writes: "Geocodes each address and creates a <b>Site ID</b> linked to the merchant. Each site automatically becomes a node in the merchant's <b>VHQ hierarchy</b>." },
+    { key: "dev", lbl: "Devices", sys: "VHQ 2.0", writes: "Allocates serials and places each device under its site's hierarchy node. Assigns the software group so devices arrive pre-configured." },
+    { key: "pay", lbl: "Payment setup", sys: "Payments gateway", writes: "Issues a <b>MID per site</b> and a <b>TID per device</b>. Enables payment methods, then configures settlement and pricing." },
+    { key: "rev", lbl: "Review & submit", sys: "Experience API", writes: "Submits everything as one onboarding case. The experience API orchestrates the calls in order and tracks status end to end." },
+  ];
+  return isPartner() ? all : all.filter(s => s.key !== "biz" && s.key !== "pay");
+}
+
+function newWizState() {
+  return {
+    biz: { name: isPartner() ? "" : "Brew & Co. Coffee LLC", ein: "", mcc: "5814 · Fast food & coffee", email: "", kycDone: false },
+    locs: isPartner()
+      ? [{ name: "", addr: "", hours: "07:00–19:00" }]
+      : [{ name: "Domain Northside", addr: "11410 Century Oaks Terrace, Austin, TX", hours: "07:00–20:00" }],
+    qty: { v400m: 2, p630: 0, t650p: 0 },
+    group: "Retail – Quick Service",
+    methods: ["Contactless", "Chip", "Apple Pay / Google Pay"],
+    plan: "Interchange+ 0.25% + $0.08",
+  };
+}
+
+function openWizard() {
+  state.wizStep = 0;
+  state.wiz = newWizState();
+  $("wizTitle").textContent = isPartner() ? "Onboard a new merchant" : "Add a location";
+  $("wizScrim").classList.add("open");
+  renderWizard();
+}
+function closeWizard() { $("wizScrim").classList.remove("open"); }
+
+function renderWizard() {
+  const steps = wizSteps();
+  const s = steps[state.wizStep];
+  $("wizCounter").textContent = `Step ${state.wizStep + 1} of ${steps.length}`;
+  $("stepper").innerHTML = steps.map((st, i) => `
+    <div class="step ${i === state.wizStep ? "active" : i < state.wizStep ? "done" : ""}" data-i="${i}">
+      <span class="num">${i < state.wizStep ? "✓" : i + 1}</span>
+      <span class="lbl">${st.lbl}</span>
+      <span class="sys">→ ${st.sys}</span>
+    </div>`).join("");
+  $("stepper").querySelectorAll(".step").forEach(el => el.addEventListener("click", () => { state.wizStep = +el.dataset.i; renderWizard(); }));
+
+  const w = state.wiz;
+  let body = `<h2>${s.lbl}</h2><div class="writes"><b>Writes to ${s.sys}.</b> ${s.writes}</div>`;
+
+  if (s.key === "biz") {
+    body += `<div class="form-grid">
+      <div class="field full"><label>Legal business name</label><input data-bind="biz.name" value="${w.biz.name}" placeholder="e.g. Brew & Co. Coffee LLC"></div>
+      <div class="field"><label>Tax ID / EIN</label><input data-bind="biz.ein" value="${w.biz.ein}" placeholder="12-3456789"></div>
+      <div class="field"><label>Business category (MCC)</label><select data-bind="biz.mcc"><option>5814 · Fast food & coffee</option><option>5411 · Grocery</option><option>5812 · Restaurants</option><option>7230 · Beauty salons</option></select></div>
+      <div class="field"><label>Beneficial owner email</label><input data-bind="biz.email" value="${w.biz.email}" placeholder="owner@business.com"></div>
+      <div class="field"><label>Settlement bank account</label><input placeholder="Routing • Account (verified via Plaid)"></div>
+    </div>
+    <div class="loc-block">
+      <div class="check-row"><span class="${w.biz.kycDone ? "ok" : "faint"}">${w.biz.kycDone ? "✓" : "○"}</span> Identity & sanctions screening</div>
+      <div class="check-row"><span class="${w.biz.kycDone ? "ok" : "faint"}">${w.biz.kycDone ? "✓" : "○"}</span> Business registry match</div>
+      <div class="check-row"><span class="${w.biz.kycDone ? "ok" : "faint"}">${w.biz.kycDone ? "✓" : "○"}</span> Bank account ownership</div>
+      <div><button class="btn btn-sm" id="runKyc">${w.biz.kycDone ? "Re-run checks" : "Run pre-checks"}</button></div>
+    </div>`;
+  }
+
+  if (s.key === "loc") {
+    body += w.locs.map((l, i) => `
+      <div class="loc-block">
+        <div class="row"><b>Location ${i + 1}</b><div class="grow"></div>${w.locs.length > 1 ? `<button class="btn btn-ghost btn-sm" data-rm="${i}">Remove</button>` : ""}</div>
+        <div class="form-grid">
+          <div class="field"><label>Location name</label><input data-loc="${i}" data-k="name" value="${l.name}" placeholder="e.g. Downtown"></div>
+          <div class="field"><label>Trading hours</label><input data-loc="${i}" data-k="hours" value="${l.hours}"></div>
+          <div class="field full"><label>Street address</label><input data-loc="${i}" data-k="addr" value="${l.addr}" placeholder="Start typing an address…"></div>
+        </div>
+        ${l.addr.length > 8 ? `<div class="geo">✓ Address verified · geocoded · timezone America/Chicago · will appear on the Locations map</div>` : ""}
+      </div>`).join("") + `<div><button class="btn btn-sm" id="addLoc">+ Add another location</button></div>`;
+  }
+
+  if (s.key === "dev") {
+    const total = Object.values(w.qty).reduce((a, b) => a + b, 0);
+    body += `<div class="muted" style="font-size:12px">Quantities apply to each location (${w.locs.length}). Devices ship pre-enrolled in VHQ under the right site.</div>
+      <div class="model-grid">${MODELS.map(m => `
+        <div class="model">
+          <span class="nm">${m.nm}</span><span class="ds">${m.ds}</span><span class="faint" style="font-size:11px">${m.price} each</span>
+          <div class="qty"><button data-q="${m.id}" data-d="-1">−</button><span>${w.qty[m.id]}</span><button data-q="${m.id}" data-d="1">+</button></div>
+        </div>`).join("")}
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Software group</label><select data-bind="group"><option>Retail – Quick Service</option><option>Grocery – Multi-lane</option><option>Hospitality – Pay at table</option></select></div>
+        <div class="field"><label>Ship to</label><select><option>Each location's address</option><option>Merchant HQ</option></select></div>
+      </div>
+      <div class="muted" style="font-size:12px">${total * w.locs.length} devices total across ${w.locs.length} location${w.locs.length > 1 ? "s" : ""}.</div>`;
+  }
+
+  if (s.key === "pay") {
+    const methods = ["Contactless", "Chip", "Swipe", "Apple Pay / Google Pay", "EBT", "Gift cards"];
+    body += `<div class="field"><label>Payment methods</label><div class="chips">${methods.map(m => `<button class="chip ${w.methods.includes(m) ? "on" : ""}" data-m="${m}">${m}</button>`).join("")}</div></div>
+      <div class="form-grid">
+        <div class="field"><label>Pricing plan</label><select data-bind="plan"><option>Interchange+ 0.25% + $0.08</option><option>Flat 2.6% + $0.10</option><option>Tiered</option></select></div>
+        <div class="field"><label>Settlement</label><select><option>Next day · daily batch at 23:00</option><option>Same day</option></select></div>
+      </div>
+      <div class="loc-block"><div class="muted" style="font-size:12px">Issued on submit</div>
+        ${w.locs.map((l, i) => `<div class="check-row">MID for <b>${l.name || "Location " + (i + 1)}</b> · ${Object.values(w.qty).reduce((a, b) => a + b, 0)} TIDs</div>`).join("")}
+      </div>`;
+  }
+
+  if (s.key === "rev") {
+    const devs = Object.entries(w.qty).filter(([, n]) => n).map(([k, n]) => `${n} × ${MODELS.find(m => m.id === k).nm}`).join(", ") || "None";
+    const order = isPartner()
+      ? [
+          ["Boarding & Compliance", `Create application for <b>${w.biz.name || "new merchant"}</b> and run KYC`, "~2 min auto, up to 24h manual"],
+          ["Site registry", `Create ${w.locs.length} site${w.locs.length > 1 ? "s" : ""}: ${w.locs.map(l => l.name || "Unnamed").join(", ")}`, "instant"],
+          ["VHQ 2.0", `Create hierarchy nodes and allocate ${devs} per site · ${w.group}`, "instant, ships in 1–2 days"],
+          ["Payments gateway", `Issue MIDs and TIDs · ${w.methods.join(", ")} · ${w.plan}`, "after KYC approval"],
+        ]
+      : [
+          ["Site registry", `Create site: ${w.locs.map(l => l.name || "Unnamed").join(", ")}`, "instant"],
+          ["VHQ 2.0", `Allocate ${devs} under the new site · ${w.group}`, "ships in 1–2 days"],
+          ["Payments gateway", "Issue MID and TIDs using your existing pricing and settlement", "instant"],
+        ];
+    body += `<div class="muted" style="font-size:12px">What happens when you submit</div>
+      <div class="review">${order.map((o, i) => `<div class="rr"><span class="n">${i + 1}</span><div><b>${o[0]}</b><div class="muted">${o[1]}</div></div><span class="faint" style="font-size:11px">${o[2]}</span></div>`).join("")}</div>
+      <div class="muted" style="font-size:12px">You can track progress in <b>Onboarding in progress</b> on the home page. The location appears on the map right away, marked <i>Awaiting go-live</i>.</div>`;
+  }
+
+  $("stepPane").innerHTML = body;
+  $("wizBack").disabled = state.wizStep === 0;
+  $("wizNext").textContent = state.wizStep === steps.length - 1 ? "Submit" : "Continue";
+  bindWizard();
+}
+
+function bindWizard() {
+  const w = state.wiz;
+  $("stepPane").querySelectorAll("[data-bind]").forEach(el => {
+    const [a, b] = el.dataset.bind.split(".");
+    if (el.tagName === "SELECT") el.value = b ? w[a][b] : w[a];
+    el.addEventListener("input", () => { if (b) w[a][b] = el.value; else w[a] = el.value; });
+  });
+  $("stepPane").querySelectorAll("[data-loc]").forEach(el => {
+    el.addEventListener("input", () => { w.locs[+el.dataset.loc][el.dataset.k] = el.value; });
+    if (el.dataset.k === "addr") el.addEventListener("blur", renderWizard);
+  });
+  const kyc = $("runKyc");
+  if (kyc) kyc.addEventListener("click", () => { kyc.textContent = "Checking…"; setTimeout(() => { w.biz.kycDone = true; renderWizard(); }, 700); });
+  const add = $("addLoc");
+  if (add) add.addEventListener("click", () => { w.locs.push({ name: "", addr: "", hours: "07:00–19:00" }); renderWizard(); });
+  $("stepPane").querySelectorAll("[data-rm]").forEach(b => b.addEventListener("click", () => { w.locs.splice(+b.dataset.rm, 1); renderWizard(); }));
+  $("stepPane").querySelectorAll("[data-q]").forEach(b => b.addEventListener("click", () => {
+    w.qty[b.dataset.q] = Math.max(0, w.qty[b.dataset.q] + +b.dataset.d); renderWizard();
+  }));
+  $("stepPane").querySelectorAll("[data-m]").forEach(b => b.addEventListener("click", () => {
+    const m = b.dataset.m; w.methods = w.methods.includes(m) ? w.methods.filter(x => x !== m) : [...w.methods, m]; renderWizard();
+  }));
+}
+
+function submitWizard() {
+  const w = state.wiz;
+  const merchant = isPartner() ? (w.biz.name || "New Merchant LLC").replace(/ LLC$/i, "") : "Brew & Co. Coffee";
+  const perLoc = Object.values(w.qty).reduce((a, b) => a + b, 0) || 1;
+  w.locs.forEach((l, i) => {
+    const id = "N" + Date.now() + i;
+    const base = isPartner() ? { lat: 32.78 + i, lon: -96.8 - i } : { lat: 30.4 + i * 0.03, lon: -97.72 };
+    LOCATIONS.push({
+      id, merchant, site: l.name || `Location ${i + 1}`, city: isPartner() ? "Dallas, TX" : "Austin, TX",
+      addr: l.addr || "Address pending verification", lat: base.lat, lon: base.lon, on: 0, total: perLoc,
+      vol: 0, txns: 0, appr: null, status: "pending", owner: isPartner() ? "other" : "self",
+      mid: "Issued after KYC", vhq: `${merchant.replace(/\W/g, "")} / ${l.name || "Site"}`,
+    });
+  });
+  if (isPartner()) PIPELINE.unshift({ name: merchant, stage: "Submitted · auto-checks running", step: 1, age: "now" });
+  closeWizard();
+  renderAll();
+  toast(isPartner() ? `${merchant} submitted. ${w.locs.length} location(s) added as Awaiting go-live.` : `${w.locs[0].name || "New location"} added. Devices will ship in 1–2 days.`);
+}
+
+/* =====================================================================
+   Misc
+   ===================================================================== */
+let toastTimer;
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+}
+
+function renderAll() {
+  renderHeader(); renderKpis(); renderTrend(); renderFunnel(); renderMap(); renderAlerts(); renderTable(); renderBottom();
+}
+
+/* ---------- Events ---------- */
+$("personaSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  state.persona = b.dataset.persona; state.scope = "all";
+  $("personaSeg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+  renderAll();
+});
+$("rangePills").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  state.range = b.dataset.range;
+  $("rangePills").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+  renderKpis(); renderTrend();
+});
+$("locFilter").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  state.locFilter = b.dataset.f;
+  $("locFilter").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+  renderTable();
+});
+$("locSearch").addEventListener("input", (e) => { state.locQuery = e.target.value; renderTable(); });
+$("scopeSel").addEventListener("change", (e) => { state.scope = e.target.value; renderMap(); renderTable(); });
+$("onboardBtn").addEventListener("click", openWizard);
+$("orderBtn").addEventListener("click", () => toast("Order devices: would open the device catalog scoped to the selected merchant"));
+$("drawerClose").addEventListener("click", closeDrawer);
+$("scrim").addEventListener("click", closeDrawer);
+$("wizClose").addEventListener("click", closeWizard);
+$("wizDraft").addEventListener("click", () => { closeWizard(); toast("Draft saved. Resume it from Onboarding in progress."); });
+$("wizBack").addEventListener("click", () => { if (state.wizStep > 0) { state.wizStep--; renderWizard(); } });
+$("wizNext").addEventListener("click", () => {
+  if (state.wizStep === wizSteps().length - 1) submitWizard();
+  else { state.wizStep++; renderWizard(); }
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); closeWizard(); } });
+window.addEventListener("resize", renderTrend);
+new ResizeObserver(() => renderMap()).observe($("map"));
+
+renderAll();
+</script>
+</body>
+</html>
