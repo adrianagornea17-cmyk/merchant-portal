@@ -560,6 +560,8 @@
             <button class="btn btn-primary" id="onboardBtn2">+ Onboard merchant</button>
           </div>
 
+          <div class="kpis" id="merchKpis"></div>
+
         <!-- Location table -->
         <div class="card card-pad">
           <div class="table-tools">
@@ -837,6 +839,34 @@ function renderKpis() {
         <path d="${sparkPath(k.spark, 100, 26)}" fill="none" stroke="${k.color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
       </svg>
       <div class="kpi-foot"><span class="src">${k.src}</span><span class="faint">View ›</span></div>
+    </div>`).join("");
+}
+
+function renderMerchantKpis() {
+  const partner = isPartner();
+  const list = partner ? [
+    { label: "Merchants", value: "48", delta: "▲ 3 this month", dir: "up", src: "Boarding", color: "var(--success)", spark: [41,42,42,43,44,45,45,46,47,48] },
+    { label: "Locations", value: "131", delta: "▲ 7 this month", dir: "up", src: "Site registry", color: "var(--success)", spark: [118,120,121,123,124,126,127,129,130,131] },
+    { label: "Total devices", value: "438", delta: "▲ 12 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [401,408,411,415,419,424,428,431,435,438] },
+    { label: "Devices online", value: "94%", delta: "▼ 1.1 pts", dir: "down", src: "VHQ 2.0", color: "var(--danger)", spark: [96,96,95.8,95.5,95.2,95,94.8,94.5,94.2,94] },
+    { label: "Needs attention", value: "9", delta: "▲ 2 vs last week", dir: "down", src: "Payments", color: "var(--warning)", spark: [5,6,5,6,7,7,8,7,8,9] },
+    { label: "Awaiting go-live", value: "13", delta: "4 ready this week", dir: "flat", src: "Boarding", color: "var(--neutral-dot)", spark: [9,10,11,11,12,12,13,12,13,13] },
+  ] : [
+    { label: "Merchants", value: "1", delta: "Brew & Co. Coffee", dir: "flat", src: "Boarding", color: "var(--success)", spark: [1,1,1,1,1,1] },
+    { label: "Locations", value: "3", delta: "1 awaiting go-live", dir: "flat", src: "Site registry", color: "var(--success)", spark: [2,2,2,3,3,3] },
+    { label: "Total devices", value: "9", delta: "▲ 2 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [6,6,7,7,8,9] },
+    { label: "Devices online", value: "6 / 9", delta: "1 offline · 2 not activated", dir: "flat", src: "VHQ 2.0", color: "var(--warning)", spark: [8,8,7,7,6,6] },
+  ];
+  $("merchKpis").style.gridTemplateColumns = `repeat(${list.length}, minmax(0, 1fr))`;
+  $("merchKpis").innerHTML = list.map(k => `
+    <div class="kpi" style="--kpi-color:${k.color}">
+      <div class="label">${k.label}</div>
+      <div class="value">${k.value}</div>
+      <div class="delta ${k.dir}">${k.delta}</div>
+      <svg class="spark" viewBox="0 0 100 26" preserveAspectRatio="none">
+        <path d="${sparkPath(k.spark, 100, 26)}" fill="none" stroke="${k.color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <div class="kpi-foot"><span class="src">${k.src}</span></div>
     </div>`).join("");
 }
 
@@ -1316,7 +1346,7 @@ function toast(msg) {
 }
 
 function renderAll() {
-  renderHeader(); renderKpis(); renderTrend(); renderFunnel(); renderMap(); renderAlerts(); renderTable(); renderBottom();
+  renderHeader(); renderKpis(); renderMerchantKpis(); renderTrend(); renderFunnel(); renderMap(); renderAlerts(); renderTable(); renderBottom();
 }
 
 /* ---------- Events ---------- */
