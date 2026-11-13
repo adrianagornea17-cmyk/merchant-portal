@@ -568,17 +568,17 @@
         <!-- Location table -->
         <div class="card card-pad">
           <div class="table-tools">
-            <h3 style="margin:0;font-size:14px">All locations</h3>
-            <span class="muted" style="font-size:12px">One row per site, joined across Boarding, Site registry, VHQ and Payments</span>
+            <h3 style="margin:0;font-size:14px">All merchants</h3>
+            <span class="muted" style="font-size:12px">Merchant companies and their sites</span>
             <div class="grow"></div>
             <div class="search" style="width:220px;padding:5px 12px">
               <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
-              <input id="locSearch" placeholder="Filter locations" />
+              <input id="locSearch" placeholder="Search by name, ID or country" />
             </div>
             <div class="pills" id="locFilter">
               <button class="pill active" data-f="all">All</button>
-              <button class="pill" data-f="issues">Needs attention</button>
-              <button class="pill" data-f="pending">Awaiting go-live</button>
+              <button class="pill" data-f="company">Merchant Company</button>
+              <button class="pill" data-f="site">Merchant Site</button>
             </div>
           </div>
           <table>
@@ -1038,42 +1038,45 @@ function renderAlerts() {
 /* =====================================================================
    Render: locations table
    ===================================================================== */
+const ALL_MERCHANTS = [...new Set(LOCATIONS.map(l => l.merchant))].sort();
+function orgRows() {
+  const locs = visibleLocations();
+  const names = [...new Set(locs.map(l => l.merchant))].sort();
+  const rows = [];
+  names.forEach((m) => {
+    const mine = locs.filter(l => l.merchant === m);
+    rows.push({ id: "ORG-" + (10021 + ALL_MERCHANTS.indexOf(m)), name: m, friendly: m, country: "United States", parent: "Parent", type: "Merchant Company", status: "Enabled" });
+    mine.forEach(l => rows.push({ id: "SITE-" + l.id, name: l.merchant + " · " + l.site, friendly: l.site, country: "United States", parent: m, type: "Merchant Site", status: l.status === "pending" ? "Disabled" : "Enabled", loc: l.id }));
+  });
+  return rows;
+}
 function renderTable() {
-  let rows = visibleLocations();
-  if (state.locFilter === "issues") rows = rows.filter(l => l.status === "offline" || l.status === "drop");
-  if (state.locFilter === "pending") rows = rows.filter(l => l.status === "pending");
+  let rows = orgRows();
+  if (state.locFilter === "company") rows = rows.filter(r => r.type === "Merchant Company");
+  if (state.locFilter === "site") rows = rows.filter(r => r.type === "Merchant Site");
   if (state.locQuery) {
     const q = state.locQuery.toLowerCase();
-    rows = rows.filter(l => (l.merchant + l.site + l.city + l.mid).toLowerCase().includes(q));
+    rows = rows.filter(r => (r.id + r.name + r.friendly + r.country + r.parent).toLowerCase().includes(q));
   }
-  rows = [...rows].sort((a, b) => b.vol - a.vol);
-
-  const cols = [
-    ...(isPartner() ? [["Merchant", ""]] : []),
-    ["Location", ""], ["Devices online", ""], ["Sales", "num"], ["Transactions", "num"], ["Approval", "num"], ["Status", ""], ["", ""],
-  ];
+  const cols = [["ID", ""], ["Name", ""], ["Friendly name", ""], ["Country", ""], ["Parent organisation", ""], ["Type", ""], ["Status", ""], ["View hierarchy", "num"]];
   $("locHead").innerHTML = cols.map(([c, cls]) => `<th class="${cls}">${c}</th>`).join("");
-
   if (!rows.length) {
-    $("locBody").innerHTML = `<tr><td colspan="${cols.length}" class="empty">No locations match this filter</td></tr>`;
+    $("locBody").innerHTML = `<tr><td colspan="${cols.length}" class="empty">No merchants match this filter</td></tr>`;
     return;
   }
-  $("locBody").innerHTML = rows.map(l => {
-    const pct = l.total ? l.on / l.total : 0;
-    const devColor = pct === 1 ? "var(--success)" : pct >= 0.6 ? "var(--warning)" : "var(--danger)";
-    const apprColor = l.appr !== null && l.appr < 95 ? "color:var(--danger);font-weight:600" : "";
-    return `<tr data-id="${l.id}">
-      ${isPartner() ? `<td><div class="merchant-cell"><span class="avatar">${initials(l.merchant)}</span><b>${l.merchant}</b></div></td>` : ""}
-      <td><div>${l.site}</div><div class="faint" style="font-size:11px">${l.city}</div></td>
-      <td><div class="dev"><div class="track"><div style="width:${pct * 100}%;background:${devColor}"></div></div><span class="muted">${l.on}/${l.total}</span></div></td>
-      <td class="num">${l.vol ? fmtMoney(l.vol) : "—"}</td>
-      <td class="num">${l.txns ? fmtNum(l.txns) : "—"}</td>
-      <td class="num" style="${apprColor}">${l.appr !== null ? l.appr.toFixed(1) + "%" : "—"}</td>
-      <td><span class="status ${STATUS[l.status].cls}">${STATUS[l.status].label}</span></td>
-      <td class="num faint">›</td>
-    </tr>`;
-  }).join("");
+  const hier = `<svg class="ico" viewBox="0 0 16 16" fill="currentColor"><rect x="6" y="1.5" width="4" height="3.5" rx=".6"/><rect x="1" y="11" width="4" height="3.5" rx=".6"/><rect x="6" y="11" width="4" height="3.5" rx=".6"/><rect x="11" y="11" width="4" height="3.5" rx=".6"/><path d="M8 5v3M3 11V8h10v3M8 8v3" fill="none" stroke="currentColor" stroke-width="1"/></svg>`;
+  $("locBody").innerHTML = rows.map((r, i) => `<tr data-i="${i}" ${r.loc ? `data-id="${r.loc}"` : ""}>
+      <td class="muted">${r.id}</td>
+      <td>${r.type === "Merchant Company" ? `<div class="merchant-cell"><span class="avatar">${initials(r.name)}</span><b>${r.name}</b></div>` : r.name}</td>
+      <td>${r.friendly}</td>
+      <td>${r.country}</td>
+      <td>${r.parent}</td>
+      <td>${r.type}</td>
+      <td><span class="status ${r.status === "Enabled" ? "s-healthy" : "s-pending"}">${r.status}</span></td>
+      <td class="num"><button class="btn btn-sm btn-ghost" data-hier="${i}" title="View hierarchy">${hier}</button></td>
+    </tr>`).join("");
   $("locBody").querySelectorAll("tr[data-id]").forEach(tr => tr.addEventListener("click", () => openDrawer(tr.dataset.id)));
+  $("locBody").querySelectorAll("[data-hier]").forEach(b => b.addEventListener("click", (e) => { e.stopPropagation(); toast("View hierarchy: would open the organisation tree for " + rows[b.dataset.hier].name); }));
 }
 
 /* =====================================================================
