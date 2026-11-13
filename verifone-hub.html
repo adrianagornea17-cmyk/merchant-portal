@@ -140,6 +140,9 @@
     background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 12px 14px 10px 18px; position: relative; overflow: hidden; cursor: pointer;
   }
+  #merchKpis .kpi { cursor: default; padding-left: 14px; }
+  #merchKpis .kpi::before { display: none; }
+  #merchKpis .kpi .value { margin-bottom: 0; }
   .kpi:hover { border-color: var(--border-strong); }
   .kpi::before { content: ""; position: absolute; left: 10px; top: 12px; bottom: 12px; width: 3px; border-radius: 2px; background: var(--kpi-color, var(--success)); }
   .kpi .label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding-left: 4px; }
@@ -851,14 +854,9 @@ function renderMerchantKpis() {
   ];
   $("merchKpis").style.gridTemplateColumns = `repeat(${list.length}, minmax(0, 1fr))`;
   $("merchKpis").innerHTML = list.map(k => `
-    <div class="kpi" style="--kpi-color:${k.color}">
+    <div class="kpi">
       <div class="label">${k.label}</div>
       <div class="value">${k.value}</div>
-      <div class="delta ${k.dir}">${k.delta}</div>
-      <svg class="spark" viewBox="0 0 100 26" preserveAspectRatio="none">
-        <path d="${sparkPath(k.spark, 100, 26)}" fill="none" stroke="${k.color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
-      </svg>
-      <div class="kpi-foot"><span class="src">${k.src}</span></div>
     </div>`).join("");
 }
 
