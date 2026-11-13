@@ -845,17 +845,17 @@ function renderKpis() {
 function renderMerchantKpis() {
   const partner = isPartner();
   const list = partner ? [
-    { label: "Merchants", value: "48", delta: "▲ 3 this month", dir: "up", src: "Boarding", color: "var(--success)", spark: [41,42,42,43,44,45,45,46,47,48] },
-    { label: "Locations", value: "131", delta: "▲ 7 this month", dir: "up", src: "Site registry", color: "var(--success)", spark: [118,120,121,123,124,126,127,129,130,131] },
-    { label: "Total devices", value: "438", delta: "▲ 12 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [401,408,411,415,419,424,428,431,435,438] },
-    { label: "Devices online", value: "94%", delta: "▼ 1.1 pts", dir: "down", src: "VHQ 2.0", color: "var(--danger)", spark: [96,96,95.8,95.5,95.2,95,94.8,94.5,94.2,94] },
-    { label: "Needs attention", value: "9", delta: "▲ 2 vs last week", dir: "down", src: "Payments", color: "var(--warning)", spark: [5,6,5,6,7,7,8,7,8,9] },
-    { label: "Awaiting go-live", value: "13", delta: "4 ready this week", dir: "flat", src: "Boarding", color: "var(--neutral-dot)", spark: [9,10,11,11,12,12,13,12,13,13] },
+    { label: "Organizations", value: "2", delta: "No change", dir: "flat", src: "Boarding", color: "var(--primary)", spark: [2,2,2,2,2,2,2,2] },
+    { label: "Merchants", value: "9", delta: "▲ 1 this month", dir: "up", src: "Boarding", color: "var(--success)", spark: [6,7,7,7,8,8,8,9] },
+    { label: "Franchises", value: "14", delta: "▲ 2 this month", dir: "up", src: "Boarding", color: "var(--success)", spark: [10,10,11,11,12,12,13,14] },
+    { label: "Locations", value: "11", delta: "▲ 1 this month", dir: "up", src: "Site registry", color: "var(--success)", spark: [8,8,9,9,10,10,10,11] },
+    { label: "Total Devices", value: "870", delta: "▲ 24 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [810,818,827,836,845,853,862,870] },
   ] : [
+    { label: "Organizations", value: "1", delta: "No change", dir: "flat", src: "Boarding", color: "var(--primary)", spark: [1,1,1,1,1,1] },
     { label: "Merchants", value: "1", delta: "Brew & Co. Coffee", dir: "flat", src: "Boarding", color: "var(--success)", spark: [1,1,1,1,1,1] },
+    { label: "Franchises", value: "3", delta: "No change", dir: "flat", src: "Boarding", color: "var(--success)", spark: [3,3,3,3,3,3] },
     { label: "Locations", value: "3", delta: "1 awaiting go-live", dir: "flat", src: "Site registry", color: "var(--success)", spark: [2,2,2,3,3,3] },
-    { label: "Total devices", value: "9", delta: "▲ 2 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [6,6,7,7,8,9] },
-    { label: "Devices online", value: "6 / 9", delta: "1 offline · 2 not activated", dir: "flat", src: "VHQ 2.0", color: "var(--warning)", spark: [8,8,7,7,6,6] },
+    { label: "Total Devices", value: "9", delta: "▲ 2 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [6,6,7,7,8,9] },
   ];
   $("merchKpis").style.gridTemplateColumns = `repeat(${list.length}, minmax(0, 1fr))`;
   $("merchKpis").innerHTML = list.map(k => `
