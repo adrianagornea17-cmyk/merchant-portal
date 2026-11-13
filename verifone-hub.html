@@ -452,25 +452,13 @@
             <div class="caption" id="trendCaption"></div>
           </div>
 
-          <div class="card card-pad" id="funnelCard">
-            <div class="card-head">
-              <h3>Onboarding funnel</h3>
-              <div class="grow"></div>
-              <span class="faint" style="font-size:11px">Last 90 days</span>
-            </div>
-            <div class="funnel" id="funnel"></div>
-            <div class="funnel-note"><i></i>Stages needing VHQ + Payments data. Not visible in Boarding today.</div>
+          <div class="card card-pad" id="mixCard">
+            <div class="card-head"><h3>How customers pay</h3><span class="src">Payments</span></div>
+            <div class="stack" id="mixStack"></div>
+            <div class="donut-legend" id="mixLegend"></div>
+            <div class="caption">Share of transactions · selected period</div>
           </div>
 
-          <div class="card card-pad hidden" id="byLocCard">
-            <div class="card-head">
-              <h3>Sales by location</h3>
-              <span class="src">Payments</span>
-              <div class="grow"></div>
-            </div>
-            <div class="funnel" id="byLoc"></div>
-            <div class="caption">Gross sales · selected period</div>
-          </div>
         </div>
 
         <!-- Map + attention -->
@@ -506,7 +494,7 @@
         </div>
 
         <!-- Bottom row -->
-        <div class="grid-3">
+        <div class="grid-3" id="bottomGrid">
           <div class="card card-pad">
             <div class="card-head"><h3>Device fleet health</h3><span class="src">VHQ 2.0</span></div>
             <div class="donut-wrap">
@@ -516,18 +504,20 @@
             <div class="caption">Device count by heartbeat status · now</div>
           </div>
 
-          <div class="card card-pad">
-            <div class="card-head"><h3>How customers pay</h3><span class="src">Payments</span></div>
-            <div class="stack" id="mixStack"></div>
-            <div class="donut-legend" id="mixLegend"></div>
-            <div class="caption">Share of transactions · selected period</div>
-          </div>
-
           <div class="card card-pad" id="pipelineCard">
             <div class="card-head"><h3>Onboarding in progress</h3><span class="src">Boarding</span><div class="grow"></div><span class="faint" style="font-size:11px">13 open</span></div>
             <div class="pipeline" id="pipeline"></div>
           </div>
 
+          <div class="card card-pad hidden" id="byLocCard">
+            <div class="card-head">
+              <h3>Sales by location</h3>
+              <span class="src">Payments</span>
+              <div class="grow"></div>
+            </div>
+            <div class="funnel" id="byLoc"></div>
+            <div class="caption">Gross sales · selected period</div>
+          </div>
           <div class="card card-pad hidden" id="settleCard">
             <div class="card-head"><h3>Next settlement</h3><span class="src">Payments</span></div>
             <div class="big-number">$27,614.20</div>
@@ -553,21 +543,6 @@
             <thead><tr><th>Order</th><th>Merchant</th><th>Terminals</th><th>Stage</th><th>ETA</th></tr></thead>
             <tbody id="ordersBody"></tbody>
           </table>
-        </div>
-
-        <!-- Apps -->
-        <div>
-          <div class="row" style="margin-bottom:10px">
-            <h2>Applications</h2>
-            <span class="muted" style="font-size:12px">You're already signed in. Deep links open with the selected merchant and location already applied.</span>
-          </div>
-          <div class="apps">
-            <div class="app"><div class="ic" style="background:#e8eeff"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#1f5bff" stroke-width="1.5"><path d="M2 12 6 7l3 3 5-6"/></svg></div><div><div class="n">Transactions &amp; Reporting</div><div class="d">Search, export, reconcile</div></div></div>
-            <div class="app"><div class="ic" style="background:#fde7ee"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#c8174f" stroke-width="1.5"><rect x="2.5" y="3" width="11" height="8" rx="1"/><path d="M6 14h4M8 11v3"/></svg></div><div><div class="n">VHQ 2.0</div><div class="d">Terminal management</div></div></div>
-            <div class="app"><div class="ic" style="background:#e3f6f0"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#10a37f" stroke-width="1.5"><rect x="3.5" y="2" width="9" height="12" rx="1"/><path d="M6 6h4M6 9h4"/></svg></div><div><div class="n">Boarding &amp; Compliance</div><div class="d">Applications, AML/KYC</div></div></div>
-            <div class="app"><div class="ic" style="background:#fff3dc"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#e08a00" stroke-width="1.5"><rect x="2" y="4" width="12" height="8" rx="1"/><path d="M2 7h12"/></svg></div><div><div class="n">Accept Payments</div><div class="d">Pay by link, virtual terminal</div></div></div>
-            <div class="app"><div class="ic" style="background:#f1f3f6"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="#141a2b" stroke-width="1.5"><path d="M2 12h12L13 5l-3 3-2-4-2 4-3-3z"/></svg></div><div><div class="n">Premier Portal</div><div class="d">Self-service support</div></div></div>
-          </div>
         </div>
 
         </div>
@@ -934,17 +909,7 @@ function renderTrend() {
    Render: funnel / sales by location
    ===================================================================== */
 function renderFunnel() {
-  $("funnelCard").classList.toggle("hidden", !isPartner());
   $("byLocCard").classList.toggle("hidden", isPartner());
-  const max = FUNNEL[0].n;
-  $("funnel").innerHTML = FUNNEL.map((f, i) => {
-    const conv = i ? Math.round((f.n / FUNNEL[i - 1].n) * 100) + "%" : "";
-    return `<div class="funnel-row ${f.ext ? "ext" : ""}">
-      <span>${f.label}</span>
-      <div class="funnel-bar" title="${conv ? conv + " from previous stage" : ""}"><div style="width:${(f.n / max) * 100}%"></div></div>
-      <span class="n">${f.n}</span>
-    </div>`;
-  }).join("");
   const mine = LOCATIONS.filter(l => l.owner === "self");
   const mmax = Math.max(...mine.map(l => l.vol)) || 1;
   $("byLoc").innerHTML = mine.map(l => `<div class="funnel-row">
@@ -1102,6 +1067,7 @@ function renderTable() {
    Render: bottom row
    ===================================================================== */
 function renderBottom() {
+  $("bottomGrid").style.gridTemplateColumns = `repeat(${isPartner() ? 2 : 3}, minmax(0, 1fr))`;
   const fleet = isPartner()
     ? [{ label: "Online", v: 412, c: "#10a37f" }, { label: "Offline < 24h", v: 15, c: "#e08a00" }, { label: "Offline > 24h", v: 7, c: "#c8174f" }, { label: "Delivered, not activated", v: 4, c: "#cfd4dc" }]
     : [{ label: "Online", v: 6, c: "#10a37f" }, { label: "Offline < 24h", v: 1, c: "#e08a00" }, { label: "Delivered, not activated", v: 2, c: "#cfd4dc" }];
