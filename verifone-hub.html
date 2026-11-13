@@ -419,7 +419,6 @@
         <div class="page-head">
           <div class="titles">
             <h1 id="pageTitle">Good afternoon, John</h1>
-            <div class="sub" id="pageSub">Portfolio overview · 48 merchants · 131 locations · 438 devices</div>
           </div>
           <div class="grow"></div>
           <div class="pills" id="rangePills">
@@ -792,12 +791,10 @@ function visibleLocations() {
 function renderHeader() {
   if (isPartner()) {
     $("pageTitle").textContent = "Good afternoon, John";
-    $("pageSub").textContent = "Portfolio overview · 48 merchants · 131 locations · 438 devices";
     $("onboardBtn").textContent = "+ Onboard merchant";
     $("scopeSel").classList.remove("hidden");
   } else {
     $("pageTitle").textContent = "Brew & Co. Coffee";
-    $("pageSub").textContent = "Business overview · 3 locations · 9 devices";
     $("onboardBtn").textContent = "+ Add location";
     $("scopeSel").classList.add("hidden");
   }
