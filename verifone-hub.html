@@ -341,6 +341,15 @@
   .toast.show { opacity: 1; transform: translateX(-50%); }
 
   .view { display: flex; flex-direction: column; gap: 18px; }
+  .link-primary { color: var(--primary); font-size: 12px; font-weight: 500; text-decoration: none; }
+  .stage-track { display: flex; align-items: center; }
+  .stage-track i { width: 9px; height: 9px; border-radius: 50%; background: #cfd4dc; flex: none; }
+  .stage-track i.done, .stage-track i.cur { background: var(--primary); }
+  .stage-track i.cur { box-shadow: 0 0 0 3px var(--primary-light); }
+  .stage-track b { width: 16px; height: 2px; background: #cfd4dc; flex: none; }
+  .stage-track b.done { background: var(--primary); }
+  .stage-cell { display: flex; align-items: center; gap: 12px; }
+  .eta-late { color: var(--danger); }
   .hidden { display: none !important; }
   .mock-banner {
     font-size: 11px; color: var(--text-muted); background: var(--bg); border: 1px dashed var(--border-strong);
@@ -531,6 +540,19 @@
             </div>
             <div class="row" style="margin-top:14px"><button class="btn btn-sm">Statements</button><button class="btn btn-sm">Disputes</button></div>
           </div>
+        </div>
+
+        <!-- Open orders -->
+        <div class="card card-pad" id="ordersCard">
+          <div class="card-head">
+            <h3>Open orders</h3>
+            <div class="grow"></div>
+            <a href="#" class="link-primary" id="allOrders">All orders</a>
+          </div>
+          <table>
+            <thead><tr><th>Order</th><th>Merchant</th><th>Terminals</th><th>Stage</th><th>ETA</th></tr></thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
         </div>
 
         <!-- Apps -->
@@ -1335,8 +1357,27 @@ function toast(msg) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
 }
 
+const ORDERS = [
+  { id: "ORD-240118", merchant: "Café Lindgren", terminals: "2× V400m", stage: 1, eta: "5 Nov 2026" },
+  { id: "ORD-240119", merchant: "Södermalms Pizzeria", terminals: "1× T650p", stage: 2, eta: "6 Nov 2026" },
+  { id: "ORD-240120", merchant: "Oulu Tapahtumat Oy", terminals: "2× V400c Plus", stage: 3, eta: "8 Nov 2026" },
+  { id: "ORD-240121", merchant: "Trondheim Drosje", terminals: "3× T650p", stage: 0, eta: "10 Nov 2026" },
+  { id: "ORD-240122", merchant: "Ravintola Suomenlinna", terminals: "4× V400m", stage: 1, eta: "31 Oct 2026", late: true },
+  { id: "ORD-240123", merchant: "Lahti Festivaalipalvelut", terminals: "6× e285", stage: 1, eta: "7 Nov 2026" },
+];
+const ORDER_STAGES = ["Submitted", "KYC check", "Approved", "Shipped", "Delivered"];
+function renderOrders() {
+  $("ordersBody").innerHTML = ORDERS.map(o => {
+    const track = ORDER_STAGES.map((_, i) =>
+      (i ? `<b class="${i <= o.stage ? "done" : ""}"></b>` : "") + `<i class="${i < o.stage ? "done" : i === o.stage ? "cur" : ""}"></i>`).join("");
+    return `<tr><td>${o.id}</td><td>${o.merchant}</td><td>${o.terminals}</td>
+      <td><div class="stage-cell"><div class="stage-track">${track}</div><span class="muted">${ORDER_STAGES[o.stage]}</span></div></td>
+      <td class="${o.late ? "eta-late" : ""}">${o.eta}</td></tr>`;
+  }).join("");
+}
+
 function renderAll() {
-  renderHeader(); renderKpis(); renderMerchantKpis(); renderTrend(); renderFunnel(); renderMap(); renderAlerts(); renderTable(); renderBottom();
+  renderHeader(); renderKpis(); renderMerchantKpis(); renderTrend(); renderFunnel(); renderMap(); renderAlerts(); renderTable(); renderBottom(); renderOrders();
 }
 
 /* ---------- Events ---------- */
@@ -1374,6 +1415,7 @@ function showView(v) {
 }
 $("onboardBtn2").addEventListener("click", openWizard);
 $("orderBtn2").addEventListener("click", () => $("orderBtn").click());
+$("allOrders").addEventListener("click", (e) => { e.preventDefault(); toast("All orders: would open the full order list"); });
 $("onboardBtn").addEventListener("click", openWizard);
 $("orderBtn").addEventListener("click", () => toast("Order devices: would open the device catalog scoped to the selected merchant"));
 $("drawerClose").addEventListener("click", closeDrawer);
