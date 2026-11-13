@@ -807,9 +807,7 @@ function renderHeader() {
   }
   const merchants = [...new Set(LOCATIONS.map(l => l.merchant))].sort();
   $("scopeSel").innerHTML = `<option value="all">All merchants (48)</option>` + merchants.map(m => `<option ${m === state.scope ? "selected" : ""}>${m}</option>`).join("");
-  $("sources").innerHTML = `<span>Data joined from:</span>` + SOURCES.map(s =>
-    `<span><span class="dot" style="background:${s.live ? "var(--success)" : "var(--text-faint)"}"></span>${s.name} <span class="faint">· ${s.sync}</span></span>`
-  ).join("");
+  $("sources").innerHTML = `<span><span class="dot" style="background:var(--success)"></span>Synced 5 min ago</span>`;
 }
 
 /* =====================================================================
