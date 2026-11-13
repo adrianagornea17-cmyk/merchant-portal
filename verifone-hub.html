@@ -851,11 +851,11 @@ function renderMerchantKpis() {
     { label: "Locations", value: "11", delta: "▲ 1 this month", dir: "up", src: "Site registry", color: "var(--success)", spark: [8,8,9,9,10,10,10,11] },
     { label: "Total Devices", value: "870", delta: "▲ 24 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [810,818,827,836,845,853,862,870] },
   ] : [
-    { label: "Organizations", value: "1", delta: "No change", dir: "flat", src: "Boarding", color: "var(--primary)", spark: [1,1,1,1,1,1] },
-    { label: "Merchants", value: "1", delta: "Brew & Co. Coffee", dir: "flat", src: "Boarding", color: "var(--success)", spark: [1,1,1,1,1,1] },
-    { label: "Franchises", value: "3", delta: "No change", dir: "flat", src: "Boarding", color: "var(--success)", spark: [3,3,3,3,3,3] },
-    { label: "Locations", value: "3", delta: "1 awaiting go-live", dir: "flat", src: "Site registry", color: "var(--success)", spark: [2,2,2,3,3,3] },
-    { label: "Total Devices", value: "9", delta: "▲ 2 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [6,6,7,7,8,9] },
+    { label: "Organizations", value: "2", delta: "No change", dir: "flat", src: "Boarding", color: "var(--primary)", spark: [2,2,2,2,2,2,2,2] },
+    { label: "Merchants", value: "9", delta: "▲ 1 this month", dir: "up", src: "Boarding", color: "var(--success)", spark: [6,7,7,7,8,8,8,9] },
+    { label: "Franchises", value: "14", delta: "▲ 2 this month", dir: "up", src: "Boarding", color: "var(--success)", spark: [10,10,11,11,12,12,13,14] },
+    { label: "Locations", value: "11", delta: "▲ 1 this month", dir: "up", src: "Site registry", color: "var(--success)", spark: [8,8,9,9,10,10,10,11] },
+    { label: "Total Devices", value: "870", delta: "▲ 24 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [810,818,827,836,845,853,862,870] },
   ];
   $("merchKpis").style.gridTemplateColumns = `repeat(${list.length}, minmax(0, 1fr))`;
   $("merchKpis").innerHTML = list.map(k => `
