@@ -847,10 +847,10 @@ function renderKpis() {
 
 function renderMerchantKpis() {
   const list = [
-    { label: "Total Customers", value: "23", delta: "▲ 1 this month", dir: "up", src: "Boarding", color: "var(--success)", spark: [20,20,21,21,22,22,22,23] },
-    { label: "Active Customers", value: "23", delta: "100% of total", dir: "flat", src: "Payments", color: "var(--success)", spark: [20,20,21,21,22,22,22,23] },
+    { label: "Merchants", value: "23", delta: "▲ 1 this month", dir: "up", src: "Boarding", color: "var(--success)", spark: [20,20,21,21,22,22,22,23] },
+    { label: "Locations", value: "23", delta: "100% of total", dir: "flat", src: "Payments", color: "var(--success)", spark: [20,20,21,21,22,22,22,23] },
     { label: "Total Devices", value: "5,257", delta: "▲ 84 this month", dir: "up", src: "VHQ 2.0", color: "var(--success)", spark: [5040,5075,5110,5140,5170,5200,5230,5257] },
-    { label: "Active Users", value: "118", delta: "▲ 6 this month", dir: "up", src: "Identity", color: "var(--success)", spark: [102,104,107,109,112,114,116,118] },
+    { label: "Total users", value: "118", delta: "▲ 6 this month", dir: "up", src: "Identity", color: "var(--success)", spark: [102,104,107,109,112,114,116,118] },
   ];
   $("merchKpis").style.gridTemplateColumns = `repeat(${list.length}, minmax(0, 1fr))`;
   $("merchKpis").innerHTML = list.map(k => `
