@@ -425,11 +425,13 @@ textarea.inp { border-radius: 16px; resize: vertical; min-height: 84px; line-hei
               '<p class="errtxt" id="e_dPrice" hidden></p></div>' +
           '</div>' +
           '<div class="fld"><label class="lbl" for="dSku">Product ID / SKU<em>optional</em></label><input class="inp" id="dSku" placeholder="Enter an ID or SKU" value="' + esc(d.sku) + '"></div>' +
-          '<div class="fld"><label class="lbl" for="dUrl">Product URL<em>optional</em></label><input class="inp" id="dUrl" inputmode="url" placeholder="https://" value="' + esc(d.url) + '"><p class="errtxt" id="e_dUrl" hidden></p></div>' +
         '</div>' +
         '<div class="d-sec" id="dSaveSec" hidden>' +
           '<label class="check"><input type="checkbox" id="dSave"' + (d.save ? ' checked' : '') + '><span>Save to product catalog<small>Find this product next time without retyping it.</small></span></label>' +
           '<div class="fld" id="dOrgFld" hidden><label class="lbl" for="dOrg">Organisation</label><input class="inp" id="dOrg" readonly value="Organization: Parent"></div>' +
+        '</div>' +
+        '<div class="d-sec">' +
+          '<div class="fld"><label class="lbl" for="dUrl">Product URL<em>optional</em></label><input class="inp" id="dUrl" inputmode="url" placeholder="https://" value="' + esc(d.url) + '"><p class="errtxt" id="e_dUrl" hidden></p></div>' +
         '</div>' +
       '</div>' +
       '<div class="d-foot"><div class="d-total"><span>Total price</span><span id="dTotal"></span></div>' +
