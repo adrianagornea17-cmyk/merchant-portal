@@ -220,6 +220,21 @@ textarea.inp { border-radius: 16px; resize: vertical; min-height: 84px; line-hei
 .list { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
 .list b { font-weight: 600; }
 .notes section + section { margin-top: 28px; }
+
+[hidden] { display: none !important; }
+[hidden] { display: none !important; }
+/* ---------- Full-page modal ---------- */
+body { padding: 0; }
+.wrap { max-width: none; margin: 0; }
+.frame { height: 100vh; height: 100dvh; border: 0; border-radius: 0; box-shadow: none; }
+.mock-head { justify-content: flex-start; padding: 16px 48px; }
+.mock-head h2 { font-size: 24px; }
+.mock-head .x-close { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; display: grid; place-items: center; border-radius: 999px; color: var(--muted); font-size: 24px; line-height: 1; text-decoration: none; }
+.mock-head .x-close:hover { background: var(--surface-2); color: var(--ink); }
+.pbar { padding: 12px 48px; }
+.pbar .discard { color: var(--ink); text-decoration: none; }
+.mock { padding: 28px 48px 40px; }
+@media (max-width: 560px) { .mock-head { padding: 14px 16px; } .pbar { padding: 12px 16px; } .mock { padding: 16px; } }
 </style>
 </head>
 <body>
@@ -228,7 +243,7 @@ textarea.inp { border-radius: 16px; resize: vertical; min-height: 84px; line-hei
   
 
   <div class="frame" id="frame">
-    <div class="mock-head"><h2>Create Payment Link</h2><span aria-hidden="true">×</span></div>
+    <div class="mock-head"><h2>Create Payment Link</h2><a class="x-close" href="verifone-central-2.html" aria-label="Close and return to the prototypes home" title="Close">×</a></div>
     <div class="page">
     <div class="mock">
       <div>
@@ -277,7 +292,7 @@ textarea.inp { border-radius: 16px; resize: vertical; min-height: 84px; line-hei
       </aside>
     </div>
     </div>
-    <div class="pbar"><button type="button" class="discard">Discard</button><button type="button" class="btn primary">Create &amp; Send Link</button></div>
+    <div class="pbar"><a class="discard" href="verifone-central-2.html">Discard</a><button type="button" class="btn primary">Create &amp; Send Link</button></div>
 
     <div class="scrim" id="scrim"></div>
     <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle"></div>
@@ -426,11 +441,9 @@ textarea.inp { border-radius: 16px; resize: vertical; min-height: 84px; line-hei
           '</div>' +
           '<div class="fld"><label class="lbl" for="dSku">Product ID / SKU<em>optional</em></label><input class="inp" id="dSku" placeholder="Enter an ID or SKU" value="' + esc(d.sku) + '"></div>' +
         '</div>' +
-        '<div class="d-sec" id="dSaveSec" hidden>' +
-          '<label class="check"><input type="checkbox" id="dSave"' + (d.save ? ' checked' : '') + '><span>Save to product catalog<small>Find this product next time without retyping it.</small></span></label>' +
-          '<div class="fld" id="dOrgFld" hidden><label class="lbl" for="dOrg">Organisation</label><input class="inp" id="dOrg" readonly value="Organization: Parent"></div>' +
-        '</div>' +
         '<div class="d-sec">' +
+          '<div class="fld" id="dSaveSec" hidden><label class="check"><input type="checkbox" id="dSave"' + (d.save ? ' checked' : '') + '><span>Save to product catalog<small>Find this product next time without retyping it.</small></span></label></div>' +
+          '<div class="fld" id="dOrgFld" hidden><label class="lbl" for="dOrg">Organisation</label><input class="inp" id="dOrg" readonly value="Organization: Parent"></div>' +
           '<div class="fld"><label class="lbl" for="dUrl">Product URL<em>optional</em></label><input class="inp" id="dUrl" inputmode="url" placeholder="https://" value="' + esc(d.url) + '"><p class="errtxt" id="e_dUrl" hidden></p></div>' +
         '</div>' +
       '</div>' +
