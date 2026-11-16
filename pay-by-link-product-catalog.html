@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pay by Link Cart - Inline search</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a contained mock of the Create Payment Link page (form column + preview column) with the standard right-hand side panel sliding over it. Notes sit below. */
+:root {
+  --bg: #ECEBF0;
+  --canvas: #F6F6F8;
+  --surface: #FFFFFF;
+  --surface-2: #F3F3F6;
+  --ink: #15131A;
+  --muted: #6A6672;
+  --line: #DEDCE4;
+  --accent: #0B45E8;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E6ECFD;
+  --ok: #17784A;
+  --danger: #B3261E;
+  --scrim: rgba(21,19,26,.45);
+  --font: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --shadow: 0 1px 2px rgba(21,19,26,.05), 0 10px 30px rgba(21,19,26,.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E0D11; --canvas: #16141A; --surface: #1D1B22; --surface-2: #26232C; --ink: #F4F1F6; --muted: #A59EAE;
+    --line: #37333F; --accent: #6F93FF; --accent-ink: #0B0B12; --accent-soft: #1C2748; --ok: #5FD39A; --danger: #FF8A80;
+    --scrim: rgba(0,0,0,.6); --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E0D11; --canvas: #16141A; --surface: #1D1B22; --surface-2: #26232C; --ink: #F4F1F6; --muted: #A59EAE;
+  --line: #37333F; --accent: #6F93FF; --accent-ink: #0B0B12; --accent-soft: #1C2748; --ok: #5FD39A; --danger: #FF8A80;
+  --scrim: rgba(0,0,0,.6); --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.4);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.45;
+  padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; }
+.page-head { margin-bottom: 20px; display: flex; gap: 16px; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; }
+.page-head h1 { font-size: 26px; line-height: 1.15; margin: 0 0 6px; font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
+.page-head p { margin: 0; color: var(--muted); max-width: 66ch; }
+.eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.hintbar { font-size: 13px; color: var(--muted); }
+
+/* ---------- Mock page frame ---------- */
+.frame { position: relative; overflow: hidden; display: flex; flex-direction: column; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; height: 800px; box-shadow: var(--shadow); font-size: 14px; }
+.mock-head { position: relative; display: flex; justify-content: center; align-items: center; padding: 14px 28px; background: var(--surface); border-bottom: 1px solid var(--line); flex: none; }
+.mock-head h2 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.mock-head span { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 22px; line-height: 1; }
+.page { flex: 1; overflow-y: auto; }
+.pbar { flex: none; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; background: var(--surface); border-top: 1px solid var(--line); }
+.pbar .discard { border: 0; background: transparent; font-weight: 600; font-size: 13px; cursor: pointer; padding: 8px 12px; }
+.pbar .btn { padding: 8px 22px; }
+.mock-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.mock-chips span { background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 2px 8px; font-size: 11.5px; font-weight: 600; }
+.pm { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; margin-bottom: 8px; font-size: 13.5px; }
+.pm input { accent-color: var(--accent); width: 16px; height: 16px; }
+.pm .pm-ic { width: 22px; height: 16px; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); }
+.opt { display: flex; align-items: center; gap: 10px; padding: 9px 2px; font-size: 13.5px; }
+.opt input { accent-color: var(--accent); width: 16px; height: 16px; }
+.opt small { margin-left: auto; color: var(--muted); font-size: 11.5px; }
+.mock { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 300px); gap: 24px; justify-content: center; padding: 24px 28px 32px; align-items: start; }
+@media (max-width: 860px) { .mock { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 16px 18px; }
+.card + .card { margin-top: 14px; }
+.card h3 { font-size: 13.5px; margin: 0 0 10px; font-weight: 700; }
+.divider { border: 0; border-top: 1px dashed var(--line); margin: 0 0 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.lbl { font-size: 13px; color: var(--muted); font-weight: 500; }
+.lbl em { font-style: normal; font-size: 11px; margin-left: 4px; opacity: .8; }
+.pill-select {
+  appearance: none; -webkit-appearance: none; background-color: var(--surface); border: 1px solid var(--ink); border-radius: 999px;
+  padding: 8px 36px 8px 16px; width: 100%; max-width: 240px; cursor: pointer; font-size: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%236A6672' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+.pill-select.soft { border-color: var(--muted); max-width: 100%; }
+.org { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 7px 14px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+.org::before { content: ""; width: 9px; height: 11px; background: currentColor; border-radius: 1px; opacity: .85; }
+.amt { display: flex; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; background: var(--surface); }
+.amt select { border: 0; border-right: 1px solid var(--line); background: transparent; padding: 8px 10px 8px 16px; cursor: pointer; }
+.amt input { border: 0; background: transparent; padding: 8px 16px; flex: 1; min-width: 0; outline: none; font-variant-numeric: tabular-nums; }
+
+.list-head { display: flex; align-items: center; justify-content: space-between; min-height: 36px; margin-bottom: 8px; }
+.count { display: inline-block; min-width: 20px; padding: 0 6px; margin-left: 6px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); text-align: center; color: var(--ink); letter-spacing: 0; }
+.items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 8px 12px; padding: 10px 6px 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); }
+.r-name { font-weight: 600; overflow-wrap: anywhere; }
+.r-meta { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.r-total { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.r-actions { display: flex; gap: 2px; }
+.icon-btn { width: 36px; height: 36px; display: inline-grid; place-items: center; border-radius: 999px; border: 1px solid transparent; background: transparent; cursor: pointer; color: var(--muted); }
+.icon-btn:hover { background: var(--surface); border-color: var(--line); color: var(--ink); }
+.icon-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+.icon-btn.add { border: 1.5px solid var(--ink); color: var(--ink); }
+.icon-btn.add:hover { background: var(--ink); color: var(--surface); }
+svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 9px 20px; border: 1.5px solid var(--ink); background: var(--surface); cursor: pointer; font-weight: 600; font-size: 14px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+.btn.ghost:hover { color: var(--ink); }
+.empty { border: 1.5px dashed var(--line); border-radius: 12px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.empty p { margin: 0; color: var(--muted); font-size: 14px; }
+.total { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.total .big { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Preview */
+.pv { position: sticky; top: 16px; }
+.pv-card { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 16px; font-size: 13px; }
+.pv-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.logo { width: 70px; height: 22px; border-radius: 4px; background: var(--surface-2); border: 1px dashed var(--line); }
+.pv-total { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+.pv-line { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); padding: 3px 0; font-variant-numeric: tabular-nums; }
+.pv-line span:first-child { overflow-wrap: anywhere; }
+.pv-sep { border-top: 1px solid var(--line); margin: 12px 0; }
+.pv-fake { height: 26px; border: 1px solid var(--line); border-radius: 999px; margin-bottom: 8px; background: var(--surface-2); }
+.pv-pay { height: 30px; border-radius: 999px; background: var(--ink); color: var(--surface); display: grid; place-items: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---------- Side panel (the standard right-hand drawer) ---------- */
+.scrim { position: absolute; inset: 0; background: var(--scrim); opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s; z-index: 10; }
+.drawer { position: absolute; top: 0; right: 0; bottom: 0; width: min(420px, 100%); background: var(--canvas); border-left: 1px solid var(--line); z-index: 11; transform: translateX(100%); visibility: hidden; transition: transform .24s ease, visibility .24s; }
+.frame.open .scrim { opacity: 1; visibility: visible; }
+.frame.open .drawer { transform: none; visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .scrim, .drawer { transition: none; } }
+.d-form { height: 100%; display: flex; flex-direction: column; }
+.d-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.d-head h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.d-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+.d-sec { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.d-sec + .d-sec { margin-top: 12px; }
+.d-foot { border-top: 1px solid var(--line); background: var(--surface); padding: 12px 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+.d-total { display: flex; justify-content: space-between; font-weight: 600; font-variant-numeric: tabular-nums; }
+.d-actions { display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+.d-actions .spacer { flex: 1; }
+.fld { display: flex; flex-direction: column; gap: 6px; }
+.inp { border: 1px solid var(--ink); background: var(--surface); border-radius: 999px; padding: 9px 16px; width: 100%; font-size: 14px; }
+textarea.inp { border-radius: 16px; resize: vertical; min-height: 84px; line-height: 1.4; }
+.inp:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+.inp.err { border-color: var(--danger); }
+.inp[readonly] { background: var(--surface-2); border-color: var(--line); color: var(--muted); }
+.errtxt { color: var(--danger); font-size: 12.5px; margin: 0; }
+.note { font-size: 12.5px; color: var(--muted); margin: 0; }
+.note.ok { color: var(--ok); }
+.prefix { position: relative; }
+.prefix span { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; pointer-events: none; }
+.prefix .inp { padding-left: 52px; font-variant-numeric: tabular-nums; }
+.two { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; }
+.stepper { display: inline-flex; align-items: center; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--surface); height: 40px; }
+.stepper button { width: 36px; height: 100%; border: 0; background: transparent; cursor: pointer; font-size: 18px; border-radius: 999px; }
+.stepper button:hover { color: var(--accent); }
+.stepper input { width: 38px; text-align: center; border: 0; background: transparent; font-variant-numeric: tabular-nums; outline: none; -moz-appearance: textfield; }
+.stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.combo { position: relative; }
+.search-ic { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.combo .inp { padding-left: 40px; }
+.suggest { position: absolute; z-index: 5; left: 0; right: 0; top: calc(100% + 6px); list-style: none; margin: 0; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); max-height: 260px; overflow: auto; }
+.suggest .grp { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 6px 10px 2px; font-weight: 600; }
+.suggest button { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; text-align: left; border: 0; background: transparent; padding: 8px 10px; border-radius: 10px; cursor: pointer; }
+.suggest button:hover, .suggest button:focus-visible { background: var(--surface-2); }
+.suggest .sub { font-size: 12px; color: var(--muted); grid-column: 1; }
+.suggest .price { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; grid-row: 1; grid-column: 2; }
+.suggest .create { color: var(--accent); font-weight: 600; grid-column: 1 / -1; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; cursor: pointer; }
+.check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.check small { display: block; color: var(--muted); font-size: 12.5px; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(20px, env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--surface); padding: 10px 14px 10px 18px; border-radius: 999px; display: flex; gap: 14px; align-items: center; box-shadow: var(--shadow); z-index: 30; max-width: calc(100vw - 32px); }
+.toast button { background: transparent; border: 0; color: inherit; text-decoration: underline; font-weight: 600; cursor: pointer; }
+
+/* ---------- Add-flow variants ---------- */
+.seg { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.seg .eyebrow { margin-right: 4px; }
+.seg button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.seg button:hover { border-color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.c-row { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
+.c-row .combo { flex: 1 1 200px; min-width: 0; }
+.c-row .btn { height: 42px; white-space: nowrap; }
+.empty-b, .empty-c { border: 1.5px dashed var(--line); border-radius: 12px; padding: 14px; }
+.add-more { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; }
+.chip:hover { border-color: var(--ink); }
+.chip.new { border-style: dashed; color: var(--accent); border-color: var(--accent); }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pcard { display: flex; flex-direction: column; gap: 2px; text-align: left; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); cursor: pointer; min-width: 0; }
+.pcard:hover { border-color: var(--ink); }
+.pcard .pc-name { font-weight: 600; overflow-wrap: anywhere; }
+.pcard .pc-sub { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.pcard.new { border-style: dashed; border-color: var(--accent); color: var(--accent); background: var(--surface); }
+
+/* ---------- Notes ---------- */
+.notes { margin-top: 36px; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 36px; align-items: start; }
+@media (max-width: 860px) { .notes { grid-template-columns: minmax(0, 1fr); } }
+.notes h2 { font-size: 19px; margin: 0 0 12px; font-weight: 700; }
+.changes { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.changes li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.changes .was { color: var(--muted); }
+.changes .now { font-weight: 500; }
+@media (max-width: 560px) { .changes li { grid-template-columns: 1fr; gap: 4px; } }
+.list { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+.list b { font-weight: 600; }
+.notes section + section { margin-top: 28px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  
+
+  <div class="frame" id="frame">
+    <div class="mock-head"><h2>Create Payment Link</h2><span aria-hidden="true">×</span></div>
+    <div class="page">
+    <div class="mock">
+      <div>
+        <div class="card">
+          <h3>Organisation</h3>
+          <div class="org">Organization: Parent</div>
+        </div>
+        <div class="card">
+          <h3>Cart information</h3>
+          <hr class="divider">
+          <div class="field">
+            <label for="mode" class="lbl">Cart type</label>
+            <select id="mode" class="pill-select">
+              <option value="amount">Amount</option>
+              <option value="items" selected="">Amount &amp; Product</option>
+            </select>
+          </div>
+          <div id="cartBody"><div class="field"><label for="cur" class="lbl">Currency</label><select id="cur" class="pill-select soft"><option value="AUD" selected="">Australian Dollar [AUD]</option><option value="NZD">New Zealand Dollar [NZD]</option><option value="USD">US Dollar [USD]</option><option value="GBP">Pound Sterling [GBP]</option><option value="EUR">Euro [EUR]</option></select></div><div class="list-head"><span class="eyebrow">Products<span class="count">1</span></span></div><ul class="items"><li class="row" data-id="1"><div><div class="r-name">Test product</div><div class="r-meta">SKU 123456 · 1 × AUD 10.00</div></div><div class="r-total">AUD 10.00</div><div class="r-actions"><button type="button" class="icon-btn" data-act="edit" aria-label="Edit Test product" title="Edit"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 7.5l3 3"></path></svg></button><button type="button" class="icon-btn danger" data-act="remove" aria-label="Remove Test product" title="Remove"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"></path></svg></button></div></li></ul><div class="add-more"><div class="c-row"><div class="combo"><span class="search-ic"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="M20 20l-4-4"></path></svg></span><input class="inp" id="cName" autocomplete="off" placeholder="Add another product" role="combobox" aria-label="Search catalog" aria-expanded="false" aria-controls="cSuggest"><ul class="suggest" id="cSuggest" hidden=""></ul></div><button type="button" class="btn" data-act="cnew"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add product</button></div></div><div class="total"><span class="eyebrow">Total</span><span class="big">AUD 10.00</span></div></div>
+        </div>
+        <div class="card">
+          <h3>Payment methods for AUD</h3>
+          <div class="mock-chips"><span>Card</span><span>Paypal</span><span>Google Pay</span><span>Apple Pay</span></div>
+          <label class="pm"><input type="checkbox" checked=""> <i class="pm-ic"></i> Card</label>
+          <label class="pm"><input type="checkbox" checked=""> <i class="pm-ic"></i> Paypal</label>
+          <label class="pm"><input type="checkbox" checked=""> <i class="pm-ic"></i> Google Pay</label>
+          <label class="pm"><input type="checkbox" checked=""> <i class="pm-ic"></i> Apple Pay</label>
+        </div>
+        <div class="card">
+          <h3>Options</h3>
+          <label class="opt"><input type="checkbox"> Change language <small>Default: English</small></label>
+          <label class="opt"><input type="checkbox"> Change checkout theme <small>Default theme</small></label>
+          <label class="opt"><input type="checkbox"> Add reference <small>Invoice or order number</small></label>
+          <label class="opt"><input type="checkbox"> Set link expiration <small>Default: 7 days</small></label>
+          <label class="opt"><input type="checkbox"> Send to customer <small>Email or SMS</small></label>
+        </div>
+      </div>
+      <aside class="pv" aria-label="Checkout preview">
+        <div class="eyebrow" style="margin-bottom:8px">Preview</div>
+        <div class="pv-card">
+          <div class="pv-top"><div class="logo"></div><div><div class="pv-total" id="pvTotal">AUD 10.00</div></div></div>
+          <div id="pvLines"><div class="pv-line"><span>Test product</span><span>10.00</span></div></div>
+          <div class="pv-sep"></div>
+          <div class="pv-fake"></div><div class="pv-fake"></div>
+          <div class="pv-pay" id="pvPay">Pay AUD 10.00</div>
+        </div>
+      </aside>
+    </div>
+    </div>
+    <div class="pbar"><button type="button" class="discard">Discard</button><button type="button" class="btn primary">Create &amp; Send Link</button></div>
+
+    <div class="scrim" id="scrim"></div>
+    <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle"></div>
+  </div>
+
+  </div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden=""></div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var I = function (d) { return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">' + d + '</svg>'; };
+  var ICON = {
+    edit: I('<path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17z"/><path d="M14.5 7.5l3 3"/>'),
+    trash: I('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"/>'),
+    plus: I('<path d="M12 5v14M5 12h14"/>'),
+    close: I('<path d="M6 6l12 12M18 6L6 18"/>'),
+    search: I('<circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/>')
+  };
+  var CURS = [['AUD', 'Australian Dollar [AUD]'], ['NZD', 'New Zealand Dollar [NZD]'], ['USD', 'US Dollar [USD]'], ['GBP', 'Pound Sterling [GBP]'], ['EUR', 'Euro [EUR]']];
+
+  var uid = 100;
+  var S = {
+    mode: 'items', cur: 'AUD', amount: '',
+    items: [{ id: 1, name: 'Test product', desc: '', price: 10, qty: 1, sku: '123456', url: '', cat: 'c1' }],
+    catalog: [
+      { id: 'c1', name: 'Test product', desc: '', sku: '123456', price: 10, url: '' },
+      { id: 'c2', name: 'Test product with tax', desc: 'Price includes 5% tax', sku: 'TestSku1', price: 10.5, url: '' },
+      { id: 'c3', name: 'Wireless router X2', desc: 'Dual-band router', sku: 'RTR-X2', price: 129, url: '' },
+      { id: 'c4', name: 'Setup fee', desc: '', sku: 'FEE-SETUP', price: 25, url: '' }
+    ],
+    variant: 'b', drawer: null, draft: null, undo: null, toastTimer: null, returnFocus: null
+  };
+
+  var frame = $('#frame'), drawerEl = $('#drawer'), cartBody = $('#cartBody');
+  var num = function (v) { var n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : NaN; };
+  var fmt = function (n) { return S.cur + ' ' + (Math.round((n || 0) * 100) / 100).toFixed(2); };
+  var itemsTotal = function () { return S.items.reduce(function (t, i) { return t + i.price * i.qty; }, 0); };
+  var cartTotal = function () { return S.mode === 'amount' ? (num(S.amount) || 0) : itemsTotal(); };
+  var catById = function (id) { return S.catalog.filter(function (c) { return c.id === id; })[0]; };
+  var curOpts = function () { return CURS.map(function (c) { return '<option value="' + c[0] + '"' + (c[0] === S.cur ? ' selected' : '') + '>' + (S.mode === 'amount' ? c[0] : c[1]) + '</option>'; }).join(''); };
+
+  /* ---------- Cart card + preview ---------- */
+  function renderCart() {
+    var h = '';
+    if (S.mode === 'amount') {
+      h = '<div class="field"><label for="amt" class="lbl">Transaction amount</label><div class="amt"><select id="cur" aria-label="Currency">' + curOpts() + '</select>' +
+          '<input id="amt" inputmode="decimal" placeholder="Enter amount" value="' + esc(S.amount) + '"></div></div>';
+    } else {
+      h = '<div class="field"><label for="cur" class="lbl">Currency</label><select id="cur" class="pill-select soft">' + curOpts() + '</select></div>';
+      h += '<div class="list-head"><span class="eyebrow">Products<span class="count">' + S.items.length + '</span></span>' +
+           (S.items.length && S.variant === 'a' ? '<button type="button" class="icon-btn add" data-act="add" aria-label="Add another product" title="Add another product">' + ICON.plus + '</button>' : '') + '</div>';
+      if (S.items.length) {
+        h += '<ul class="items">' + S.items.map(function (it) {
+          var meta = (it.sku ? 'SKU ' + esc(it.sku) + ' &middot; ' : '') + it.qty + ' &times; ' + fmt(it.price);
+          return '<li class="row" data-id="' + it.id + '"><div><div class="r-name">' + esc(it.name) + '</div><div class="r-meta">' + meta + '</div></div>' +
+            '<div class="r-total">' + fmt(it.price * it.qty) + '</div><div class="r-actions">' +
+            '<button type="button" class="icon-btn" data-act="edit" aria-label="Edit ' + esc(it.name) + '" title="Edit">' + ICON.edit + '</button>' +
+            '<button type="button" class="icon-btn danger" data-act="remove" aria-label="Remove ' + esc(it.name) + '" title="Remove">' + ICON.trash + '</button></div></li>';
+        }).join('') + '</ul>';
+        if (S.variant !== 'a') h += addMoreHTML();
+      } else {
+        h += emptyHTML();
+      }
+      h += '<div class="total"><span class="eyebrow">Total</span><span class="big">' + fmt(itemsTotal()) + '</span></div>';
+    }
+    cartBody.innerHTML = h;
+    renderPreview();
+  }
+  function searchHTML(ph) {
+    return '<div class="c-row"><div class="combo"><span class="search-ic">' + ICON.search + '</span><input class="inp" id="cName" autocomplete="off" placeholder="' + ph + '" role="combobox" aria-label="Search catalog" aria-expanded="false" aria-controls="cSuggest"><ul class="suggest" id="cSuggest" hidden></ul></div>' +
+      '<button type="button" class="btn" data-act="cnew">' + ICON.plus + 'Add product</button></div>';
+  }
+  function cardsHTML() {
+    return '<div class="cards">' + S.catalog.slice(0, 3).map(function (c) {
+      return '<button type="button" class="pcard" data-act="cpick" data-cid="' + c.id + '"><span class="pc-name">' + esc(c.name) + '</span><span class="pc-sub">' + (c.sku ? esc(c.sku) + ' &middot; ' : '') + fmt(c.price) + '</span></button>';
+    }).join('') + '<button type="button" class="pcard new" data-act="cnew">' + ICON.plus + '<span class="pc-name">New product</span><span class="pc-sub">Enter details, optionally save</span></button></div>';
+  }
+  function emptyHTML() {
+    if (S.variant === 'b') return '<div class="empty-b"><p class="lbl" style="margin:0 0 8px">Add your first product</p>' + searchHTML('Search from Product Catalog') + '</div>';
+    if (S.variant === 'c') return '<div class="empty-c"><p class="lbl" style="margin:0 0 8px">Pick from your catalog</p>' + cardsHTML() + '</div>';
+    return '<div class="empty"><p>No products in this cart yet.</p><button type="button" class="btn primary" data-act="add">' + ICON.plus + 'Add product</button></div>';
+  }
+  function addMoreHTML() {
+    if (S.variant === 'b') return '<div class="add-more">' + searchHTML('Add another product') + '</div>';
+    var chips = S.catalog.filter(function (c) { return !S.items.some(function (i) { return i.cat === c.id; }); }).slice(0, 3).map(function (c) {
+      return '<button type="button" class="chip" data-act="cpick" data-cid="' + c.id + '">+ ' + esc(c.name) + '</button>';
+    }).join('');
+    return '<div class="add-more"><span class="lbl">Quick add</span><div class="chips">' + chips + '<button type="button" class="chip new" data-act="cnew">+ New product</button></div></div>';
+  }
+  function refreshCSuggest(force) {
+    var ul = $('#cSuggest'), inp = $('#cName'); if (!ul || !inp) return;
+    var raw = inp.value.trim(), q = raw.toLowerCase();
+    var m = S.catalog.filter(function (c) { return !q || c.name.toLowerCase().indexOf(q) > -1 || (c.sku || '').toLowerCase().indexOf(q) > -1; }).slice(0, 6);
+    var exact = S.catalog.some(function (c) { return c.name.toLowerCase() === q; });
+    var h = '';
+    if (m.length) h += '<li class="grp">Product catalog</li>' + m.map(function (c) {
+      var n = S.items.filter(function (i) { return i.cat === c.id; }).reduce(function (t, i) { return t + i.qty; }, 0);
+      return '<li><button type="button" data-act="cpick" data-cid="' + c.id + '"><span>' + esc(c.name) + '</span><span class="price">' + fmt(c.price) + '</span><span class="sub">' + (c.sku ? 'SKU: ' + esc(c.sku) : 'No SKU') + (n ? ' &middot; In cart &times; ' + n : '') + '</span></button></li>';
+    }).join('');
+    if (q && !exact) h += '<li><button type="button" data-act="cnew"><span class="create">Add &ldquo;' + esc(raw) + '&rdquo; as a new product</span></button></li>';
+    ul.innerHTML = h; ul.hidden = !(force || document.activeElement === inp); inp.setAttribute('aria-expanded', ul.hidden ? 'false' : 'true');
+  }
+  function addFromCatalog(cid) {
+    var c = catById(cid); if (!c) return;
+    var dup = S.items.filter(function (i) { return i.cat === cid && i.price === c.price; })[0];
+    if (dup) dup.qty++; else S.items.push({ id: ++uid, name: c.name, desc: c.desc, price: c.price, qty: 1, sku: c.sku, url: c.url, cat: c.id });
+    renderCart(); toast(c.name + ' added to cart.');
+  }
+  function syncVariant() {
+    document.querySelectorAll('[data-variant]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-variant') === S.variant ? 'true' : 'false'); });
+  }
+  function renderPreview() {
+    var t = cartTotal();
+    $('#pvTotal').textContent = fmt(t);
+    $('#pvPay').textContent = 'Pay ' + fmt(t);
+    $('#pvLines').innerHTML = S.mode === 'items' ? S.items.map(function (i) {
+      return '<div class="pv-line"><span>' + esc(i.name) + (i.qty > 1 ? ' &times; ' + i.qty : '') + '</span><span>' + (Math.round(i.price * i.qty * 100) / 100).toFixed(2) + '</span></div>';
+    }).join('') : '';
+  }
+
+  /* ---------- Side panel ---------- */
+  function drawerHTML(isNew) {
+    var d = S.draft;
+    return '<form class="d-form" id="dForm" novalidate>' +
+      '<div class="d-head"><h4 id="dTitle">' + (isNew ? 'Add product' : 'Edit product') + '</h4>' +
+        '<button type="button" class="icon-btn" data-act="close" aria-label="Close panel">' + ICON.close + '</button></div>' +
+      '<div class="d-body">' +
+        '<div class="d-sec">' +
+          '<div class="fld"><label class="lbl" for="dName">Product name</label>' +
+            '<input class="inp" id="dName" autocomplete="off" placeholder="Enter product name" value="' + esc(d.name) + '">' +
+            '<p class="note ok" id="dFrom" hidden>From your product catalog. Changes here apply to this link only.</p>' +
+            '<p class="errtxt" id="e_dName" hidden></p></div>' +
+          '<div class="fld"><label class="lbl" for="dDesc">Product description<em>optional</em></label>' +
+            '<textarea class="inp" id="dDesc" placeholder="Enter a description">' + esc(d.desc) + '</textarea></div>' +
+          '<div class="two">' +
+            '<div class="fld"><span class="lbl" id="dQtyLbl">Quantity</span><div class="stepper" role="group" aria-labelledby="dQtyLbl">' +
+              '<button type="button" data-act="qty-dec" aria-label="Decrease quantity">&minus;</button>' +
+              '<input id="dQty" inputmode="numeric" aria-label="Quantity" value="' + esc(d.qty) + '">' +
+              '<button type="button" data-act="qty-inc" aria-label="Increase quantity">+</button></div>' +
+              '<p class="errtxt" id="e_dQty" hidden></p></div>' +
+            '<div class="fld"><label class="lbl" for="dPrice">Price per unit</label><div class="prefix"><span>' + S.cur + '</span>' +
+              '<input class="inp" id="dPrice" inputmode="decimal" placeholder="0.00" value="' + esc(d.price) + '"></div>' +
+              '<p class="errtxt" id="e_dPrice" hidden></p></div>' +
+          '</div>' +
+          '<div class="fld"><label class="lbl" for="dSku">Product ID / SKU<em>optional</em></label><input class="inp" id="dSku" placeholder="Enter an ID or SKU" value="' + esc(d.sku) + '"></div>' +
+          '<div class="fld"><label class="lbl" for="dUrl">Product URL<em>optional</em></label><input class="inp" id="dUrl" inputmode="url" placeholder="https://" value="' + esc(d.url) + '"><p class="errtxt" id="e_dUrl" hidden></p></div>' +
+        '</div>' +
+        '<div class="d-sec" id="dSaveSec" hidden>' +
+          '<label class="check"><input type="checkbox" id="dSave"' + (d.save ? ' checked' : '') + '><span>Save to product catalog<small>Find this product next time without retyping it.</small></span></label>' +
+          '<div class="fld" id="dOrgFld" hidden><label class="lbl" for="dOrg">Organisation</label><input class="inp" id="dOrg" readonly value="Organization: Parent"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="d-foot"><div class="d-total"><span>Total price</span><span id="dTotal"></span></div>' +
+        '<div class="d-actions"><button type="button" class="btn ghost" data-act="close">Cancel</button><span class="spacer"></span>' +
+        '<button type="submit" class="btn primary">' + (isNew ? 'Add to cart' : 'Save changes') + '</button></div></div>' +
+    '</form>';
+  }
+  function openDrawer(kind, it, prefill) {
+    S.returnFocus = document.activeElement;
+    S.drawer = kind;
+    S.draft = it ? { name: it.name, desc: it.desc, qty: String(it.qty), price: String(it.price), sku: it.sku, url: it.url, cat: it.cat, save: false }
+                 : { name: prefill || '', desc: '', qty: '1', price: '', sku: '', url: '', cat: null, save: false };
+    drawerEl.innerHTML = drawerHTML(kind === 'new');
+    frame.classList.add('open');
+    refresh();
+    setTimeout(function () { var n = $('#dName'); if (n) n.focus(); }, 60);
+  }
+  function closeDrawer() {
+    S.drawer = null; S.draft = null; frame.classList.remove('open');
+    var r = S.returnFocus; S.returnFocus = null;
+    if (r && r.isConnected) r.focus(); else { var b = cartBody.querySelector('[data-act="add"], [data-act="edit"]'); if (b) b.focus(); }
+  }
+  function refresh() {
+    if (!S.draft) return;
+    var d = S.draft;
+    $('#dFrom').hidden = !d.cat;
+    $('#dSaveSec').hidden = !!d.cat;
+    $('#dOrgFld').hidden = !d.save;
+    var q = parseInt(d.qty, 10), p = num(d.price);
+    $('#dTotal').textContent = fmt((q >= 1 ? q : 0) * (p > 0 ? p : 0));
+  }
+  function refreshSuggest(force) {
+    var ul = $('#dSuggest'), inp = $('#dName'); if (!ul || !inp) return;
+    var q = S.draft.name.trim().toLowerCase();
+    var m = S.catalog.filter(function (c) { return !q || c.name.toLowerCase().indexOf(q) > -1 || (c.sku || '').toLowerCase().indexOf(q) > -1; }).slice(0, 5);
+    var exact = S.catalog.some(function (c) { return c.name.toLowerCase() === q; });
+    var h = '';
+    if (m.length) h += '<li class="grp">Product catalog</li>' + m.map(function (c) {
+      return '<li><button type="button" data-act="pick" data-cid="' + c.id + '"><span>' + esc(c.name) + '</span><span class="price">' + fmt(c.price) + '</span><span class="sub">' + (c.sku ? 'SKU: ' + esc(c.sku) : 'No SKU') + '</span></button></li>';
+    }).join('');
+    if (q && !exact) h += '<li><button type="button" data-act="create"><span class="create">Use &ldquo;' + esc(S.draft.name.trim()) + '&rdquo; as a new product</span></button></li>';
+    var show = !!h && !S.draft.cat && (force || document.activeElement === inp);
+    ul.innerHTML = h; ul.hidden = !show; inp.setAttribute('aria-expanded', show ? 'true' : 'false');
+  }
+  function closeSuggest() { var cu = $('#cSuggest'); if (cu) cu.hidden = true; var ul = $('#dSuggest'); if (ul) ul.hidden = true; var i = $('#dName'); if (i) i.setAttribute('aria-expanded', 'false'); }
+  function setErr(id, msg) {
+    var e = $('#e_' + id), f = $('#' + id);
+    if (e) { e.hidden = !msg; e.textContent = msg || ''; }
+    if (f) f.classList.toggle('err', !!msg);
+  }
+  function clearErrs() { ['dName', 'dQty', 'dPrice', 'dUrl'].forEach(function (id) { setErr(id, ''); }); }
+
+  function commit(again) {
+    var d = S.draft, name = d.name.trim(), price = num(d.price), qty = parseInt(d.qty, 10), url = d.url.trim();
+    clearErrs();
+    var bad = null;
+    if (!name) { setErr('dName', 'Enter a product name.'); bad = bad || 'dName'; }
+    if (!(qty >= 1)) { setErr('dQty', 'At least 1.'); bad = bad || 'dQty'; }
+    if (!(price > 0)) { setErr('dPrice', 'Enter a price above 0.'); bad = bad || 'dPrice'; }
+    if (url && !/^https?:\/\/\S+\.\S+/.test(url)) { setErr('dUrl', 'Start with https://'); bad = bad || 'dUrl'; }
+    if (bad) { $('#' + bad).focus(); return; }
+    var cat = d.cat, saved = false;
+    if (!cat && d.save) {
+      cat = 'c' + (++uid); saved = true;
+      S.catalog.unshift({ id: cat, name: name, desc: d.desc.trim(), sku: d.sku.trim(), price: price, url: url });
+    }
+    var rec = { name: name, desc: d.desc.trim(), price: price, qty: qty, sku: d.sku.trim(), url: url, cat: cat }, msg;
+    if (S.drawer === 'new') {
+      var dup = cat && S.items.filter(function (i) { return i.cat === cat && i.price === price; })[0];
+      if (dup) { dup.qty += qty; msg = name + ' quantity updated.'; }
+      else { rec.id = ++uid; S.items.push(rec); msg = name + ' added to cart.'; }
+    } else {
+      var it = S.items.filter(function (i) { return i.id === S.drawer; })[0];
+      Object.keys(rec).forEach(function (k) { it[k] = rec[k]; }); msg = 'Product updated.';
+    }
+    if (saved) msg = msg.replace(/\.$/, '') + ' and saved to catalog.';
+    renderCart(); toast(msg);
+    if (again) { S.draft = { name: '', desc: '', qty: '1', price: '', sku: '', url: '', cat: null, save: false }; drawerEl.innerHTML = drawerHTML(true); refresh(); $('#dName').focus(); }
+    else closeDrawer();
+  }
+  function removeItem(id) {
+    var idx = S.items.map(function (i) { return i.id; }).indexOf(id); if (idx < 0) return;
+    var it = S.items.splice(idx, 1)[0];
+    S.undo = { it: it, idx: idx }; renderCart(); toast(it.name + ' removed.', true);
+  }
+  function toast(msg, withUndo) {
+    var t = $('#toast');
+    t.innerHTML = '<span>' + esc(msg) + '</span>' + (withUndo ? '<button type="button" data-act="undo">Undo</button>' : '');
+    t.hidden = false; clearTimeout(S.toastTimer);
+    S.toastTimer = setTimeout(function () { t.hidden = true; }, 5000);
+  }
+
+  /* ---------- Events ---------- */
+  document.addEventListener('click', function (e) {
+    var vb = e.target.closest('[data-variant]');
+    if (vb) { S.variant = vb.getAttribute('data-variant'); syncVariant(); renderCart(); return; }
+    var b = e.target.closest('[data-act]');
+    if (e.target === $('#scrim')) { closeDrawer(); return; }
+    if (!b) { if (!e.target.closest('.combo')) closeSuggest(); return; }
+    var act = b.getAttribute('data-act'), row = b.closest('.row'), id = row ? +row.getAttribute('data-id') : 0;
+    if (act === 'add') openDrawer('new');
+    else if (act === 'edit') openDrawer(id, S.items.filter(function (i) { return i.id === id; })[0]);
+    else if (act === 'remove') removeItem(id);
+    else if (act === 'close') closeDrawer();
+    else if (act === 'cpick') addFromCatalog(b.getAttribute('data-cid'));
+    else if (act === 'cnew') { var cn = $('#cName'); openDrawer('new', null, cn ? cn.value.trim() : ''); }
+    else if (act === 'pick') {
+      var c = catById(b.getAttribute('data-cid')), d = S.draft;
+      d.name = c.name; d.desc = c.desc; d.price = String(c.price); d.sku = c.sku; d.url = c.url; d.cat = c.id; d.save = false;
+      $('#dName').value = d.name; $('#dDesc').value = d.desc; $('#dPrice').value = d.price; $('#dSku').value = d.sku; $('#dUrl').value = d.url;
+      clearErrs(); closeSuggest(); refresh(); $('#dQty').focus();
+    }
+    else if (act === 'create') { closeSuggest(); $('#dPrice').focus(); }
+    else if (act === 'qty-inc' || act === 'qty-dec') {
+      var q = $('#dQty'), v = (parseInt(q.value, 10) || 1) + (act === 'qty-inc' ? 1 : -1);
+      q.value = Math.max(1, v); S.draft.qty = q.value; setErr('dQty', ''); refresh();
+    }
+    else if (act === 'undo' && S.undo) { S.items.splice(S.undo.idx, 0, S.undo.it); S.undo = null; $('#toast').hidden = true; renderCart(); }
+  });
+  document.addEventListener('input', function (e) {
+    var id = e.target.id;
+    if (id === 'amt') { S.amount = e.target.value; renderPreview(); return; }
+    if (id === 'cName') { refreshCSuggest(true); return; }
+    if (!S.draft) return;
+    var map = { dName: 'name', dDesc: 'desc', dQty: 'qty', dPrice: 'price', dSku: 'sku', dUrl: 'url' };
+    if (map[id]) {
+      S.draft[map[id]] = e.target.value;
+      if (id === 'dName') {
+        var c = S.draft.cat && catById(S.draft.cat);
+        if (c && c.name !== S.draft.name) S.draft.cat = null;
+        refreshSuggest(true);
+      }
+      setErr(id, ''); refresh();
+    } else if (id === 'dSave') { S.draft.save = e.target.checked; refresh(); }
+  });
+  document.addEventListener('focusin', function (e) {
+    if (e.target.id === 'dName' && S.draft) refreshSuggest(true);
+    else if (e.target.id === 'cName') refreshCSuggest(true);
+  });
+  document.addEventListener('change', function (e) {
+    if (e.target.id === 'cur') { S.cur = e.target.value; renderCart(); }
+    else if (e.target.id === 'mode') { S.mode = e.target.value; renderCart(); }
+  });
+  document.addEventListener('submit', function (e) { e.preventDefault(); if (S.draft) commit(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' || !S.drawer) return;
+    var ul = $('#dSuggest');
+    if (ul && !ul.hidden) closeSuggest(); else closeDrawer();
+  });
+
+  renderCart();
+})();
+</script>
+
+
+
+</body></html>
