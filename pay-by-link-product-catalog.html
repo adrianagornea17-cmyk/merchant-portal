@@ -442,8 +442,8 @@ body { padding: 0; }
           '<div class="fld"><label class="lbl" for="dSku">Product ID / SKU<em>optional</em></label><input class="inp" id="dSku" placeholder="Enter an ID or SKU" value="' + esc(d.sku) + '"></div>' +
         '</div>' +
         '<div class="d-sec">' +
-          '<div class="fld" id="dSaveSec" hidden><label class="check"><input type="checkbox" id="dSave"' + (d.save ? ' checked' : '') + '><span>Save to product catalog<small>Find this product next time without retyping it.</small></span></label></div>' +
-          '<div class="fld" id="dOrgFld" hidden><label class="lbl" for="dOrg">Organisation</label><input class="inp" id="dOrg" readonly value="Organization: Parent"></div>' +
+          '<div class="fld" id="dSaveSec" hidden><label class="check"><input type="checkbox" id="dSave"' + (d.save ? ' checked' : '') + '><span>Save to product catalog</span></label></div>' +
+          '<div class="fld" id="dOrgFld"><label class="lbl" for="dOrg">Organisation</label><input class="inp" id="dOrg" readonly value="Organization: Parent"></div>' +
           '<div class="fld"><label class="lbl" for="dUrl">Product URL<em>optional</em></label><input class="inp" id="dUrl" inputmode="url" placeholder="https://" value="' + esc(d.url) + '"><p class="errtxt" id="e_dUrl" hidden></p></div>' +
         '</div>' +
       '</div>' +
@@ -472,7 +472,6 @@ body { padding: 0; }
     var d = S.draft;
     $('#dFrom').hidden = !d.cat;
     $('#dSaveSec').hidden = !!d.cat;
-    $('#dOrgFld').hidden = !d.save;
     var q = parseInt(d.qty, 10), p = num(d.price);
     $('#dTotal').textContent = fmt((q >= 1 ? q : 0) * (p > 0 ? p : 0));
   }
