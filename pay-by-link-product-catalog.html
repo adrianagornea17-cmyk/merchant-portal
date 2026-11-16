@@ -195,6 +195,14 @@ textarea.inp { border-radius: 16px; resize: vertical; min-height: 84px; line-hei
 .c-row { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
 .c-row .combo { flex: 1 1 200px; min-width: 0; }
 .c-row .btn { height: 42px; white-space: nowrap; }
+.prod-find .inp { border-radius: 6px; border-color: var(--line); padding: 9px 12px; font-size: 14px; }
+.prod-find .inp::placeholder { color: var(--muted); }
+.prod-find .inp:focus { border-color: var(--accent); }
+.prod-find .combo .inp { padding-left: 12px; }
+.rec-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 4px 0; border: 0; background: transparent; color: var(--accent); font-weight: 600; font-size: 14px; cursor: pointer; }
+.rec-link:hover { text-decoration: underline; }
+.rec-link .info { color: var(--muted); display: inline-flex; }
+.rec-link .info svg { width: 14px; height: 14px; }
 .empty-b, .empty-c { border: 1.5px dashed var(--line); border-radius: 12px; padding: 14px; }
 .add-more { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -367,18 +375,23 @@ body { padding: 0; }
     return '<div class="c-row"><div class="combo"><span class="search-ic">' + ICON.search + '</span><input class="inp" id="cName" autocomplete="off" placeholder="' + ph + '" role="combobox" aria-label="Search catalog" aria-expanded="false" aria-controls="cSuggest"><ul class="suggest" id="cSuggest" hidden></ul></div>' +
       '<button type="button" class="btn" data-act="cnew">' + ICON.plus + 'Add product</button></div>';
   }
+  function findHTML(ph) {
+    var info = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3"></rect><path d="M12 11v5M12 8h.01"></path></svg>';
+    return '<div class="prod-find"><div class="combo"><input class="inp" id="cName" autocomplete="off" placeholder="' + ph + '" role="combobox" aria-label="Find or add a product" aria-expanded="false" aria-controls="cSuggest"><ul class="suggest" id="cSuggest" hidden></ul></div>' +
+      '<button type="button" class="rec-link" data-act="recommend">' + ICON.plus + 'Add recommended products<span class="info" title="Adds the top products from your catalog">' + info + '</span></button></div>';
+  }
   function cardsHTML() {
     return '<div class="cards">' + S.catalog.slice(0, 3).map(function (c) {
       return '<button type="button" class="pcard" data-act="cpick" data-cid="' + c.id + '"><span class="pc-name">' + esc(c.name) + '</span><span class="pc-sub">' + (c.sku ? esc(c.sku) + ' &middot; ' : '') + fmt(c.price) + '</span></button>';
     }).join('') + '<button type="button" class="pcard new" data-act="cnew">' + ICON.plus + '<span class="pc-name">New product</span><span class="pc-sub">Enter details, optionally save</span></button></div>';
   }
   function emptyHTML() {
-    if (S.variant === 'b') return '<div class="empty-b"><p class="lbl" style="margin:0 0 8px">Add your first product</p>' + searchHTML('Search from Product Catalog') + '</div>';
+    if (S.variant === 'b') return findHTML('Find or add a product…');
     if (S.variant === 'c') return '<div class="empty-c"><p class="lbl" style="margin:0 0 8px">Pick from your catalog</p>' + cardsHTML() + '</div>';
     return '<div class="empty"><p>No products in this cart yet.</p><button type="button" class="btn primary" data-act="add">' + ICON.plus + 'Add product</button></div>';
   }
   function addMoreHTML() {
-    if (S.variant === 'b') return '<div class="add-more">' + searchHTML('Add another product') + '</div>';
+    if (S.variant === 'b') return '<div class="add-more">' + findHTML('Find or add another product…') + '</div>';
     var chips = S.catalog.filter(function (c) { return !S.items.some(function (i) { return i.cat === c.id; }); }).slice(0, 3).map(function (c) {
       return '<button type="button" class="chip" data-act="cpick" data-cid="' + c.id + '">+ ' + esc(c.name) + '</button>';
     }).join('');
@@ -548,6 +561,7 @@ body { padding: 0; }
     else if (act === 'edit') openDrawer(id, S.items.filter(function (i) { return i.id === id; })[0]);
     else if (act === 'remove') removeItem(id);
     else if (act === 'close') closeDrawer();
+    else if (act === 'recommend') { S.catalog.filter(function (c) { return !S.items.some(function (i) { return i.cat === c.id; }); }).slice(0, 2).forEach(function (c) { addFromCatalog(c.id); }); }
     else if (act === 'cpick') addFromCatalog(b.getAttribute('data-cid'));
     else if (act === 'cnew') { var cn = $('#cName'); openDrawer('new', null, cn ? cn.value.trim() : ''); }
     else if (act === 'pick') {
