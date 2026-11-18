@@ -350,6 +350,30 @@
   .stage-track b.done { background: var(--primary); }
   .stage-cell { display: flex; align-items: center; gap: 12px; }
   .eta-late { color: var(--danger); }
+  /* ---------- Devices / fleet ---------- */
+  .dk-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .dk { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px 14px; border-bottom: 3px solid var(--c, var(--primary)); }
+  .dk .top { display: flex; align-items: center; font-size: 12px; color: var(--text-muted); }
+  .dk .top small { font-size: 10px; letter-spacing: .4px; text-transform: uppercase; margin-left: 4px; color: var(--text-faint); }
+  .dk .ib { margin-left: auto; width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: var(--ibg, var(--primary-light)); color: var(--ic, var(--primary)); }
+  .dk .big { font-size: 26px; font-weight: 700; margin: 14px 0 6px; }
+  .dk .foot { font-size: 11.5px; color: var(--text-muted); }
+  .chip-s { display: inline-block; border: 1px solid; border-radius: 999px; padding: 1px 8px; font-size: 11px; margin-right: 6px; }
+  .okbox { display: flex; gap: 12px; align-items: flex-start; border: 1px solid #86d9a8; background: var(--success-light); border-radius: 10px; padding: 14px 16px; color: #0b6b50; }
+  .okbox b { display: block; color: var(--text); font-size: 13px; }
+  .okbox span { font-size: 12px; color: var(--text-faint); }
+  .grid-fleet { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.65fr); gap: 20px; align-items: start; }
+  .seg2 { display: inline-flex; border-radius: 4px; overflow: hidden; }
+  .seg2 button { border: none; background: transparent; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--text-muted); }
+  .seg2 button.active { background: #0b2e4a; color: #fff; }
+  .att-sec { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: .6px; padding: 12px 0 8px; border-bottom: 1px solid var(--border); }
+  .att-sec i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .att-sec .cnt { margin-left: auto; font-size: 11px; padding: 1px 8px; border-radius: 999px; }
+  .att-row { display: flex; align-items: center; padding: 14px 8px 14px 12px; cursor: pointer; }
+  .att-row:hover { background: #fafbfd; }
+  .att-row b { font-size: 13px; display: block; }
+  .att-row span { font-size: 12px; color: var(--text-muted); }
+  .att-row .n { margin-left: auto; font-size: 15px; font-weight: 700; }
   .hidden { display: none !important; }
   .mock-banner {
     font-size: 11px; color: var(--text-muted); background: var(--bg); border: 1px dashed var(--border-strong);
@@ -370,7 +394,7 @@
       <a href="#" class="active" data-view="home"><svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 1.5 7v7.5h4.5V10h4v4.5h4.5V7z"/></svg>Home</a>
       <a href="#" data-view="merchants"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 6h12l-1-3H3zM3 6v7h10V6M6.5 13V9.5h3V13"/></svg>Merchants<span class="new">New</span></a>
       <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M9.8 5.8C9.4 5.3 8.8 5 8 5c-1.1 0-1.9.6-1.9 1.5 0 2 3.8 1 3.8 3 0 .9-.8 1.5-1.9 1.5-.8 0-1.5-.3-1.9-.9M8 3.8V5M8 11v1.2"/></svg>Transactions</a>
-      <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="1.5" width="8" height="13" rx="1.5"/><path d="M6 4.5h4M6 8h1M9 8h1M6 10.5h1M9 10.5h1"/></svg>Devices</a>
+      <a href="#" data-view="devices"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="1.5" width="8" height="13" rx="1.5"/><path d="M6 4.5h4M6 8h1M9 8h1M6 10.5h1M9 10.5h1"/></svg>Devices</a>
       <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 7h6M5 10h4"/></svg>Boarding</a>
       <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"/></svg>Administration</a>
       <a href="#"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12h12L13 5l-3 3-2-4-2 4-3-3z"/></svg>Premier Portal</a>
@@ -570,6 +594,70 @@
             <tbody id="locBody"></tbody>
           </table>
         </div>
+        </div>
+
+        <!-- ================= Devices view (Estate health) ================= -->
+        <div id="devicesView" class="view hidden">
+          <div class="page-head">
+            <div class="titles">
+              <h1>Device Fleet Management</h1>
+              <div class="sub">Real-time monitoring of 870 payment terminals</div>
+            </div>
+            <div class="grow"></div>
+            <span class="src">VHQ 2.0</span>
+            <button class="btn" id="orderBtn3">Order devices</button>
+          </div>
+
+          <div class="dk-grid">
+            <div class="dk">
+              <div class="top">Total Devices<span class="ib"><svg class="ico" style="width:16px;height:16px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="2.5" width="13" height="8.5" rx="1"/><path d="M5.5 14h5M8 11v3"/></svg></span></div>
+              <div class="big">870</div><div class="foot">Online: 280 | Offline: 64</div>
+            </div>
+            <div class="dk" style="--c:#cfd4dc">
+              <div class="top">In Sync<span class="ib" style="--ibg:var(--success-light);--ic:var(--success)"><svg class="ico" style="width:16px;height:16px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m3 8.5 3.2 3L13 4.5"/></svg></span></div>
+              <div class="big" style="color:var(--text-faint)">&mdash;</div><div class="foot">No sync data yet</div>
+            </div>
+            <div class="dk">
+              <div class="top">Deployments<small>&middot; Last 7 days</small><span class="ib"><svg class="ico" style="width:16px;height:16px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 10.5V2.5M5 5l3-3 3 3M2.5 10v3.5h11V10"/></svg></span></div>
+              <div class="big">0</div><div class="foot">Success: 0</div>
+            </div>
+            <div class="dk" style="--c:var(--danger)">
+              <div class="top">Active Alerts<span class="ib" style="--ibg:var(--danger-light);--ic:var(--danger)"><svg class="ico" style="width:16px;height:16px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 2 1.5 13.5h13zM8 6.5v3.2M8 11.5v.4"/></svg></span></div>
+              <div class="big" style="color:var(--danger)">28,890</div>
+              <div class="foot"><span class="chip-s" style="color:var(--danger);border-color:var(--danger)">986 C</span><span class="chip-s" style="color:var(--warning);border-color:var(--warning)">4,237 W</span><span class="chip-s" style="color:var(--text-muted);border-color:var(--border-strong)">23,667 L</span></div>
+            </div>
+          </div>
+
+          <div class="grid-fleet">
+            <div class="okbox">
+              <svg class="ico" style="width:18px;height:18px;margin-top:1px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m3 8.5 3.2 3L13 4.5"/></svg>
+              <div><b>Deployments</b><span>No deployments in the last 7 days</span></div>
+            </div>
+            <div class="card card-pad map-card">
+              <div class="card-head"><h3>Fleet Location</h3><div class="grow"></div><span class="faint" style="font-size:12px">280 online &middot; 870 devices</span></div>
+              <div class="map" id="fleetMap" style="min-height:320px"><svg id="fleetSvg"></svg></div>
+            </div>
+          </div>
+
+          <div class="grid-fleet">
+            <div class="card card-pad">
+              <div class="card-head"><h3>Lifecycle Status</h3><div class="grow"></div>
+                <div class="seg2" id="lcSeg"><button class="active" data-m="status">Status</button><button data-m="model">Model</button></div></div>
+              <div class="donut-wrap" style="flex-direction:column;gap:14px">
+                <svg id="lcDonut" width="200" height="200" viewBox="0 0 200 200"></svg>
+                <div class="donut-legend" id="lcLegend" style="width:100%;max-width:220px"></div>
+              </div>
+            </div>
+            <div class="card card-pad">
+              <div class="card-head"><h3>Devices Needing Attention</h3><div class="grow"></div><span class="faint" style="font-size:12px">100 issues</span></div>
+              <div class="att-sec" style="color:var(--danger)"><i style="background:var(--danger)"></i>CRITICAL<span class="cnt" style="background:var(--danger-light)">64</span></div>
+              <div class="att-row" data-t="Offline devices"><div><b>Offline</b><span>No connectivity in the last 15 minutes</span></div><span class="n">64</span><span class="faint">&nbsp;&rsaquo;</span></div>
+              <div class="att-sec" style="color:var(--primary)"><i style="background:var(--primary)"></i>INFO<span class="cnt" style="background:var(--primary-light)">36</span></div>
+              <div class="att-row" data-t="Pending registration"><div><b>Pending Registration</b><span>Enrolled but has not completed first handshake</span></div><span class="n">36</span><span class="faint">&nbsp;&rsaquo;</span></div>
+              <div class="att-sec" style="font-weight:500;letter-spacing:0;border-bottom:none;border-top:1px solid var(--border);margin-top:8px"><i style="background:var(--success)"></i><span style="color:var(--text-muted)">5 checks healthy</span><button class="btn-ghost btn btn-sm" id="chkToggle" style="margin-left:auto;color:var(--text-muted)">Show</button></div>
+              <div id="chkList" class="hidden" style="font-size:12px;color:var(--text-muted);flex-direction:column;gap:6px;padding:4px 0 4px 15px"><span>&#10003; Low battery</span><span>&#10003; Storage full</span><span>&#10003; Tamper detected</span><span>&#10003; Software out of date</span><span>&#10003; Certificate expiry</span></div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -1311,6 +1399,59 @@ function renderAll() {
   renderHeader(); renderKpis(); renderMerchantKpis(); renderTrend(); renderFunnel(); renderMap(); renderAlerts(); renderTable(); renderBottom();
 }
 
+/* =====================================================================
+   Devices: estate health
+   ===================================================================== */
+const LIFECYCLE = {
+  status: [{ label: "Registered", v: 281, c: "#22c55e" }, { label: "Pending Registration", v: 36, c: "#3b82f6" }, { label: "Decommissioned", v: 553, c: "#8f98a3" }],
+  model: [{ label: "V400m", v: 412, c: "#1f5bff" }, { label: "P630", v: 218, c: "#6f93ff" }, { label: "T650p", v: 140, c: "#10a37f" }, { label: "Other", v: 100, c: "#cfd4dc" }],
+};
+let lcMode = "status";
+function renderLifecycle() {
+  const d = LIFECYCLE[lcMode], total = d.reduce((s, x) => s + x.v, 0);
+  const R = 76, C = 2 * Math.PI * R; let off = 0, a = "";
+  d.forEach(x => { const len = x.v / total * C; a += `<circle cx="100" cy="100" r="${R}" fill="none" stroke="${x.c}" stroke-width="32" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 100 100)"/>`; off += len; });
+  a += `<text x="100" y="104" text-anchor="middle" font-size="26" font-weight="700" fill="#141a2b">${total}</text><text x="100" y="122" text-anchor="middle" font-size="10" fill="#9aa0ae">TOTAL DEVICES</text>`;
+  $("lcDonut").innerHTML = a;
+  $("lcLegend").innerHTML = d.map(x => `<div class="li"><span class="sw" style="background:${x.c};border-radius:50%;width:8px;height:8px"></span>${x.label}<span class="v">${x.v}</span></div>`).join("");
+}
+function renderFleetMap() {
+  const box = $("fleetMap").getBoundingClientRect();
+  const W = box.width || 600, H = box.height || 320;
+  const b = { minLon: -132, maxLon: -55, minLat: 24, maxLat: 56 }, st = 1.3;
+  const lonSpan = b.maxLon - b.minLon, latSpan = (b.maxLat - b.minLat) * st;
+  const sc = Math.min(W / lonSpan, H / latSpan);
+  const ox = (W - lonSpan * sc) / 2, oy = (H - latSpan * sc) / 2;
+  const px = lon => ox + (lon - b.minLon) * sc, py = lat => oy + (b.maxLat - lat) * st * sc;
+  const outline = US_OUTLINE.map(([lo, la], i) => (i ? "L" : "M") + px(lo).toFixed(1) + " " + py(la).toFixed(1)).join(" ") + " Z";
+  const pins = [
+    { lon: -123.1, lat: 49.3, n: 1, c: "#c8174f" },
+    { lon: -79.4, lat: 43.7, n: 228, c: "#c8174f", big: true },
+    { lon: -63.6, lat: 44.6, n: 3, c: "#1f5bff" },
+  ];
+  let g = `<path d="${outline}" fill="#ffffff" stroke="#c9d1dd"/>`;
+  pins.forEach(p => {
+    const r = p.big ? 15 : p.n > 1 ? 12 : 5;
+    g += `<g transform="translate(${px(p.lon)},${py(p.lat)})"><circle r="${r + 7}" fill="${p.c}" opacity=".2"/><circle r="${r}" fill="${p.c}" stroke="#fff" stroke-width="${p.n > 1 ? 2 : 1.5}"/>${p.n > 1 ? `<text y="3.5" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">${p.n}</text>` : ""}</g>`;
+  });
+  g += `<text x="14" y="${H - 12}" font-size="10" fill="#9aa0ae">Sample data - production would use Google / Mapbox tiles</text>`;
+  $("fleetSvg").setAttribute("viewBox", `0 0 ${W} ${H}`);
+  $("fleetSvg").innerHTML = g;
+}
+$("lcSeg").addEventListener("click", (e) => {
+  const bt = e.target.closest("button"); if (!bt) return;
+  lcMode = bt.dataset.m;
+  $("lcSeg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === bt));
+  renderLifecycle();
+});
+document.querySelectorAll(".att-row").forEach(r => r.addEventListener("click", () => toast(r.dataset.t + ": would open the filtered device list")));
+$("chkToggle").addEventListener("click", () => {
+  const l = $("chkList"); l.classList.toggle("hidden");
+  l.style.display = l.classList.contains("hidden") ? "" : "flex";
+  $("chkToggle").textContent = l.classList.contains("hidden") ? "Show" : "Hide";
+});
+$("orderBtn3").addEventListener("click", () => $("orderBtn").click());
+
 /* ---------- Events ---------- */
 $("personaSeg").addEventListener("click", (e) => {
   const b = e.target.closest("button"); if (!b) return;
@@ -1340,9 +1481,10 @@ $("crumb").addEventListener("click", (e) => { e.preventDefault(); showView("home
 function showView(v) {
   $("homeView").classList.toggle("hidden", v !== "home");
   $("merchantsView").classList.toggle("hidden", v !== "merchants");
+  $("devicesView").classList.toggle("hidden", v !== "devices");
   $("mainNav").querySelectorAll("a[data-view]").forEach(x => x.classList.toggle("active", x.dataset.view === v));
-  $("crumb").textContent = v === "merchants" ? "Merchants" : "Home";
-  if (v === "merchants") renderTable(); else renderMap();
+  $("crumb").textContent = v === "merchants" ? "Merchants" : v === "devices" ? "Devices" : "Home";
+  if (v === "merchants") renderTable(); else if (v === "devices") { renderFleetMap(); renderLifecycle(); } else renderMap();
 }
 $("onboardBtn2").addEventListener("click", openWizard);
 $("orderBtn2").addEventListener("click", () => $("orderBtn").click());
@@ -1360,6 +1502,7 @@ $("wizNext").addEventListener("click", () => {
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); closeWizard(); } });
 window.addEventListener("resize", renderTrend);
 new ResizeObserver(() => renderMap()).observe($("map"));
+new ResizeObserver(() => { if ($("fleetMap").offsetWidth) renderFleetMap(); }).observe($("fleetMap"));
 
 renderAll();
 </script>
