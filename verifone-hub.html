@@ -450,7 +450,7 @@
             <button class="pill" data-range="7d">Last 7 Days</button>
             <button class="pill" data-range="30d">Last 30 Days</button>
           </div>
-          <button class="btn hidden" id="orderBtn">Order devices</button>
+          <button class="btn" id="orderBtn">Order devices</button>
           <button class="btn btn-primary" id="onboardBtn">+ Onboard merchant</button>
         </div>
 
@@ -1099,11 +1099,11 @@ function renderAlerts() {
         <div class="d">${a.d}</div>
         <div class="tags">${a.tags.map(t => `<span class="src">${t}</span>`).join("")}</div>
       </div>
-      ${a.loc ? `<button class="btn btn-sm" data-alert="${i}">${a.action}</button>` : "<span></span>"}
+      <button class="btn btn-sm" data-alert="${i}">${a.action}</button>
     </div>`).join("");
   $("alerts").querySelectorAll("button[data-alert]").forEach(b => {
     const a = list[+b.dataset.alert];
-    b.addEventListener("click", () => a.loc ? openDrawer(a.loc) : toast(`${a.action}: would open the relevant workflow`));
+    /* actions are display-only in this mockup: nothing opens on click */
   });
 }
 
@@ -1504,7 +1504,7 @@ function showView(v) {
 $("onboardBtn2").addEventListener("click", openWizard);
 $("orderBtn2").addEventListener("click", () => $("orderBtn").click());
 $("onboardBtn").addEventListener("click", openWizard);
-$("orderBtn").addEventListener("click", () => toast("Order devices: would open the device catalog scoped to the selected merchant"));
+/* Order devices is display-only in this mockup: nothing opens on click */
 $("drawerClose").addEventListener("click", closeDrawer);
 $("scrim").addEventListener("click", closeDrawer);
 $("wizClose").addEventListener("click", closeWizard);
