@@ -450,7 +450,7 @@
             <button class="pill" data-range="7d">Last 7 Days</button>
             <button class="pill" data-range="30d">Last 30 Days</button>
           </div>
-          <button class="btn" id="orderBtn">Order devices</button>
+          <button class="btn hidden" id="orderBtn">Order devices</button>
           <button class="btn btn-primary" id="onboardBtn">+ Onboard merchant</button>
         </div>
 
@@ -1099,7 +1099,7 @@ function renderAlerts() {
         <div class="d">${a.d}</div>
         <div class="tags">${a.tags.map(t => `<span class="src">${t}</span>`).join("")}</div>
       </div>
-      <button class="btn btn-sm" data-alert="${i}">${a.action}</button>
+      ${a.loc ? `<button class="btn btn-sm" data-alert="${i}">${a.action}</button>` : "<span></span>"}
     </div>`).join("");
   $("alerts").querySelectorAll("button[data-alert]").forEach(b => {
     const a = list[+b.dataset.alert];
