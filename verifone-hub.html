@@ -859,11 +859,11 @@ function visibleLocations() {
 function renderHeader() {
   if (isPartner()) {
     $("pageTitle").textContent = "Good afternoon, John";
-    $("onboardBtn").textContent = "+ Onboard merchant";
+    $("onboardBtn").textContent = "+ Add new merchant"; $("orderBtn").textContent = "Add device";
     $("scopeSel").classList.remove("hidden");
   } else {
     $("pageTitle").textContent = "Brew & Co. Coffee";
-    $("onboardBtn").textContent = "+ Add location";
+    $("onboardBtn").textContent = "+ Add a location"; $("orderBtn").textContent = "Order device";
     $("scopeSel").classList.add("hidden");
   }
   const merchants = [...new Set(LOCATIONS.map(l => l.merchant))].sort();
@@ -1503,7 +1503,7 @@ function showView(v) {
 }
 $("onboardBtn2").addEventListener("click", openWizard);
 $("orderBtn2").addEventListener("click", () => $("orderBtn").click());
-$("onboardBtn").addEventListener("click", openWizard);
+/* header buttons are display-only: nothing opens on click */
 /* Order devices is display-only in this mockup: nothing opens on click */
 $("drawerClose").addEventListener("click", closeDrawer);
 $("scrim").addEventListener("click", closeDrawer);
