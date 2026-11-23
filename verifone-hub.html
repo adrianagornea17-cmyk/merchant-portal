@@ -40,7 +40,7 @@
   input, select { font: inherit; color: inherit; }
 
   /* ---------- Shell ---------- */
-  .shell { display: grid; grid-template-columns: 124px 1fr; height: 100vh; }
+  .shell { display: grid; grid-template-columns: 224px 1fr; height: 100vh; }
   .sidebar {
     background: var(--bg); border-right: 1px solid var(--border);
     display: flex; flex-direction: column; padding: 12px 0;
@@ -48,19 +48,20 @@
   .logo { display: grid; grid-template-columns: repeat(2, 8px); gap: 4px 10px; justify-content: center; margin: 4px 0 14px; }
   .logo span { width: 8px; height: 8px; border-radius: 50%; background: var(--text); }
   .logo span:nth-child(3) { grid-column: 1 / 3; justify-self: center; }
-  .collapse { display: flex; align-items: center; gap: 6px; justify-content: center; color: var(--text); font-size: 12px; margin-bottom: 14px; }
+  .collapse { display: flex; align-items: center; gap: 8px; justify-content: center; color: var(--text); font-size: 14px; margin-bottom: 16px; }
   .nav { display: flex; flex-direction: column; gap: 2px; padding: 0 4px; }
   .nav a {
-    display: flex; align-items: center; gap: 8px; padding: 8px 8px; border-radius: 6px;
-    color: var(--text); text-decoration: none; font-size: 11px; line-height: 1.2;
+    display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 8px;
+    color: var(--text); text-decoration: none; font-size: 14px; line-height: 1.2; white-space: nowrap; min-width: 0;
   }
   .nav a:hover { background: var(--bg-subtle); }
   .nav a.active { background: var(--primary); color: #fff; font-weight: 600; }
-  .nav a .new { margin-left: auto; font-size: 9px; background: var(--primary-light); color: var(--primary); padding: 1px 4px; border-radius: 4px; }
+  .nav a .new { margin-left: auto; margin-right: 22px; flex: none; white-space: nowrap; font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 1px 4px; border-radius: 4px; }
   .nav a.active .new { background: rgba(255,255,255,.25); color: #fff; }
   .nav-sep { height: 1px; background: var(--border); margin: 8px 6px; }
   .sidebar .spacer { flex: 1; }
   .ico { width: 14px; height: 14px; flex: none; }
+  .nav a .ico { width: 18px; height: 18px; }
 
   .main { display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
   .topbar {
@@ -379,6 +380,31 @@
     font-size: 11px; color: var(--text-muted); background: var(--bg); border: 1px dashed var(--border-strong);
     border-radius: 8px; padding: 6px 12px; display: flex; gap: 10px; align-items: center;
   }
+
+  /* ---- Organization page ---- */
+  .org-title { display: flex; align-items: center; gap: 10px; }
+  .org-title h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -.3px; }
+  .org-back { border: 0; background: transparent; cursor: pointer; padding: 4px; border-radius: 6px; color: var(--text); display: grid; place-items: center; }
+  .org-back:hover { background: var(--bg-subtle); }
+  .org-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; }
+  .chip-tag { padding: 3px 10px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border); font-size: 12px; }
+  .org-id { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); }
+  .org-id button { border: 1px solid var(--border-strong); background: var(--bg); border-radius: 6px; padding: 3px 5px; cursor: pointer; display: grid; place-items: center; color: var(--text); }
+  .org-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border-strong); flex-wrap: wrap; }
+  .org-tab { border: 0; background: transparent; padding: 9px 14px; font-size: 12.5px; font-weight: 500; cursor: pointer; color: var(--text); border-radius: 6px 6px 0 0; }
+  .org-tab:hover { background: var(--bg-subtle); }
+  .org-tab.active { background: var(--primary); color: #fff; }
+  .org-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+  .org-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .org-card h3 { margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; }
+  .org-card .field label small { color: var(--text-faint); font-weight: 400; margin-left: 4px; font-size: 10.5px; }
+  .org-card .field input, .org-card .field select, .org-card .field textarea { background: var(--bg-subtle); border-radius: 8px; border: 1px solid var(--border); padding: 8px 10px; font-size: 12.5px; font-family: inherit; color: var(--text); }
+  .org-card .field textarea { min-height: 64px; resize: vertical; }
+  .org-card .field.full { grid-column: 1 / -1; }
+  .org-check { display: flex; align-items: center; gap: 8px; font-size: 12.5px; align-self: end; padding-bottom: 8px; }
+  .org-empty { padding: 28px 12px; text-align: center; color: var(--text-muted); font-size: 12.5px; }
+  .org-table-wrap { overflow-x: auto; }
+  @media (max-width: 1100px) { .org-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -433,6 +459,7 @@
             <div class="seg" id="personaSeg">
               <button data-persona="partner" class="active">Partner / ISO</button>
               <button data-persona="merchant">Merchant</button>
+              <button data-persona="merchant-nomop">Merchants without MOP</button>
             </div>
           </div>
         </div>
@@ -489,7 +516,7 @@
           <div class="card card-pad map-card">
             <div class="card-head">
               <h3>Locations</h3>
-              <span class="src">Site registry</span><span class="src">VHQ 2.0</span>
+              <span class="src">Location registry</span><span class="src">VHQ 2.0</span>
               <div class="grow"></div>
               <div class="map-legend">
                 <span style="--c:var(--success)">Healthy</span>
@@ -532,6 +559,18 @@
             <div class="pipeline" id="pipeline"></div>
           </div>
 
+          <div class="card card-pad" id="commCard">
+            <div class="card-head">
+              <h3>Commission growth</h3>
+              <span class="faint" style="font-size:11px">last 12 months</span>
+            </div>
+            <div class="chart-wrap" id="commWrap">
+              <svg id="commChart" width="100%" height="230"></svg>
+              <div class="chart-tip" id="commTip"></div>
+            </div>
+            <div class="caption" id="commCaption"></div>
+          </div>
+
           <div class="card card-pad hidden" id="byLocCard">
             <div class="card-head">
               <h3 id="byLocTitle">Sales by location</h3>
@@ -567,7 +606,7 @@
         <div class="card card-pad">
           <div class="table-tools">
             <h3 style="margin:0;font-size:14px">All merchants</h3>
-            <span class="muted" style="font-size:12px">Merchant companies and their sites</span>
+            <span class="muted" style="font-size:12px">Merchant companies and their locations</span>
             <div class="grow"></div>
             <div class="search" style="width:220px;padding:5px 12px">
               <svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
@@ -576,7 +615,7 @@
             <div class="pills" id="locFilter">
               <button class="pill active" data-f="all">All</button>
               <button class="pill" data-f="company">Merchant Company</button>
-              <button class="pill" data-f="site">Merchant Site</button>
+              <button class="pill" data-f="site">Merchant Location</button>
             </div>
           </div>
           <table>
@@ -586,6 +625,41 @@
             <tbody id="locBody"></tbody>
           </table>
         </div>
+        </div>
+
+
+        <!-- ================= Organization view ================= -->
+        <div id="orgView" class="view hidden">
+          <div class="page-head">
+          <div>
+            <div class="org-title">
+              <button class="org-back" id="orgBack" title="Back to merchants"><svg class="ico" style="width:18px;height:18px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 8H3M7 4 3 8l4 4"/></svg></button>
+              <h1 id="orgName"></h1>
+              <svg class="ico" style="width:18px;height:18px" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="m8 1.8 1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.6l-3.8 2 .7-4.3-3.1-3 4.3-.6z"/></svg>
+            </div>
+            <div class="org-meta">
+              <span class="status s-healthy" id="orgStatus">Enabled</span>
+              <span class="chip-tag">Merchant Company</span>
+              <span class="org-id">ID: <span id="orgId"></span>
+                <button id="orgCopy" title="Copy ID"><svg class="ico" viewBox="0 0 16 16" fill="currentColor"><path d="M5 1.5h7a1 1 0 0 1 1 1V11H5zM3 4v10h8v-1H4V4z"/></svg></button></span>
+            </div>
+          </div>
+          <div class="grow"></div>
+          <button class="btn">Add device</button>
+          <button class="btn btn-primary">+ Add location</button>
+          </div>
+
+          <div class="kpis" id="orgKpis" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
+
+          <div class="org-tabs" id="orgTabs">
+            <button class="org-tab active" data-tab="locations">Locations</button>
+            <button class="org-tab" data-tab="details">Organization Details</button>
+            <button class="org-tab" data-tab="contacts">Contacts &amp; Addresses</button>
+            <button class="org-tab" data-tab="linked">Linked Records</button>
+            <button class="org-tab" data-tab="custom">Custom Configuration</button>
+            <button class="org-tab" data-tab="hier">Organization Hierarchy</button>
+          </div>
+          <div id="orgTabBody"></div>
         </div>
 
         <!-- ================= Devices view (Estate health) ================= -->
@@ -657,46 +731,6 @@
   </div>
 </div>
 
-<!-- ================= Location drawer ================= -->
-<div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer">
-  <div class="drawer-head">
-    <div class="row">
-      <div>
-        <div class="muted" style="font-size:11px" id="dMerchant"></div>
-        <h2 id="dTitle" style="font-size:17px"></h2>
-        <div class="muted" style="font-size:12px;margin-top:2px" id="dAddr"></div>
-      </div>
-      <div class="grow"></div>
-      <button class="x-btn" id="drawerClose">×</button>
-    </div>
-    <div class="row" style="margin-top:10px" id="dStatus"></div>
-  </div>
-  <div class="drawer-body">
-    <div>
-      <div class="sec-title">Last 24 hours <span class="src">Payments</span></div>
-      <div class="mini-kpis" id="dKpis"></div>
-    </div>
-    <div>
-      <div class="sec-title">Devices <span class="src">VHQ 2.0</span></div>
-      <div class="dev-list" id="dDevices"></div>
-    </div>
-    <div>
-      <div class="sec-title">Onboarding history <span class="src">Boarding</span></div>
-      <div class="timeline" id="dTimeline"></div>
-    </div>
-    <div>
-      <div class="sec-title">Identifiers</div>
-      <div class="dev-list" id="dIds"></div>
-    </div>
-    <div class="row">
-      <button class="btn btn-sm">Open in VHQ 2.0</button>
-      <button class="btn btn-sm">View transactions</button>
-      <button class="btn btn-sm">Add device</button>
-    </div>
-  </div>
-</aside>
-
 <!-- ================= Onboarding wizard ================= -->
 <div class="modal-scrim" id="wizScrim">
   <div class="modal">
@@ -732,7 +766,7 @@ const SOURCES = [
   { name: "Payments gateway", sync: "live", live: true },
   { name: "Boarding & Compliance", sync: "synced 2 min ago" },
   { name: "VHQ 2.0", sync: "live", live: true },
-  { name: "Site registry", sync: "synced 5 min ago" },
+  { name: "Location registry", sync: "synced 5 min ago" },
 ];
 
 const KPI_DATA = {
@@ -741,7 +775,7 @@ const KPI_DATA = {
     { id: "txn", label: "Transactions", value: "10,806", delta: "▲ 4.1%", dir: "up", src: "Payments", spark: [2,1,1,3,7,11,14,13,12,15,10,5], color: "var(--success)" },
     { id: "appr", label: "Authorisation rate", value: "97.4%", delta: "▼ 0.8 pts", dir: "down", src: "Payments", spark: [98,98,98.2,98,97.9,97.6,97.2,97,97.1,97.3,97.4,97.4], color: "var(--danger)" },
     { id: "mer", label: "Active merchants", value: "48", delta: "▲ 2 went live", dir: "up", src: "Boarding", spark: [44,44,45,45,45,46,46,46,47,47,48,48], color: "var(--success)", partnerOnly: true },
-    { id: "loc", label: "Active locations", value: "131", delta: "3 awaiting go-live", dir: "flat", src: "Site registry", spark: [124,125,125,126,127,128,128,129,130,130,131,131], color: "var(--success)" },
+    { id: "loc", label: "Active locations", value: "131", delta: "3 awaiting go-live", dir: "flat", src: "Location registry", spark: [124,125,125,126,127,128,128,129,130,130,131,131], color: "var(--success)" },
     { id: "dev", label: "Devices online", value: "412 / 438", delta: "94.1% · 7 offline >24h", dir: "down", src: "VHQ 2.0", spark: [96,96,95.8,95.5,95.1,94.8,94.3,94.1,94.2,94.1,94,94.1], color: "var(--warning)" },
   ],
   "7d": [
@@ -749,7 +783,7 @@ const KPI_DATA = {
     { id: "txn", label: "Transactions", value: "72,940", delta: "▲ 2.7%", dir: "up", src: "Payments", spark: [9.8,10.1,10.6,12.1,13.4,8.4,9.2], color: "var(--success)" },
     { id: "appr", label: "Authorisation rate", value: "97.9%", delta: "▼ 0.2 pts", dir: "down", src: "Payments", spark: [98.1,98.2,98,98.1,97.9,97.8,97.4], color: "var(--danger)" },
     { id: "mer", label: "Active merchants", value: "48", delta: "▲ 5 went live", dir: "up", src: "Boarding", spark: [43,44,45,45,46,47,48], color: "var(--success)", partnerOnly: true },
-    { id: "loc", label: "Active locations", value: "131", delta: "▲ 9 this week", dir: "up", src: "Site registry", spark: [122,124,125,127,128,130,131], color: "var(--success)" },
+    { id: "loc", label: "Active locations", value: "131", delta: "▲ 9 this week", dir: "up", src: "Location registry", spark: [122,124,125,127,128,130,131], color: "var(--success)" },
     { id: "dev", label: "Devices online", value: "412 / 438", delta: "94.1% · 7 offline >24h", dir: "down", src: "VHQ 2.0", spark: [96.4,96.2,95.9,95.6,95.1,94.6,94.1], color: "var(--warning)" },
   ],
   "30d": [
@@ -757,7 +791,7 @@ const KPI_DATA = {
     { id: "txn", label: "Transactions", value: "301,512", delta: "▲ 9.3%", dir: "up", src: "Payments", spark: [70,74,77,80], color: "var(--success)" },
     { id: "appr", label: "Authorisation rate", value: "98.0%", delta: "▲ 0.3 pts", dir: "up", src: "Payments", spark: [97.7,97.9,98.1,98.0], color: "var(--success)" },
     { id: "mer", label: "Active merchants", value: "48", delta: "▲ 14 went live", dir: "up", src: "Boarding", spark: [34,38,43,48], color: "var(--success)", partnerOnly: true },
-    { id: "loc", label: "Active locations", value: "131", delta: "▲ 31 this month", dir: "up", src: "Site registry", spark: [100,110,121,131], color: "var(--success)" },
+    { id: "loc", label: "Active locations", value: "131", delta: "▲ 31 this month", dir: "up", src: "Location registry", spark: [100,110,121,131], color: "var(--success)" },
     { id: "dev", label: "Devices online", value: "412 / 438", delta: "94.1% · 7 offline >24h", dir: "down", src: "VHQ 2.0", spark: [96.8,96.1,95.2,94.1], color: "var(--warning)" },
   ],
 };
@@ -864,8 +898,13 @@ function renderHeader() {
   } else {
     $("pageTitle").textContent = "Brew & Co. Coffee";
     $("onboardBtn").textContent = "+ Add a location"; $("orderBtn").textContent = "Order device";
+    if (state.persona === "merchant-nomop") { $("onboardBtn").textContent = "+ Add Virtual Transaction"; $("orderBtn").textContent = "+ Add Payment Link"; }
     $("scopeSel").classList.add("hidden");
   }
+  const noMop = state.persona === "merchant-nomop";
+  $("orderBtn").classList.toggle("btn-primary", noMop);
+  $("onboardBtn").classList.toggle("btn-primary", !noMop);
+  $("orderBtn").style.order = noMop ? "2" : ""; $("onboardBtn").style.order = noMop ? "1" : "";
   const merchants = [...new Set(LOCATIONS.map(l => l.merchant))].sort();
   $("scopeSel").innerHTML = `<option value="all">All merchants (48)</option>` + merchants.map(m => `<option ${m === state.scope ? "selected" : ""}>${m}</option>`).join("");
   $("sources").innerHTML = `<span><span class="dot" style="background:var(--success)"></span>Synced 5 min ago</span>`;
@@ -900,7 +939,7 @@ function renderKpis() {
       <svg class="spark" viewBox="0 0 100 26" preserveAspectRatio="none">
         <path d="${sparkPath(k.spark, 100, 26)}" fill="none" stroke="${k.color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
       </svg>
-      <div class="kpi-foot"><span class="src">${k.src}</span><span class="faint">View ›</span></div>
+      <div class="kpi-foot" style="justify-content:flex-end"><span class="faint">View ›</span></div>
     </div>`).join("");
 }
 
@@ -968,6 +1007,61 @@ function renderTrend() {
     tip.innerHTML = `<b>${d.cats[i]}</b><br>Sales $${sales[i]}${d.unit} · Refunds $${refunds[i]}${d.unit}`;
   });
   svg.querySelector("#hit").addEventListener("mouseleave", () => { tip.style.display = "none"; guide.style.display = "none"; });
+}
+
+/* =====================================================================
+   Render: commission growth (partner only)
+   ===================================================================== */
+const COMMISSION = {
+  cats: ["Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct"],
+  vals: [5830, 6520, 5780, 6140, 6720, 7480, 8560, 9420, 9540, 9150, 9020, 9420],
+};
+function renderCommission() {
+  $("commCard").classList.toggle("hidden", !isPartner());
+  if (!isPartner()) return;
+  const svg = $("commChart"), W = svg.clientWidth || 420, H = 230;
+  const pad = { l: 50, r: 14, t: 14, b: 26 };
+  const { cats, vals } = COMMISSION;
+  const lo = 5344, hi = 9991, n = vals.length, col = "#10a37f";
+  const fmt = (v) => "$" + v.toLocaleString("en-US");
+  const x = (i) => pad.l + (i / (n - 1)) * (W - pad.l - pad.r);
+  const y = (v) => pad.t + (1 - (v - lo) / (hi - lo)) * (H - pad.t - pad.b);
+  let g = "";
+  for (let i = 0; i <= 4; i++) {
+    const v = Math.round(lo + ((hi - lo) / 4) * i);
+    g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="#eceef2"/>`;
+    g += `<text x="${pad.l - 8}" y="${y(v) + 4}" text-anchor="end" font-size="10" fill="#9aa0ae">${fmt(v)}</text>`;
+  }
+  cats.forEach((c, i) => { g += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle" font-size="10" fill="#9aa0ae">${c}</text>`; });
+  const line = vals.map((v, i) => (i ? "L" : "M") + x(i) + " " + y(v)).join(" ");
+  g += `<path d="${line} L ${x(n - 1)} ${y(lo)} L ${x(0)} ${y(lo)} Z" fill="${col}" opacity="0.08"/>`;
+  g += `<path d="${line}" fill="none" stroke="${col}" stroke-width="2"/>`;
+  g += `<line id="commGuide" y1="${pad.t}" y2="${H - pad.b}" stroke="#cfd4dc" stroke-dasharray="3 3" style="display:none"/>`;
+  g += `<circle id="commDot" r="4.5" fill="${col}" stroke="#fff" stroke-width="2" style="display:none"/>`;
+  g += `<circle cx="${x(n - 1)}" cy="${y(vals[n - 1])}" r="3.5" fill="${col}"/>`;
+  g += `<rect id="commHit" x="${pad.l}" y="${pad.t}" width="${W - pad.l - pad.r}" height="${H - pad.t - pad.b}" fill="transparent"/>`;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = g;
+  const first = vals[0], last = vals[n - 1];
+  $("commCaption").textContent = `Monthly commission earned · up ${Math.round((last / first - 1) * 100)}% since ${cats[0]} · sample data`;
+
+  const tip = $("commTip"), guide = svg.querySelector("#commGuide"), dot = svg.querySelector("#commDot"), hit = svg.querySelector("#commHit");
+  const total = vals.reduce((a, v) => a + v, 0), peak = Math.max(...vals);
+  hit.addEventListener("mousemove", (e) => {
+    const r = svg.getBoundingClientRect();
+    const px = (e.clientX - r.left) * (W / r.width);
+    const i = Math.max(0, Math.min(n - 1, Math.round(((px - pad.l) / (W - pad.l - pad.r)) * (n - 1))));
+    guide.setAttribute("x1", x(i)); guide.setAttribute("x2", x(i)); guide.style.display = "";
+    dot.setAttribute("cx", x(i)); dot.setAttribute("cy", y(vals[i])); dot.style.display = "";
+    const chg = i ? (vals[i] / vals[i - 1] - 1) * 100 : null;
+    const share = Math.round((vals[i] / total) * 1000) / 10;
+    const chgTxt = chg === null ? "First month shown" : `<span style="color:${chg >= 0 ? "#10a37f" : "#c8174f"}">${chg >= 0 ? "▲" : "▼"} ${Math.abs(chg).toFixed(1)}%</span> vs ${cats[i - 1]}`;
+    tip.style.display = "block";
+    tip.style.left = (x(i) / W) * r.width + "px";
+    tip.style.top = (y(vals[i]) / H) * r.height + "px";
+    tip.innerHTML = `<b>${cats[i]} · ${fmt(vals[i])}</b><br>${chgTxt}<br>${share}% of 12-month total${vals[i] === peak ? " · peak month" : ""}`;
+  });
+  hit.addEventListener("mouseleave", () => { tip.style.display = "none"; guide.style.display = "none"; dot.style.display = "none"; });
 }
 
 /* =====================================================================
@@ -1067,7 +1161,6 @@ function renderMap() {
     });
     p.addEventListener("mouseleave", () => { tip.style.display = "none"; });
     p.addEventListener("click", () => {
-      if (c.items.length === 1) return openDrawer(c.items[0].id);
       state.locQuery = c.items[0].city.split(",")[0];
       $("locSearch").value = state.locQuery;
       renderTable();
@@ -1089,7 +1182,7 @@ const US_OUTLINE = [
    Render: alerts
    ===================================================================== */
 function renderAlerts() {
-  const list = ALERTS.filter(a => a.who.includes(state.persona));
+  const list = ALERTS.filter(a => a.who.includes(isPartner() ? "partner" : "merchant"));
   $("alertCount").textContent = list.filter(a => a.sev !== "low").length + " urgent";
   $("alerts").innerHTML = list.map((a, i) => `
     <div class="alert ${a.sev}">
@@ -1118,14 +1211,14 @@ function orgRows() {
   names.forEach((m) => {
     const mine = locs.filter(l => l.merchant === m);
     rows.push({ id: "ORG-" + (10021 + ALL_MERCHANTS.indexOf(m)), name: m, friendly: m, country: "United States", parent: "Parent", type: "Merchant Company", status: "Enabled" });
-    mine.forEach(l => rows.push({ id: "SITE-" + l.id, name: l.merchant + " · " + l.site, friendly: l.site, country: "United States", parent: m, type: "Merchant Site", status: l.status === "pending" ? "Disabled" : "Enabled", loc: l.id }));
+    mine.forEach(l => rows.push({ id: "LOC-" + l.id, name: l.merchant + " · " + l.site, friendly: l.site, country: "United States", parent: m, type: "Merchant Location", status: l.status === "pending" ? "Disabled" : "Enabled", loc: l.id }));
   });
   return rows;
 }
 function renderTable() {
   let rows = orgRows();
   if (state.locFilter === "company") rows = rows.filter(r => r.type === "Merchant Company");
-  if (state.locFilter === "site") rows = rows.filter(r => r.type === "Merchant Site");
+  if (state.locFilter === "site") rows = rows.filter(r => r.type === "Merchant Location");
   if (state.locQuery) {
     const q = state.locQuery.toLowerCase();
     rows = rows.filter(r => (r.id + r.name + r.friendly + r.country + r.parent).toLowerCase().includes(q));
@@ -1137,7 +1230,7 @@ function renderTable() {
     return;
   }
   const hier = `<svg class="ico" viewBox="0 0 16 16" fill="currentColor"><rect x="6" y="1.5" width="4" height="3.5" rx=".6"/><rect x="1" y="11" width="4" height="3.5" rx=".6"/><rect x="6" y="11" width="4" height="3.5" rx=".6"/><rect x="11" y="11" width="4" height="3.5" rx=".6"/><path d="M8 5v3M3 11V8h10v3M8 8v3" fill="none" stroke="currentColor" stroke-width="1"/></svg>`;
-  $("locBody").innerHTML = rows.map((r, i) => `<tr data-i="${i}" ${r.loc ? `data-id="${r.loc}"` : ""}>
+  $("locBody").innerHTML = rows.map((r, i) => `<tr data-i="${i}" ${r.loc ? `data-id="${r.loc}"` : `data-org="${r.name.replace(/"/g, "&quot;")}"`}>
       <td class="muted">${r.id}</td>
       <td>${r.type === "Merchant Company" ? `<div class="merchant-cell"><span class="avatar">${initials(r.name)}</span><b>${r.name}</b></div>` : r.name}</td>
       <td>${r.friendly}</td>
@@ -1147,7 +1240,7 @@ function renderTable() {
       <td><span class="status ${r.status === "Enabled" ? "s-healthy" : "s-pending"}">${r.status}</span></td>
       <td class="num"><button class="btn btn-sm btn-ghost" data-hier="${i}" title="View hierarchy">${hier}</button></td>
     </tr>`).join("");
-  $("locBody").querySelectorAll("tr[data-id]").forEach(tr => tr.addEventListener("click", () => openDrawer(tr.dataset.id)));
+  $("locBody").querySelectorAll("tr[data-org]").forEach(tr => tr.addEventListener("click", () => openOrg(tr.dataset.org)));
   $("locBody").querySelectorAll("[data-hier]").forEach(b => b.addEventListener("click", (e) => { e.stopPropagation(); toast("View hierarchy: would open the organisation tree for " + rows[b.dataset.hier].name); }));
 }
 
@@ -1155,7 +1248,7 @@ function renderTable() {
    Render: bottom row
    ===================================================================== */
 function renderBottom() {
-  $("bottomGrid").style.gridTemplateColumns = `repeat(${isPartner() ? 2 : 3}, minmax(0, 1fr))`;
+  $("bottomGrid").style.gridTemplateColumns = `repeat(3, minmax(0, 1fr))`;
   const fleet = isPartner()
     ? [{ label: "Online", v: 412, c: "#10a37f" }, { label: "Offline < 24h", v: 15, c: "#e08a00" }, { label: "Offline > 24h", v: 7, c: "#c8174f" }, { label: "Delivered, not activated", v: 4, c: "#cfd4dc" }]
     : [{ label: "Online", v: 6, c: "#10a37f" }, { label: "Offline < 24h", v: 1, c: "#e08a00" }, { label: "Delivered, not activated", v: 2, c: "#cfd4dc" }];
@@ -1182,47 +1275,6 @@ function renderBottom() {
     </div>`).join("") + `<div style="padding-top:8px"><button class="btn btn-ghost btn-sm" style="padding-left:0">View all 13 in progress →</button></div>`;
 }
 
-/* =====================================================================
-   Drawer
-   ===================================================================== */
-function openDrawer(id) {
-  const l = LOCATIONS.find(x => x.id === id);
-  const st = STATUS[l.status];
-  $("dMerchant").textContent = l.merchant;
-  $("dTitle").textContent = l.site;
-  $("dAddr").textContent = l.addr;
-  $("dStatus").innerHTML = `<span class="status ${st.cls}">${st.label}</span><span class="faint" style="font-size:11px">Last refreshed just now</span>`;
-  $("dKpis").innerHTML = `
-    <div><b>${l.vol ? fmtMoney(l.vol) : "—"}</b><span>Gross sales</span></div>
-    <div><b>${l.txns ? fmtNum(l.txns) : "—"}</b><span>Transactions</span></div>
-    <div><b style="${l.appr !== null && l.appr < 95 ? "color:var(--danger)" : ""}">${l.appr !== null ? l.appr + "%" : "—"}</b><span>Authorisation rate</span></div>`;
-  const models = ["V400m", "V400m", "P630", "T650p"];
-  const devs = Array.from({ length: Math.min(l.total, 6) }, (_, i) => {
-    const online = i >= l.total - l.on;
-    const serial = `${300 + (l.id.length * 7 + i * 13) % 600}-${100 + i * 37}-${(l.id.charCodeAt(1) * 3 + i * 11) % 900 + 100}`;
-    const pending = l.status === "pending";
-    return `<div class="dev-item">
-      <div><b>${models[i % models.length]}</b> · ${serial}<div class="meta">Lane ${i + 1} · TID ${String(70010000 + i + l.id.length * 100)} · App v6.12.${online ? 3 : 2}</div></div>
-      <span class="status ${pending ? "s-pending" : online ? "s-healthy" : "s-offline"}">${pending ? "Not activated" : online ? "Online" : "Offline 6h"}</span>
-    </div>`;
-  }).join("");
-  $("dDevices").innerHTML = devs + (l.total > 6 ? `<div class="dev-item"><span class="muted">+ ${l.total - 6} more devices</span><span></span></div>` : "");
-  const live = l.status !== "pending";
-  $("dTimeline").innerHTML = [
-    { t: "Application approved (KYC / AML passed)", w: "Sep 02", done: true },
-    { t: "Location created and geocoded", w: "Sep 02", done: true },
-    { t: `${l.total} devices allocated and shipped`, w: "Sep 04", done: true },
-    { t: "Devices checked in to VHQ", w: live ? "Sep 06" : "Pending", done: live, cur: !live },
-    { t: "First transaction", w: live ? "Sep 06" : "Pending", done: live },
-  ].map(s => `<div class="tl ${s.done ? "done" : s.cur ? "cur" : ""}"><span class="d"></span><span>${s.t}</span><span class="when">${s.w}</span></div>`).join("");
-  $("dIds").innerHTML = `
-    <div class="dev-item"><span class="muted">Merchant ID (MID)</span><b>${l.mid}</b></div>
-    <div class="dev-item"><span class="muted">VHQ hierarchy</span><b>${l.vhq}</b></div>
-    <div class="dev-item"><span class="muted">Site ID</span><b>SITE-${l.id.replace("L", "").padStart(5, "0")}</b></div>`;
-  $("scrim").classList.add("open");
-  $("drawer").classList.add("open");
-}
-function closeDrawer() { $("scrim").classList.remove("open"); $("drawer").classList.remove("open"); }
 
 /* =====================================================================
    Onboarding wizard
@@ -1230,9 +1282,9 @@ function closeDrawer() { $("scrim").classList.remove("open"); $("drawer").classL
 function wizSteps() {
   const all = [
     { key: "biz", lbl: "Business & KYC", sys: "Boarding & Compliance", writes: "Creates the application and runs AML/KYC and sanctions checks. On approval it returns the <b>Merchant ID</b> that every other system is keyed on." },
-    { key: "loc", lbl: "Locations", sys: "Site registry", writes: "Geocodes each address and creates a <b>Site ID</b> linked to the merchant. Each site automatically becomes a node in the merchant's <b>VHQ hierarchy</b>." },
-    { key: "dev", lbl: "Devices", sys: "VHQ 2.0", writes: "Allocates serials and places each device under its site's hierarchy node. Assigns the software group so devices arrive pre-configured." },
-    { key: "pay", lbl: "Payment setup", sys: "Payments gateway", writes: "Issues a <b>MID per site</b> and a <b>TID per device</b>. Enables payment methods, then configures settlement and pricing." },
+    { key: "loc", lbl: "Locations", sys: "Location registry", writes: "Geocodes each address and creates a <b>Location ID</b> linked to the merchant. Each location automatically becomes a node in the merchant's <b>VHQ hierarchy</b>." },
+    { key: "dev", lbl: "Devices", sys: "VHQ 2.0", writes: "Allocates serials and places each device under its location's hierarchy node. Assigns the software group so devices arrive pre-configured." },
+    { key: "pay", lbl: "Payment setup", sys: "Payments gateway", writes: "Issues a <b>MID per location</b> and a <b>TID per device</b>. Enables payment methods, then configures settlement and pricing." },
     { key: "rev", lbl: "Review & submit", sys: "Experience API", writes: "Submits everything as one onboarding case. The experience API orchestrates the calls in order and tracks status end to end." },
   ];
   return isPartner() ? all : all.filter(s => s.key !== "biz" && s.key !== "pay");
@@ -1306,7 +1358,7 @@ function renderWizard() {
 
   if (s.key === "dev") {
     const total = Object.values(w.qty).reduce((a, b) => a + b, 0);
-    body += `<div class="muted" style="font-size:12px">Quantities apply to each location (${w.locs.length}). Devices ship pre-enrolled in VHQ under the right site.</div>
+    body += `<div class="muted" style="font-size:12px">Quantities apply to each location (${w.locs.length}). Devices ship pre-enrolled in VHQ under the right location.</div>
       <div class="model-grid">${MODELS.map(m => `
         <div class="model">
           <span class="nm">${m.nm}</span><span class="ds">${m.ds}</span><span class="faint" style="font-size:11px">${m.price} each</span>
@@ -1337,13 +1389,13 @@ function renderWizard() {
     const order = isPartner()
       ? [
           ["Boarding & Compliance", `Create application for <b>${w.biz.name || "new merchant"}</b> and run KYC`, "~2 min auto, up to 24h manual"],
-          ["Site registry", `Create ${w.locs.length} site${w.locs.length > 1 ? "s" : ""}: ${w.locs.map(l => l.name || "Unnamed").join(", ")}`, "instant"],
-          ["VHQ 2.0", `Create hierarchy nodes and allocate ${devs} per site · ${w.group}`, "instant, ships in 1–2 days"],
+          ["Location registry", `Create ${w.locs.length} location${w.locs.length > 1 ? "s" : ""}: ${w.locs.map(l => l.name || "Unnamed").join(", ")}`, "instant"],
+          ["VHQ 2.0", `Create hierarchy nodes and allocate ${devs} per location · ${w.group}`, "instant, ships in 1–2 days"],
           ["Payments gateway", `Issue MIDs and TIDs · ${w.methods.join(", ")} · ${w.plan}`, "after KYC approval"],
         ]
       : [
-          ["Site registry", `Create site: ${w.locs.map(l => l.name || "Unnamed").join(", ")}`, "instant"],
-          ["VHQ 2.0", `Allocate ${devs} under the new site · ${w.group}`, "ships in 1–2 days"],
+          ["Location registry", `Create location: ${w.locs.map(l => l.name || "Unnamed").join(", ")}`, "instant"],
+          ["VHQ 2.0", `Allocate ${devs} under the new location · ${w.group}`, "ships in 1–2 days"],
           ["Payments gateway", "Issue MID and TIDs using your existing pricing and settlement", "instant"],
         ];
     body += `<div class="muted" style="font-size:12px">What happens when you submit</div>
@@ -1392,7 +1444,7 @@ function submitWizard() {
       id, merchant, site: l.name || `Location ${i + 1}`, city: isPartner() ? "Dallas, TX" : "Austin, TX",
       addr: l.addr || "Address pending verification", lat: base.lat, lon: base.lon, on: 0, total: perLoc,
       vol: 0, txns: 0, appr: null, status: "pending", owner: isPartner() ? "other" : "self",
-      mid: "Issued after KYC", vhq: `${merchant.replace(/\W/g, "")} / ${l.name || "Site"}`,
+      mid: "Issued after KYC", vhq: `${merchant.replace(/\W/g, "")} / ${l.name || "Location"}`,
     });
   });
   if (isPartner()) PIPELINE.unshift({ name: merchant, stage: "Submitted · auto-checks running", step: 1, age: "now" });
@@ -1411,7 +1463,7 @@ function toast(msg) {
 }
 
 function renderAll() {
-  renderHeader(); renderKpis(); renderMerchantKpis(); renderTrend(); renderFunnel(); renderMap(); renderAlerts(); renderTable(); renderBottom();
+  renderHeader(); renderKpis(); renderMerchantKpis(); renderTrend(); renderCommission(); renderFunnel(); renderMap(); renderAlerts(); renderTable(); renderBottom(); renderCommission();
 }
 
 /* =====================================================================
@@ -1486,27 +1538,136 @@ $("locFilter").addEventListener("click", (e) => {
   $("locFilter").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
   renderTable();
 });
+
+/* =====================================================================
+   Organization page
+   ===================================================================== */
+let curView = "home", curOrg = null, orgTab = "details";
+function orgUuid(name) {
+  let h = 2166136261, out = "";
+  for (let i = 0; out.replace(/-/g, "").length < 32; i++) { h = Math.imul(h ^ (name.charCodeAt(i % name.length) + i), 16777619) >>> 0; out += h.toString(16).padStart(8, "0"); }
+  out = out.slice(0, 32);
+  return `${out.slice(0,8)}-${out.slice(8,12)}-4${out.slice(13,16)}-b${out.slice(17,20)}-${out.slice(20,32)}`;
+}
+function fld(label, val, opts = {}) {
+  const ph = opts.ph || "";
+  const lbl = `<label>${label}${opts.req ? "" : "<small>Optional</small>"}</label>`;
+  if (opts.select) return `<div class="field">${lbl}<select disabled><option>${val || "- Select -"}</option></select></div>`;
+  if (opts.area) return `<div class="field full">${lbl}<textarea disabled placeholder="${ph}">${val || ""}</textarea></div>`;
+  return `<div class="field ${opts.full ? "full" : ""}">${lbl}<input disabled value="${val || ""}" placeholder="${ph}" /></div>`;
+}
+function openOrg(name) {
+  curOrg = name; orgTab = "locations";
+  showView("org");
+}
+function renderOrg() {
+  const name = curOrg, locs = LOCATIONS.filter(l => l.merchant === name);
+  const idx = ALL_MERCHANTS.indexOf(name), uuid = orgUuid(name);
+  const devices = locs.reduce((a, l) => a + l.total, 0), online = locs.reduce((a, l) => a + l.on, 0);
+  const txns = locs.reduce((a, l) => a + l.txns, 0), vol = locs.reduce((a, l) => a + l.vol, 0);
+  $("orgName").textContent = name;
+  $("orgId").textContent = uuid;
+  $("orgKpis").innerHTML = [
+    { label: "Transactions", value: txns.toLocaleString("en-US"), sub: "$" + vol.toLocaleString("en-US") + " processed · last 30 days" },
+    { label: "Devices", value: String(devices), sub: online + " online · " + (devices - online) + " not online" },
+    { label: "Locations", value: String(locs.length), sub: locs.filter(l => l.status !== "pending").length + " live · " + locs.filter(l => l.status === "pending").length + " awaiting go-live" },
+  ].map(k => `<div class="kpi" style="cursor:default;padding-left:14px"><div class="label">${k.label}</div><div class="value">${k.value}</div><div class="delta flat">${k.sub}</div></div>`).join("");
+  $("orgTabs").querySelectorAll(".org-tab").forEach(t => t.classList.toggle("active", t.dataset.tab === orgTab));
+  renderOrgTab(name, locs, uuid, idx);
+}
+function renderOrgTab(name, locs, uuid, idx) {
+  const body = $("orgTabBody");
+  if (orgTab === "locations") {
+    body.innerHTML = `<div class="card card-pad">
+      <div class="table-tools"><h3 style="margin:0;font-size:14px">Locations</h3>
+        <span class="muted" style="font-size:12px">${locs.length} location${locs.length === 1 ? "" : "s"} under ${name}</span>
+        <div class="grow"></div><span class="src">Location registry · VHQ 2.0</span></div>
+      <div class="org-table-wrap"><table>
+        <thead><tr><th>Location ID</th><th>Location</th><th>City</th><th>MID</th><th class="num">Devices</th><th class="num">Transactions</th><th>Status</th></tr></thead>
+        <tbody>${locs.map(l => `<tr><td class="muted">LOC-${l.id}</td><td><b>${l.site}</b></td><td>${l.city}</td><td class="muted">${l.mid}</td>
+          <td class="num">${l.on}/${l.total} online</td><td class="num">${l.txns.toLocaleString("en-US")}</td>
+          <td><span class="status ${STATUS[l.status].cls}">${STATUS[l.status].label}</span></td></tr>`).join("") || `<tr><td colspan="7" class="empty">No locations yet</td></tr>`}</tbody>
+      </table></div></div>`;
+  } else if (orgTab === "details") {
+    const first = locs[0] || {};
+    const parentId = orgUuid("parent-" + name);
+    body.innerHTML = `<div class="org-grid">
+      <div class="org-col">
+        <div class="card card-pad org-card"><h3>Identity Details</h3><div class="form-grid">
+          ${fld("Organization Name", name, { req: 1 })}${fld("Organization Type", "Merchant Company", { req: 1, select: 1 })}
+          ${fld("Parent Organization", "Organization: " + parentId.slice(0, 16) + "…", { req: 1 })}${fld("Parent Organization ID", parentId, { req: 1 })}
+          ${fld("Friendly Name", "", { ph: "Enter friendly name" })}
+          <div class="org-check"><input type="checkbox" disabled /> Cross Entity Access Allowed</div>
+          ${fld("Description", "", { area: 1, ph: "Enter organization description" })}
+          ${fld("Merchant URL", "", { ph: "https://example.com" })}${fld("Merchant Logo URL", "", { ph: "https://example.com/logo.png" })}
+        </div></div>
+        <div class="card card-pad org-card"><h3>Regulatory &amp; Financial</h3><div class="form-grid">
+          ${fld("Billing Currency", "USD", { select: 1 })}${fld("POI Cutover Strategy ID", "", { req: 1, select: 1 })}
+          ${fld("Industry", "", { select: 1 })}${fld("FNS Number", "", { ph: "Enter FNS number" })}
+          ${fld("Creditor Reference Type", "", { ph: "Enter creditor reference type" })}${fld("Creditor Reference Custom Specifier", "", { ph: "Enter custom specifier" })}
+        </div></div>
+      </div>
+      <div class="org-col">
+        <div class="card card-pad org-card"><h3>Legal &amp; Structural</h3><div class="form-grid">
+          ${fld("Legal Entity Type", "", { select: 1, full: 1 })}
+          ${fld("Verifone ID", "", { ph: "Enter Verifone ID" })}${fld("Token Entity ID", "", { ph: "Enter token entity ID" })}
+          ${fld("Merchant Category Code", "", { ph: "Enter MCC" })}${fld("Tax Registration Number", "", { ph: "Enter tax registration number" })}
+        </div></div>
+        <div class="card card-pad org-card"><h3>Reference Identifiers</h3><div class="form-grid">
+          ${fld("Location Reference", first.vhq || "", { ph: "Enter location reference" })}${fld("Company Group Reference Identifier", "", { ph: "Enter company group reference" })}
+          ${fld("Label", "", { ph: "Enter label", full: 1 })}
+          ${fld("Business Identifier Types", "", { select: 1, full: 1 })}
+        </div></div>
+        <div class="card card-pad org-card"><h3>Platform Features</h3><div class="form-grid">
+          ${fld("Batch Theme ID", "", { ph: "Enter batch theme ID", full: 1 })}
+        </div></div>
+        <div class="card card-pad org-card"><div class="table-tools" style="margin-bottom:8px"><h3 style="margin:0;border:0;padding:0">Token Scopes</h3><div class="grow"></div><button class="btn btn-primary" style="opacity:.6;cursor:default">+ New Token Scope</button></div>
+          <table><thead><tr><th>Name</th><th>Token Format</th><th>Token Type</th><th>Actions</th></tr></thead></table>
+          <div class="org-empty">No token scopes created for this organization</div>
+          <div class="muted" style="font-size:11px;margin-bottom:12px">Token scopes can only be added to active Merchant Company or Merchant Company Group organizations</div>
+          <div style="font-weight:600;font-size:12.5px;margin-bottom:6px">Linked Token Scopes</div>
+          <table><thead><tr><th>Name</th><th>Token Format</th><th>Token Type</th><th>Actions</th></tr></thead></table>
+          <div class="org-empty">No token scopes linked to this organization</div>
+        </div>
+      </div></div>`;
+  } else if (orgTab === "hier") {
+    body.innerHTML = `<div class="card card-pad org-card"><h3>Organization Hierarchy</h3>
+      <table><tbody>
+        <tr><td><div class="merchant-cell"><span class="avatar">${initials(name)}</span><b>${name}</b></div></td><td class="muted">ORG-${10021 + idx}</td><td>Merchant Company</td></tr>
+        ${locs.map(l => `<tr><td style="padding-left:44px">${l.site}</td><td class="muted">LOC-${l.id}</td><td>Merchant Location</td></tr>`).join("")}
+      </tbody></table></div>`;
+  } else {
+    const t = { contacts: "contacts and addresses", linked: "linked records", custom: "custom configuration" }[orgTab];
+    body.innerHTML = `<div class="card card-pad org-card"><div class="org-empty">No ${t} to show in this mockup.</div></div>`;
+  }
+}
+$("orgBack").addEventListener("click", () => showView("merchants"));
+$("orgTabs").addEventListener("click", (e) => { const t = e.target.closest(".org-tab"); if (!t) return; orgTab = t.dataset.tab; renderOrg(); });
+$("orgCopy").addEventListener("click", () => { try { navigator.clipboard.writeText($("orgId").textContent); } catch (e) {} toast("Organization ID copied"); });
+
 $("locSearch").addEventListener("input", (e) => { state.locQuery = e.target.value; renderTable(); });
 $("scopeSel").addEventListener("change", (e) => { state.scope = e.target.value; renderMap(); renderTable(); });
 $("mainNav").addEventListener("click", (e) => {
   const a = e.target.closest("a[data-view]"); if (!a) return;
   e.preventDefault(); showView(a.dataset.view);
 });
-$("crumb").addEventListener("click", (e) => { e.preventDefault(); showView("home"); });
+$("crumb").addEventListener("click", (e) => { e.preventDefault(); showView(curView === "org" ? "merchants" : "home"); });
 function showView(v) {
   $("homeView").classList.toggle("hidden", v !== "home");
   $("merchantsView").classList.toggle("hidden", v !== "merchants");
   $("devicesView").classList.toggle("hidden", v !== "devices");
-  $("mainNav").querySelectorAll("a[data-view]").forEach(x => x.classList.toggle("active", x.dataset.view === v));
-  $("crumb").textContent = v === "merchants" ? "Merchants" : v === "devices" ? "Devices" : "Home";
+  $("orgView").classList.toggle("hidden", v !== "org");
+  curView = v;
+  const navV = v === "org" ? "merchants" : v;
+  $("mainNav").querySelectorAll("a[data-view]").forEach(x => x.classList.toggle("active", x.dataset.view === navV));
+  $("crumb").textContent = v === "merchants" || v === "org" ? "Merchants" : v === "devices" ? "Devices" : "Home";
+  if (v === "org") renderOrg();
   if (v === "merchants") renderTable(); else if (v === "devices") { renderFleetMap(); renderLifecycle(); } else renderMap();
 }
 $("onboardBtn2").addEventListener("click", openWizard);
 $("orderBtn2").addEventListener("click", () => $("orderBtn").click());
 /* header buttons are display-only: nothing opens on click */
 /* Order devices is display-only in this mockup: nothing opens on click */
-$("drawerClose").addEventListener("click", closeDrawer);
-$("scrim").addEventListener("click", closeDrawer);
 $("wizClose").addEventListener("click", closeWizard);
 $("wizDraft").addEventListener("click", () => { closeWizard(); toast("Draft saved. Resume it from Onboarding in progress."); });
 $("wizBack").addEventListener("click", () => { if (state.wizStep > 0) { state.wizStep--; renderWizard(); } });
@@ -1514,8 +1675,8 @@ $("wizNext").addEventListener("click", () => {
   if (state.wizStep === wizSteps().length - 1) submitWizard();
   else { state.wizStep++; renderWizard(); }
 });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); closeWizard(); } });
-window.addEventListener("resize", renderTrend);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeWizard(); } });
+window.addEventListener("resize", () => { renderTrend(); renderCommission(); });
 new ResizeObserver(() => renderMap()).observe($("map"));
 new ResizeObserver(() => { if ($("fleetMap").offsetWidth) renderFleetMap(); }).observe($("fleetMap"));
 
