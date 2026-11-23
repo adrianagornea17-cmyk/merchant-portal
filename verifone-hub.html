@@ -534,24 +534,16 @@
 
           <div class="card card-pad hidden" id="byLocCard">
             <div class="card-head">
-              <h3>Sales by location</h3>
+              <h3 id="byLocTitle">Sales by location</h3>
               <span class="src">Payments</span>
               <div class="grow"></div>
             </div>
+            <div class="seg" id="byLocSeg" style="margin-bottom:12px">
+              <button class="active" data-by="location">Location</button>
+              <button data-by="device">Device</button>
+            </div>
             <div class="funnel" id="byLoc"></div>
             <div class="caption">Gross sales · selected period</div>
-          </div>
-          <div class="card card-pad hidden" id="settleCard">
-            <div class="card-head"><h3>Next settlement</h3><span class="src">Payments</span></div>
-            <div class="big-number">$27,614.20</div>
-            <div class="muted" style="margin:4px 0 14px">Deposits tomorrow to •••• 4421</div>
-            <div class="donut-legend">
-              <div class="li"><span>Gross sales</span><span class="v">$28,300.00</span></div>
-              <div class="li"><span>Refunds</span><span class="v">−$73.40</span></div>
-              <div class="li"><span>Processing fees</span><span class="v">−$612.40</span></div>
-              <div class="li"><span>Open chargebacks</span><span class="v" style="color:var(--danger)">2</span></div>
-            </div>
-            <div class="row" style="margin-top:14px"><button class="btn btn-sm">Statements</button><button class="btn btn-sm">Disputes</button></div>
           </div>
         </div>
 
@@ -980,16 +972,39 @@ function renderTrend() {
 /* =====================================================================
    Render: funnel / sales by location
    ===================================================================== */
+let salesBy = "location";
 function renderFunnel() {
   $("byLocCard").classList.toggle("hidden", isPartner());
   const mine = LOCATIONS.filter(l => l.owner === "self");
-  const mmax = Math.max(...mine.map(l => l.vol)) || 1;
-  $("byLoc").innerHTML = mine.map(l => `<div class="funnel-row">
-      <span>${l.site}</span>
-      <div class="funnel-bar"><div style="width:${(l.vol / mmax) * 100}%"></div></div>
-      <span class="n" style="width:auto">${l.vol ? "$" + (l.vol / 1000).toFixed(1) + "K" : "—"}</span>
+  const models = ["V400m", "V400m", "P630", "T650p"];
+  let rows;
+  if (salesBy === "device") {
+    rows = [];
+    mine.forEach(l => {
+      const w = Array.from({ length: l.total }, (_, i) => 1 + ((i * 7 + l.id.length * 3) % 5) / 4);
+      const sum = w.reduce((a, b) => a + b, 0);
+      w.forEach((x, i) => {
+        const live = i >= l.total - l.on;
+        rows.push({ name: `${models[i % models.length]} · ${l.site} L${i + 1}`, vol: live ? Math.round(l.vol * x / sum) : 0 });
+      });
+    });
+    rows.sort((a, b) => b.vol - a.vol);
+  } else {
+    rows = mine.map(l => ({ name: l.site, vol: l.vol }));
+  }
+  $("byLocTitle").textContent = "Sales by " + salesBy;
+  const mmax = Math.max(...rows.map(r => r.vol)) || 1;
+  $("byLoc").innerHTML = rows.map(r => `<div class="funnel-row">
+      <span>${r.name}</span>
+      <div class="funnel-bar"><div style="width:${(r.vol / mmax) * 100}%"></div></div>
+      <span class="n" style="width:auto">${r.vol ? "$" + (r.vol / 1000).toFixed(1) + "K" : "—"}</span>
     </div>`).join("");
 }
+$("byLocSeg").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+  salesBy = b.dataset.by;
+  $("byLocSeg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+  renderFunnel();
+}));
 
 /* =====================================================================
    Render: map
@@ -1159,7 +1174,6 @@ function renderBottom() {
   $("mixLegend").innerHTML = MIX.map(m => `<div class="li"><span class="sw" style="background:${m.c}"></span>${m.label}<span class="v">${m.v}%</span></div>`).join("");
 
   $("pipelineCard").classList.toggle("hidden", !isPartner());
-  $("settleCard").classList.toggle("hidden", isPartner());
   $("pipeline").innerHTML = PIPELINE.map(p => `
     <div class="pipe-row">
       <span class="name">${p.name}</span><span class="age">${p.age}</span>
