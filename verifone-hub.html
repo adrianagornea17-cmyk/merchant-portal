@@ -56,7 +56,7 @@
   }
   .nav a:hover { background: var(--bg-subtle); }
   .nav a.active { background: var(--primary); color: #fff; font-weight: 600; }
-  .nav a .new { margin-left: auto; margin-right: 22px; flex: none; white-space: nowrap; font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 1px 4px; border-radius: 4px; }
+  .nav a .new { margin-left: auto; margin-right: 18px; flex: none; white-space: nowrap; font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 1px 4px; border-radius: 4px; }
   .nav a.active .new { background: rgba(255,255,255,.25); color: #fff; }
   .nav-sep { height: 1px; background: var(--border); margin: 8px 6px; }
   .sidebar .spacer { flex: 1; }
@@ -405,6 +405,48 @@
   .org-empty { padding: 28px 12px; text-align: center; color: var(--text-muted); font-size: 12.5px; }
   .org-table-wrap { overflow-x: auto; }
   @media (max-width: 1100px) { .org-grid { grid-template-columns: 1fr; } }
+
+  /* ---- Create New Order (full-screen) ---- */
+  .ord { position: fixed; inset: 0; z-index: 40; background: #f5f5f5; display: none; flex-direction: column; }
+  .ord.open { display: flex; }
+  .ord-head { background: var(--bg); border-bottom: 1px solid var(--border); padding: 20px 64px; display: flex; align-items: center; flex: none; }
+  .ord-head h2 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -.3px; }
+  .ord-x { margin-left: auto; border: 0; background: transparent; cursor: pointer; font-size: 26px; line-height: 1; color: var(--text-muted); padding: 4px 8px; border-radius: 6px; }
+  .ord-x:hover { background: var(--bg-subtle); }
+  .ord-main { flex: 1; overflow-y: auto; padding: 44px 64px 40px; }
+  .ord-steps { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 24px; max-width: 1280px; margin: 0 auto; }
+  .ord-step { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .ord-step .ico-w { height: 22px; color: #a7adba; display: flex; align-items: center; }
+  .ord-step .ico-w svg { width: 20px; height: 20px; }
+  .ord-step .bar { height: 5px; border-radius: 3px; background: #e0e2e7; }
+  .ord-step .lbl { font-size: 14px; font-weight: 500; margin-top: 14px; }
+  .ord-step.done .bar, .ord-step.cur .bar { background: var(--primary); }
+  .ord-step.cur .ico-w, .ord-step.done .ico-w { color: var(--primary); }
+  .ord-step.cur .lbl { color: var(--primary); }
+  .ord-body { max-width: 880px; margin: 40px auto 0; }
+  .ord-intro { font-size: 14px; margin: 0 0 22px; }
+  .ord-card { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 16px; }
+  .ord-card h3 { margin: 0 0 16px; font-size: 16px; font-weight: 600; }
+  .ord-card .field input, .ord-card .field select { border-radius: 999px; padding: 11px 16px; font-size: 14px; }
+  .ord-card .field label { font-size: 13px; color: var(--text); }
+  .ord-card .form-grid { gap: 16px 18px; }
+  .ord-opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .ord-opt { border: 1px solid var(--border-strong); border-radius: 12px; padding: 14px; cursor: pointer; background: var(--bg); text-align: left; font: inherit; color: var(--text); }
+  .ord-opt:hover { border-color: var(--primary); }
+  .ord-opt.on { border-color: var(--primary); background: var(--primary-light); }
+  .ord-opt b { display: block; font-size: 14px; margin-bottom: 4px; }
+  .ord-opt span { font-size: 12px; color: var(--text-muted); }
+  .ord-qty { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--border); }
+  .ord-qty:first-of-type { border-top: 0; }
+  .ord-qty input { width: 80px; border: 1px solid var(--border-strong); border-radius: 999px; padding: 8px 12px; font-size: 14px; text-align: center; }
+  .ord-sum { display: grid; grid-template-columns: 200px 1fr; gap: 10px 16px; font-size: 13.5px; }
+  .ord-sum dt { color: var(--text-muted); } .ord-sum dd { margin: 0; font-weight: 500; }
+  .ord-foot { background: var(--bg); border-top: 1px solid var(--border); padding: 20px 64px; display: flex; align-items: center; justify-content: space-between; flex: none; }
+  .ord-foot .btn { padding: 12px 22px; font-size: 14px; font-weight: 600; }
+  .ord-discard { color: var(--danger); border-color: var(--danger); background: var(--bg); }
+  .ord-foot .grp { display: flex; gap: 12px; }
+  .btn[disabled] { opacity: .45; cursor: not-allowed; }
+  @media (max-width: 1100px) { .ord-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 20px; } .ord-opts { grid-template-columns: 1fr; } .ord-head, .ord-foot, .ord-main { padding-left: 24px; padding-right: 24px; } }
 </style>
 </head>
 <body>
@@ -593,7 +635,6 @@
           <div class="page-head">
             <div class="titles">
               <h1>Merchants</h1>
-              <div class="sub">48 merchants · 131 locations · 438 devices</div>
             </div>
             <div class="grow"></div>
             <button class="btn" id="orderBtn2">Order devices</button>
@@ -728,6 +769,16 @@
 
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ================= Create New Order (full-screen) ================= -->
+<div class="ord" id="ord" role="dialog" aria-modal="true" aria-labelledby="ordTitle">
+  <div class="ord-head"><h2 id="ordTitle">Create New Order</h2><button class="ord-x" id="ordX" aria-label="Close">×</button></div>
+  <div class="ord-main"><div class="ord-steps" id="ordSteps"></div><div class="ord-body" id="ordBody"></div></div>
+  <div class="ord-foot">
+    <button class="btn ord-discard" id="ordDiscard">Discard</button>
+    <div class="grp"><button class="btn" id="ordBack">Back</button><button class="btn btn-primary" id="ordNext">Continue</button></div>
   </div>
 </div>
 
@@ -1664,7 +1715,104 @@ function showView(v) {
   if (v === "org") renderOrg();
   if (v === "merchants") renderTable(); else if (v === "devices") { renderFleetMap(); renderLifecycle(); } else renderMap();
 }
-$("onboardBtn2").addEventListener("click", openWizard);
+
+/* =====================================================================
+   Create New Order (partner: Add new merchant)
+   ===================================================================== */
+const ORD_STEPS = [
+  ["Basic Information", '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>'],
+  ["Service Plans", '<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/>'],
+  ["Payment Methods", '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>'],
+  ["Payment Devices", '<path d="M3 4h3l2.5 11h9L20 7H7"/><circle cx="10" cy="19" r="1.3"/><circle cx="17" cy="19" r="1.3"/>'],
+  ["Addresses", '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'],
+  ["Company Structure", '<rect x="9.5" y="3" width="5" height="4" rx=".8"/><rect x="3" y="16" width="5" height="4" rx=".8"/><rect x="9.5" y="16" width="5" height="4" rx=".8"/><rect x="16" y="16" width="5" height="4" rx=".8"/><path d="M12 7v4M5.5 16v-5h13v5M12 11v5"/>'],
+  ["Business Details", '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/>'],
+  ["Order Summary", '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/>'],
+];
+const ORD_ENTITIES = ["Verifone Payments US, LLC", "Verifone Canada, Inc.", "Verifone Europe B.V.", "Verifone UK Ltd."];
+const ORD_PLANS = [
+  { id: "starter", nm: "Starter", ds: "In-store card payments, next-day settlement" },
+  { id: "growth", nm: "Growth", ds: "In-store and online, pay by link, reporting" },
+  { id: "enterprise", nm: "Enterprise", ds: "Multi-location, custom pricing, dedicated support" },
+];
+const ORD_METHODS = ["Contactless", "Chip & PIN", "Swipe", "Apple Pay / Google Pay", "EBT", "Gift cards", "Pay by link", "Virtual terminal"];
+let ord = null;
+function newOrd() {
+  return { step: 0, entity: "", plan: "", methods: ["Contactless", "Chip & PIN"], dev: { v400m: 0, p630: 0, t650p: 0 },
+    addr: { line1: "", city: "", state: "", zip: "", country: "United States" },
+    co: { legal: "", dba: "", type: "", parent: "" }, biz: { mcc: "", tax: "", url: "", volume: "" } };
+}
+function openOrder() { ord = newOrd(); $("ord").classList.add("open"); $("ord").querySelector(".ord-main").scrollTop = 0; renderOrder(); }
+function closeOrder() { $("ord").classList.remove("open"); }
+function ordField(label, key, grp, ph) { return `<div class="field"><label>${label}</label><input data-g="${grp}" data-k="${key}" value="${ord[grp][key] || ""}" placeholder="${ph || ""}" /></div>`; }
+function ordCanContinue() {
+  if (ord.step === 0) return !!ord.entity;
+  if (ord.step === 1) return !!ord.plan;
+  if (ord.step === 2) return ord.methods.length > 0;
+  return true;
+}
+function renderOrder() {
+  $("ordSteps").innerHTML = ORD_STEPS.map(([n, ic], i) => `<div class="ord-step ${i < ord.step ? "done" : i === ord.step ? "cur" : ""}">
+    <div class="ico-w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg></div>
+    <div class="bar"></div><div class="lbl">${n}</div></div>`).join("");
+  const b = $("ordBody");
+  if (ord.step === 0) {
+    b.innerHTML = `<p class="ord-intro">Please start by selecting your contract settings.</p>
+      <div class="ord-card"><h3>Contract Settings</h3><div class="field"><label>Entity</label>
+      <select id="ordEntity"><option value="">- Select entity -</option>${ORD_ENTITIES.map(e => `<option ${e === ord.entity ? "selected" : ""}>${e}</option>`).join("")}</select></div></div>`;
+  } else if (ord.step === 1) {
+    b.innerHTML = `<p class="ord-intro">Choose the service plan for this merchant.</p><div class="ord-card"><h3>Service Plans</h3><div class="ord-opts">${ORD_PLANS.map(p => `<button class="ord-opt ${ord.plan === p.id ? "on" : ""}" data-plan="${p.id}"><b>${p.nm}</b><span>${p.ds}</span></button>`).join("")}</div></div>`;
+  } else if (ord.step === 2) {
+    b.innerHTML = `<p class="ord-intro">Select the payment methods the merchant will accept.</p><div class="ord-card"><h3>Payment Methods</h3><div class="ord-opts">${ORD_METHODS.map(m => `<button class="ord-opt ${ord.methods.includes(m) ? "on" : ""}" data-m="${m}"><b>${m}</b></button>`).join("")}</div></div>`;
+  } else if (ord.step === 3) {
+    b.innerHTML = `<p class="ord-intro">Add the devices to ship with this order.</p><div class="ord-card"><h3>Payment Devices</h3>${MODELS.map(m => `<div class="ord-qty"><div><b>${m.nm}</b> <span class="muted">· ${m.price}</span><div class="muted" style="font-size:12px">${m.ds}</div></div><input type="number" min="0" data-dev="${m.id}" value="${ord.dev[m.id]}" /></div>`).join("")}</div>`;
+  } else if (ord.step === 4) {
+    b.innerHTML = `<p class="ord-intro">Where is the merchant located, and where should devices ship?</p><div class="ord-card"><h3>Addresses</h3><div class="form-grid">
+      <div class="field full"><label>Street address</label><input data-g="addr" data-k="line1" value="${ord.addr.line1}" placeholder="401 Congress Ave" /></div>
+      ${ordField("City", "city", "addr", "Austin")}${ordField("State", "state", "addr", "TX")}${ordField("ZIP code", "zip", "addr", "78701")}${ordField("Country", "country", "addr")}</div></div>`;
+  } else if (ord.step === 5) {
+    b.innerHTML = `<p class="ord-intro">Describe how the merchant is structured.</p><div class="ord-card"><h3>Company Structure</h3><div class="form-grid">
+      ${ordField("Legal entity name", "legal", "co", "Brew & Co. Coffee LLC")}${ordField("Trading name", "dba", "co", "Brew & Co.")}
+      <div class="field"><label>Organization type</label><select data-g="co" data-k="type">${["", "Merchant Company", "Merchant Company Group"].map(t => `<option ${t === ord.co.type ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+      ${ordField("Parent organization", "parent", "co", "Optional")}</div></div>`;
+  } else if (ord.step === 6) {
+    b.innerHTML = `<p class="ord-intro">A few business details for onboarding checks.</p><div class="ord-card"><h3>Business Details</h3><div class="form-grid">
+      ${ordField("Merchant category code (MCC)", "mcc", "biz", "5814")}${ordField("Tax registration number", "tax", "biz")}
+      ${ordField("Website", "url", "biz", "https://example.com")}${ordField("Expected monthly volume", "volume", "biz", "$50,000")}</div></div>`;
+  } else {
+    const devs = MODELS.filter(m => ord.dev[m.id] > 0).map(m => `${ord.dev[m.id]} × ${m.nm}`).join(", ") || "None";
+    const row = (k, v) => `<dt>${k}</dt><dd>${v || "—"}</dd>`;
+    b.innerHTML = `<p class="ord-intro">Review the order before you submit it.</p><div class="ord-card"><h3>Order Summary</h3><dl class="ord-sum">
+      ${row("Entity", ord.entity)}${row("Service plan", (ORD_PLANS.find(p => p.id === ord.plan) || {}).nm)}${row("Payment methods", ord.methods.join(", "))}${row("Devices", devs)}
+      ${row("Address", [ord.addr.line1, ord.addr.city, ord.addr.state, ord.addr.zip, ord.addr.country].filter(Boolean).join(", "))}
+      ${row("Legal entity", ord.co.legal)}${row("Organization type", ord.co.type)}${row("MCC", ord.biz.mcc)}${row("Expected volume", ord.biz.volume)}</dl></div>`;
+  }
+  $("ordBack").style.visibility = ord.step ? "visible" : "hidden";
+  $("ordNext").textContent = ord.step === ORD_STEPS.length - 1 ? "Submit order" : "Continue";
+  $("ordNext").disabled = !ordCanContinue();
+}
+$("ordBody").addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.dataset.g) ord[t.dataset.g][t.dataset.k] = t.value;
+  else if (t.dataset.dev) ord.dev[t.dataset.dev] = Math.max(0, parseInt(t.value || "0", 10) || 0);
+});
+$("ordBody").addEventListener("change", (e) => { if (e.target.id === "ordEntity") { ord.entity = e.target.value; $("ordNext").disabled = !ordCanContinue(); } });
+$("ordBody").addEventListener("click", (e) => {
+  const p = e.target.closest("[data-plan]"), m = e.target.closest("[data-m]");
+  if (p) { ord.plan = p.dataset.plan; renderOrder(); }
+  if (m) { const k = m.dataset.m; ord.methods = ord.methods.includes(k) ? ord.methods.filter(x => x !== k) : [...ord.methods, k]; renderOrder(); }
+});
+$("ordNext").addEventListener("click", () => {
+  if (!ordCanContinue()) return;
+  if (ord.step === ORD_STEPS.length - 1) { closeOrder(); toast("Order submitted for " + (ord.co.legal || "the new merchant") + "."); return; }
+  ord.step++; $("ord").querySelector(".ord-main").scrollTop = 0; renderOrder();
+});
+$("ordBack").addEventListener("click", () => { if (ord.step) { ord.step--; renderOrder(); } });
+$("ordDiscard").addEventListener("click", closeOrder);
+$("ordX").addEventListener("click", closeOrder);
+$("onboardBtn").addEventListener("click", () => { if (isPartner()) openOrder(); });
+
+$("onboardBtn2").addEventListener("click", () => { if (isPartner()) openOrder(); else openWizard(); });
 $("orderBtn2").addEventListener("click", () => $("orderBtn").click());
 /* header buttons are display-only: nothing opens on click */
 /* Order devices is display-only in this mockup: nothing opens on click */
@@ -1675,7 +1823,7 @@ $("wizNext").addEventListener("click", () => {
   if (state.wizStep === wizSteps().length - 1) submitWizard();
   else { state.wizStep++; renderWizard(); }
 });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeWizard(); } });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeWizard(); closeOrder(); } });
 window.addEventListener("resize", () => { renderTrend(); renderCommission(); });
 new ResizeObserver(() => renderMap()).observe($("map"));
 new ResizeObserver(() => { if ($("fleetMap").offsetWidth) renderFleetMap(); }).observe($("fleetMap"));
